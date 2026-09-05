@@ -1,0 +1,1028 @@
+{
+ "id": "modell-05",
+ "title": "NICOLE",
+ "blocks": [
+  {
+   "id": "block-lv-sb",
+   "title": "Leseverstehen und Sprachbausteine",
+   "minutes": 90,
+   "hint": "Aufgaben 1–40",
+   "parts": [
+    "lv1",
+    "lv2",
+    "lv3",
+    "sb1",
+    "sb2"
+   ],
+   "maxPoints": 105.0,
+   "availablePoints": 105.0,
+   "missing": 0
+  },
+  {
+   "id": "block-hv",
+   "title": "Hörverstehen",
+   "minutes": 30,
+   "hint": "Aufgaben 41–60",
+   "parts": [
+    "hv1",
+    "hv2",
+    "hv3"
+   ],
+   "maxPoints": 75.0,
+   "availablePoints": 75.0,
+   "missing": 0
+  },
+  {
+   "id": "block-sa",
+   "title": "Schriftlicher Ausdruck",
+   "minutes": 30,
+   "hint": "",
+   "parts": [
+    "sa"
+   ],
+   "maxPoints": 45.0,
+   "availablePoints": 45,
+   "missing": 0
+  }
+ ],
+ "subtitle": "61 Aufgaben · 150 Minuten",
+ "sections": [
+  {
+   "id": "lv1",
+   "group": "Leseverstehen",
+   "title": "Leseverstehen, Teil 1",
+   "minutes": 15,
+   "instruction": "Lesen Sie die Überschriften a–j und die Texte 1–5. Finden Sie für jeden Text die passende Überschrift. Jede Überschrift passt nur einmal.",
+   "bankTitle": "Überschriften",
+   "format": "matching",
+   "bank": [
+    {
+     "key": "A",
+     "text": "Sportkurse für ältere Menschen"
+    },
+    {
+     "key": "B",
+     "text": "Für Jugendliche ist der Computer etwas Alltägliches"
+    },
+    {
+     "key": "C",
+     "text": "Das Interesse am Handel über Internet nimmt stark ab"
+    },
+    {
+     "key": "D",
+     "text": "Arbeiten am Computer verursacht häufig Rückenschmerzen"
+    },
+    {
+     "key": "E",
+     "text": "Internetnutzer machen viele Dinge gleichzeitig"
+    },
+    {
+     "key": "F",
+     "text": "Firmen müssen auch über Internet für Produkte werben"
+    },
+    {
+     "key": "G",
+     "text": "Auch Freizei tsportarten sollten trainiert werden"
+    },
+    {
+     "key": "H",
+     "text": "Was man gegen Rückenschmerzen tun kann"
+    },
+    {
+     "key": "I",
+     "text": "Kinder wollen mit dem Computer nur spielen"
+    },
+    {
+     "key": "J",
+     "text": "Internetnutzer interessieren sich nicht fürs Fernsehen"
+    }
+   ],
+   "items": [
+    {
+     "id": "1",
+     "text": "Falsche Körperhaltung, mangelnde Bewegung und psychische Faktoren sind meistens die Hauptfaktoren für Rückenschmerzen. Hier finden Sie ein ganzheitliches Trainingsprogramm, das hilft: Alle Übungen lassen sich im Alltag gut umsetzen und sind auch bei Vorschäden der Wirbelsäule durchführbar. Mit speziellen Entspannungstraining. 114 Seiten, durchgehend Farbabbildungen, 18×25 cm, gebunden.",
+     "answer": "H"
+    },
+    {
+     "id": "2",
+     "text": "Der Computer gehört heute wie selbstverständlich in das Jugendzimmer. Wie früher die Modelleisendbahn oder die Barbie-Puppe. Was aber genau treiben die Kids mit den hochgerüsteten Rechenmaschinen auf dem Schreibtisch? Das wollte die Jugendzeitschrift Bravo wissen. Selbstverständlich spielen, aber auch andere, nützlichere Dinge wie Texte schreiben oder Hausaufgaben für die Schule erledigen, Tabellen erstellen und natürlich im Internet herumsurfen.",
+     "answer": "B"
+    },
+    {
+     "id": "3",
+     "text": "Inline-Skating ist ein Idealer Ausdauersport – nicht nur für die jüngere Generation. Das haben jetzt Untersuchungen am Institut für Sportwissenschaften an der Universität Frankfurt bestätigt. Danach trainiert Inline-Skating das Herz-Kreislauf-System, beansprucht die wichtigsten Muskelgruppen und fördert die Koordination. Die Faszination dieser rasanten Freizeitsportart wirke generationenübergreifend und erfasst die Jungen wie die Alten, sagt Dr. Hans Jürgen Ahrens. Allerdings fragt der Arzt kritisch, warum jeder Skifahrer, Windsurfer oder Tennisspieler zu Beginn Trainingsstunden bei einem Profi belege, oft aber nicht der Inliner: Dabei lässt sich das Verletzungsrisiko durch regelmäßiges Fahrtraining deutlich verringern. In einem Kurs sollten die wichtigsten Sturz- Brems und Fahrtechniken erlernt werden.",
+     "answer": "G"
+    },
+    {
+     "id": "4",
+     "text": "Eine Studie der Fernsehgesellschaften ARD und ZDF besagt, dass deutsche Internetnutzer sich auch mit anderen Dingen beschäftigen, wenn sie im Internet sind. Ein Großteil der beobachteten Personen telefoniert beim Surfen, hört nebenbei Musik, oder arbeitet mit anderen Computerprogrammen. Aber auch Konkurrenzmedien wie Fernsehen und Zeitschriften finden große Aufmerksamkeit, während im Internet nach Informationen gesucht wird.",
+     "answer": "E"
+    },
+    {
+     "id": "5",
+     "text": "Geschäfte über das Internet werden in Deutschland auch in Zukunft Milliarden Euro einbringen. In spätestens zwei Jahren werden 20 Prozent aller europäischen Geschäfte über das Internet abgewickelt, sagen die Fachleute. Heutzutage ist es kaum vorstellbar, dass ein Unternehmen allein mit klassischen Verkaufsmethoden und ohne zusätzliches Online- Marketing erfolgreich sein wird. Wer heute nicht anfängt, diese Möglichkeiten zu nutzen, kann in Zukunft seine Kunden verlieren. Das Argument, dass die angebotene Ware sich ja auch ohne Internet gut verkaufe, stimmt so nicht mehr. Denn das Internet beeinflusst auch das Käuferverhalten auf der Straße.",
+     "answer": "F"
+    }
+   ],
+   "pointsPerItem": 5.0,
+   "maxPoints": 25.0,
+   "availablePoints": 25.0,
+   "missing": 0
+  },
+  {
+   "id": "lv2",
+   "group": "Leseverstehen",
+   "title": "Leseverstehen, Teil 2",
+   "minutes": 20,
+   "instruction": "Lesen Sie den Text und die Aufgaben 6–10. Welche Lösung (A, B oder C) ist jeweils richtig?",
+   "format": "mc",
+   "passages": [
+    {
+     "paragraphs": [
+      {
+       "t": "Computerkurse sind schon für Kinder spannend",
+       "b": true
+      },
+      {
+       "t": "Schreiben, Rechnen, Programme installieren",
+       "b": true
+      },
+      {
+       "t": "Schaden oder nützen Computer unseren Kindern? Fragen sich viele Eltern. Ein Computerkurs Veranstalter ist sich ganz sicher: wenn man den Kindern beibringt, den Computer richtig einzusetzen, ist sogar eine Lernhilfe. Seit fünf Jahren bietet Franz Krapfi Krapfen Bauer Computerkurse für Kinder zwischen sieben und vierzehn Jahren an und ist von seinen Schülern begeistert Am liebsten würden die Kinder drei Stunden ohne Pause durcharbeiten Und das obwohl in seinen Kursen nicht gespielt wird, sondern der Computer als Lernhilfe genutzt wird. Im ersten Kurs lernen die Kinder den Umgang mit dem Betriebssystem und erste Grundzüge der Textverarbeitung.",
+       "b": false
+      },
+      {
+       "t": "Das Geheimnis von Krapfen Bauer Ich erkläre die Programme in der Sprache der Kinder und langweile sie nicht mit technischen Details. Sein Talent entdeckte er, als sich seine eigenen Kinder für den PC) zu interessieren begannen. Seine Tochter brachte immer mehr Mitschüler zum Sonntäglich PC-Training mit, bis eines Tages klar war: Das muss auf professionelle Beine gestellt werden. Das schwierigste war, einen passenden und vor allem kostengünstige Raum zu finden, denn Geld brachten die Kinderkurse am Anfang sehr wenig ein; Ein Bekannte, der Direktor eines Hotels ist, hatte schließlich die passende Lösung Die Schulungsräume im Hotel stehen den Kindern nun an den Wochenenden zur Verfügung Allgemein rät Krapffen Bauer, Kinder so früh wie möglich an den Computer zu lassen, allerdings nur unter Aufsicht und mit den richtigen Programmen. Beim Computer ist es wie beim Fernseher wenn man ihn als Kindermädchen einsetzt, ohne sich darum zu kümmern, was die Kinder damit machen, kann das negativ Folgen haben schon für drei bis vierjährige Kinder gebe es sehr gute Spielprogramme, die mit Vorschulaufgaben vergleichbar wären. Gerade in der Zeit nach Weihnachten haben Krapfis Kindercomputerkurse Hochsaison. Viele Eltern haben einen Computer unter den Christbaum gestellt und wollen jetzt, dass ihre Kinder frühzeitig damit umgehen lernen. Wobei der Seminarleiter für manche Eltern sogar zu viel wissen weitergibt Einige Eltern haben sich schon beschwert, weil ihre Kinder jetzt Hausaufgaben am Computer lösen Die manchmal befürchtet Überordnung der Kinder hat Krapfen Bauer noch nicht erlebt. Ganz im Gegenteil, die kleinen sind oft gar nicht zu stoppen, wenn sie wieder etwas Neues erlernt haben. Viele Teilnehmer kommen dann auch gern zu den nächsten Kursen. Zeichenprogramm oder Spiele kommen in den Computerkursen höchstens als Belohnung am Rande vor.",
+       "b": false
+      },
+      {
+       "t": "Das größte Hindernis auf dem Weg zum Computerexperten ist für die Kinder in manchen Fällen die negative Einstellung der Eltern.",
+       "b": false
+      },
+      {
+       "t": "Die Erwachsene kennen oft nur die komplizierten Datenbankwendungen und Programme aus dem Büro und können sich gar nicht vorstellen, was man mit dem Computer noch alles machen kann bedauert Krapfen Bauer natürlich wirkt sich diese negative Grundeinstellung auch auf die Kinder aus, Überraschenderweise sind es dann oft die Großeltern, die für Computerkurse das Geld geben, damit ihre Enkelkinder mit dem PC richtig umgehen lernen. Information und Anmeldung Tel: 0664/ 33 33 14 E Mail: Krapfi@aon.at",
+       "b": false
+      }
+     ]
+    }
+   ],
+   "items": [
+    {
+     "id": "6",
+     "text": "In der Computerkursen von Franz Krapfenbauer",
+     "options": [
+      {
+       "key": "A",
+       "text": "lernen die Kinder vor allem neue Computerspiele kennen.."
+      },
+      {
+       "key": "B",
+       "text": "lernen Kinder ab 14 Jahren das richtige Arbeiten mit dem Computer."
+      },
+      {
+       "key": "C",
+       "text": "werden die Computerprogramme so einfach wie möglich erklärt."
+      }
+     ],
+     "answer": "C"
+    },
+    {
+     "id": "7",
+     "text": "Am Anfang war es für Franz Krapfenbauer schwierig,",
+     "options": [
+      {
+       "key": "A",
+       "text": "einen geeigneten Raum für die Kurse zu finden."
+      },
+      {
+       "key": "B",
+       "text": "genug Kinder für den Computerkurs zu finden."
+      },
+      {
+       "key": "C",
+       "text": "seine Tochter für den Computer zu begeistern."
+      }
+     ],
+     "answer": "A"
+    },
+    {
+     "id": "8",
+     "text": "Herr Krapfenbauer meint,",
+     "options": [
+      {
+       "key": "A",
+       "text": "dass auch kleine Kinder mit dem Computer arbeiten sollen."
+      },
+      {
+       "key": "B",
+       "text": "dass Kinderunter vier Jahren zu jung für den Computer seien."
+      },
+      {
+       "key": "C",
+       "text": "dass sich Kinder alleine mit dem Computer beschäftigen sollen."
+      }
+     ],
+     "answer": "A"
+    },
+    {
+     "id": "9",
+     "text": "Viele Kinder",
+     "options": [
+      {
+       "key": "A",
+       "text": "machen im Kurs ihre Hausaufgaben am Computer."
+      },
+      {
+       "key": "B",
+       "text": "machen nach dem ersten Kurs noch einen weiteren Kurs."
+      },
+      {
+       "key": "C",
+       "text": "probieren im Kurs neue Computerspiele aus."
+      }
+     ],
+     "answer": "B"
+    },
+    {
+     "id": "10",
+     "text": "Franz Krapfenbauer erzählt,",
+     "options": [
+      {
+       "key": "A",
+       "text": "dass die Computerkurse oft von den Großeltern bezahlt werden."
+      },
+      {
+       "key": "B",
+       "text": "dass einige Eltern selbst als Computerexperten arbeiten."
+      },
+      {
+       "key": "C",
+       "text": "dass er auch Computerkurse in Büros plant."
+      }
+     ],
+     "answer": "A"
+    }
+   ],
+   "pointsPerItem": 5.0,
+   "maxPoints": 25.0,
+   "availablePoints": 25.0,
+   "missing": 0
+  },
+  {
+   "id": "lv3",
+   "group": "Leseverstehen",
+   "title": "Leseverstehen, Teil 3",
+   "minutes": 20,
+   "instruction": "Lesen Sie die Situationen 11–20 und die Anzeigen im Bild. Finden Sie für jede Situation die passende Anzeige. Wenn Sie keine passende Anzeige finden, wählen Sie X.",
+   "bankTitle": "Anzeigen",
+   "format": "matching",
+   "bank": [
+    {
+     "key": "A",
+     "text": ""
+    },
+    {
+     "key": "B",
+     "text": ""
+    },
+    {
+     "key": "C",
+     "text": ""
+    },
+    {
+     "key": "D",
+     "text": ""
+    },
+    {
+     "key": "E",
+     "text": ""
+    },
+    {
+     "key": "F",
+     "text": ""
+    },
+    {
+     "key": "G",
+     "text": ""
+    },
+    {
+     "key": "H",
+     "text": ""
+    },
+    {
+     "key": "I",
+     "text": ""
+    },
+    {
+     "key": "J",
+     "text": ""
+    },
+    {
+     "key": "K",
+     "text": ""
+    },
+    {
+     "key": "L",
+     "text": ""
+    },
+    {
+     "key": "X",
+     "text": ""
+    }
+   ],
+   "items": [
+    {
+     "id": "11",
+     "text": "Sie suchen für Ihnen 5-Jährigen Sohn einen Schikurs.",
+     "answer": "D"
+    },
+    {
+     "id": "12",
+     "text": "Sie möchten am Wochenende in den Zoo gehen.",
+     "answer": "E"
+    },
+    {
+     "id": "13",
+     "text": "Sie suchen eine Zeitschrift für Ihre Freundin, die sich für Mode interessiert.",
+     "answer": "C"
+    },
+    {
+     "id": "14",
+     "text": "Ihre Bekannte sucht einen Job in einem Modegeschäft.",
+     "answer": "K"
+    },
+    {
+     "id": "15",
+     "text": "Sie möchten Ihre Freunde am Montagabend in den Zirkus einladen.",
+     "answer": "X"
+    },
+    {
+     "id": "16",
+     "text": "Ihre 10-jährige Tochter möchte sich gern einen Tierfilm ansehen.",
+     "answer": "J"
+    },
+    {
+     "id": "17",
+     "text": "Sie möchten für Ihre Familie billige Winterkleidung kaufen.",
+     "answer": "X"
+    },
+    {
+     "id": "18",
+     "text": "Sie möchten einen Schikurs machen und sich dafür Schier leihen.",
+     "answer": "B"
+    },
+    {
+     "id": "19",
+     "text": "Sie machen in Österreich Urlaub und möchten sich einen Film im englischen Original ansehen.",
+     "answer": "X"
+    },
+    {
+     "id": "20",
+     "text": "Sie interessieren sich für Tiere und möchten ihnen helfen.",
+     "answer": "H"
+    }
+   ],
+   "pointsPerItem": 2.5,
+   "maxPoints": 25.0,
+   "availablePoints": 25.0,
+   "missing": 0,
+   "bankImage": "img/m05-lv3.jpg"
+  },
+  {
+   "id": "sb1",
+   "group": "Sprachbausteine",
+   "title": "Sprachbausteine, Teil 1",
+   "minutes": 20,
+   "instruction": "Lesen Sie den Text und schließen Sie die Lücken 21–30. Welche Lösung (A, B oder C) ist jeweils richtig?",
+   "format": "mc",
+   "passages": [
+    {
+     "paragraphs": [
+      {
+       "t": "Genuss mit Kaffee Partner",
+       "b": false
+      },
+      {
+       "t": "Sehr geehrte Frau Thoma,",
+       "b": false
+      },
+      {
+       "t": "schade, (21) Sie bisher noch nicht Kunde bei Kaffee Partner (22). Vielleicht liegt das an uns,",
+       "b": false
+      },
+      {
+       "t": "weil wir (23) nicht das richtige Angebot gemacht haben, seit wir uns vor einiger Zeit in Köln",
+       "b": false
+      },
+      {
+       "t": "auf der ANUGA, der großen Messe für Nahrung und Genussmittel, (24) haben. Wir (25) das jetzt mit dem aktuellen Katalog nachholen, den Sie heute erhalten.",
+       "b": false
+      },
+      {
+       "t": "Sie (26) darin viele nützliche und attraktive Dinge rund um das Thema Kaffee und Trinkwasser",
+       "b": false
+      },
+      {
+       "t": "(27) Mitarbeiter und Besucher. Aber auch Tee, kleine Leckereien und nette Kalender für Büro",
+       "b": false
+      },
+      {
+       "t": "und Zuhause (28) Ihnen unser Geschenkkatalog.",
+       "b": false
+      },
+      {
+       "t": "Viel Spaß beim Blättern und Aussuchen. Wir freuen (29) auf Sie!",
+       "b": false
+      },
+      {
+       "t": "(30) Grüße aus Wallenhorst",
+       "b": false
+      },
+      {
+       "t": "Ihr Kaffee Partner-Team",
+       "b": false
+      },
+      {
+       "t": "Manfred Pflüger",
+       "b": false
+      }
+     ]
+    }
+   ],
+   "items": [
+    {
+     "id": "21",
+     "text": "Genuss mit Kaffee Partner Sehr geehrte Frau Thoma, schade, (21) Sie bisher noch nicht Kunde bei Kaffee Partner (22). …",
+     "options": [
+      {
+       "key": "A",
+       "text": "dass"
+      },
+      {
+       "key": "B",
+       "text": "darum"
+      },
+      {
+       "key": "C",
+       "text": "weil"
+      }
+     ],
+     "answer": "B"
+    },
+    {
+     "id": "22",
+     "text": "… (21) Sie bisher noch nicht Kunde bei Kaffee Partner (22). Vielleicht liegt das an uns, weil wir (23) nicht das …",
+     "options": [
+      {
+       "key": "A",
+       "text": "seid"
+      },
+      {
+       "key": "B",
+       "text": "sein"
+      },
+      {
+       "key": "C",
+       "text": "sind"
+      }
+     ],
+     "answer": "C"
+    },
+    {
+     "id": "23",
+     "text": "… Partner (22). Vielleicht liegt das an uns, weil wir (23) nicht das richtige Angebot gemacht haben, seit wir uns …",
+     "options": [
+      {
+       "key": "A",
+       "text": "euch"
+      },
+      {
+       "key": "B",
+       "text": "Ihnen"
+      },
+      {
+       "key": "C",
+       "text": "Sie"
+      }
+     ],
+     "answer": "B"
+    },
+    {
+     "id": "24",
+     "text": "… der ANUGA, der großen Messe für Nahrung und Genussmittel, (24) haben. Wir (25) das jetzt mit dem aktuellen Katalog …",
+     "options": [
+      {
+       "key": "A",
+       "text": "kennen gelernt"
+      },
+      {
+       "key": "B",
+       "text": "kennen lernen"
+      },
+      {
+       "key": "C",
+       "text": "kennen lernte"
+      }
+     ],
+     "answer": "A"
+    },
+    {
+     "id": "25",
+     "text": "… Messe für Nahrung und Genussmittel, (24) haben. Wir (25) das jetzt mit dem aktuellen Katalog nachholen, den Sie …",
+     "options": [
+      {
+       "key": "A",
+       "text": "mochten"
+      },
+      {
+       "key": "B",
+       "text": "möchten"
+      },
+      {
+       "key": "C",
+       "text": "mögen"
+      }
+     ],
+     "answer": "B"
+    },
+    {
+     "id": "26",
+     "text": "… aktuellen Katalog nachholen, den Sie heute erhalten. Sie (26) darin viele nützliche und attraktive Dinge rund um das …",
+     "options": [
+      {
+       "key": "A",
+       "text": "fanden"
+      },
+      {
+       "key": "B",
+       "text": "finden"
+      },
+      {
+       "key": "C",
+       "text": "findet"
+      }
+     ],
+     "answer": "B"
+    },
+    {
+     "id": "27",
+     "text": "… attraktive Dinge rund um das Thema Kaffee und Trinkwasser (27) Mitarbeiter und Besucher. Aber auch Tee, kleine …",
+     "options": [
+      {
+       "key": "A",
+       "text": "für"
+      },
+      {
+       "key": "B",
+       "text": "von"
+      },
+      {
+       "key": "C",
+       "text": "wegen"
+      }
+     ],
+     "answer": "B"
+    },
+    {
+     "id": "28",
+     "text": "… kleine Leckereien und nette Kalender für Büro und Zuhause (28) Ihnen unser Geschenkkatalog. Viel Spaß beim Blättern und …",
+     "options": [
+      {
+       "key": "A",
+       "text": "gezeigt"
+      },
+      {
+       "key": "B",
+       "text": "zeigen"
+      },
+      {
+       "key": "C",
+       "text": "zeigt"
+      }
+     ],
+     "answer": "C"
+    },
+    {
+     "id": "29",
+     "text": "… Viel Spaß beim Blättern und Aussuchen. Wir freuen (29) auf Sie! (30) Grüße aus Wallenhorst Ihr Kaffee …",
+     "options": [
+      {
+       "key": "A",
+       "text": "mich"
+      },
+      {
+       "key": "B",
+       "text": "sich"
+      },
+      {
+       "key": "C",
+       "text": "uns"
+      }
+     ],
+     "answer": "C"
+    },
+    {
+     "id": "30",
+     "text": "… beim Blättern und Aussuchen. Wir freuen (29) auf Sie! (30) Grüße aus Wallenhorst Ihr Kaffee Partner-Team Manfred …",
+     "options": [
+      {
+       "key": "A",
+       "text": "Freundlich"
+      },
+      {
+       "key": "B",
+       "text": "Freundliche"
+      },
+      {
+       "key": "C",
+       "text": "Freundlichen"
+      }
+     ],
+     "answer": "B"
+    }
+   ],
+   "pointsPerItem": 1.5,
+   "maxPoints": 15.0,
+   "availablePoints": 15.0,
+   "missing": 0
+  },
+  {
+   "id": "sb2",
+   "group": "Sprachbausteine",
+   "title": "Sprachbausteine, Teil 2",
+   "minutes": 15,
+   "instruction": "Lesen Sie den Text und schließen Sie die Lücken 31–40. Benutzen Sie die Wörter aus der Liste. Jedes Wort passt nur einmal.",
+   "bankTitle": "Wörterliste",
+   "format": "wordbank",
+   "passages": [
+    {
+     "paragraphs": [
+      {
+       "t": "Sehr geehrte Damen und Herren,",
+       "b": false
+      },
+      {
+       "t": "mit großem Interesse und auch mit Hoffnung habe ich Ihre Anzeige gelesen. leider (31) ich Sie im Moment nicht anrufen, da das Telefon immer belegt ist. (32) schreibe ich Ihnen diese Mail. Mein Sohn Matthias macht (33) zwei Jahren sein Abitur, (34) seine Leistungen sind zurzeit nicht so gut. Ich mache (35) vor allem bei den Fächern Physik und Mathematik große Sorgen. Matthias ist nicht dumm, aber er ist etwas faul und denkt, er brauche (36) Fächer nicht.",
+       "b": false
+      },
+      {
+       "t": "Fragen wollte ich nun, (37) es bei Ihnen auch individuelle Physik und Mathematiknachhilfe gibt. Und (38) finden die Stunden statt? Am späten Nachmittag oder am frühen Abend? Mir wäre es jedenfalls sehr wichtig, dass Sie meinem Sohn helfen (39).",
+       "b": false
+      },
+      {
+       "t": "Ab 19.30 Uhr bin ich telefonisch (40) der Nummer 0428-1734 zu erreichen.",
+       "b": false
+      },
+      {
+       "t": "Mit freundlichen Grüßen JOSEF MARTINELL",
+       "b": false
+      }
+     ]
+    }
+   ],
+   "bank": [
+    {
+     "key": "A",
+     "text": "ABER"
+    },
+    {
+     "key": "B",
+     "text": "DARF"
+    },
+    {
+     "key": "C",
+     "text": "DASS"
+    },
+    {
+     "key": "D",
+     "text": "DESHALB"
+    },
+    {
+     "key": "E",
+     "text": "DIESE"
+    },
+    {
+     "key": "F",
+     "text": "IN"
+    },
+    {
+     "key": "G",
+     "text": "KANN"
+    },
+    {
+     "key": "H",
+     "text": "KÖNNTEN"
+    },
+    {
+     "key": "I",
+     "text": "MICH"
+    },
+    {
+     "key": "J",
+     "text": "MIR"
+    },
+    {
+     "key": "K",
+     "text": "OB"
+    },
+    {
+     "key": "L",
+     "text": "OBWOHL"
+    },
+    {
+     "key": "M",
+     "text": "UNTER"
+    },
+    {
+     "key": "N",
+     "text": "VOR"
+    },
+    {
+     "key": "O",
+     "text": "WANN"
+    }
+   ],
+   "items": [
+    {
+     "id": "31",
+     "text": "… auch mit Hoffnung habe ich Ihre Anzeige gelesen. leider (31) ich Sie im Moment nicht anrufen, da das Telefon immer …",
+     "answer": "G",
+     "explain": "Das Wort lautet: KANN"
+    },
+    {
+     "id": "32",
+     "text": "… im Moment nicht anrufen, da das Telefon immer belegt ist. (32) schreibe ich Ihnen diese Mail. Mein Sohn Matthias macht …",
+     "answer": "D",
+     "explain": "Das Wort lautet: DESHALB"
+    },
+    {
+     "id": "33",
+     "text": "… schreibe ich Ihnen diese Mail. Mein Sohn Matthias macht (33) zwei Jahren sein Abitur, (34) seine Leistungen sind …",
+     "answer": "F",
+     "explain": "Das Wort lautet: IN"
+    },
+    {
+     "id": "34",
+     "text": "… Mein Sohn Matthias macht (33) zwei Jahren sein Abitur, (34) seine Leistungen sind zurzeit nicht so gut. Ich mache …",
+     "answer": "A",
+     "explain": "Das Wort lautet: ABER"
+    },
+    {
+     "id": "35",
+     "text": "… seine Leistungen sind zurzeit nicht so gut. Ich mache (35) vor allem bei den Fächern Physik und Mathematik große …",
+     "answer": "J",
+     "explain": "Das Wort lautet: MIR"
+    },
+    {
+     "id": "36",
+     "text": "… nicht dumm, aber er ist etwas faul und denkt, er brauche (36) Fächer nicht. Fragen wollte ich nun, (37) es bei Ihnen …",
+     "answer": "E",
+     "explain": "Das Wort lautet: DIESE"
+    },
+    {
+     "id": "37",
+     "text": "… er brauche (36) Fächer nicht. Fragen wollte ich nun, (37) es bei Ihnen auch individuelle Physik und …",
+     "answer": "K",
+     "explain": "Das Wort lautet: OB"
+    },
+    {
+     "id": "38",
+     "text": "… individuelle Physik und Mathematiknachhilfe gibt. Und (38) finden die Stunden statt? Am späten Nachmittag oder am …",
+     "answer": "O",
+     "explain": "Das Wort lautet: WANN"
+    },
+    {
+     "id": "39",
+     "text": "… es jedenfalls sehr wichtig, dass Sie meinem Sohn helfen (39). Ab 19.30 Uhr bin ich telefonisch (40) der Nummer …",
+     "answer": "H",
+     "explain": "Das Wort lautet: KÖNNTEN"
+    },
+    {
+     "id": "40",
+     "text": "… meinem Sohn helfen (39). Ab 19.30 Uhr bin ich telefonisch (40) der Nummer 0428-1734 zu erreichen. Mit freundlichen …",
+     "answer": "M",
+     "explain": "Das Wort lautet: UNTER"
+    }
+   ],
+   "pointsPerItem": 1.5,
+   "maxPoints": 15.0,
+   "availablePoints": 15.0,
+   "missing": 0
+  },
+  {
+   "id": "hv1",
+   "group": "Hörverstehen",
+   "title": "Hörverstehen, Teil 1",
+   "minutes": 8,
+   "instruction": "Entscheiden Sie, ob die Aussagen richtig oder falsch sind.",
+   "note": "Hinweis: Die Hörtexte sind in der PDF-Vorlage nicht enthalten. Dieser Teil dient zum Wiederholen der Aussagen und zum Vergleich mit der Lösung — nicht zum Hörtraining.",
+   "format": "truefalse",
+   "items": [
+    {
+     "id": "41",
+     "text": "Der Sprecher interessiert sich für Sport als für Kultur.",
+     "answer": "r"
+    },
+    {
+     "id": "42",
+     "text": "Die Sprecherin geht so oft sie kann ins Theater.",
+     "answer": "r"
+    },
+    {
+     "id": "43",
+     "text": "Der Sprecher hört besonders gern moderne Musik.",
+     "answer": "f"
+    },
+    {
+     "id": "44",
+     "text": "Die Sprecherin geht oft in Kunstausstellungen.",
+     "answer": "f"
+    },
+    {
+     "id": "45",
+     "text": "Die Sprecherin hätte gerne mehr Zeit für die Kultur.",
+     "answer": "r"
+    }
+   ],
+   "pointsPerItem": 5.0,
+   "maxPoints": 25.0,
+   "availablePoints": 25.0,
+   "missing": 0
+  },
+  {
+   "id": "hv2",
+   "group": "Hörverstehen",
+   "title": "Hörverstehen, Teil 2",
+   "minutes": 14,
+   "instruction": "Entscheiden Sie, ob die Aussagen richtig oder falsch sind.",
+   "note": "Hinweis: Die Hörtexte sind in der PDF-Vorlage nicht enthalten. Dieser Teil dient zum Wiederholen der Aussagen und zum Vergleich mit der Lösung — nicht zum Hörtraining.",
+   "format": "truefalse",
+   "items": [
+    {
+     "id": "46",
+     "text": "Die Lehrerin fährt mit ihrer Klasse und an die Nordsee.",
+     "answer": "f"
+    },
+    {
+     "id": "47",
+     "text": "Herr Kühne hat den Brief der Lehrerin nicht erhalten.",
+     "answer": "r"
+    },
+    {
+     "id": "48",
+     "text": "Die Klassenfahrt beginnt an einem Samstag.",
+     "answer": "f"
+    },
+    {
+     "id": "49",
+     "text": "Herrn Kühnes Sohn Martin wird bei Busfahrten oft schlecht.",
+     "answer": "r"
+    },
+    {
+     "id": "50",
+     "text": "Die Fahrt mit dem Schiff dauert fünf bis sechs Stunden.",
+     "answer": "f"
+    },
+    {
+     "id": "51",
+     "text": "Das Haus, in dem die Schüler wohnen, gehört zu einem Hotel.",
+     "answer": "f"
+    },
+    {
+     "id": "52",
+     "text": "Die Klassenfahrt wird von einer Lehrerin und einem Lehrer geleitet.",
+     "answer": "r"
+    },
+    {
+     "id": "53",
+     "text": "Die Lehrerin empfiehlt, dass die Kinder nicht mehr als 50 Euro Taschengeld mitnehmen.",
+     "answer": "r"
+    },
+    {
+     "id": "54",
+     "text": "Katerina kann entweder mitfahren, oder in eine andere Klasse gehen.",
+     "answer": "r"
+    },
+    {
+     "id": "55",
+     "text": "Auf der Klassenfahrt darf nur mit Erlaubnis der Eltern geraucht werden.",
+     "answer": "f"
+    }
+   ],
+   "pointsPerItem": 2.5,
+   "maxPoints": 25.0,
+   "availablePoints": 25.0,
+   "missing": 0
+  },
+  {
+   "id": "hv3",
+   "group": "Hörverstehen",
+   "title": "Hörverstehen, Teil 3",
+   "minutes": 8,
+   "instruction": "Entscheiden Sie, ob die Aussagen richtig oder falsch sind.",
+   "note": "Hinweis: Die Hörtexte sind in der PDF-Vorlage nicht enthalten. Dieser Teil dient zum Wiederholen der Aussagen und zum Vergleich mit der Lösung — nicht zum Hörtraining.",
+   "format": "truefalse",
+   "items": [
+    {
+     "id": "56",
+     "text": "Sie können mit dem Bus in die Innenstadt fahren.",
+     "answer": "r"
+    },
+    {
+     "id": "57",
+     "text": "Sie können noch eine Stunde durch alle Geschäfte laufen.",
+     "answer": "f"
+    },
+    {
+     "id": "58",
+     "text": "Dr. Krausch ist ab dem 18. Oktober wieder in der Praxis.",
+     "answer": "r"
+    },
+    {
+     "id": "59",
+     "text": "Alle Kunden müssen an der Kasse nebenan bezahlen.",
+     "answer": "f"
+    },
+    {
+     "id": "60",
+     "text": "Die Polizei informiert, dass alle Parkhäuser bei der Ausstellung besetzt sind.",
+     "answer": "f"
+    }
+   ],
+   "pointsPerItem": 5.0,
+   "maxPoints": 25.0,
+   "availablePoints": 25.0,
+   "missing": 0
+  },
+  {
+   "id": "sa",
+   "group": "Schriftlicher Ausdruck",
+   "title": "Schriftlicher Ausdruck",
+   "minutes": 30,
+   "instruction": "Schreiben Sie Ihrer Bekannten einen Antwortbrief, der die folgenden Punkte enthält:",
+   "brief": {
+    "intro": "Eine Freundin beschreibt in einem Brief, welche Probleme sie mit ihrem Bruder hat und bittet Sie um Rat:",
+    "greeting": "Liebe(r)........",
+    "paragraphs": [
+     "entschuldige, dass ich dir so lange nicht mehr geschrieben habe. Aber weißt du mein älterer Bruder, der schon lange im Ausland lebt, ist jetzt für zwei Monate bei uns. Wir unternehmen einiges zusammen, Z.B. gehen wir nachmittags ins Schwimmbad oder abends ins Kino.",
+     "Wir verstehen uns eigentlich ganz gut, aber dennoch habe ich ein Problem mit ihm: Wenn es im Fernsehen Sportsendungen gibt, dann bekomme ich ihn nicht mehr weg vom Fernseher! Er sitzt dann stundenlang nur da und sieht fern, ganz egal wie schön das Wetter draußen ist! Was soll ich bloß tun? Überhaupt nichts sagen oder soll ich mit ihm deswegen streiten? Er fährt bald wieder weg und ich möchte doch mit ihm zusammen sein. Was würdest du machen? Hast du vielleicht ein paar Tipps oder Ratschläge für mich?",
+     "Herzliche Grüße"
+    ],
+    "signature": "Nicole"
+   },
+   "hints": [
+    "Bevor Sie den Brief schreiben ,überlegen Sie sich eine passende Reihenfolge der punkte, eine passende"
+   ],
+   "format": "writing",
+   "items": [
+    {
+     "id": "A",
+     "text": "Schreiben Sie Ihrer Bekannten einen Antwortbrief, der die folgenden Punkte enthält:",
+     "minWords": 100,
+     "points": [
+      "Eigene Erfahrungen mit Geschwistern, Freunden,",
+      "Tipps für Nicole",
+      "Was Sie über den Bruder denken",
+      "Was Sie selbst gern gemeinsam mit anderen machen"
+     ]
+    }
+   ],
+   "criteria": [
+    {
+     "title": "Aufgabenbewältigung",
+     "hint": "Sind alle vier Leitpunkte inhaltlich angemessen bearbeitet?"
+    },
+    {
+     "title": "Kommunikative Gestaltung",
+     "hint": "Anrede, Gruß, passendes Register und verbundene Sätze statt aneinandergereihter Punkte?"
+    },
+    {
+     "title": "Formale Richtigkeit",
+     "hint": "Stören Fehler in Grammatik, Wortschatz und Rechtschreibung das Verstehen?"
+    }
+   ],
+   "grades": [
+    {
+     "key": "A",
+     "points": 5
+    },
+    {
+     "key": "B",
+     "points": 3
+    },
+    {
+     "key": "C",
+     "points": 1
+    },
+    {
+     "key": "D",
+     "points": 0
+    }
+   ],
+   "factor": 3,
+   "maxPoints": 45,
+   "availablePoints": 45,
+   "missing": 0
+  }
+ ]
+}

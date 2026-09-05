@@ -1,0 +1,1088 @@
+{
+ "id": "modell-08",
+ "title": "IRIS1",
+ "blocks": [
+  {
+   "id": "block-lv-sb",
+   "title": "Leseverstehen und Sprachbausteine",
+   "minutes": 90,
+   "hint": "Aufgaben 1–40",
+   "parts": [
+    "lv1",
+    "lv2",
+    "lv3",
+    "sb1",
+    "sb2"
+   ],
+   "maxPoints": 105.0,
+   "availablePoints": 105.0,
+   "missing": 0
+  },
+  {
+   "id": "block-hv",
+   "title": "Hörverstehen",
+   "minutes": 30,
+   "hint": "Aufgaben 41–60",
+   "parts": [
+    "hv1",
+    "hv2",
+    "hv3"
+   ],
+   "maxPoints": 75.0,
+   "availablePoints": 75.0,
+   "missing": 0
+  },
+  {
+   "id": "block-sa",
+   "title": "Schriftlicher Ausdruck",
+   "minutes": 30,
+   "hint": "",
+   "parts": [
+    "sa"
+   ],
+   "maxPoints": 45.0,
+   "availablePoints": 45,
+   "missing": 0
+  }
+ ],
+ "subtitle": "61 Aufgaben · 150 Minuten",
+ "sections": [
+  {
+   "id": "lv1",
+   "group": "Leseverstehen",
+   "title": "Leseverstehen, Teil 1",
+   "minutes": 15,
+   "instruction": "Lesen Sie die Überschriften a–j und die Texte 1–5. Finden Sie für jeden Text die passende Überschrift. Jede Überschrift passt nur einmal.",
+   "bankTitle": "Überschriften",
+   "format": "matching",
+   "bank": [
+    {
+     "key": "A",
+     "text": "Zufriedenheit im Job schützt vor Stress"
+    },
+    {
+     "key": "B",
+     "text": "Erfolgreiche Männer können auch gute Väter sein"
+    },
+    {
+     "key": "C",
+     "text": "Keiner lacht so fröhlich wie der Weihnachtsmann"
+    },
+    {
+     "key": "D",
+     "text": "Wie Männer und Frauen lachen"
+    },
+    {
+     "key": "E",
+     "text": "Weniger Arbeit weniger Stress"
+    },
+    {
+     "key": "F",
+     "text": "Schlechte Nachrichten? Sagen Sie es mit einem Lächeln"
+    },
+    {
+     "key": "G",
+     "text": "Der Beruf ist für Männer wichtiger als die Familie"
+    },
+    {
+     "key": "H",
+     "text": "Auch ältere Menschen leiden unter Stress"
+    },
+    {
+     "key": "I",
+     "text": "Frauen reagieren besser auf schlechte Nachrichten als Männer"
+    },
+    {
+     "key": "J",
+     "text": "Mit 70 Jahren macht das Leben am meistens Spaß"
+    }
+   ],
+   "items": [
+    {
+     "id": "1",
+     "text": "Frauen lachen auf viele Arten Sie kichern glucksen und manchmal singen sie fast Bei Männern dagegen kommt das viel seltener vor. Aber gemeinsam ist Männern und Frauen, dass sie in Vokalen lachen die im Mundzentrum gebildet werden. Und das ist entscheidend: Nur wenn die Vokale im Mundzentrum gebildet werden, ist das Lachen für uns fröhlich und positiv. Damit ist bewiesen, dass das Lachen vom Weihnachtsmann, dass wie eine tiefes Ho, ho, ho klingt. Kaum als fröhlich empfunden wird. Denn dieser Laut wird im hinteren Teil des Mundraums gebildet. (aus einer deutschen Zeitung)",
+     "answer": "D"
+    },
+    {
+     "id": "2",
+     "text": "Viel Arbeit, viel Stress. Wer viel arbeitet muss nicht unbedingt gestresst sein. Frauen in medizinischen Berufen zum Beispiel klagen trotz teilweise hoher Belastung deutlich weniger über stressbedingte Krankheiten als Raumpflegerinnen, Kindergärtnerinnen oder Berufsschullehrerinnen. Dies zeigt eine Untersuchung des Hamburger IPO Instituts, das für eine Studie 1000 Frauen und Männer befragt hat. Vor Stress schützen laut Studie ein angenehmes Betriebsklima, ein gutes Verhältnis zur Chefin oder zum Chef und die Möglichkeit, die eigene Arbeit selbstständig zu planen. (aus einer deutschen Zeitung)",
+     "answer": "A"
+    },
+    {
+     "id": "3",
+     "text": "Ein neues Buch zeigt, wie Männer Fähigkeiten aus dem Arbeitsleben auf die Erziehung übertragen können und so zu erfolgreichen Vätern werden. Da wird die gemeinsame Kindererziehung zur Partnerarbeit (oder sogar zum Joint Venture) geschicktes Verhandeln heißt, das Kind zu überzeugen, dass sie Zähne geputzt werden müssen, und der Familienurlaub hat alle Qualitäten einer Tagung oder eines Seminars: Man erhält die Gelegenheit, die Kinder intensiv zu studieren. (aus einer deutschen Zeitung)",
+     "answer": "B"
+    },
+    {
+     "id": "4",
+     "text": "Eine Studie der Universität Essex hat ergeben dass wir mit siebzig Jahren am glücklichsten sind. Zwar haben die meisten Menschen in diesem Alter gesundheitliche Probleme, aber dafür genießen sie viel Freizeit und haben keinen Stress mehr. Deshalb macht ihnen das Leben so viel Spaß wie nie zuvor. Die Studie besagt auch, dass wir einen ersten Höhepunkt der Lebensfreude mit fünfzehn Jahren erreichen. Danach geht es bergab zwischen dreißig und fünfzig Jahren tragen wir am meisten Verantwortung das Leben ist geprägt von Sachzwängen. (aus einer deutschen Zeitung)",
+     "answer": "J"
+    },
+    {
+     "id": "5",
+     "text": "Warum bleiben manche Managerinnen erfolgreich, obwohl sie Nachrichten mitteilen, die ihr Publikum lieber nicht hören möchte? Ganz einfach: Sie verkaufen die schlechte Nachricht mit Humor. Ein Londoner Soziologe hat während einer Studie beobachtet, dass gerade bei Reden unangenehmen Inhalts oft heiter gelacht wird. Das Lachen wird bewusst provoziert, etwa durch bestimmte Wörter oder durch ein eigenes breites Lächeln. Die fröhliche Stimmung soll dafür sorgen, dass die Zuhörenden das Gefühl haben würden mehr wissen als alle anderen. (aus einer deutschen Zeitung)",
+     "answer": "F"
+    }
+   ],
+   "pointsPerItem": 5.0,
+   "maxPoints": 25.0,
+   "availablePoints": 25.0,
+   "missing": 0
+  },
+  {
+   "id": "lv2",
+   "group": "Leseverstehen",
+   "title": "Leseverstehen, Teil 2",
+   "minutes": 20,
+   "instruction": "Lesen Sie den Text und die Aufgaben 6–10. Welche Lösung (A, B oder C) ist jeweils richtig?",
+   "format": "mc",
+   "passages": [
+    {
+     "paragraphs": [
+      {
+       "t": "Informationsverhaltungen sind wichtige Grundlagen für die Berufswahl",
+       "b": true
+      },
+      {
+       "t": "Die Entscheidung, welchen Beruf man erlernen will, ist nicht leicht. Große) Firmen bieten spezielle Information",
+       "b": false
+      },
+      {
+       "t": "Veranstaltung für Schülerinnen und Schüler an. Wir haben einen Info Nachmittag der Bank Credit Suisse in Bern",
+       "b": false
+      },
+      {
+       "t": "beucht und uns danach bei den Jugendlichen umgehört.",
+       "b": false
+      },
+      {
+       "t": "20 Schülerinnen und Schüler kann Irene Leiser um Punkt 13 Uhr zu diesem Info Nachmittag Begrüßen. Die jugendlichen kommen aus dem ganzen Kanton Bern und haben sich vorher bei der Bank angemeldet. Viermal im",
+       "b": false
+      },
+      {
+       "t": "Frühling und zwei weitere Male im August werden diese Info Veranstaltungen bei der Credit Suisse durchgeführt. Sie",
+       "b": false
+      },
+      {
+       "t": "richten sich vor allem an Schülerinnen und Schüler aus der 8. Klasse. Irene Leiser hat gute Erfahrungen mit diesen",
+       "b": false
+      },
+      {
+       "t": "Veranstaltungen gemacht die Jugendlichen können danach ihre Erwartungen an den Beruf und die Ausbildung an die",
+       "b": false
+      },
+      {
+       "t": "Realität anpassen.",
+       "b": false
+      },
+      {
+       "t": "Im ersten Teil des Nachmittags erklärt Frau Leiser die Hauptaufgaben einer Bank und stellt die Firma vor. Danach treten",
+       "b": false
+      },
+      {
+       "t": "die Lehrlinge in Aktion: Daniel Sommer und Linda Schmidt sind im Zweiten Lehrjahre und erzählen aus ihrem",
+       "b": false
+      },
+      {
+       "t": "Berufsalltag. Dieser Teil gefällt den Schülerinnen und Schülern besonders gut.",
+       "b": false
+      },
+      {
+       "t": "Die Jugendlichen identifizieren sich mit den Lehrringe und sehen, wo sie selber in zwei Jahren beruflich stehen könnten.",
+       "b": false
+      },
+      {
+       "t": "Das fasziniert sehr zum Schluss folge Informationen darüber, welche Voraussetzungen man mitbringen muss und wie",
+       "b": false
+      },
+      {
+       "t": "man sich bewirbt. Um 16:30 Uhr schließt Frau Leiser die Veranstaltung. Sie ist zufrieden mit dem Nachmittag. Die",
+       "b": false
+      },
+      {
+       "t": "Gruppe war sehr aufmerksam. Interessierten Schülerinnen und Schüler gibt sie folgenden Tipp: Gehen Sie auch noch zu",
+       "b": false
+      },
+      {
+       "t": "anderen Firmen. Fragen Sie dort möglichst viele Lehrlinge und Mitarbeiter nach ihren Erfahrungen Wir haben danach",
+       "b": false
+      },
+      {
+       "t": "eine Schülerin und einen Schüler befragt wie sie den Nachmittag erlebt haben:",
+       "b": false
+      },
+      {
+       "t": "Tugba Kaptan aus Biel, 8. Klasse",
+       "b": false
+      },
+      {
+       "t": "Mich fasziniert das Umfeld einer Bank. Ich hätte mehr Leute bei der Arbeit sehen wollen zum Beispiel am Schalter. Aber",
+       "b": false
+      },
+      {
+       "t": "der Tag hat mir weiter geholfen. Ich habe viele Dinge erfahren die ich bis her nicht gewusst habe. Solche Nachmittag ist",
+       "b": false
+      },
+      {
+       "t": "ideal weil da schulfrei ist.",
+       "b": false
+      },
+      {
+       "t": "Alan Blank aus Mühleberg,8. Klasse",
+       "b": false
+      },
+      {
+       "t": "Die Bank ist eigentlich mein Traumbiet und bietet mir nach der Lehre viele Entscheidungsmöglichkeiten. Ich habe mich",
+       "b": false
+      },
+      {
+       "t": "umgeschaut und mich über viele Beruf informiert. Jetzt weiß ich, dass ich eine Lehre in diesem Bereich machen will. Ich",
+       "b": false
+      },
+      {
+       "t": "suche nach der optimalen Lehrestelle. Eine Großbank wäre toll für mich. Dieser Nachmittag hat mir gefallen. Alles war",
+       "b": false
+      },
+      {
+       "t": "sehr gut organisiert. Ich kann solche Veranstaltungen nur empfehlen . Was mir persönlich gefehlt hat, ist eine Führung",
+       "b": false
+      },
+      {
+       "t": "durch den Betrieb. Es ist wichtig zu sehen, wie das alles genau vor sich geht.",
+       "b": false
+      }
+     ]
+    }
+   ],
+   "items": [
+    {
+     "id": "6",
+     "text": "Um Berufe kennenzulernen,",
+     "options": [
+      {
+       "key": "A",
+       "text": "arbeiten Berner Schüler in den Ferien bei großen Firmen."
+      },
+      {
+       "key": "B",
+       "text": "nehmen Berner Schüler an Informationsveranstaltungen von großen Firmen teil."
+      },
+      {
+       "key": "C",
+       "text": "sollen Berner Schüler zweimal jährlich ein Praktikum machen."
+      }
+     ],
+     "answer": "B"
+    },
+    {
+     "id": "7",
+     "text": "Frau Leiser",
+     "options": [
+      {
+       "key": "A",
+       "text": "erzählt aus ihrem Berufsalltag in der Bank."
+      },
+      {
+       "key": "B",
+       "text": "stellt die wichtigsten Aufgaben der Bank vor."
+      },
+      {
+       "key": "C",
+       "text": "zeigt den Jugendlichen die ganze Firma."
+      }
+     ],
+     "answer": "B"
+    },
+    {
+     "id": "8",
+     "text": "An dem Informationsnachmittag",
+     "options": [
+      {
+       "key": "A",
+       "text": "bekamen die Jugendlichen eine Liste mit Bewerbungstipps."
+      },
+      {
+       "key": "B",
+       "text": "war die Gruppe interessiert und hat gut zugehört."
+      },
+      {
+       "key": "C",
+       "text": "wurden viele Fragen gestellt."
+      }
+     ],
+     "answer": "B"
+    },
+    {
+     "id": "9",
+     "text": "Tugba Kaptan",
+     "options": [
+      {
+       "key": "A",
+       "text": "fand es gut, dass sie am Schalter arbeiten durfte."
+      },
+      {
+       "key": "B",
+       "text": "fand es schade, dass an diesem Nachmittag die Schule ausgefallen ist."
+      },
+      {
+       "key": "C",
+       "text": "hat viele Informationen bekommen."
+      }
+     ],
+     "answer": "C"
+    },
+    {
+     "id": "10",
+     "text": "Alan Blank",
+     "options": [
+      {
+       "key": "A",
+       "text": "möchte später gern bei einer Bank arbeiten."
+      },
+      {
+       "key": "B",
+       "text": "möchte viele Dinge besser nicht selbst entscheiden."
+      },
+      {
+       "key": "C",
+       "text": "weiß noch nicht, was er machen will."
+      }
+     ],
+     "answer": "A"
+    }
+   ],
+   "pointsPerItem": 5.0,
+   "maxPoints": 25.0,
+   "availablePoints": 25.0,
+   "missing": 0
+  },
+  {
+   "id": "lv3",
+   "group": "Leseverstehen",
+   "title": "Leseverstehen, Teil 3",
+   "minutes": 20,
+   "instruction": "Lesen Sie die Situationen 11–20 und die Anzeigen im Bild. Finden Sie für jede Situation die passende Anzeige. Wenn Sie keine passende Anzeige finden, wählen Sie X.",
+   "bankTitle": "Anzeigen",
+   "format": "matching",
+   "bank": [
+    {
+     "key": "A",
+     "text": ""
+    },
+    {
+     "key": "B",
+     "text": ""
+    },
+    {
+     "key": "C",
+     "text": ""
+    },
+    {
+     "key": "D",
+     "text": ""
+    },
+    {
+     "key": "E",
+     "text": ""
+    },
+    {
+     "key": "F",
+     "text": ""
+    },
+    {
+     "key": "G",
+     "text": ""
+    },
+    {
+     "key": "H",
+     "text": ""
+    },
+    {
+     "key": "I",
+     "text": ""
+    },
+    {
+     "key": "J",
+     "text": ""
+    },
+    {
+     "key": "K",
+     "text": ""
+    },
+    {
+     "key": "L",
+     "text": ""
+    },
+    {
+     "key": "X",
+     "text": ""
+    }
+   ],
+   "items": [
+    {
+     "id": "11",
+     "text": "Ihre Freund wollen einen Sprachkurs in Spanien machen und ihre Kinder mitnehmen.",
+     "answer": "B"
+    },
+    {
+     "id": "12",
+     "text": "Ihr Auto ist kaputt und Sie brauchen jemanden, der es repariert.",
+     "answer": "D"
+    },
+    {
+     "id": "13",
+     "text": "Sie wollen mit einem Videoprogramm Deutsch lernen.",
+     "answer": "X"
+    },
+    {
+     "id": "14",
+     "text": "Sie wollen Ihrer Kursleiterin eine Kursabschlussreise vorschlagen.",
+     "answer": "C"
+    },
+    {
+     "id": "15",
+     "text": "Ihr Fernseher ist kaputt. Sie wollen ihn reparieren lassen.",
+     "answer": "F"
+    },
+    {
+     "id": "16",
+     "text": "Eine Bekannte hat eine neue Wohnung. Sie möchten ihr etwas für die Küche schenken.",
+     "answer": "H"
+    },
+    {
+     "id": "17",
+     "text": "Sie suchen ein Geschenk für ein 6- jähriges Kind.",
+     "answer": "G"
+    },
+    {
+     "id": "18",
+     "text": "Ihr Kind ist krank. Sie suchen einen Kinderarzt.",
+     "answer": "X"
+    },
+    {
+     "id": "19",
+     "text": "Ihre Tante ist operiert worden. Jetzt ist sie wieder zu Hause und braucht spezielles Essen.",
+     "answer": "L"
+    },
+    {
+     "id": "20",
+     "text": "Sie haben sich beim Tennis den Fuß verletzt und brauchen einen Arzt.",
+     "answer": "I"
+    }
+   ],
+   "pointsPerItem": 2.5,
+   "maxPoints": 25.0,
+   "availablePoints": 25.0,
+   "missing": 0,
+   "bankImage": "img/m08-lv3.jpg"
+  },
+  {
+   "id": "sb1",
+   "group": "Sprachbausteine",
+   "title": "Sprachbausteine, Teil 1",
+   "minutes": 20,
+   "instruction": "Lesen Sie den Text und schließen Sie die Lücken 21–30. Welche Lösung (A, B oder C) ist jeweils richtig?",
+   "format": "mc",
+   "passages": [
+    {
+     "paragraphs": [
+      {
+       "t": "Schwarzenbek, den",
+       "b": false
+      },
+      {
+       "t": "…….. Liebe Maria, danke vielmals für die Einladung. Nächste Woche werde ich also (21) dir in Berlin sein. Ich freue mich schon sehr (22) , denn schließlich haben wir uns fast ein (23) Jahr nicht gesehen. Wie du ja weißt, wohne ich jetzt auf dem Land hier in der Nähe von Hamburg und das finde ich ganz toll. (24) ich würde gern auch mal wieder in eine richtige Disko gehen. Mal wieder eine ganze Nascht tanzen, das (25) mein Traum! Und zu zwei macht es viel (26) Spaß!",
+       "b": false
+      },
+      {
+       "t": "Weißt du eigentlich, ob die Disko am Wittenberger Platz (27) existiert? Leider habe ich noch keine Ahnung, (28) ich in Berlin ankommen werde. Jedenfalls (29) ich versuchen, eine Mitfahrgelegenheit zu finden. Es gibt ja im Internet die Mitfahrzentrale, (30) so etwas organisiert. Also mache dir keine Sorgen, wenn ich etwas später komme! Ich freue mich sehr auf dich! Alexandra",
+       "b": false
+      }
+     ]
+    }
+   ],
+   "items": [
+    {
+     "id": "21",
+     "text": "… vielmals für die Einladung. Nächste Woche werde ich also (21) dir in Berlin sein. Ich freue mich schon sehr (22) , denn …",
+     "options": [
+      {
+       "key": "A",
+       "text": "bei"
+      },
+      {
+       "key": "B",
+       "text": "nach"
+      },
+      {
+       "key": "C",
+       "text": "zu"
+      }
+     ],
+     "answer": "A"
+    },
+    {
+     "id": "22",
+     "text": "… also (21) dir in Berlin sein. Ich freue mich schon sehr (22) , denn schließlich haben wir uns fast ein (23) Jahr nicht …",
+     "options": [
+      {
+       "key": "A",
+       "text": "darauf"
+      },
+      {
+       "key": "B",
+       "text": "darum"
+      },
+      {
+       "key": "C",
+       "text": "dazu"
+      }
+     ],
+     "answer": "A"
+    },
+    {
+     "id": "23",
+     "text": "… schon sehr (22) , denn schließlich haben wir uns fast ein (23) Jahr nicht gesehen. Wie du ja weißt, wohne ich jetzt auf …",
+     "options": [
+      {
+       "key": "A",
+       "text": "halbe"
+      },
+      {
+       "key": "B",
+       "text": "halben"
+      },
+      {
+       "key": "C",
+       "text": "halbes"
+      }
+     ],
+     "answer": "C"
+    },
+    {
+     "id": "24",
+     "text": "… hier in der Nähe von Hamburg und das finde ich ganz toll. (24) ich würde gern auch mal wieder in eine richtige Disko …",
+     "options": [
+      {
+       "key": "A",
+       "text": "Aber"
+      },
+      {
+       "key": "B",
+       "text": "Sondern"
+      },
+      {
+       "key": "C",
+       "text": "Trotzdem"
+      }
+     ],
+     "answer": "A"
+    },
+    {
+     "id": "25",
+     "text": "… Disko gehen. Mal wieder eine ganze Nascht tanzen, das (25) mein Traum! Und zu zwei macht es viel (26) Spaß! Weißt du …",
+     "options": [
+      {
+       "key": "A",
+       "text": "hätte"
+      },
+      {
+       "key": "B",
+       "text": "wäre"
+      },
+      {
+       "key": "C",
+       "text": "würde"
+      }
+     ],
+     "answer": "B"
+    },
+    {
+     "id": "26",
+     "text": "… tanzen, das (25) mein Traum! Und zu zwei macht es viel (26) Spaß! Weißt du eigentlich, ob die Disko am Wittenberger …",
+     "options": [
+      {
+       "key": "A",
+       "text": "am meisten"
+      },
+      {
+       "key": "B",
+       "text": "ganz"
+      },
+      {
+       "key": "C",
+       "text": "mehr"
+      }
+     ],
+     "answer": "C"
+    },
+    {
+     "id": "27",
+     "text": "… Weißt du eigentlich, ob die Disko am Wittenberger Platz (27) existiert? Leider habe ich noch keine Ahnung, (28) ich in …",
+     "options": [
+      {
+       "key": "A",
+       "text": "auch"
+      },
+      {
+       "key": "B",
+       "text": "noch"
+      },
+      {
+       "key": "C",
+       "text": "nur"
+      }
+     ],
+     "answer": "B"
+    },
+    {
+     "id": "28",
+     "text": "… Platz (27) existiert? Leider habe ich noch keine Ahnung, (28) ich in Berlin ankommen werde. Jedenfalls (29) ich …",
+     "options": [
+      {
+       "key": "A",
+       "text": "als"
+      },
+      {
+       "key": "B",
+       "text": "wann"
+      },
+      {
+       "key": "C",
+       "text": "wenn"
+      }
+     ],
+     "answer": "B"
+    },
+    {
+     "id": "29",
+     "text": "… Ahnung, (28) ich in Berlin ankommen werde. Jedenfalls (29) ich versuchen, eine Mitfahrgelegenheit zu finden. Es gibt …",
+     "options": [
+      {
+       "key": "A",
+       "text": "darf"
+      },
+      {
+       "key": "B",
+       "text": "soll"
+      },
+      {
+       "key": "C",
+       "text": "will"
+      }
+     ],
+     "answer": "C"
+    },
+    {
+     "id": "30",
+     "text": "… zu finden. Es gibt ja im Internet die Mitfahrzentrale, (30) so etwas organisiert. Also mache dir keine Sorgen, wenn …",
+     "options": [
+      {
+       "key": "A",
+       "text": "das"
+      },
+      {
+       "key": "B",
+       "text": "die"
+      },
+      {
+       "key": "C",
+       "text": "der"
+      }
+     ],
+     "answer": "B"
+    }
+   ],
+   "pointsPerItem": 1.5,
+   "maxPoints": 15.0,
+   "availablePoints": 15.0,
+   "missing": 0
+  },
+  {
+   "id": "sb2",
+   "group": "Sprachbausteine",
+   "title": "Sprachbausteine, Teil 2",
+   "minutes": 15,
+   "instruction": "Lesen Sie den Text und schließen Sie die Lücken 31–40. Benutzen Sie die Wörter aus der Liste. Jedes Wort passt nur einmal.",
+   "bankTitle": "Wörterliste",
+   "format": "wordbank",
+   "passages": [
+    {
+     "paragraphs": [
+      {
+       "t": "Frankfurter Allianz Bahnstr. 99 Max Kühne",
+       "b": false
+      },
+      {
+       "t": "Tel.: 069-951670 Frankfurt, den",
+       "b": false
+      },
+      {
+       "t": "…….",
+       "b": false
+      },
+      {
+       "t": "Neuer Berater für Ihre Versicherungen Sehr geehrter Herr Frankel, wir möchten Sie darüber informieren, (31) Ihre Versicherungen künftig von Herrn Max Kühne bearbeitet werden. Ihm wurden (32) Unterlagen übergeben.",
+       "b": false
+      },
+      {
+       "t": "Alle Kundendaten (33) selbstverständlich streng vertraulich behandelt. Wenn Sie also (34) zu Ihren Versicherungen haben, wenden Sie sich in Zukunft bitte an Herrn Kühne. Er berät und (35) Sie gern. Auch im Schadensfall (36) er Ihnen schnell und zuverlässig weiter. Im Übrigen möchten wir uns (37) einen Fehler in unserer letzten Beitragsrechnung entschuldigen. Leider ist (38) die Adresse von Herrn Kühne nicht korrekt. Seine (39) Anschrift und Telefonnummer finden Sie auf diesem Brief oben rechts.",
+       "b": false
+      },
+      {
+       "t": "Wir danken (40) für Ihr Vertrauen.",
+       "b": false
+      },
+      {
+       "t": "Mit freundlichen Grüßen Ihre Frankfurter Allianz",
+       "b": false
+      }
+     ]
+    }
+   ],
+   "bank": [
+    {
+     "key": "A",
+     "text": "ANTWORTEN"
+    },
+    {
+     "key": "B",
+     "text": "AUF"
+    },
+    {
+     "key": "C",
+     "text": "DASS"
+    },
+    {
+     "key": "D",
+     "text": "DORT"
+    },
+    {
+     "key": "E",
+     "text": "FRAGEN"
+    },
+    {
+     "key": "F",
+     "text": "FÜR"
+    },
+    {
+     "key": "G",
+     "text": "HABEN"
+    },
+    {
+     "key": "H",
+     "text": "HILFT"
+    },
+    {
+     "key": "I",
+     "text": "IHNEN"
+    },
+    {
+     "key": "J",
+     "text": "IHRE"
+    },
+    {
+     "key": "K",
+     "text": "INFORMIERT"
+    },
+    {
+     "key": "L",
+     "text": "OB"
+    },
+    {
+     "key": "M",
+     "text": "RICHTIGE"
+    },
+    {
+     "key": "N",
+     "text": "WERDEN"
+    },
+    {
+     "key": "O",
+     "text": "ZU"
+    }
+   ],
+   "items": [
+    {
+     "id": "31",
+     "text": "… Herr Frankel, wir möchten Sie darüber informieren, (31) Ihre Versicherungen künftig von Herrn Max Kühne …",
+     "answer": "C",
+     "explain": "Das Wort lautet: DASS"
+    },
+    {
+     "id": "32",
+     "text": "… künftig von Herrn Max Kühne bearbeitet werden. Ihm wurden (32) Unterlagen übergeben. Alle Kundendaten (33) …",
+     "answer": "J",
+     "explain": "Das Wort lautet: IHRE"
+    },
+    {
+     "id": "33",
+     "text": "… Ihm wurden (32) Unterlagen übergeben. Alle Kundendaten (33) selbstverständlich streng vertraulich behandelt. Wenn Sie …",
+     "answer": "N",
+     "explain": "Das Wort lautet: WERDEN"
+    },
+    {
+     "id": "34",
+     "text": "… streng vertraulich behandelt. Wenn Sie also (34) zu Ihren Versicherungen haben, wenden Sie sich in Zukunft …",
+     "answer": "E",
+     "explain": "Das Wort lautet: FRAGEN"
+    },
+    {
+     "id": "35",
+     "text": "… Sie sich in Zukunft bitte an Herrn Kühne. Er berät und (35) Sie gern. Auch im Schadensfall (36) er Ihnen schnell und …",
+     "answer": "K",
+     "explain": "Das Wort lautet: INFORMIERT"
+    },
+    {
+     "id": "36",
+     "text": "… Kühne. Er berät und (35) Sie gern. Auch im Schadensfall (36) er Ihnen schnell und zuverlässig weiter. Im Übrigen …",
+     "answer": "H",
+     "explain": "Das Wort lautet: HILFT"
+    },
+    {
+     "id": "37",
+     "text": "… und zuverlässig weiter. Im Übrigen möchten wir uns (37) einen Fehler in unserer letzten Beitragsrechnung …",
+     "answer": "F",
+     "explain": "Das Wort lautet: FÜR"
+    },
+    {
+     "id": "38",
+     "text": "… letzten Beitragsrechnung entschuldigen. Leider ist (38) die Adresse von Herrn Kühne nicht korrekt. Seine (39) …",
+     "answer": "D",
+     "explain": "Das Wort lautet: DORT"
+    },
+    {
+     "id": "39",
+     "text": "… ist (38) die Adresse von Herrn Kühne nicht korrekt. Seine (39) Anschrift und Telefonnummer finden Sie auf diesem Brief …",
+     "answer": "M",
+     "explain": "Das Wort lautet: RICHTIGE"
+    },
+    {
+     "id": "40",
+     "text": "… finden Sie auf diesem Brief oben rechts. Wir danken (40) für Ihr Vertrauen. Mit freundlichen Grüßen Ihre …",
+     "answer": "I",
+     "explain": "Das Wort lautet: IHNEN"
+    }
+   ],
+   "pointsPerItem": 1.5,
+   "maxPoints": 15.0,
+   "availablePoints": 15.0,
+   "missing": 0
+  },
+  {
+   "id": "hv1",
+   "group": "Hörverstehen",
+   "title": "Hörverstehen, Teil 1",
+   "minutes": 8,
+   "instruction": "Entscheiden Sie, ob die Aussagen richtig oder falsch sind.",
+   "note": "Hinweis: Die Hörtexte sind in der PDF-Vorlage nicht enthalten. Dieser Teil dient zum Wiederholen der Aussagen und zum Vergleich mit der Lösung — nicht zum Hörtraining.",
+   "format": "truefalse",
+   "items": [
+    {
+     "id": "41",
+     "text": "Für die Sprechen ist es unwichtig, ob ihre Kinder in der Schule gut sind.",
+     "answer": "f"
+    },
+    {
+     "id": "42",
+     "text": "Der Sprecher findet es wichtig, dass Eltern immer für ihre Kinder da sind.",
+     "answer": "r"
+    },
+    {
+     "id": "43",
+     "text": "Die Sprecherin glaubt, dass sie mehr mit ihrer Tochter sprechen müsste.",
+     "answer": "f"
+    },
+    {
+     "id": "44",
+     "text": "Es ist dem Sprecher wichtig, dass seine Kinder gesund leben.",
+     "answer": "r"
+    },
+    {
+     "id": "45",
+     "text": "Der Sprecher möchte, dass sein Kind die eigenen Ideen realisieren kann.",
+     "answer": "r"
+    }
+   ],
+   "pointsPerItem": 5.0,
+   "maxPoints": 25.0,
+   "availablePoints": 25.0,
+   "missing": 0
+  },
+  {
+   "id": "hv2",
+   "group": "Hörverstehen",
+   "title": "Hörverstehen, Teil 2",
+   "minutes": 14,
+   "instruction": "Entscheiden Sie, ob die Aussagen richtig oder falsch sind.",
+   "note": "Hinweis: Die Hörtexte sind in der PDF-Vorlage nicht enthalten. Dieser Teil dient zum Wiederholen der Aussagen und zum Vergleich mit der Lösung — nicht zum Hörtraining.",
+   "format": "truefalse",
+   "items": [
+    {
+     "id": "46",
+     "text": "Viele Touristen besuchen Torgau wegen seiner historischen Sehenswürdigkeiten.",
+     "answer": "r"
+    },
+    {
+     "id": "47",
+     "text": "Den Spielpark Hartenfels gibt es schon seit vielen Jahren.",
+     "answer": "f"
+    },
+    {
+     "id": "48",
+     "text": "Außer dem Spielpark gibt es in der Umgebung viele andere Freizeitmöglichkeiten für die Kinder.",
+     "answer": "f"
+    },
+    {
+     "id": "49",
+     "text": "Der Spielpark bietet den Kindern Spielmöglichkeiten, die sie zu Hause nicht haben.",
+     "answer": "r"
+    },
+    {
+     "id": "50",
+     "text": "Die Kinder können im Spielpark auch selbst etwas bauen.",
+     "answer": "r"
+    },
+    {
+     "id": "51",
+     "text": "Das Spielen am Back kann für die Kinder gefährlich werden.",
+     "answer": "f"
+    },
+    {
+     "id": "52",
+     "text": "Beide Elternteile müssen auf die Kinder aufpassen.",
+     "answer": "f"
+    },
+    {
+     "id": "53",
+     "text": "Im Spielpark können Kinder bis zum Alter von sieben von Aufsichtspersonen betreut werden.",
+     "answer": "f"
+    },
+    {
+     "id": "54",
+     "text": "Der Eintritt in den Spielpark ist zurzeit frei.",
+     "answer": "r"
+    },
+    {
+     "id": "55",
+     "text": "Die Schlossführung bereitet Kindern und Erwachsenen viel Spaß.",
+     "answer": "f"
+    }
+   ],
+   "pointsPerItem": 2.5,
+   "maxPoints": 25.0,
+   "availablePoints": 25.0,
+   "missing": 0
+  },
+  {
+   "id": "hv3",
+   "group": "Hörverstehen",
+   "title": "Hörverstehen, Teil 3",
+   "minutes": 8,
+   "instruction": "Entscheiden Sie, ob die Aussagen richtig oder falsch sind.",
+   "note": "Hinweis: Die Hörtexte sind in der PDF-Vorlage nicht enthalten. Dieser Teil dient zum Wiederholen der Aussagen und zum Vergleich mit der Lösung — nicht zum Hörtraining.",
+   "format": "truefalse",
+   "items": [
+    {
+     "id": "56",
+     "text": "Die Linie 2 fährt zum Hauptbahnhof.",
+     "answer": "f"
+    },
+    {
+     "id": "57",
+     "text": "Das Hallenbad schließt heute um 21:00 Uhr.",
+     "answer": "r"
+    },
+    {
+     "id": "58",
+     "text": "Sie können mit der S1 nach Hütteldorf fahren.",
+     "answer": "f"
+    },
+    {
+     "id": "59",
+     "text": "Badezimmerspiegel finden Sie im Untergeschoss.",
+     "answer": "r"
+    },
+    {
+     "id": "60",
+     "text": "Sie können gleich in Richtung Eilenburg umsteigen.",
+     "answer": "r"
+    }
+   ],
+   "pointsPerItem": 5.0,
+   "maxPoints": 25.0,
+   "availablePoints": 25.0,
+   "missing": 0
+  },
+  {
+   "id": "sa",
+   "group": "Schriftlicher Ausdruck",
+   "title": "Schriftlicher Ausdruck",
+   "minutes": 30,
+   "instruction": "Antworten Sie Ihrer Bekannten. Schreiben Sie etwas zu allen vier Punkten: Reaktion auf die Prüfung",
+   "brief": {
+    "intro": "Eine Bekannte hat Ihnen den folgende E-Mail geschrieben:",
+    "greeting": "Liebe(r)........",
+    "paragraphs": [
+     "endlich habe ich die Deutscheprüfung hinter mir. Ich glaube, es ist gut gelaufen. Jetzt soll für unseren Kurs eine Party organisieren. Du hast doch kürzlich erzählt, dass Du für Euren Kurs auch ein Abschlussfest organsiert hast. Sicher kannst du mir ein paar Tipps geben. Ich habe mir gedacht, wir könnten vielleicht in einem Restaurant feiern .Da kann jeder essen und trinken, was er will . Was meinst Du? Essen zu kochen ist doch ziemlich viel Arbeit. und natürlich brauchen wir Musik. Welche Musik ist am besten geeignet? Was schlägst Du vor?",
+     "Melde Dich bald.",
+     "Ich freue mich schon auf deine Antwort.",
+     "Liebe Grüße"
+    ],
+    "signature": "Iris"
+   },
+   "hints": [
+    "Überlegen Sie sich vor dem Schreiben eine passende Reihenfolge der punkte, eine passende Betreff, eine"
+   ],
+   "format": "writing",
+   "items": [
+    {
+     "id": "A",
+     "text": "Antworten Sie Ihrer Bekannten. Schreiben Sie etwas zu allen vier Punkten: Reaktion auf die Prüfung",
+     "minWords": 100,
+     "points": [
+      "Wo feiern? Restaurant- Ihre Meinung",
+      "Welche Musik",
+      "Urlaubpläne"
+     ]
+    }
+   ],
+   "criteria": [
+    {
+     "title": "Aufgabenbewältigung",
+     "hint": "Sind alle vier Leitpunkte inhaltlich angemessen bearbeitet?"
+    },
+    {
+     "title": "Kommunikative Gestaltung",
+     "hint": "Anrede, Gruß, passendes Register und verbundene Sätze statt aneinandergereihter Punkte?"
+    },
+    {
+     "title": "Formale Richtigkeit",
+     "hint": "Stören Fehler in Grammatik, Wortschatz und Rechtschreibung das Verstehen?"
+    }
+   ],
+   "grades": [
+    {
+     "key": "A",
+     "points": 5
+    },
+    {
+     "key": "B",
+     "points": 3
+    },
+    {
+     "key": "C",
+     "points": 1
+    },
+    {
+     "key": "D",
+     "points": 0
+    }
+   ],
+   "factor": 3,
+   "maxPoints": 45,
+   "availablePoints": 45,
+   "missing": 0
+  }
+ ]
+}

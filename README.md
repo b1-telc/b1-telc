@@ -1,16 +1,75 @@
-## Hi there 👋
+# telc B1 Training
 
-<!--
-**b1-telc/b1-telc** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+تطبيق جوال (PWA) للتدريب على امتحان **telc Deutsch B1**، مبني آلياً من
+`Doku/B1 Telc.pdf`. **واجهة التطبيق كلها بالألماني** (بدون عربي) — عشان تكون
+جوّ الامتحان نفسه.
 
-Here are some ideas to get you started:
+## شو فيه
+- **١٦ نموذج امتحان** (Modelltests) مقسومين حسب أقسام telc الرسمية:
+  Leseverstehen 1‑3، Sprachbausteine 1‑2، Hörverstehen 1‑3، Schriftlicher Ausdruck.
+- **٨٩٠ سؤال** مستخرجة من الـPDF، وكل جواب مربوط بمفتاح الحلول الرسمي.
+- **مؤقّت** بيبلش عند الضغط على «Start» وبيسلّم أوتوماتيكياً لما ينتهي الوقت.
+- **تصحيح فوري**: العلامة، النسبة، وجواب كل سؤال مع الحل الصحيح.
+- التقدّم والنتائج بتنحفظ بالمتصفّح، والتطبيق بيشتغل **بدون إنترنت**.
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+## التركيب على الجوال
+لازم يكون التطبيق على رابط (PWA ما بتنثبّت من ملف محلي). أسهل طريقة GitHub Pages:
+
+1. من صفحة المستودع: **Settings ← Pages**
+2. **Source: Deploy from a branch** ← اختار الفرع و `/ (root)` ← Save
+3. بعد دقيقة بيطلع رابط مثل `https://<اسمك>.github.io/B1-telc/`
+4. افتح الرابط من المتصفّح على الجوال ← قائمة المتصفّح ← **«إضافة إلى الشاشة الرئيسية»**
+
+بعدها بيصير أيقونة مثل أي تطبيق، وبيفتح بملء الشاشة وبيشتغل بدون نت.
+
+### تجربة محلية
+```bash
+python3 -m http.server 8000   # وبعدين افتح http://localhost:8000
+```
+
+## ملاحظات مهمة
+- **الاستماع (Hörverstehen):** ملفات الصوت مو موجودة بالـPDF الأصلي، فالقسم هاد
+  بيعرض الجمل مع الحل للمراجعة بس — مو للتدريب على السمع. التطبيق بينبّه على هيك
+  قبل ما تبلّشي القسم.
+- **إعلانات Leseverstehen Teil 3** بالـPDF صور مو نص، فبتنعرض كصورة فوق الأسئلة.
+- بعض الأسئلة ناقصة لأنها **مقصوصة من الـPDF الأصلي** (خاصة النماذج ١٣‑١٦
+  والنموذج ١٢ الناقص). التطبيق بيحذف أي سؤال ما إله جواب بمفتاح الحلول
+  بدل ما يعرضه غلط.
+
+## البنية
+```
+index.html              الصفحة الوحيدة
+manifest.webmanifest    إعدادات تثبيت التطبيق على الجوال
+sw.js                   التشغيل بدون إنترنت
+assets/style.css        التنسيق
+assets/app.js           المحرّك: عرض الأسئلة، المؤقّت، التصحيح
+assets/icons/           أيقونات التطبيق
+data/index.json         فهرس النماذج
+data/modell-XX.json     محتوى كل نموذج
+data/img/               صور صفحات الإعلانات
+tools/telcpdf.py        قراءة الـPDF: صفحات ← سطور بإحداثيات ← نماذج وأقسام
+tools/sections.py       تحليل محتوى كل نوع قسم
+tools/build.py          توليد ملفات data/*.json
+```
+
+### إعادة توليد البيانات
+```bash
+pip install pdfplumber pypdfium2 pillow
+python3 tools/build.py "Doku/B1 Telc.pdf" data
+```
+
+## صيغة القسم
+| format      | الاستعمال                                   |
+|-------------|---------------------------------------------|
+| `matching`  | وصل نص بعنوان / موقف بإعلان (`bank`)         |
+| `mc`        | اختيار من متعدد (`options` لكل سؤال)         |
+| `wordbank`  | ملء فراغات من قائمة كلمات (`bank`)           |
+| `truefalse` | Richtig / Falsch                            |
+| `writing`   | تعبير كتابي مع نقاط مطلوبة وتقييم ذاتي       |
+
+## النشر على GitHub Pages
+Settings ← Pages ← Source: **Deploy from a branch** ← الفرع `main` والمجلد `/ (root)`.
+
+الملف `.nojekyll` بالجذر بيمنع GitHub من معالجة الموقع بـJekyll — التطبيق ملفات
+ثابتة جاهزة، فما بده معالجة، وبدون الملف Jekyll بيتجاهل أي ملف أو مجلد
+بيبلّش بشرطة سفلية.
