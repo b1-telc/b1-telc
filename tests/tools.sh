@@ -94,6 +94,17 @@ mkdir -p "$TMP/audio" && : > "$TMP/audio/m01-hv1.mp3"
 python3 tools/upload_audio.py "$TMP/audio" --dry-run 2>/dev/null | grep -q "^  m01-hv1.mp3"
 check "الصوت بينرفع بلا بادئة" $?
 
+# ---------- vorlagen.js مطابق لملفات القوالب ----------
+# القوالب مصدرها الـ.txt، واللوحة بتقرا النسخة المولّدة. لو انحرفوا،
+# الزرّ بيلزق شي غير يلي انفحص بالاختبارات.
+./tools/build_vorlagen.sh >/dev/null 2>&1
+git diff --quiet -- admin/vorlagen.js 2>/dev/null
+check "★ vorlagen.js محدّث من docs/vorlage/*.txt" $?
+
+# اللوحة لازم تحمّل الملف، وإلا VORLAGE_* مو معرّفة والزرّ بيرمي خطأ
+grep -q 'src="vorlagen.js"' admin/index.html
+check "اللوحة بتحمّل vorlagen.js" $?
+
 # ---------- setup.sql مطابق للترحيلات ----------
 ./tools/build_setup.sh >/dev/null 2>&1
 git diff --quiet -- supabase/setup.sql 2>/dev/null
@@ -103,16 +114,8 @@ check "★ setup.sql محدّث من الترحيلات (ما نسيت تعيد�
 if psql -h /tmp -p "${PGPORT:-5433}" -U postgres -c '' 2>/dev/null; then
   psql -h /tmp -p "${PGPORT:-5433}" -U postgres -q \
     -c "drop database if exists setuptest;" -c "create database setuptest;" >/dev/null 2>&1
-  psql -h /tmp -p "${PGPORT:-5433}" -U postgres -d setuptest -q >/dev/null 2>&1 <<'SQL'
-create schema if not exists auth;
-create table auth.users (id uuid primary key default gen_random_uuid());
-create or replace function auth.uid() returns uuid language sql stable as
-  $$ select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
-do $r$ begin
-  if not exists (select 1 from pg_roles where rolname='anon') then create role anon; end if;
-  if not exists (select 1 from pg_roles where rolname='authenticated') then create role authenticated; end if;
-end $r$;
-SQL
+  psql -h /tmp -p "${PGPORT:-5433}" -U postgres -d setuptest -q \
+    -f supabase/tests/bootstrap.sql >/dev/null 2>&1
   ERRS=0
   for _ in 1 2 3; do
     N=$(psql -h /tmp -p "${PGPORT:-5433}" -U postgres -d setuptest \
