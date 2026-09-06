@@ -82,6 +82,29 @@ async function api(path, opts = {}, retry = true){
 const rpc = (fn, args) =>
   api(`rpc/${fn}`, { method:'POST', body: JSON.stringify(args || {}) });
 
+/* رفع ملف لـStorage بجلسة الأدمن نفسها.
+   ما بده مفتاح service_role: سياسة 0015 بتسمح الكتابة لـis_admin() وبالدلوين
+   بس. x-upsert بيخلّي الرفع التاني بيستبدل بدل ما يفشل بـ409. */
+async function upload(bucket, path, file, retry = true){
+  if (!session) throw new Error('no_session');
+  const r = await fetch(`${BASE}/storage/v1/object/${bucket}/${path}`, {
+    method: 'POST',
+    headers: { apikey: KEY, authorization: `Bearer ${session.access_token}`,
+               'x-upsert': 'true',
+               'content-type': file.type || 'application/octet-stream' },
+    body: file
+  });
+  if (r.status === 401 && retry){
+    if (await refresh()) return upload(bucket, path, file, false);
+    throw new Error('no_session');
+  }
+  if (!r.ok){
+    const j = await r.json().catch(() => null);
+    throw new Error(j?.message || j?.error || `Upload fehlgeschlagen (${r.status})`);
+  }
+  return true;
+}
+
 /* نلفّ كل إجراء: بيوقف الزرّ، بيعرض الخطأ، وبيعيد الرسم لما يخلص */
 async function act(btn, fn, okMsg){
   const old = btn && btn.textContent;
@@ -164,13 +187,14 @@ async function screenHome(){
         <span>gerade gesperrt</span></div>` : ''}
     </div>` : ''}
 
-    <h2>Stufen</h2>
+    <h2>Prüfungen</h2>
     <div class="card"><div class="wrap"><table>
-      <tr><th>Stufe</th><th>Titel</th><th>Status</th></tr>
+      <tr><th>Anbieter</th><th>Stufe</th><th>Titel</th><th>Status</th></tr>
       ${(o.levels || []).map(l => `<tr>
-        <td class="mono">${esc(l.id)}</td><td>${esc(l.title)}</td>
+        <td>${esc(l.provider || '—')}</td>
+        <td class="mono">${esc(l.stufe || l.id)}</td><td>${esc(l.title)}</td>
         <td><span class="pill ${l.published ? 'ok' : ''}">${l.published ? 'online' : 'versteckt'}</span></td>
-      </tr>`).join('') || '<tr><td colspan="3" class="empty">Keine Stufen</td></tr>'}
+      </tr>`).join('') || '<tr><td colspan="4" class="empty">Keine Prüfungen</td></tr>'}
     </table></div></div>`;
 }
 
@@ -351,6 +375,8 @@ function userDialog(u){
       b.dataset.st === 'revoked' ? 'Abo gesperrt' : 'Abo entsperrt').then(close));
 }
 
+let codeLevel = '';
+
 async function screenCodes(){
   app.innerHTML = '<div class="empty">Lädt …</div>';
   const [codes, content] = await Promise.all([
@@ -362,6 +388,11 @@ async function screenCodes(){
     ...l,
     live: (content.tests || []).filter(t => t.level_id === l.id && t.published).length
   }));
+  /* الافتراضي: أول امتحان إله محتوى منشور. بلاه بيوقع الاختيار على أول
+     صف بالترتيب — وهاد ممكن يكون مستوى فاضي لسا ما انبنى، فبيطلعلك
+     تحذير «ما فيه امتحانات» بلا سبب واضح أول ما تفتحي الصفحة. */
+  if (!codeLevel || !levels.some(l => l.id === codeLevel))
+    codeLevel = (levels.find(l => l.live > 0) || levels[0] || {}).id || '';
 
   const state = c => c.revoked_at        ? ['bad', 'gesperrt']
                    : c.uses >= c.max_uses ? ['', 'aufgebraucht']
@@ -375,33 +406,55 @@ async function screenCodes(){
     <div class="card">
       <div class="row">
         <label>Anzahl<input id="c_n" type="number" value="5" min="1" max="200"></label>
-        <label>Stufe<select id="c_lvl">
-          ${levels.map(l => `<option value="${esc(l.id)}" data-live="${l.live}"
-            data-pub="${l.published ? 1 : 0}">${esc(l.title)}${
-            l.published ? '' : ' (versteckt)'}</option>`).join('')
-            || '<option value="">— zuerst eine Stufe anlegen —</option>'}
+        <label>Prüfung<select id="c_lvl">
+          ${levelOptions(levels, codeLevel,
+              l => `data-live="${l.live}" data-pub="${l.published ? 1 : 0}"`)
+            || '<option value="">— zuerst eine Prüfung anlegen —</option>'}
         </select></label>
-        <label>Tage<select id="c_days">
+        <label>Art<select id="c_kind">
+          <option value="full" selected>Vollzugang</option>
+          <option value="demo">Demo</option>
+        </select></label>
+        <label id="c_days_l">Tage<select id="c_days">
           <option value="30" selected>30</option><option value="90">90</option>
           <option value="180">180</option><option value="365">365</option>
         </select></label>
+        <label id="c_hours_l" hidden>Stunden<input id="c_hours" type="number"
+          value="24" min="1" max="720"></label>
         <label>Aktivierungen<input id="c_uses" type="number" value="2"
           min="1" max="10" title="Wie oft der Code eingelöst werden kann"></label>
         <label style="flex:2">Notiz<input id="c_note" placeholder="z. B. Kurs März"></label>
         <button class="btn" id="c_go">Erzeugen</button>
       </div>
+
+      <!-- Nur für Demo: welche Tests der Code öffnet. Ohne Auswahl öffnet
+           er die ganze Stufe, und das ist dann kein Demo mehr. -->
+      <div class="row" id="c_tests_row" hidden style="margin-top:10px">
+        <label style="flex:1">Tests im Demo
+          <select id="c_tests" multiple size="4"></select></label>
+        <p class="sub" style="flex:1;align-self:flex-end;margin:0">
+          Mehrere mit Strg/Cmd anklicken. Korrektur und Lösungen sind dabei —
+          nur die anderen Modelltests bleiben zu.</p>
+      </div>
+
       <p class="sub" id="c_hint" style="margin:10px 0 0"></p>
       <div id="c_out"></div>
     </div>
 
     <div class="card"><div class="wrap"><table>
-      <tr><th>Code</th><th>Status</th><th>Stufen</th><th>Tage</th>
+      <tr><th>Code</th><th>Status</th><th>Stufen</th><th>Gültig</th><th>Umfang</th>
           <th>Aktivierungen</th><th>Notiz</th><th>erstellt</th><th></th></tr>
       ${codes.map(c => { const [cls, txt] = state(c); return `<tr>
         <td class="mono"><b>${esc(c.code)}</b></td>
         <td><span class="pill ${cls}">${txt}</span></td>
         <td>${esc((c.levels || []).join(', '))}</td>
-        <td>${c.duration_days}</td>
+        <td>${c.duration_days ? c.duration_days + ' Tage' : ''}${
+          c.duration_days && c.duration_hours ? ' + ' : ''}${
+          c.duration_hours ? c.duration_hours + ' Std' : ''}</td>
+        <td>${(c.test_slugs || []).length
+          ? `<span class="pill warn">Demo</span> <span class="mono"
+               style="font-size:12px">${esc(c.test_slugs.join(', '))}</span>`
+          : 'ganze Stufe'}</td>
         <td>${c.uses} / ${c.max_uses}
           ${(c.redeemers || []).length ? `<div style="color:var(--muted);font-size:12px">
             ${c.redeemers.map(x => esc(x.name || 'ohne Namen') + ' · ' + fmtDate(x.at)).join('<br>')}
@@ -414,42 +467,88 @@ async function screenCodes(){
           ${!c.revoked_at && c.uses === 0
             ? `<button class="btn sm danger" data-rev="${esc(c.id)}">sperren</button>` : ''}
         </td>
-      </tr>`; }).join('') || '<tr><td colspan="8" class="empty">Noch keine Codes</td></tr>'}
+      </tr>`; }).join('') || '<tr><td colspan="9" class="empty">Noch keine Codes</td></tr>'}
     </table></div></div>`;
 
   /* Vor dem Erzeugen sichtbar machen, was der Code öffnet — eine Stufe,
      nicht alles, und nur ihre veröffentlichten Tests. */
-  const sel = document.getElementById('c_lvl');
-  const hint = document.getElementById('c_hint');
+  const $c = id => document.getElementById(id);
+  const sel = $c('c_lvl'), hint = $c('c_hint'), kind = $c('c_kind'), tsel = $c('c_tests');
+
+  /* Die Testliste hängt an der Stufe: ein Demo-Code für B1 darf keinen
+     A1-Test anbieten. Nur veröffentlichte — ein verstecktes sieht der
+     Kurs ohnehin nicht, und der Code sähe leer aus. */
+  const testsOf = lvl => (content.tests || [])
+    .filter(t => t.level_id === lvl && t.published);
+
+  const fillTests = () => {
+    const list = testsOf(sel.value);
+    tsel.innerHTML = list.map((t, i) =>
+      `<option value="${esc(t.slug)}"${i === 0 ? ' selected' : ''}>${
+        esc(t.title)} <span>(${esc(t.slug)})</span></option>`).join('')
+      || '<option value="" disabled>— keine veröffentlichten Tests —</option>';
+  };
+
+  const isDemo = () => kind.value === 'demo';
+  const picked = () => [...tsel.selectedOptions].map(o => o.value).filter(Boolean);
+
   const showHint = () => {
+    $c('c_days_l').hidden   = isDemo();
+    $c('c_hours_l').hidden  = !isDemo();
+    $c('c_tests_row').hidden = !isDemo();
+
     const o = sel.selectedOptions[0];
     if (!o || !o.value){ hint.textContent = ''; return; }
     const live = Number(o.dataset.live), pub = o.dataset.pub === '1';
-    const days = document.getElementById('c_days').value;
-    const uses = document.getElementById('c_uses').value;
-    hint.innerHTML = pub && live
-      ? `Öffnet <b>${live} Test${live === 1 ? '' : 's'}</b> der Stufe
-         <b>${esc(o.textContent)}</b> für <b>${esc(days)} Tage</b>,
-         einlösbar auf <b>${esc(uses)} Gerät${uses === '1' ? '' : 'en'}</b>.
-         Andere Stufen bleiben zu — dafür braucht es einen zweiten Code.`
-      : `<span style="color:var(--warn)">Diese Stufe hat gerade
-         ${live ? 'keine veröffentlichten' : 'keine'} Tests — der Code
-         funktioniert, der Kurs sieht aber nichts.</span>`;
+    const uses = $c('c_uses').value;
+    const geraete = `<b>${esc(uses)} Gerät${uses === '1' ? '' : 'en'}</b>`;
+
+    if (!pub || !live){
+      hint.innerHTML = `<span style="color:var(--warn)">Diese Stufe hat gerade
+        ${live ? 'keine veröffentlichten' : 'keine'} Tests — der Code
+        funktioniert, der Kurs sieht aber nichts.</span>`;
+      return;
+    }
+    if (isDemo()){
+      const n = picked().length;
+      hint.innerHTML = n
+        ? `Öffnet <b>${n} Test${n === 1 ? '' : 's'}</b> der Stufe
+           <b>${esc(o.textContent)}</b> für <b>${esc($c('c_hours').value)} Stunden</b>,
+           einlösbar auf ${geraete}. Mit Korrektur und Lösungen.
+           Die anderen ${live - n} Test${live - n === 1 ? '' : 's'} bleiben zu.`
+        : `<span style="color:var(--warn)">Kein Test ausgewählt — bitte
+           mindestens einen anklicken.</span>`;
+    } else {
+      hint.innerHTML = `Öffnet <b>${live} Test${live === 1 ? '' : 's'}</b> der Stufe
+        <b>${esc(o.textContent)}</b> für <b>${esc($c('c_days').value)} Tage</b>,
+        einlösbar auf ${geraete}.
+        Andere Stufen bleiben zu — dafür braucht es einen zweiten Code.`;
+    }
   };
-  sel.onchange = showHint;
-  document.getElementById('c_days').onchange = showHint;
-  document.getElementById('c_uses').oninput = showHint;
-  showHint();
+
+  wireNewLevel(sel, id => { if (id) codeLevel = id; screenCodes(); });
+  sel.onchange     = () => { fillTests(); showHint(); };
+  kind.onchange    = showHint;
+  tsel.onchange    = showHint;
+  $c('c_days').onchange  = showHint;
+  $c('c_hours').oninput  = showHint;
+  $c('c_uses').oninput   = showHint;
+  fillTests(); showHint();
 
   document.getElementById('c_go').onclick = async e => {
     if (!sel.value) return toast('Zuerst eine Stufe anlegen (Inhalte → Stufen)');
+    if (isDemo() && !picked().length)
+      return toast('Beim Demo mindestens einen Test auswählen');
     const made = await act(e.target, () => rpc('admin_create_codes', {
-      p_count: Number(document.getElementById('c_n').value),
+      p_count: Number($c('c_n').value),
       p_levels: [sel.value],
-      p_days: Number(document.getElementById('c_days').value),
-      p_max_devices: Number(document.getElementById('c_uses').value),
-      p_note: document.getElementById('c_note').value.trim() || null,
-      p_max_uses: Number(document.getElementById('c_uses').value)
+      // Demo zählt in Stunden, nicht in Tagen — 0 Tage + 24 Stunden
+      p_days:  isDemo() ? 0 : Number($c('c_days').value),
+      p_hours: isDemo() ? Number($c('c_hours').value) : 0,
+      p_tests: isDemo() ? picked() : null,
+      p_max_devices: Number($c('c_uses').value),
+      p_note: $c('c_note').value.trim() || null,
+      p_max_uses: Number($c('c_uses').value)
     }), 'Codes erzeugt');
     if (!made) return;
     document.getElementById('c_out').innerHTML =
@@ -497,18 +596,29 @@ async function screenAudit(){
 /* ============ الإنشاء: مستويات، امتحانات، مراجع ============ */
 let contentCache = null;
 
+let contentLevel = '';
+
 async function screenContent(){
   app.innerHTML = '<div class="empty">Lädt …</div>';
   const c = contentCache = await rpc('admin_content');
+  // مرشّح الستوفة بينطبق هون بالعميل: admin_content بترجّع كل شي مرة
+  // وحدة، والقوائم صغيرة — نداء تاني لكل تبديل مو مستاهل.
+  const tests = (c.tests || []).filter(t => !contentLevel || t.level_id === contentLevel);
 
   const lvlRow = l => `<tr>
-    <td class="mono">${esc(l.id)}</td>
-    <td>${esc(l.title)}</td>
+    <td>${l.provider
+      ? `<b>${esc(l.provider)}</b>`
+      : '<span style="color:var(--warn)">ohne Anbieter</span>'}</td>
+    <td class="mono">${esc(l.stufe || '—')}</td>
+    <td>${esc(l.title)}
+      <div class="mono" style="color:var(--muted);font-size:12px">${esc(l.id)}</div></td>
     <td>${l.tests}</td>
     <td><span class="pill ${l.published ? 'ok' : ''}">${l.published ? 'online' : 'versteckt'}</span></td>
     <td><button class="btn sm grey" data-lvl="${esc(l.id)}"
           data-pub="${l.published ? 0 : 1}" data-title="${esc(l.title)}"
-          data-sort="${l.sort}">${l.published ? 'verstecken' : 'online stellen'}</button></td>
+          data-sort="${l.sort}" data-prov="${esc(l.provider || '')}"
+          data-stufe="${esc(l.stufe || '')}"
+          >${l.published ? 'verstecken' : 'online stellen'}</button></td>
   </tr>`;
 
   const testRow = t => `<tr>
@@ -519,6 +629,8 @@ async function screenContent(){
     <td>${t.answers}</td>
     <td><span class="pill ${t.published ? 'ok' : ''}">${t.published ? 'online' : 'Entwurf'}</span></td>
     <td style="white-space:nowrap">
+      <button class="btn sm" data-tedit="${esc(t.id)}"
+        title="Im Import-Editor öffnen">bearbeiten</button>
       <button class="btn sm grey" data-tpub="${esc(t.id)}" data-v="${t.published ? 0 : 1}">
         ${t.published ? 'verstecken' : 'online'}</button>
       <button class="btn sm danger" data-tdel="${esc(t.id)}" data-n="${esc(t.title)}">löschen</button>
@@ -536,35 +648,64 @@ async function screenContent(){
 
   app.innerHTML = `
     <h1>Inhalte</h1>
-    <p class="sub">Stufen, Modelltests und Lesematerial.</p>
+    <p class="sub">Prüfungen, Modelltests und Lesematerial.</p>
 
-    <h2>Stufen</h2>
+    <h2>Prüfungen</h2>
+    <p class="sub">Eine Prüfung ist <b>Anbieter + Stufe</b>: telc·B1 und
+      Goethe·B1 sind zwei verschiedene Produkte mit eigenen Modelltests,
+      eigenen Codes und eigenem Abo. Ein Code für telc·B1 öffnet Goethe·B1
+      nicht.</p>
     <div class="card">
       <div class="row">
-        <label>Kennung<input id="l_id" placeholder="a2" maxlength="16"></label>
-        <label style="flex:2">Titel<input id="l_title" placeholder="telc Deutsch A2"></label>
+        <label>Anbieter<input id="l_prov" list="anbieter" placeholder="telc"></label>
+        <datalist id="anbieter">
+          ${ANBIETER.map(a => `<option value="${esc(a)}">`).join('')}
+        </datalist>
+        <label>Stufe<input id="l_stufe" list="stufen" placeholder="B1"
+          maxlength="12" style="max-width:110px"></label>
+        <datalist id="stufen">
+          ${STUFEN.map(x => `<option value="${esc(x)}">`).join('')}
+        </datalist>
+        <label style="flex:2">Titel <span style="color:var(--muted)">(optional)</span>
+          <input id="l_title" placeholder="wird aus Anbieter + Stufe gebildet"></label>
         <label>Reihenfolge<input id="l_sort" type="number" value="0"></label>
         <button class="btn" id="l_go">Anlegen / ändern</button>
       </div>
       <div class="wrap" style="margin-top:12px"><table>
-        <tr><th>Kennung</th><th>Titel</th><th>Tests</th><th>Status</th><th></th></tr>
-        ${c.levels.map(lvlRow).join('')}
+        <tr><th>Anbieter</th><th>Stufe</th><th>Titel</th><th>Tests</th>
+            <th>Status</th><th></th></tr>
+        ${c.levels.map(lvlRow).join('')
+          || '<tr><td colspan="6" class="empty">Noch keine Prüfung</td></tr>'}
       </table></div>
     </div>
 
     <h2>Modelltests</h2>
-    <div class="card"><div class="wrap"><table>
-      <tr><th>Stufe</th><th>Test</th><th>Teile / Aufg.</th><th>Lösungen</th><th>Status</th><th></th></tr>
-      ${c.tests.map(testRow).join('') || '<tr><td colspan="6" class="empty">Noch keine Tests</td></tr>'}
-    </table></div></div>
-
-    <h2>Lesematerial</h2>
-    <p class="sub">Texte, die im Kurs jederzeit lesbar sind — kein Test, keine Zeit.</p>
     <div class="card">
       <div class="row">
-        <label>Stufe<select id="r_lvl">
-          <option value="">alle Stufen</option>
-          ${c.levels.map(l => `<option value="${esc(l.id)}">${esc(l.title)}</option>`).join('')}
+        <label>Prüfung<select id="t_lvl">
+          <option value="">alle Prüfungen</option>
+          ${levelOptions(c.levels, contentLevel)}
+        </select></label>
+        <p class="sub" style="flex:2;align-self:flex-end;margin:0">
+          <b>bearbeiten</b> öffnet den Test im Import-Editor — dieselbe
+          Vorlagensprache wie beim Anlegen. Speichern ersetzt ihn.</p>
+      </div>
+      <div class="wrap" style="margin-top:12px"><table>
+        <tr><th>Stufe</th><th>Test</th><th>Teile / Aufg.</th><th>Lösungen</th><th>Status</th><th></th></tr>
+        ${tests.map(testRow).join('')
+          || '<tr><td colspan="6" class="empty">Keine Tests in dieser Stufe</td></tr>'}
+      </table></div>
+    </div>
+
+    <h2>Lesematerial</h2>
+    <p class="sub">Kein Modelltest: freie Texte, die im Kurs jederzeit lesbar
+      sind — Wortschatzlisten, Grammatik, Prüfungstipps. Ohne Uhr, ohne
+      Punkte, ohne Lösung. Wer die Stufe abonniert hat, sieht sie.</p>
+    <div class="card">
+      <div class="row">
+        <label>Prüfung<select id="r_lvl">
+          <option value="">alle Prüfungen</option>
+          ${levelOptions(c.levels, '')}
         </select></label>
         <label style="flex:2">Titel<input id="r_title" placeholder="z. B. Wortschatz Reisen"></label>
         <label>Reihenfolge<input id="r_sort" type="number" value="0"></label>
@@ -585,19 +726,38 @@ async function screenContent(){
 
   const $ = id => document.getElementById(id);
 
+  $('t_lvl').onchange = e => { contentLevel = e.target.value; screenContent(); };
+
+  /* التعديل: القراءة رجوعاً من القاعدة، تحويل لنص القالب، وفتح المحرّر.
+     نفس اللغة يلي بتنكتب فيها الامتحانات الجديدة — ما في صيغة تانية
+     تتعلّميها، والحفظ بيستبدل الامتحان على نفس الـslug. */
+  app.querySelectorAll('[data-tedit]').forEach(b => b.onclick = async () => {
+    const t = (c.tests || []).find(x => x.id === b.dataset.tedit);
+    const doc = await act(b, () => rpc('admin_test_doc', { p_test_id: b.dataset.tedit }));
+    if (!doc) return;
+    importState = { id: null, doc: null, raw: '' };
+    pendingEdit = { level: t.level_id, slug: t.slug, text: Markup.serialize(doc) };
+    show('import');
+  });
+
   $('l_go').onclick = async e => {
-    const id = $('l_id').value.trim().toLowerCase();
-    if (!/^[a-z][a-z0-9_]{0,15}$/.test(id))
-      return toast('Kennung: Kleinbuchstaben, z. B. a2');
+    const provider = $('l_prov').value.trim();
+    const stufe    = $('l_stufe').value.trim().toUpperCase();
+    if (!provider || !stufe)
+      return toast('Anbieter und Stufe sind beide nötig');
+    // المعرّف والعنوان بيتولّدوا بقاعدة البيانات لما ما ينعطوا
     await act(e.target, () => rpc('admin_upsert_level', {
-      p_id: id, p_title: $('l_title').value.trim() || id.toUpperCase(),
-      p_sort: Number($('l_sort').value) || 0, p_published: false }), 'Stufe gespeichert');
+      p_id: null, p_title: $('l_title').value.trim() || null,
+      p_sort: Number($('l_sort').value) || 0, p_published: false,
+      p_provider: provider, p_stufe: stufe }), 'Prüfung gespeichert');
     screenContent();
   };
   app.querySelectorAll('[data-lvl]').forEach(b => b.onclick = async () => {
     await act(b, () => rpc('admin_upsert_level', {
       p_id: b.dataset.lvl, p_title: b.dataset.title,
-      p_sort: Number(b.dataset.sort), p_published: b.dataset.pub === '1' }), 'Gespeichert');
+      p_sort: Number(b.dataset.sort), p_published: b.dataset.pub === '1',
+      p_provider: b.dataset.prov || null, p_stufe: b.dataset.stufe || null }),
+      'Gespeichert');
     screenContent();
   });
   app.querySelectorAll('[data-tpub]').forEach(b => b.onclick = async () => {
@@ -641,55 +801,200 @@ async function screenContent(){
 
 /* ============ الاستماع ============
    ثلث الامتحان. بدون ملفات صوت هالقسم مراجعة مو تدريب. */
-async function screenAudio(){
-  app.innerHTML = '<div class="empty">Lädt …</div>';
-  const rows = await rpc('admin_audio_status');
-  const missing = rows.filter(r => !r.audio).length;
+/* منتقي الستوفة بيعرض يلي موجود بس، فالمستخدم يلي بده A1 وما عنده
+   بيوقف. الخيار الأخير بيفتح سؤالين وبيعمل الستوفة على طول، بلا ما
+   يترك الشاشة يلي هو فيها. */
+/* ============ المؤسسة + الدرجة ============ */
+/* «A1» لحالها مو منتج: في A1 من telc وA1 من Goethe وA1 من ÖSD، وكل
+   وحدة امتحان مختلف. فصف المستوى الواحد بقاعدة البيانات = (مؤسسة،
+   درجة)، والاشتراك والكود معلّقين عليه متل ما كانوا. */
+const STUFEN    = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+const ANBIETER  = ['telc', 'Goethe', 'ÖSD', 'TestDaF', 'DTZ'];
 
-  app.innerHTML = `
-    <h1>Hörtexte</h1>
-    <p class="sub">Ein Drittel jeder Prüfung ist Hören. Ohne Datei zeigt der
-      Abschnitt nur das Transkript — zum Nachlesen, nicht zum Üben.</p>
-    ${missing ? `<div class="stats"><div class="stat warn">
-      <b>${missing}</b><span>Abschnitte ohne Hörtext</span></div>
-      <div class="stat"><b>${rows.length - missing}</b><span>mit Hörtext</span></div>
-    </div>` : ''}
+/* اسم للعرض: «telc · B1». المستويات القديمة ممكن تكون بلا مؤسسة —
+   منبيّن عنوانها متل ما هو بدل ما نخترع وحدة. */
+const lvlName = l => l.provider && l.stufe
+  ? `${l.provider} · ${l.stufe}` : (l.title || l.id);
+
+/* قائمة مجمّعة بالمؤسسة: بعشر مستويات بتصير القائمة المسطّحة غير
+   مقروءة، والمجموعات بتخلّي «كل telc» واضحة بنظرة. */
+function levelOptions(levels, selected, extra = ''){
+  const groups = new Map();
+  for (const l of levels){
+    const g = l.provider || 'ohne Anbieter';
+    if (!groups.has(g)) groups.set(g, []);
+    groups.get(g).push(l);
+  }
+  return [...groups].map(([g, list]) => `<optgroup label="${esc(g)}">
+    ${list.map(l => `<option value="${esc(l.id)}"${
+      l.id === selected ? ' selected' : ''}${extra ? ' ' + extra(l) : ''}
+      >${esc(l.stufe || l.title)}${l.published ? '' : ' (versteckt)'}</option>`).join('')}
+  </optgroup>`).join('');
+}
+
+const NEW_LEVEL = '__neu__';
+const newLevelOption = '<option value="' + NEW_LEVEL + '">+ neue Stufe anlegen …</option>';
+
+async function askNewLevel(){
+  const provider = (prompt(
+    `Anbieter der Prüfung?\n(${ANBIETER.join(', ')} … oder ein anderer)`) || '').trim();
+  if (!provider) return null;
+  const stufe = (prompt(
+    `Stufe?\n(${STUFEN.join(', ')})`, 'B1') || '').trim().toUpperCase();
+  if (!stufe) return null;
+  try {
+    // مخفية أول ما تنعمل: ما في محتوى فيها بعد، ونشرها فاضية بيوصّل
+    // للطالب مستوى بلا امتحانات. المعرّف بيتولّد بقاعدة البيانات.
+    const r = await rpc('admin_upsert_level', {
+      p_id: null, p_title: null, p_sort: 0, p_published: false,
+      p_provider: provider, p_stufe: stufe });
+    toast(`„${provider} · ${stufe}" angelegt (noch versteckt)`);
+    return r.id;
+  } catch (e){
+    toast(e.message === 'provider_and_stufe_required'
+      ? 'Anbieter und Stufe sind beide nötig'
+      : `Fehler: ${e.message}`, 4000);
+    return null;
+  }
+}
+
+/* بيربط منتقي بالخيار: لما ينختار، بيسأل وبيعيد رسم الشاشة */
+function wireNewLevel(sel, redraw){
+  if (!sel) return;
+  sel.insertAdjacentHTML('beforeend', newLevelOption);
+  const prev = sel.value;
+  sel.addEventListener('change', async () => {
+    if (sel.value !== NEW_LEVEL) return;
+    sel.value = prev;
+    const id = await askNewLevel();
+    redraw(id);
+  });
+}
+
+/* ============ الملفات: صور وصوت ============ */
+/* مكان واحد لكل ملف بيحتاجه امتحان. الرفع بيصير من هون مباشرة — ما عاد
+   يلزم مفتاح service_role ولا سكربت بايثون على الجهاز.
+
+   الاسم بالدلو لازم يطابق يلي بـconfig حرف بحرف: ملف مرفوع باسم تاني
+   ما بيظهر للطالب أبداً، وسياسة Storage كمان ما بتلاقيه. فالجدول
+   بيعرض الاسم المتوقّع، والرفع بيستعمله — مو اسم الملف يلي عالجهاز. */
+let assetLevel = '';
+
+async function screenAssets(){
+  app.innerHTML = '<div class="empty">Lädt …</div>';
+  const [rows, content] = await Promise.all([
+    rpc('admin_assets', { p_level_id: assetLevel || null }),
+    rpc('admin_content')
+  ]);
+
+  const img = rows.filter(r => r.kind === 'image');
+  const aud = rows.filter(r => r.kind === 'audio');
+  const fehlt = rows.filter(r => !r.uploaded).length;
+
+  /* الصوت بده سطر أطول من الصورة: اسم الملف قابل للتعديل (القسم ممكن
+     يكون لسا ما إله ملف مربوط) وعدد الوجيدات. الصورة اسمها جاي من
+     الاستيراد ومو قابل للتعديل هون — تغييره لازم يصير بالنص. */
+  const block = (title, list, bucket, hint) => `
+    <h2>${title}</h2>
     <div class="card">
-      <p class="sub" style="margin-top:0">Dateien zuerst hochladen:
-        <code>python3 tools/upload_audio.py audio/</code> — danach hier den
-        Dateinamen eintragen.</p>
-      <div class="wrap"><table>
-        <tr><th>Test</th><th>Teil</th><th>Aufg.</th><th>Datei</th>
-            <th>Wiedergaben</th><th></th></tr>
-        ${rows.map(r => `<tr>
+      <p class="sub" style="margin-top:0">${hint}</p>
+      ${list.length ? `<div class="wrap"><table>
+        <tr><th>Test</th><th>Teil</th><th>Dateiname</th>
+            ${bucket === 'exam-audio' ? '<th>Wdh.</th>' : ''}
+            <th>Status</th><th></th></tr>
+        ${list.map(r => `<tr>
           <td>${esc(r.test_title)}
-            <div class="mono" style="color:var(--muted);font-size:12px">${esc(r.test)}</div></td>
+            <div class="mono" style="color:var(--muted);font-size:12px">${esc(r.slug)}</div></td>
           <td class="mono">${esc(r.section)}</td>
-          <td>${r.items}</td>
-          <td><input data-path="${esc(r.section_id)}" value="${esc(r.audio || '')}"
-                placeholder="m01-hv1.mp3" style="min-width:150px"></td>
-          <td><input data-plays="${esc(r.section_id)}" type="number" min="1" max="5"
-                value="${r.plays}" style="width:70px"></td>
+          <td>${bucket === 'exam-audio'
+            ? `<input class="mono" data-name="${esc(r.section_id)}"
+                 value="${esc(r.path)}" style="min-width:170px;font-size:12px">`
+            : `<span class="mono" style="font-size:12px">${esc(r.path)}</span>`}</td>
+          ${bucket === 'exam-audio'
+            ? `<td><input data-plays="${esc(r.section_id)}" type="number" min="1" max="5"
+                 value="${r.plays}" style="width:64px"></td>` : ''}
+          <td><span class="pill ${r.uploaded ? 'ok' : r.assigned ? 'warn' : ''}">${
+            r.uploaded ? 'da' : r.assigned ? 'fehlt' : 'offen'}</span></td>
           <td style="white-space:nowrap">
-            <button class="btn sm" data-save="${esc(r.section_id)}">Speichern</button>
-            ${r.audio ? `<button class="btn sm grey" data-clear="${esc(r.section_id)}">leeren</button>` : ''}
-          </td></tr>`).join('') ||
-          '<tr><td colspan="6" class="empty">Keine Hörverstehen-Abschnitte</td></tr>'}
-      </table></div>
+            <input type="file" hidden
+                   accept="${bucket === 'exam-audio' ? 'audio/*' : 'image/*'}"
+                   data-file="${esc(r.section_id)}" data-bucket="${bucket}"
+                   data-path="${esc(r.path)}">
+            <button class="btn sm ${r.uploaded ? 'grey' : ''}"
+                    data-pick="${esc(r.section_id)}">${
+              r.uploaded ? 'ersetzen' : 'hochladen'}</button>
+            ${bucket === 'exam-audio' && r.assigned
+              ? `<button class="btn sm grey" data-unlink="${esc(r.section_id)}"
+                   title="Verknüpfung lösen">trennen</button>` : ''}
+          </td></tr>`).join('')}
+      </table></div>` : '<p class="empty">Nichts nötig</p>'}
     </div>`;
 
-  app.querySelectorAll('[data-save]').forEach(b => b.onclick = async () => {
-    const id = b.dataset.save;
-    const path = app.querySelector(`[data-path="${id}"]`).value.trim();
-    const plays = Number(app.querySelector(`[data-plays="${id}"]`).value) || 1;
-    await act(b, () => rpc('admin_set_section_audio', {
-      p_section_id: id, p_path: path || null, p_plays: plays }), 'Gespeichert');
-    screenAudio();
+  app.innerHTML = `
+    <h1>Dateien</h1>
+    <p class="sub">Bilder der Anzeigen und die Hörtexte. Ohne sie fehlt dem
+      Kurs ein Teil der Prüfung — Leseverstehen 3 bleibt leer, Hörverstehen
+      lässt sich nur nachlesen.</p>
+
+    <div class="stats">
+      <div class="stat ${fehlt ? 'warn' : 'ok'}"><b>${fehlt}</b><span>fehlen</span></div>
+      <div class="stat"><b>${rows.length - fehlt}</b><span>hochgeladen</span></div>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <label>Prüfung<select id="as_lvl">
+          <option value="">alle Prüfungen</option>
+          ${levelOptions(content.levels || [], assetLevel)}
+        </select></label>
+      </div>
+    </div>
+
+    ${block('Bilder', img, 'exam-images',
+      'Die Anzeigenseite aus der PDF, als Bild. Der Dateiname steht im Test ' +
+      'unter <code>Bild:</code> — er wird beim Hochladen übernommen, egal wie ' +
+      'die Datei auf Ihrem Rechner heißt.')}
+
+    ${block('Hörtexte', aud, 'exam-audio',
+      'Die Aufnahme zum Abschnitt. Wie oft sie abgespielt werden darf, ' +
+      'steht im Test unter <code>Wiedergaben:</code>.')}`;
+
+  document.getElementById('as_lvl').onchange = e => {
+    assetLevel = e.target.value; screenAssets();
+  };
+
+  app.querySelectorAll('[data-pick]').forEach(b => b.onclick = () =>
+    app.querySelector(`[data-file="${b.dataset.pick}"]`).click());
+
+  app.querySelectorAll('[data-file]').forEach(inp => inp.onchange = async () => {
+    const file = inp.files && inp.files[0];
+    if (!file) return;
+    const id  = inp.dataset.file;
+    const btn = app.querySelector(`[data-pick="${id}"]`);
+    // اسم الملف بالدلو هو يلي بالحقل، مو اسم الملف عالجهاز — لازم يطابق
+    // يلي بـconfig حرف بحرف وإلا الطالب ما بيشوفه.
+    const nameEl = app.querySelector(`[data-name="${id}"]`);
+    const path = (nameEl ? nameEl.value.trim() : inp.dataset.path);
+    if (!path) return toast('Zuerst einen Dateinamen eintragen');
+    try {
+      await act(btn, async () => {
+        // للصوت: نربط المسار بالقسم أول، وإلا بيوصل الملف للدلو وما حدا
+        // بيعرف إنه إله
+        if (inp.dataset.bucket === 'exam-audio'){
+          const plays = Number(app.querySelector(`[data-plays="${id}"]`).value) || 1;
+          await rpc('admin_set_section_audio',
+                    { p_section_id: id, p_path: path, p_plays: plays });
+        }
+        await upload(inp.dataset.bucket, path, file);
+      }, 'Hochgeladen');
+    } catch { /* act أصلاً بيعرض الخطأ */ }
+    screenAssets();
   });
-  app.querySelectorAll('[data-clear]').forEach(b => b.onclick = async () => {
-    await act(b, () => rpc('admin_set_section_audio', {
-      p_section_id: b.dataset.clear, p_path: null, p_plays: 1 }), 'Entfernt');
-    screenAudio();
+
+  app.querySelectorAll('[data-unlink]').forEach(b => b.onclick = async () => {
+    await act(b, () => rpc('admin_set_section_audio',
+      { p_section_id: b.dataset.unlink, p_path: null, p_plays: 1 }), 'Getrennt');
+    screenAssets();
   });
 }
 
@@ -700,6 +1005,10 @@ const SAMPLE = VORLAGE_BEISPIEL.split('\n').filter(l => !l.startsWith('//'))
   .join('\n').split('### Teil: lv2')[0].trim();
 
 let importState = { id: null, doc: null, raw: '' };
+/* لما تضغطي «bearbeiten» بالإنهالته، منخزّن الامتحان هون ومنقفز لشاشة
+   الاستيراد — هي يلي بترسم المحرّر، فما بينفع نملا الحقول قبلها. */
+let pendingEdit = null;
+let importLevel = '';
 
 async function screenImport(){
   app.innerHTML = '<div class="empty">Lädt …</div>';
@@ -712,9 +1021,8 @@ async function screenImport(){
 
     <div class="card">
       <div class="row">
-        <label>Stufe<select id="i_lvl">
-          ${c.levels.map(l => `<option value="${esc(l.id)}">${esc(l.title)}</option>`).join('')
-            || '<option value="">— zuerst eine Stufe anlegen —</option>'}
+        <label>Prüfung<select id="i_lvl">
+          ${levelOptions(c.levels, importLevel)}
         </select></label>
         <label style="flex:2">Kennung des Tests
           <input id="i_slug" placeholder="modell-a2-01"></label>
@@ -765,7 +1073,24 @@ async function screenImport(){
     </table></div></div>`;
 
   const $ = id => document.getElementById(id);
-  const fill = txt => { $('i_text').value = txt; $('i_text').scrollTop = 0; $('i_parse').click(); };
+  const fill = txt => {
+    $('i_text').value = txt; $('i_text').scrollTop = 0;
+    runParse(txt);
+  };
+
+  wireNewLevel($('i_lvl'), id => { if (id) importLevel = id; screenImport(); });
+
+  // امتحان جاي للتعديل: الستوفة والاسم لازم يكونوا نفسهن، وإلا الحفظ
+  // بيعمل امتحان تاني بدل ما يستبدل هاد.
+  if (pendingEdit){
+    const { level, slug, text } = pendingEdit;
+    pendingEdit = null;
+    importLevel = level;
+    $('i_lvl').value = level;
+    $('i_slug').value = slug;
+    fill(text);
+    toast(`„${slug}" geladen — Speichern ersetzt den Test`);
+  }
   // المثال معبّى وبيمرق بلا تحذير — بيبيّن الشكل الصح.
   $('i_sample').onclick = () => fill(VORLAGE_BEISPIEL);
   // القالب الفاضي فيه كل الـ٦١ سؤال وكل خاناته <…>. المحلّل بينبّه على
@@ -866,7 +1191,7 @@ async function saveImport(btn, status){
 
 /* ============ التشغيل ============ */
 const TABS = { home: screenHome, users: screenUsers, codes: screenCodes,
-               content: screenContent, audio: screenAudio,
+               content: screenContent, assets: screenAssets,
                import: screenImport, audit: screenAudit };
 
 async function show(name){

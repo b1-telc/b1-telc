@@ -191,17 +191,28 @@ try {
   check('صفحة التدقيق بتعرض الإجراءات',
         (await page.textContent('table')).includes('code.create'));
 
-  // ---- المحتوى: إنشاء مستوى ----
+  // ---- المحتوى: إنشاء امتحان (مؤسسة + درجة) ----
+  // «A1» لحالها مو منتج: A1 من telc غير A1 من Goethe. فالنموذج بياخد
+  // الاتنين، والمعرّف والعنوان بيتولّدوا بقاعدة البيانات.
   await page.evaluate(() => document.querySelector('[data-tab="content"]').click());
   await page.waitForSelector('#l_go');
-  await page.fill('#l_id', 'a1'); await page.fill('#l_title', 'telc Deutsch A1');
+  await page.fill('#l_prov', 'telc'); await page.fill('#l_stufe', 'A1');
   await page.evaluate(() => document.getElementById('l_go').click());
   // ننتظر إعادة الرسم فعلياً بدل مهلة عمياء — إعادة الرسم بتمسح الحقول
   await page.waitForFunction(() =>
-    document.querySelector('table') && document.body.textContent.includes('telc Deutsch A1'));
+    document.querySelector('table') && document.body.textContent.includes('telc A1'));
   await page.waitForTimeout(300);
-  check('إنشاء مستوى A1 وصل لقاعدة البيانات',
-        sql(`select title from levels where id='a1';`) === 'telc Deutsch A1');
+  check('★ إنشاء telc · A1 وصل لقاعدة البيانات',
+        sql(`select id||'/'||provider||'/'||stufe||'/'||title
+               from levels where provider='telc' and stufe='A1';`)
+        === 'telc-a1/telc/A1/telc A1');
+
+  // مؤسسة بلا درجة لازم تنرفض قبل ما توصل للقاعدة
+  await page.fill('#l_prov', 'Goethe'); await page.fill('#l_stufe', '');
+  await page.evaluate(() => document.getElementById('l_go').click());
+  await page.waitForTimeout(500);
+  check('★ مؤسسة بلا درجة ما بتنحفظ',
+        sql(`select count(*) from levels where provider='Goethe';`) === '0');
 
   // ---- المراجع ----
   await page.fill('#r_title', 'Wortschatz A1');
@@ -256,6 +267,144 @@ try {
   const tbl = await page.textContent('table');
   check('الجدول بيعرض «2× frei»', /2×\s*frei/.test(tbl));
 
+  // ---- إنشاء ستوفة من المنتقي مباشرة ----
+  // كان لازم المستخدم يروح للإنهالته يعمل الستوفة ويرجع. الخيار الأخير
+  // بالمنتقي بيعملها بمكانها. الفحص: الخيار موجود بكل منتقي، والستوفة
+  // بتوصل للقاعدة، وبتنعمل مخفية (نشرها فاضية بتوصّل ستوفة بلا امتحانات).
+  await page.evaluate(() => document.querySelector('[data-tab="import"]').click());
+  await page.waitForSelector('#i_lvl');
+  check('★ خيار «neue Stufe» بمنتقي الاستيراد',
+        (await page.locator('#i_lvl option[value="__neu__"]').count()) === 1);
+
+  const answers = ['Goethe', 'C1'];
+  const onDialog = d => d.accept(answers.shift() ?? '');
+  page.on('dialog', onDialog);
+  await page.selectOption('#i_lvl', '__neu__');
+  await page.waitForTimeout(1500);
+
+  page.off('dialog', onDialog);
+  const newLvl = sql(`select id||'/'||title||'/'||published
+                        from levels where provider='Goethe' and stufe='C1';`);
+  check(`★ الامتحان انعمل من المنتقي (${newLvl})`,
+        newLvl === 'goethe-c1/Goethe C1/false');
+  check('وانختار بعد الإنشاء',
+        (await page.locator('#i_lvl').inputValue()) === 'goethe-c1');
+
+  await page.evaluate(() => document.querySelector('[data-tab="codes"]').click());
+  await page.waitForSelector('#c_lvl');
+  check('★ ونفس الخيار بمنتقي الأكواد',
+        (await page.locator('#c_lvl option[value="__neu__"]').count()) === 1);
+
+  // ---- الإنهالته: تصفية وتعديل ----
+  await page.evaluate(() => document.querySelector('[data-tab="content"]').click());
+  await page.waitForSelector('#t_lvl');
+  const allTests = await page.locator('[data-tedit]').count();
+  check(`كل الامتحانات ظاهرة (${allTests})`, allTests > 0);
+
+  await page.selectOption('#t_lvl', 'telc-a1');
+  await page.waitForTimeout(400);
+  const a1Tests = await page.locator('[data-tedit]').count();
+  check(`★ التصفية بالستوفة بتشتغل (a1: ${a1Tests})`, a1Tests < allTests);
+
+  // «bearbeiten» لازم يفتح المحرّر بنفس الستوفة ونفس الاسم — لو اختلف
+  // واحد منهن، الحفظ بيعمل امتحان جديد بدل ما يستبدل هاد.
+  // منرجّع التصفية لكل الستوفات: a1 لسا بلا امتحانات، ولف الفحص جوّا
+  // شرط بيخلّيه ينجح بصمت لما ما يكون في شي يُضغط.
+  await page.selectOption('#t_lvl', '');
+  await page.waitForTimeout(400);
+  await page.locator('[data-tedit]').first().click();
+  await page.waitForSelector('#i_text');
+  await page.waitForTimeout(1200);
+  const lvl  = await page.locator('#i_lvl').inputValue();
+  const slug = await page.locator('#i_slug').inputValue();
+  const txt  = await page.locator('#i_text').inputValue();
+  check(`★ التعديل فتح المحرّر بالستوفة والاسم (${lvl}/${slug})`,
+        lvl === 'b1' && /^modell-/.test(slug));
+  check('★ والنص طالع بصيغة القالب',
+        /^# /.test(txt) && /### Teil:/.test(txt) && /Lösung:/.test(txt));
+  const st = await page.locator('.stat b').allTextContents();
+  check(`★ والمعاينة انفحصت لحالها (${st.join('/')})`,
+        st[1] === '9' && Number(st[2]) > 40);
+
+  await page.selectOption('#t_lvl', '').catch(() => {});
+
+  // ---- المنتقيات مجمّعة بالمؤسسة ----
+  await page.evaluate(() => document.querySelector('[data-tab="codes"]').click());
+  await page.waitForSelector('#c_lvl');
+  await page.waitForTimeout(300);
+  // بعشر امتحانات، قائمة مسطّحة بتصير غير مقروءة. والأهم: الخيار لازم
+  // يبيّن الدرجة، مو العنوان الكامل، وإلا «telc Deutsch B1» و«Goethe
+  // Deutsch B1» بيطولوا وبيتشابهوا.
+  const groups = await page.locator('#c_lvl optgroup').count();
+  check(`★ منتقي الأكواد مجمّع بالمؤسسة (${groups} مجموعة)`, groups >= 1);
+  const gLabel = await page.locator('#c_lvl optgroup').first().getAttribute('label');
+  check(`اسم المجموعة هو المؤسسة (${gLabel})`, /telc|Goethe|ÖSD/.test(gLabel));
+
+  // والافتراضي لازم يقع على امتحان إله محتوى، مو على أول صف بالترتيب
+  const hint0 = await page.textContent('#c_hint');
+  check('★ الافتراضي امتحان إله محتوى منشور',
+        /Öffnet/.test(hint0) && !/keine Tests/.test(hint0));
+
+  // ---- الملفات: رفع من اللوحة ----
+  // الرفع الحقيقي بده Storage شغّال، وما عندنا هون. يلي منفحصه إنو
+  // الشاشة بتعرف شو ناقص وإنها بتربط اسم الملف بالقسم قبل الرفع —
+  // هاد الجزء يلي بينكسر بصمت لو انعكس ترتيبه.
+  await page.evaluate(() => document.querySelector('[data-tab="assets"]').click());
+  await page.waitForSelector('#as_lvl');
+  const asTxt = await page.textContent('#app');
+  check('شاشة الملفات فيها الصور والهörtexte',
+        /Bilder/.test(asTxt) && /Hörtexte/.test(asTxt));
+
+  const rowsN = await page.locator('[data-pick]').count();
+  check(`فيها صفوف للرفع (${rowsN})`, rowsN > 0);
+
+  // أقسام الاستماع بلا ملف لازم تطلع باسم مقترح قابل للتعديل
+  const nameN = await page.locator('[data-name]').count();
+  check(`★ أقسام الاستماع إلها حقل اسم (${nameN})`, nameN > 0);
+  const firstName = await page.locator('[data-name]').first().inputValue();
+  check(`الاسم المقترح شكله ملف صوت (${firstName})`, /\.mp3$/.test(firstName));
+
+  // التصفية بالستوفة
+  await page.selectOption('#as_lvl', 'telc-a1');
+  await page.waitForTimeout(400);
+  check('★ التصفية بالستوفة بتشتغل',
+        (await page.locator('[data-pick]').count()) < rowsN);
+  await page.selectOption('#as_lvl', '');
+  await page.waitForTimeout(400);
+
+  await page.evaluate(() => document.querySelector('[data-tab="codes"]').click());
+  await page.waitForSelector('#c_kind');
+
+  // ---- الكود التجريبي ----
+  // زرّ واحد بيبدّل بين يومين نموذجين: كامل بالأيام، تجريبي بالساعات
+  // وامتحان محدّد. لازم النداء يوصل بالقيم الصح، وإلا الكود «التجريبي»
+  // بيفتح المستوى كامل ٣٠ يوم وحدا بياخد كل شي ببلاش.
+  await page.selectOption('#c_kind', 'demo');
+  await page.waitForTimeout(200);
+  check('★ Demo بيبيّن الساعات وبيخفي الأيام',
+        !(await page.locator('#c_hours_l').isHidden())
+        && await page.locator('#c_days_l').isHidden());
+  check('★ وبيبيّن قائمة الامتحانات',
+        !(await page.locator('#c_tests_row').isHidden()));
+
+  const nOpts = await page.locator('#c_tests option').count();
+  check(`قائمة الامتحانات معبّاية (${nOpts})`, nOpts > 0);
+
+  await page.fill('#c_hours', '24');
+  await page.fill('#c_uses', '3');
+  await page.evaluate(() => document.getElementById('c_go').click());
+  await page.waitForTimeout(1200);
+
+  const demoRow = sql(`select duration_days||'/'||duration_hours||'/'||
+      coalesce(array_length(test_slugs,1),0)||'/'||max_uses
+    from access_codes order by created_at desc limit 1;`);
+  check(`★ الكود التجريبي انحفظ صح (${demoRow} = يوم/ساعة/امتحان/تفعيل)`,
+        demoRow === '0/24/1/3');
+
+  // ونرجّع النموذج لوضع الكامل تا ما نأثّر على الاختبارات الجاية
+  await page.selectOption('#c_kind', 'full');
+  await page.waitForTimeout(200);
+
   // ---- الاستيراد: المثال ----
   await page.evaluate(() => document.querySelector('[data-tab="import"]').click());
   await page.waitForSelector('#i_sample');
@@ -295,7 +444,7 @@ try {
   // ---- الاستيراد: نشر فعلي ----
   await page.evaluate(() => document.getElementById('i_sample').click());
   await page.waitForSelector('.preview');
-  await page.selectOption('#i_lvl', 'a1');
+  await page.selectOption('#i_lvl', 'telc-a1');
   await page.fill('#i_slug', 'probe-a1-01');
   await page.evaluate(() => document.getElementById('i_apply').click());
   await page.waitForTimeout(1500);

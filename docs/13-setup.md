@@ -59,7 +59,12 @@ The buckets and their read policy come from `0013_storage.sql`, which
 > file to the level that references it, so a B1 image is unreachable for an
 > A1 subscriber.
 
-The Leseverstehen 3 pages are exam content, so they go in a **private** bucket:
+**The panel can do this for you.** Adminpanel → **Dateien** lists every file
+an exam needs, marks what is missing, and uploads straight from the browser
+under your admin session — no `service_role` key on your machine, no script.
+It also names the file for you, so it always matches what the exam expects.
+
+The script below still works and is faster for the initial 16 at once:
 
 ```bash
 export SUPABASE_URL=https://xxxxxxxx.supabase.co
@@ -152,6 +157,48 @@ Not required to launch. See
 API key stored as a Supabase secret and one `supabase functions deploy`.
 Without it the app works exactly as described above; the correction button
 just says it is not set up.
+
+## The panel, tab by tab
+
+| Tab | What it is for |
+|---|---|
+| **Übersicht** | Numbers at a glance, and recent failed code attempts. |
+| **Nutzer** | Every account: which codes they redeemed, every subscription, lengthen or shorten each one on its own. |
+| **Codes** | Generate access codes. *Vollzugang* opens a whole level for days; *Demo* opens the tests you pick for hours. |
+| **Inhalte** | Levels, model tests, reading material. Filter by level; **bearbeiten** opens a test back in the import editor. |
+| **Dateien** | Every image and audio file an exam needs, what is missing, upload straight from the browser. |
+| **Import** | Paste a new exam. **Beispiel einfügen** for a worked example, **Leere Vorlage** for the blank 61-slot template. |
+| **Protokoll** | Every admin action, who did it and when. |
+
+**Lesematerial** (under Inhalte) is not a test: free text your students can read
+any time — vocabulary lists, grammar notes, exam tips. No clock, no points, no
+answer key. Anyone subscribed to that level sees it.
+
+**Editing a published test:** Inhalte → pick the level → **bearbeiten**. The
+test comes back as the same template language you paste in, you change what you
+need, and saving replaces it. Verified lossless: questions, answers and
+explanations come back byte-identical through a full read-edit-save cycle.
+
+### A "level" is provider + stufe
+
+`A1` on its own is not a product. There is a telc A1, a Goethe A1, an ÖSD A1 —
+different exams, different structure. So one row in `levels` is one **exam
+product**:
+
+| id | provider | stufe | what it sells |
+|---|---|---|---|
+| `b1` | telc | B1 | the 16 exams in this repo |
+| `goethe-b1` | Goethe | B1 | a separate product |
+| `oesd-a2` | ÖSD | A2 | a separate product |
+
+A code for telc·B1 does **not** open Goethe·B1. Everything that already guarded
+access — subscriptions, codes, RLS, storage — hangs off this one id and did not
+have to change; `provider` and `stufe` are two descriptive columns on top.
+
+Create one under **Inhalte → Prüfungen** (Anbieter + Stufe; id and title are
+generated), or from the level selector in Import or Codes — last entry,
+*+ neue Stufe anlegen*. It starts hidden, because a published product with no
+exams in it is what the student would see.
 
 ## Day-to-day
 
