@@ -7,6 +7,11 @@ import http from 'http';
 import path from 'path';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
+/* SERVE_FROM=dist بيشغّل نفس الجولة على الناتج المنشور بدل المصدر.
+   الناتج بتنشال منه التعليقات، والماسح ممكن يكسر شي — والاختبارات
+   بتشتغل على المصدر، يعني الكسر بيوصل للمستخدم وحده. */
+const SERVE = process.env.SERVE_FROM
+  ? path.resolve(ROOT, process.env.SERVE_FROM) : ROOT;
 const fx = JSON.parse(readFileSync(path.join(ROOT, 'tests/fixture.json'), 'utf8'));
 
 /* نغمة WAV مولّدة بالاختبار — أنضف من رفع ملف ثنائي بالمستودع */
@@ -35,7 +40,7 @@ const server = http.createServer((req, res) => {
     return res.end(TONE);
   }
   try {
-    const body = readFileSync(path.join(ROOT, f));
+    const body = readFileSync(path.join(SERVE, f));
     res.writeHead(200, { 'content-type': MIME[path.extname(f)] || 'application/octet-stream' });
     res.end(body);
   } catch { res.writeHead(404); res.end('nope'); }
@@ -113,6 +118,12 @@ await page.addInitScript(fx => {
                             { id:'a2', title:'telc Deutsch A2',
                               provider:'telc', stufe:'A2' }]
       .filter(l => sub.levels.includes(l.id)),
+    // كتالوج: امتحان مفتوح وواحد مقفول — حالة الكود التجريبي
+    catalog: async lvl => lvl === 'b1' ? [
+      { id: 'modell-01', title: 'PETRA', aufgaben: 61, minutes: 150, open: true },
+      { id: 'modell-02', title: 'EVA1',  aufgaben: 60, minutes: 150, open: false },
+      { id: 'modell-03', title: 'SOPHIE',aufgaben: 59, minutes: 150, open: false }
+    ] : [],
     resources: async lvl => lvl === 'b1'
       ? [{ id:'r1', title:'Wortschatz Reisen', kind:'text',
            body:'## Verben\n\nfahren, fliegen, ankommen\n\n## Nomen\n\nder Zug, das Gleis' }]
@@ -124,7 +135,9 @@ await page.addInitScript(fx => {
       title: fx.test.title, subtitle: fx.test.subtitle,
       blocks: fx.test.blocks, aufgaben: 61,
       minutes: fx.test.blocks.reduce((a,b) => a + b.minutes, 0) }] }),
-    test: async () => shape(),
+    // منسجّل كل نداء تحميل: «ما بينحمّل محتوى المقفول» خاصية سلوكية،
+    // مو شي بينفحص بالبحث عن كلمات بالصفحة
+    test: async (id) => { (window.__loaded ||= []).push(id); return shape(); },
     imageUrl: async () => null,
     audioUrl: async () => '/tone.wav',
     reviewSummary: async () => ({
@@ -253,6 +266,66 @@ await page.waitForTimeout(600);
 check('زرّ المراجعة ظهر', await page.locator('#drill').count() === 1);
 check('الزرّ بيقول كم سؤال مستحقّ',
       /\d+ Aufgaben? fällig/.test(await page.textContent('#drill')));
+
+// ---- ٨ب) الامتحانات المقفولة ----
+// هدفها التسويق: صاحب التجريبي لازم يشوف إنه في غير امتحان. بس
+// محتواها ما لازم يوصل الصفحة أبداً.
+check('البلاطات: مفتوح + مقفولين', await page.locator('.tile.locked').count() === 2);
+check('★ المقفولة ما بتنضغط',
+      await page.locator('.tile.locked').first().isDisabled());
+check('★ وما إلها data-id، فما في طريقة تفتحها',
+      await page.locator('.tile.locked[data-id]').count() === 0);
+const lockedTxt = await page.textContent('.tile.locked');
+check(`عنوانها ظاهر للتشويق (${lockedTxt.replace(/\s+/g,' ').trim().slice(0,30)})`,
+      /EVA1/.test(lockedTxt) && /60 Aufgaben/.test(lockedTxt));
+check('★ وسطر «في غيرهن» ظاهر',
+      /weitere Modelltests/.test(await page.textContent('.upsell')));
+
+// ★ محتوى المقفول ما بينحمّل: منحاول نفتحه بالضغط ومنشوف إذا انطلب
+await page.evaluate(() => {
+  const b = document.querySelector('.tile.locked');
+  b.disabled = false;            // نشيل القفل البصري ومنجرّب
+  b.click();
+});
+await page.waitForTimeout(600);
+const loaded = await page.evaluate(() => window.__loaded || []);
+check(`★ ولا نداء لتحميل امتحان مقفول (${loaded.join(', ') || 'ولا واحد'})`,
+      !loaded.includes('modell-02') && !loaded.includes('modell-03'));
+
+// ---- ٨ج) لغة الواجهة ----
+// الواجهة بس بتنترجم. محتوى الامتحان بيضل ألماني: قراءة التعليمة
+// الألمانية جزء من الاختبار، وترجمتها بتلغي التدرّب.
+check('منتقي اللغة موجود بتلات لغات',
+      await page.locator('#lang option').count() === 3);
+
+await page.selectOption('#lang', 'ar');
+await page.waitForTimeout(500);
+check('★ الواجهة صارت عربي',
+      /أهلاً/.test(await page.textContent('#app')));
+check('★ والاتجاه انقلب لليمين',
+      await page.getAttribute('html', 'dir') === 'rtl');
+check('★ والجمع العربي صح (مثنّى)',
+      /نموذجين|نموذج/.test(await page.textContent('.upsell')));
+
+await page.selectOption('#lang', 'uk');
+await page.waitForTimeout(500);
+check('★ والأوكرانية شغّالة',
+      /Вітаємо/.test(await page.textContent('#app')));
+check('والاتجاه رجع لليسار',
+      await page.getAttribute('html', 'dir') === 'ltr');
+
+// الاختيار لازم ينحفظ بين الجلسات
+check('★ اللغة انحفظت',
+      await page.evaluate(() => localStorage.getItem('b1.lang')) === 'uk');
+
+// ★ ولا اسم امتحان انترجم — العناوين محتوى، مو واجهة
+check('★ عناوين الامتحانات ضلّت متل ما هي',
+      /PETRA/.test(await page.textContent('#app')));
+
+await page.selectOption('#lang', 'de');
+await page.waitForTimeout(500);
+check('والرجوع للألماني شغّال',
+      /Willkommen/.test(await page.textContent('#app')));
 
 // ---- ٩) بطاقة الاشتراك ----
 // كانت المعلومة تطلع بس لما يكون في أكتر من مستوى، فالطالب العادي ما

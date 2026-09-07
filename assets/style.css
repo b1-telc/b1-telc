@@ -312,6 +312,17 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
 /* Kachel "Fehler wiederholen" */
 .tile.drill .n{background:var(--warn-soft); color:var(--warn); font-size:19px}
 
+/* ---- Sprachumschalter ---- */
+.langsel{background:transparent;border:1px solid var(--line,#e2e7f0);
+  color:var(--muted,#68758a);border-radius:8px;padding:4px 6px;
+  font:inherit;font-size:13px;margin-inline-start:8px;cursor:pointer}
+
+/* Arabisch läuft von rechts nach links. Die Pfeile zeigen sonst in die
+   falsche Richtung, und Ränder sitzen auf der falschen Seite. */
+[dir="rtl"] .chev{transform:scaleX(-1)}
+[dir="rtl"] .icon-btn{transform:scaleX(-1)}
+[dir="rtl"] .icon-btn>*{transform:scaleX(-1);display:inline-block}
+
 /* ---- Abo-Karte: was habe ich, wie lange noch ----
    Steht immer da, auch bei einer einzigen Stufe. Vorher zeigte nur der
    Umschalter die Restzeit, und der erschien erst ab zwei Stufen — der
@@ -330,6 +341,17 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
 .abo.on{border-color:var(--blue,#2f6bed)}
 .abo.soon{border-color:var(--warn,#b7791f)}
 .abo.soon .when b{color:var(--warn,#b7791f)}
+
+/* ---- Gesperrter Modelltest ----
+   Sichtbar, aber nicht anklickbar: der Demo-Nutzer soll sehen, dass es
+   mehr gibt. Der Inhalt wird nie geladen — nur Titel und Aufgabenzahl
+   kommen aus level_catalog. */
+.tile.locked{opacity:.55;cursor:default}
+.tile.locked .n{background:var(--line,#e2e7f0);color:var(--muted,#68758a)}
+.upsell{background:var(--card,#fff);border:1px dashed var(--brand,#2f6bed);
+  border-radius:12px;padding:12px 14px;margin:0 0 12px;
+  font-size:14px;color:var(--muted,#68758a)}
+.upsell b{color:var(--ink,#101828)}
 
 /* ---- Lesematerial ---- */
 .readable{line-height:1.7}

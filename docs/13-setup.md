@@ -204,6 +204,47 @@ Everywhere you choose an exam, it is **two fields**: Anbieter, then Stufe. One
 grouped dropdown was tried first and rejected — a closed `<select>` shows only
 `B1`, hiding the provider, which is half the decision.
 
+## What students can see
+
+Everything the browser downloads — HTML, CSS, JavaScript — is readable in the
+browser's developer tools. That is true of every web app and cannot be changed;
+it is also not a problem here, because nothing secret is in it:
+
+| In the browser | Why it is fine |
+|---|---|
+| `config.js` with the anon key | Public by design. RLS decides what it may read. |
+| All app JavaScript | Logic only. Scoring runs in `submit_attempt()` on the server. |
+| Exam questions of the open test | The student paid to see them. |
+| **Answer keys** | Never sent. `item_answers` has RLS and no policy at all. |
+| **Locked tests' content** | Never sent. Only title and task count, from `level_catalog`. |
+
+What the build does remove is developer comments: `tools/build_dist.sh` strips
+them from every JS and CSS file it publishes. The stripper is a state-machine
+scanner, not a regular expression — `//` inside a string, `/*` inside a
+template literal and `//` inside a regex literal all survive — and the full
+browser suite runs a second time against the stripped output, so a scanner bug
+cannot reach a student.
+
+## Languages
+
+The student app runs in **German, Arabic and Ukrainian**, switchable in the top
+bar and remembered per device. Arabic switches the whole layout to right-to-left.
+
+**Only the interface is translated.** Exam content — questions, reading texts,
+telc's own task instructions — stays German, deliberately: reading the German
+instruction is part of the exam, and translating it would make the practice
+stop matching the real day. The writing box also stays left-to-right in Arabic,
+because the answer is written in German.
+
+Translations live in `assets/i18n.js`, one dictionary per language. A missing
+key falls back to German rather than showing an empty string, and a test fails
+the build if Arabic or Ukrainian is missing anything German has. Plural forms
+come from `Intl.PluralRules`, so Arabic gets its dual (سؤالين) and Ukrainian its
+few/many split — not a hand-rolled two-form guess.
+
+To add a language: add an entry to `LANGS` and a dictionary beside the others.
+The test will tell you what is still missing.
+
 ## Day-to-day
 
 | Task | Where |
