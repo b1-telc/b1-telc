@@ -31,7 +31,7 @@ body{
   font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   font-size:var(--fs); line-height:1.7; -webkit-text-size-adjust:100%;
 }
-main{max-width:820px; margin:0 auto; padding:18px 16px 90px}
+main{max-width:820px; margin:0 auto; padding:18px 16px 24px}
 
 /* ---------- topbar ---------- */
 .topbar{
@@ -40,13 +40,20 @@ main{max-width:820px; margin:0 auto; padding:18px 16px 90px}
 }
 .brand{font-weight:700; font-size:18px; margin-inline-end:auto}
 .brand span{color:var(--brand)}
-/* ★ «Zurück» كان نص أزرق بلا إطار ولا أرضية: بيقرا كعنوان، مو كزرّ،
-   وهدف اللمس فيه كان أصغر من إصبع. صار إله إطار وأرضية وارتفاع ٤٤. */
+/* ★ «Zurück»: كان نص أزرق صغير بالشريط العلوي، بين الاسم والساعة —
+   المستخدم ما كان يلاقيه. صار تحت الصفحة، بعرضها كلها، بإطار وأرضية.
+   نفس مكان «سلّم» و«ابدأ»، فالإصبع أصلاً هناك. */
+.backbar{max-width:820px; margin:0 auto; padding:0 16px 32px}
+.backbar:has(> [hidden]){padding:0}
+/* وقت الامتحان في شريط ثابت تحت (سلّم/وقفة) — الزرّ لازم يوقف فوقه،
+   وإلا بينختفي تحته بالضبط بالشاشة يلي بده يرجع منها */
+body:has(.bottombar) .backbar{padding-bottom:110px}
 .icon-btn{
+  display:block; width:100%;
   background:var(--brand-soft); border:2px solid var(--brand);
-  color:var(--brand-dark); font-size:15px; font-weight:700;
-  cursor:pointer; padding:8px 14px; min-height:44px; border-radius:11px;
-  font-family:inherit; white-space:nowrap;
+  color:var(--brand-dark); font-size:1em; font-weight:700;
+  cursor:pointer; padding:12px 16px; min-height:52px; border-radius:12px;
+  font-family:inherit;
 }
 .icon-btn:hover{background:var(--brand); color:#fff}
 .timer{
@@ -173,6 +180,24 @@ select:focus,textarea:focus{outline:0; border-color:var(--brand)}
 textarea{min-height:230px; line-height:1.8; direction:ltr; text-align:left}
 .counter{font-size:.83em; color:var(--muted); margin-top:6px}
 
+/* ---- Schnellprüfung beim Brief ----
+   Zählbares steht oben und aktualisiert sich beim Tippen. Die Leitpunkte
+   stehen darunter als Haken — ob ein Punkt wirklich bearbeitet ist, kann
+   nur der Schreibende beurteilen, also behauptet die App es nicht. */
+.checks{margin-top:10px; border:1px solid var(--line); border-radius:12px;
+  padding:12px 14px; background:var(--card)}
+.checks h3{margin:0 0 8px; font-size:.95em}
+.checks ul{list-style:none; margin:0; padding:0}
+.checks li{display:flex; gap:8px; align-items:flex-start; padding:3px 0;
+  font-size:.92em; color:var(--muted)}
+.checks li.ok{color:var(--ok)}
+.checks .mark{flex:none; width:1.1em; font-weight:700}
+.checks .sub{margin:10px 0 4px; font-size:.86em}
+.checks .pts li{color:var(--ink)}
+.checks .pts label{display:flex; gap:8px; align-items:flex-start; cursor:pointer}
+.checks .pts input{margin:2px 0 0; width:18px; height:18px; flex:none;
+  accent-color:var(--brand)}
+
 /* حقل الكود: كبير، بالنص، وLTR دايماً — حتى بواجهة عربية الكود لاتيني */
 .codeinput{
   font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
@@ -230,7 +255,7 @@ textarea{min-height:230px; line-height:1.8; direction:ltr; text-align:left}
 .empty{text-align:center; color:var(--muted); padding:40px 10px}
 @media (max-width:520px){
   .opts.inline{grid-template-columns:1fr}
-  main{padding:14px 12px 90px}
+  main{padding:14px 12px 20px}
 }
 
 /* صورة بنك الإعلانات (Leseverstehen Teil 3) */
@@ -384,11 +409,23 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
 
 .btn.wide{width:100%; justify-content:center; min-height:54px}
 
+/* ---- Warteliste ----
+   Die Nummer ist der Punkt: "Platz 47" sagt, dass da noch andere sind.
+   Deshalb steht sie groß und allein, nicht in einem Satz versteckt. */
+.queue{text-align:center; padding:26px 16px}
+.qnum{
+  font-size:3.4em; font-weight:800; line-height:1;
+  color:var(--brand); font-variant-numeric:tabular-nums;
+}
+.qlabel{margin:8px 0 0; font-weight:700; font-size:1.05em}
+.queue .sub{margin:6px 0 0}
+
 /* Arabisch läuft von rechts nach links. Die Pfeile zeigen sonst in die
    falsche Richtung, und Ränder sitzen auf der falschen Seite. */
 [dir="rtl"] .chev{transform:scaleX(-1)}
-[dir="rtl"] .icon-btn{transform:scaleX(-1)}
-[dir="rtl"] .icon-btn>*{transform:scaleX(-1);display:inline-block}
+/* ★ زرّ الرجوع ما بينقلب بالـCSS: صار عريض ونصّه جوّاه، فقلبه بيقلب
+   الحروف كمان. و«‹» بينعكس لحاله بسياق يمين-لليسار — هيك بيشتغل
+   الترميز ثنائي الاتجاه. */
 
 /* ---- Abo-Karte: was habe ich, wie lange noch ----
    Steht immer da, auch bei einer einzigen Stufe. Vorher zeigte nur der

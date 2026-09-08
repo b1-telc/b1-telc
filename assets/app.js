@@ -13,6 +13,7 @@ const S = {
   run: null,        // laufender Durchgang: ein Teil oder ein ganzer Prüfungsteil
   answers: {},      // { itemId: Antwort }
   dropped: {},      // { itemId: [früher gewählte Buchstaben] } — werden durchgestrichen
+  checks: {},       // { itemId: [Leitpunkt abgehakt?] } — Selbstkontrolle beim Brief
   tick: null,       // Timer
   left: 0,          // verbleibende Sekunden
   view: 'home',
@@ -98,7 +99,12 @@ function go(view, fn){
 
    الواجهة بس بتنترجم: محتوى الامتحان بيضل ألماني، لأن قراءة التعليمة
    الألمانية جزء من الاختبار. */
-const THEMES = ['system', 'light', 'dark'];
+/* ★ زرّين بس بالواجهة: ☀ و🌙.
+   «متل الجهاز» ضل شغّال كسلوك — مين ما لمس شي، التطبيق بيتبع إعداد
+   جهازه — بس ما عاد إله زرّ: تلات خيارات لمظهر بتخلّي القرار أصعب مما
+   يستاهل، والزرّ التالت (🖥) ما بيقول شي لمين مو متعوّد على التقنية.
+   المعلّم هو المظهر يلي شايفه فعلاً، حتى لو جاي من إعداد الجهاز. */
+const THEMES = ['light', 'dark'];
 const SIZES  = [0.9, 1, 1.15, 1.35];      // مضروب بحجم الخط الأساسي
 
 function applyLook(){
@@ -116,12 +122,19 @@ function applyLook(){
    الزرّ كان بيفتح شاشة لحالها: يعني ضغطتين وخروج من الصفحة تا يكبّر
    الخط أو يبدّل لغته. ومين ما بيقرا الألماني ما كان يعرف إنّ ⚙ تعني
    إعدادات أصلاً. هلق الأعلام والأزرار ظاهرة أول ما يفتح التطبيق. */
-function setbarHTML(){
+/* المظهر المعروض حالياً — سواء انختار بالإيد أو إجا من الجهاز */
+function shownTheme(){
   const th = load('b1.theme', 'system');
+  if (th === 'light' || th === 'dark') return th;
+  return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+function setbarHTML(){
+  const th = shownTheme();
   let sz = load('b1.size', 1);
   if (!SIZES.includes(sz)) sz = 1;
   const i = SIZES.indexOf(sz);
-  const ic = { system: '🖥', light: '☀', dark: '🌙' };
+  const ic = { light: '☀', dark: '🌙' };
 
   return `<div class="setbar" role="group" aria-label="${esc(t('settings'))}">
     <div class="setgrp">
@@ -131,8 +144,8 @@ function setbarHTML(){
     </div>
     <div class="setgrp">
       ${THEMES.map(x => `<button class="chip${x === th ? ' on' : ''}"
-        data-theme="${esc(x)}" title="${esc(t(x === 'system' ? 'themeSystem'
-          : x === 'light' ? 'themeLight' : 'themeDark'))}">${ic[x]}</button>`).join('')}
+        data-theme="${esc(x)}" title="${esc(t(x === 'light' ? 'themeLight' : 'themeDark'))
+        }">${ic[x]}</button>`).join('')}
     </div>
     <div class="setgrp">
       <button class="chip" data-size="-" ${i === 0 ? 'disabled' : ''}
@@ -202,7 +215,13 @@ async function boot(){
     S.sub = API.hasSession() ? await API.subscription() : null;
   } catch { S.sub = null; }
 
-  if (!S.sub) return screenCode();
+  if (!S.sub){
+    // بالطابور؟ منرجّعه لمكانه بدل ما نطلب منه كوده من جديد
+    let w = null;
+    try { w = API.hasSession() ? await API.waitlist() : null; } catch {}
+    if (w && w.waiting && !w.open) return screenWait(w.position, w.total);
+    return screenCode(w && w.waiting && w.open ? t('waitOpen') : undefined);
+  }
 
   try { S.levels = await API.myLevels(S.sub); } catch { S.levels = []; }
   // die zuletzt gewählte Stufe merken, sonst die erste des Abos
@@ -217,6 +236,42 @@ async function boot(){
   }
   S.catalog = await loadCatalog(S.level);
   screenHome();
+}
+
+/* ★ قائمة الانتظار.
+   الكود ما بينستهلك — بيضل ساري لصاحبه — فالطالب ما بيخسر شي، بس
+   بيستنى دوره. ومنقول له رقمه: «إنت رقم ٤٧» بتقول إنّ في ناس غيره،
+   وهاد بيشتغل لصالحنا أكتر من أي إعلان.
+
+   وما منخلّيه يعيد إدخال الكود تا يعرف: زرّ واحد بيسأل الخادم. */
+function screenWait(pos, total){
+  stopTimer();
+  go('wait', () => {
+    elBack.hidden = true;
+    app.innerHTML = `
+      ${setbarHTML()}
+      <h1>${esc(t('waitTitle'))}</h1>
+      <div class="card queue">
+        <div class="qnum">${esc(String(pos ?? '—'))}</div>
+        <p class="qlabel">${esc(t('waitPos', { n: pos }))}</p>
+        ${total > 1 ? `<p class="sub">${esc(plural(total, 'nWaiting'))}</p>` : ''}
+      </div>
+      <p class="sub">${esc(t('waitHint'))}</p>
+      <button class="btn wide" id="wchk">${esc(t('waitCheck'))}</button>`;
+
+    wireSetbar();
+    const b = document.getElementById('wchk');
+    b.onclick = async () => {
+      b.disabled = true; b.textContent = t('codeChecking');
+      let st = null;
+      try { st = await API.waitlist(); } catch {}
+      b.disabled = false; b.textContent = t('waitCheck');
+      if (!st || !st.waiting) return boot();      // دوره إجا أو خرج من الطابور
+      if (st.open) return screenCode(t('waitOpen'));
+      screenWait(st.position, st.total);
+      toast(t('waitStill'));
+    };
+  });
 }
 
 /* Zugang per Code — es gibt keine E-Mail und kein Passwort. */
@@ -261,6 +316,8 @@ function screenCode(msg){
       catch { r = { ok: false, error: 'network' }; }
       btn.disabled = false; btn.textContent = t('codeButton');
       if (r && r.ok) return boot();
+      // مو خطأ: الكود صحيح وباقي ساري، بس ما في مطرح هلق
+      if (r && r.error === 'waitlist') return screenWait(r.position, r.total);
       if (r && r.error === 'too_many_attempts'){
         const m = Math.ceil((r.retry_after || 900) / 60);
         return screenCode(t('codeErrTooMany', { t: I18N.plural(m, 'nMinute') }));
@@ -722,6 +779,48 @@ addEventListener('scroll', () => {
 const shortTitle = t => t.replace('Leseverstehen', 'LV').replace('Sprachbausteine', 'SB')
                          .replace('Hörverstehen', 'HV').replace(', Teil ', ' ');
 
+/* ★ فحوص سريعة بلا ذكاء اصطناعي.
+   هدول أشياء بينفحصوا بالعدّ والمطابقة، ما بدهن حكم: عدد الكلمات،
+   في تحية بالأول، في سلام بالآخر. مجانية، فورية، وما بتغلط.
+
+   يلي **ما** منحطّه هون: هل النقاط الأربعة انكتبت فعلاً. هاد بده فهم
+   للنص، ومطابقة كلمات بتعطي جواب غلط بثقة — فمنعرضهن كقائمة الطالب
+   بيشطب عليها بإيده. صادقة أكتر من تخمين ملبّس.
+
+   والإملاء متروك للمتصفّح: lang="de" على الحقل بيخلّي المدقّق يسطّر
+   الكلمات الغلط وهو عم يكتب. مجاني ومبني بالمتصفّح. */
+const GREET = /^\s*(liebe[rs]?\b|hallo\b|hi\b|sehr\s+geehrte[rs]?\b|guten\s+(tag|morgen|abend)\b)/i;
+const CLOSE = /(viele|liebe|herzliche|beste|freundliche)\s+gr(ü|ue)(ß|ss)e|mit\s+freundlichen\s+gr(ü|ue)(ß|ss)en|bis\s+bald|tsch(ü|ue)ss|dein[e]?\b|ihr[e]?\b/i;
+
+const wordCount = s => String(s || '').trim().split(/\s+/).filter(Boolean).length;
+
+function checksHTML(it, text){
+  const n    = wordCount(text);
+  const min  = it.minWords || 100;
+  const body = String(text || '');
+  const tail = body.slice(-140);          // السلام بيكون بالآخر، مو بأي مطرح
+  const pts  = it.points || [];
+  const done = (S.checks && S.checks[it.id]) || [];
+
+  const row = (ok, label) => `<li class="${ok ? 'ok' : ''}">
+    <span class="mark">${ok ? '✓' : '○'}</span>${esc(label)}</li>`;
+
+  return `<div class="checks">
+    <h3>${esc(t('checksTitle'))}</h3>
+    <ul>
+      ${row(n >= min, t('chkWords', { n, min }))}
+      ${row(GREET.test(body), t('chkGreeting'))}
+      ${row(CLOSE.test(tail), t('chkClosing'))}
+    </ul>
+    ${pts.length ? `<p class="sub">${esc(t('chkPointsHint'))}</p>
+      <ul class="pts">
+        ${pts.map((p, i) => `<li>
+          <label><input type="checkbox" data-pt="${esc(it.id)}|${i}"
+            ${done[i] ? 'checked' : ''}> ${esc(p)}</label></li>`).join('')}
+      </ul>` : ''}
+  </div>`;
+}
+
 function renderBrief(sec){
   const b = sec.brief, it = sec.items[0];
   return `
@@ -833,10 +932,10 @@ function renderItem(sec, it){
 
   if (sec.format === 'writing'){
     const draft = S.answers[it.id] || '';
-    const n = draft.trim().split(/\s+/).filter(Boolean).length;
     return `<div class="q" id="q_${esc(it.id)}">
-      <textarea data-txt="${esc(it.id)}" placeholder="Schreiben Sie hier Ihren Brief …">${esc(draft)}</textarea>
-      <div class="counter" id="wc_${esc(it.id)}">${n} Wörter (mindestens ${it.minWords || 100})</div>
+      <textarea data-txt="${esc(it.id)}" lang="de" spellcheck="true"
+        placeholder="${esc(t('writePlaceholder'))}">${esc(draft)}</textarea>
+      <div id="chk_${esc(it.id)}">${checksHTML(it, draft)}</div>
     </div>`;
   }
   if (sec.format === 'mc' || sec.format === 'truefalse'){
@@ -928,11 +1027,32 @@ function bindInputs(sec){
       const id = ta.dataset.txt;
       S.answers[id] = ta.value;
       markPart(sec.id);
-      const n = ta.value.trim().split(/\s+/).filter(Boolean).length;
-      const c = document.getElementById('wc_' + id);
-      const min = sec.items.find(x => x.id === id).minWords || 100;
-      if (c){ c.textContent = `${n} Wörter (mindestens ${min})`; c.style.color = n >= min ? 'var(--ok)' : 'var(--muted)'; }
+      redrawChecks(sec, id);
       updateProgress();
+    };
+  });
+
+  /* شطب نقطة من الليتبونكته */
+  scope.querySelectorAll('[data-pt]').forEach(cb => {
+    cb.onchange = () => {
+      const [id, i] = cb.dataset.pt.split('|');
+      S.checks[id] = S.checks[id] || [];
+      S.checks[id][Number(i)] = cb.checked;
+    };
+  });
+}
+
+/* بنعيد رسم صندوق الفحوص بس — مو الحقل، وإلا بيضيع مكان المؤشّر */
+function redrawChecks(sec, id){
+  const box = document.getElementById('chk_' + id);
+  const it  = sec.items.find(x => x.id === id);
+  if (!box || !it) return;
+  box.innerHTML = checksHTML(it, S.answers[id] || '');
+  box.querySelectorAll('[data-pt]').forEach(cb => {
+    cb.onchange = () => {
+      const [iid, i] = cb.dataset.pt.split('|');
+      S.checks[iid] = S.checks[iid] || [];
+      S.checks[iid][Number(i)] = cb.checked;
     };
   });
 }
@@ -1342,14 +1462,16 @@ function renderAiBox(box, run, attemptId, text){
     catch { r = { ok: false, error: 'network' }; }
     btn.disabled = false; btn.textContent = 'Korrektur anfordern';
     if (r && r.ok) return showAi(out, btn, r);
-    out.innerHTML = `<p class="sub" style="color:var(--bad)">${esc({
-      quota_exceeded: 'Das Korrektur-Kontingent für diesen Zeitraum ist aufgebraucht.',
-      not_entitled:   'Kein aktives Abo.',
-      empty_text:     'Es ist kein Text zum Korrigieren da.',
-      not_configured: 'Die Korrektur ist noch nicht eingerichtet.',
-      refused:        'Der Text konnte nicht bewertet werden.',
-      network:        'Keine Verbindung.'
-    }[r && r.error] || 'Die Korrektur ist fehlgeschlagen.')}</p>`;
+    out.innerHTML = `<p class="sub" style="color:var(--bad)">${esc(t({
+      quota_exceeded: 'aiErrQuota',
+      not_entitled:   'aiErrNoSub',
+      empty_text:     'aiErrEmpty',
+      not_configured: 'aiErrSetup',
+      bad_model:      'aiErrSetup',   // إعداد غلط عند الأدمن، مو غلط الطالب
+      refused:        'aiErrRefused',
+      ai_quota:       'aiErrDaily',   // حصّة النموذج اليومية، مو حصّة الطالب
+      network:        'aiErrNetwork'
+    }[r && r.error] || 'aiErrOther'))}</p>`;
   };
 }
 

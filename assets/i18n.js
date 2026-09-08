@@ -11,12 +11,10 @@
 const I18N = (() => {
 
   /* العلم بيتعرف من بعيد وبلا قراءة — وهاد المطلوب من منتقي لغة: مين
-     ما بيقرا الألماني لازم يلاقي لغته بلا ما يقرا شي.
-     العربي ما إله علم: هي لغة عشرين بلد، وأي علم منختاره بيقصي الباقي.
-     فبيوقف حرف «ع» مكانه — بينقرا من أي عربي وما بينسب اللغة لبلد. */
+     ما بيقرا الألماني لازم يلاقي لغته بلا ما يقرا شي. */
   const LANGS = [
     { id: 'de', name: 'Deutsch',    flag: '🇩🇪', dir: 'ltr' },
-    { id: 'ar', name: 'العربية',    flag: 'ع',  dir: 'rtl' },
+    { id: 'ar', name: 'العربية',    flag: '🇸🇦', dir: 'rtl' },
     { id: 'uk', name: 'Українська', flag: '🇺🇦', dir: 'ltr' }
   ];
 
@@ -47,6 +45,33 @@ const I18N = (() => {
       codeErrDevices: 'Die Höchstzahl an Geräten ist erreicht.',
       codeErrNetwork: 'Keine Verbindung. Bitte später versuchen.',
       codeErrOther: 'Der Code konnte nicht eingelöst werden.',
+
+      waitTitle: 'Sie stehen auf der Warteliste',
+      waitPos: 'Platz {n}',
+      nWaiting: { one: '{n} Person wartet', other: '{n} Personen warten' },
+      waitHint: 'Ihr Code bleibt gültig — er wurde nicht verbraucht. '
+              + 'Sobald ein Platz frei wird, können Sie ihn einlösen. '
+              + 'Schauen Sie später noch einmal vorbei.',
+      waitCheck: 'Ist ein Platz frei?',
+      waitStill: 'Noch nicht — bitte später noch einmal.',
+      waitOpen: 'Ein Platz ist frei! Geben Sie jetzt Ihren Code ein.',
+
+      writePlaceholder: 'Schreiben Sie hier Ihren Brief …',
+      checksTitle: 'Schnellprüfung',
+      chkWords: '{n} von mindestens {min} Wörtern',
+      chkGreeting: 'Anrede am Anfang',
+      chkClosing: 'Gruß am Ende',
+      chkPointsHint: 'Haken Sie ab, was Sie schon geschrieben haben:',
+
+      aiErrQuota:   'Das Korrektur-Kontingent für diesen Zeitraum ist aufgebraucht.',
+      aiErrDaily:   'Heute wurden schon sehr viele Korrekturen angefordert. '
+                  + 'Bitte morgen noch einmal versuchen.',
+      aiErrNoSub:   'Kein aktives Abo.',
+      aiErrEmpty:   'Es ist kein Text zum Korrigieren da.',
+      aiErrSetup:   'Die Korrektur ist noch nicht eingerichtet.',
+      aiErrRefused: 'Der Text konnte nicht bewertet werden.',
+      aiErrNetwork: 'Keine Verbindung.',
+      aiErrOther:   'Die Korrektur ist fehlgeschlagen.',
 
       welcome: 'Willkommen 👋',
       homeIntro: 'Wählen Sie einen Modelltest. Jeder Test hat die Prüfungsteile ' +
@@ -137,7 +162,6 @@ const I18N = (() => {
       taskHead: 'Aufgabe',
 
       settings: 'Einstellungen',
-      themeSystem: 'Wie das Gerät',
       themeLight: 'Hell',
       themeDark: 'Dunkel',
       smaller: 'Kleiner',
@@ -183,6 +207,33 @@ const I18N = (() => {
       codeErrDevices: 'وصلت لأقصى عدد أجهزة.',
       codeErrNetwork: 'ما في اتصال. جرّب بعد شوي.',
       codeErrOther: 'ما قدرنا نفعّل الرمز.',
+
+      waitTitle: 'إنت بقائمة الانتظار',
+      waitPos: 'دورك رقم {n}',
+      nWaiting: { zero: 'ما في حدا مستني', one: 'في واحد مستني',
+                  two: 'في اتنين مستنيين', few: '{n} مستنيين',
+                  many: '{n} مستني', other: '{n} مستني' },
+      waitHint: 'رمزك باقي ساري — ما انستهلك. أول ما يفضى مطرح بتقدر '
+              + 'تفعّله. مرّ علينا بعدين.',
+      waitCheck: 'في مطرح فاضي؟',
+      waitStill: 'لسا — جرّب بعد شوي.',
+      waitOpen: 'صار في مطرح! أدخل رمزك هلق.',
+
+      writePlaceholder: 'اكتب رسالتك هون …',
+      checksTitle: 'فحص سريع',
+      chkWords: '{n} من {min} كلمة على الأقل',
+      chkGreeting: 'في تحية بالبداية',
+      chkClosing: 'في سلام بالنهاية',
+      chkPointsHint: 'شطّب على يلي كتبته:',
+
+      aiErrQuota:   'حصّة التصحيح لهالفترة خلصت.',
+      aiErrDaily:   'اليوم انطلبت تصحيحات كتير. جرّب بكرا.',
+      aiErrNoSub:   'ما في اشتراك فعّال.',
+      aiErrEmpty:   'ما في نص لنصحّحه.',
+      aiErrSetup:   'التصحيح لسا مو مجهّز.',
+      aiErrRefused: 'ما قدرنا نقيّم هالنص.',
+      aiErrNetwork: 'ما في اتصال.',
+      aiErrOther:   'التصحيح ما نجح.',
 
       welcome: 'أهلاً 👋',
       homeIntro: 'اختر نموذج امتحان. كل نموذج فيه أقسام الامتحان التحريري ' +
@@ -278,7 +329,6 @@ const I18N = (() => {
       taskHead: 'السؤال',
 
       settings: 'الإعدادات',
-      themeSystem: 'متل الجهاز',
       themeLight: 'فاتح',
       themeDark: 'غامق',
       smaller: 'أصغر',
@@ -335,6 +385,34 @@ const I18N = (() => {
       codeErrDevices: 'Досягнуто максимальну кількість пристроїв.',
       codeErrNetwork: 'Немає зв’язку. Спробуйте пізніше.',
       codeErrOther: 'Код не вдалося активувати.',
+
+      waitTitle: 'Ви у списку очікування',
+      waitPos: 'Місце {n}',
+      nWaiting: { one: '{n} людина чекає', few: '{n} людини чекають',
+                  many: '{n} людей чекають', other: '{n} людей чекають' },
+      waitHint: 'Ваш код залишається дійсним — його не використано. '
+              + 'Щойно звільниться місце, ви зможете його активувати. '
+              + 'Зазирніть пізніше.',
+      waitCheck: 'Є вільне місце?',
+      waitStill: 'Ще ні — спробуйте пізніше.',
+      waitOpen: 'Місце звільнилося! Введіть свій код зараз.',
+
+      writePlaceholder: 'Напишіть свій лист тут …',
+      checksTitle: 'Швидка перевірка',
+      chkWords: '{n} із щонайменше {min} слів',
+      chkGreeting: 'Звертання на початку',
+      chkClosing: 'Прощання наприкінці',
+      chkPointsHint: 'Позначте те, що вже написали:',
+
+      aiErrQuota:   'Ліміт перевірок на цей період вичерпано.',
+      aiErrDaily:   'Сьогодні вже було багато запитів на перевірку. '
+                  + 'Спробуйте завтра.',
+      aiErrNoSub:   'Немає активної підписки.',
+      aiErrEmpty:   'Немає тексту для перевірки.',
+      aiErrSetup:   'Перевірку ще не налаштовано.',
+      aiErrRefused: 'Не вдалося оцінити цей текст.',
+      aiErrNetwork: 'Немає зв’язку.',
+      aiErrOther:   'Перевірка не вдалася.',
 
       welcome: 'Вітаємо 👋',
       homeIntro: 'Оберіть пробний тест. Кожен тест містить частини письмового ' +
@@ -428,7 +506,6 @@ const I18N = (() => {
       taskHead: 'Завдання',
 
       settings: 'Налаштування',
-      themeSystem: 'Як на пристрої',
       themeLight: 'Світлий',
       themeDark: 'Темний',
       smaller: 'Менше',
