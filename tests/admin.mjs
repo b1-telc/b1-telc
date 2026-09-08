@@ -26,8 +26,18 @@ const asAdmin = (inner) => {
 };
 
 const MIME = { '.html':'text/html', '.js':'text/javascript', '.css':'text/css' };
+/* كل نداء بيولّد عملية psql جديدة، وexecFileSync بيوقف حلقة الأحداث
+   لحد ما تخلص — يعني نداءين متوازيين من اللوحة بينفّذوا واحد ورا التاني.
+   على عدّاء CI محمّل هاد بيتراكم. الفشل ما بيقول أي نداء تأخّر، فمنقيسه. */
+let slowest = { ms: 0, path: '—' };
 const server = http.createServer(async (req, res) => {
   const u = new URL(req.url, 'http://x');
+  const t0 = Date.now();
+  res.on('finish', () => {
+    const ms = Date.now() - t0;
+    if (ms > slowest.ms) slowest = { ms, path: u.pathname };
+    if (ms > 2000) console.log(`  · بطيء ${ms}ms — ${u.pathname}`);
+  });
   const send = (code, body) => {
     res.writeHead(code, { 'content-type':'application/json' });
     res.end(typeof body === 'string' ? body : JSON.stringify(body));
@@ -88,8 +98,11 @@ const server = http.createServer(async (req, res) => {
   // ---- ملفات ----
   let f = u.pathname === '/' ? '/admin/index.html' : u.pathname;
   try {
+    // القراءة قبل الترويسة — بالعكس، ملف ناقص بينهي العملية بـ
+    // ERR_HTTP_HEADERS_SENT بدل ما يرجّع ٤٠٤
+    const body = readFileSync(path.join(ROOT, f));
     res.writeHead(200, { 'content-type': MIME[path.extname(f)] || 'text/plain' });
-    res.end(readFileSync(path.join(ROOT, f)));
+    res.end(body);
   } catch { res.writeHead(404); res.end('nope'); }
 });
 await new Promise(r => server.listen(0, r));
@@ -99,6 +112,21 @@ const PORT = server.address().port;
    خلّفته تشغيلات سابقة قبل ما نبلّش. */
 const ADMIN_ID = 'aaaaaaaa-0000-0000-0000-000000000001';
 const STUD_ID  = 'bbbbbbbb-0000-0000-0000-000000000002';
+
+/* ★ القاعدة لازم تكون كاملة قبل ما نبلّش.
+   لو تشغيل سابق مات بنص اختبار «القاعدة ورا»، بتضل schema_version على
+   ١٢ وadmin_assets مشالة — والفشل وقتها بيطلع كمهلة عند شاشة الملفات
+   بعد ٣٨ فحص، وما بيقول ولا كلمة عن السبب. سطر واضح أرخص بكتير. */
+{
+  const have = Number(sql('select schema_version();') || 0);
+  const fns  = sql(`select count(*) from pg_proc
+                     where proname in ('admin_assets','code_norm');`);
+  if (have < 22 || fns !== '2'){
+    console.log(`\n✗ القاعدة ناقصة (schema_version=${have}, دوال=${fns}/2).`);
+    console.log('  شغّل: sudo -E ./supabase/tests/run.sh');
+    process.exit(2);
+  }
+}
 sql(`delete from writing_feedback; delete from admin_audit_log; delete from mistakes;
      delete from attempts; delete from imports; delete from resources;
      delete from tests where level_id <> 'b1';
@@ -127,10 +155,31 @@ async function pick(page, base, provider, levelId){
 
 const check = (l, c) => { results.push([l, !!c]); console.log(`  ${c ? '✓' : '✗'} ${l}`); };
 
-const HARD = setTimeout(() => { console.log('\n✗ انتهت المهلة'); process.exit(2); }, 80000);
+// ٨ ثواني كانت ضيّقة: شاشة الملفات بتنده admin_assets وadmin_content
+// سوا، وكل واحد عملية psql — على عدّاء بنواتين مع Chromium شغّال هاد
+// بيتخطّاها وبيفشل بلا ما يكون في خلل. الحارس تحت بيمسك التعليق الحقيقي.
+const HARD = setTimeout(() => { console.log('\n✗ انتهت المهلة'); process.exit(2); }, 240000);
+
+/* ★ اختبار «القاعدة ورا» بينزّل schema_version لـ١٢ وبيشيل admin_assets
+   عن قصد. الترجيع كان بـfinally لحاله — وfinally ما بتنفّذ لما الحارس
+   يندي process.exit أو تنقتل العملية. وقتها القاعدة بتضل مكسورة، وكل
+   تشغيل جاي بيفشل عند شاشة الملفات بمهلة ما بتقول السبب. صرت أسجّله
+   على exit كمان، وبيشتغل مرة وحدة. */
+let downgraded = false;
+const restoreSchema = () => {
+  if (!downgraded) return;
+  downgraded = false;
+  for (const f of ['supabase/migrations/0015_admin_upload.sql',
+                   'supabase/migrations/0019_version.sql'])
+    try {
+      execFileSync('psql', ['-h','/tmp','-p', process.env.PGPORT || '5433','-U','postgres',
+        '-d','telc','-q','-v','ON_ERROR_STOP=1','-f', f], { encoding:'utf8' });
+    } catch (e){ console.log('  ✗ ما قدرت أرجّع', f, String(e.message).slice(0,120)); }
+};
+process.on('exit', restoreSchema);
 const browser = await chromium.launch({ args:['--no-sandbox','--disable-dev-shm-usage'] });
 const page = await browser.newPage();
-page.setDefaultTimeout(8000);
+page.setDefaultTimeout(25000);
 page.on('pageerror', e => { console.log('  ✗ JS-Fehler:', e.message);
                             results.push(['بلا أخطاء JS', false]); });
 
@@ -186,10 +235,27 @@ try {
   await page.evaluate(() => document.querySelector('[data-tab="codes"]').click());
   await page.waitForSelector('#c_go');
   const codesBefore = Number(sql('select count(*) from access_codes;'));
+
+  // ★ الافتراضي كود واحد: الغالب إنّ الأدمن بده كود لطالب واحد.
+  //   كان ٥، فكل مرة بده يمسح ويكتب ١.
+  check(`★ الافتراضي كود واحد (${await page.inputValue('#c_n')})`,
+        await page.inputValue('#c_n') === '1');
+
+  // ★ «Art» أول حقل: هي يلي بتقرّر شو بيعني يلي بعدها — أيام ولا
+  //   ساعات، وهل في اختيار امتحانات أصلاً.
+  const order = await page.evaluate(() => [...document.querySelectorAll(
+    '#c_kind, #c_n, #c_lvl_prov, #c_lvl, #c_days, #c_uses')].map(e => e.id));
+  check(`★ «Art» قبل باقي المنتقيات (${order.slice(0,3).join(' → ')})`,
+        order[0] === 'c_kind');
+
   await page.fill('#c_n', '3');
   await page.evaluate(() => document.getElementById('c_go').click());
   await page.waitForSelector('.codes');
   const shown = await page.locator('.codes div').count();
+  // ★ بلا فراغات: الكود بينوزّع بواتساب، وفراغ زيادة بيصير سؤال
+  const shownCodes = await page.locator('.codes div').allTextContents();
+  check(`★ الكود بينعرض بلا فراغات (${shownCodes[0]})`,
+        shownCodes.every(c => /^[A-Z0-9]+$/.test(c.trim())));
   const codesAfter = Number(sql('select count(*) from access_codes;'));
   check(`توليد ٣ أكواد: ظهروا ${shown} وانحفظوا ${codesAfter - codesBefore}`,
         shown === 3 && codesAfter - codesBefore === 3);
@@ -526,6 +592,7 @@ try {
     // بلاه، كل ميزة بتفشل بصمت بطريقتها وما حدا بيعرف السبب — وهاد صار
     // فعلاً: المستخدم دفع اللوحة وما شغّل setup.sql، فالامتحانات
     // المقفولة ما ظهرت ولا شي قال ليش.
+    downgraded = true;
     sql("create or replace function schema_version() returns int "
         + "language sql immutable as $x$ select 12 $x$;");
     await page.evaluate(() => location.reload());
@@ -535,7 +602,7 @@ try {
     check('★ شريط «القاعدة ورا» ظهر',
           /Datenbank ist \d+ Migration/.test(banner) && /setup\.sql/.test(banner));
     check(`★ وبيقول كم ترحيل ناقص`,
-          /Stand 12/.test(banner) && /gebraucht 19/.test(banner));
+          /Stand 12/.test(banner) && /gebraucht 22/.test(banner));
     await page.evaluate(() => document.querySelector('[data-tab="codes"]').click());
     await page.waitForTimeout(900);
     check('★ وبيطلع بالشاشات التانية كمان',
@@ -557,12 +624,7 @@ try {
     check('★ ونفس الرسالة بصندوق ملفات الاستيراد',
           /setup\.sql/.test(await page.textContent('#i_files')));
   } finally {
-    // نرجّعهن تا ما نكسّر أي تشغيل جاي على نفس القاعدة
-    for (const f of ['supabase/migrations/0015_admin_upload.sql',
-                     'supabase/migrations/0019_version.sql']){
-      execFileSync('psql', ['-h','/tmp','-p', process.env.PGPORT || '5433','-U','postgres',
-        '-d','telc','-q','-v','ON_ERROR_STOP=1','-f', f], { encoding:'utf8' });
-    }
+    restoreSchema();      // وكمان على exit، لأن الحارس بيقتل العملية
   }
 
   // ---- الحارس: مستخدم عادي ما بيدخل ----
@@ -572,8 +634,11 @@ try {
   check('بعد الخروج بيرجع لشاشة الدخول', await page.locator('#mail').isVisible());
 
 } catch (err){
+  // ★ كانت ٣٠٠ حرف — بتخلص عند العنوان، قبل الجزء يلي بيقول شو صار.
+  //   فشل CI راح عليه وقت لأن الدليل كان مقصوص.
   console.log('\n✗ وقف عند:', err.message.split('\n')[0]);
-  console.log((await page.textContent('body').catch(() => '')).slice(0, 300));
+  console.log(`  أبطأ نداء: ${slowest.ms}ms — ${slowest.path}`);
+  console.log((await page.textContent('body').catch(() => '')).slice(0, 2000));
   results.push(['اكتمل بلا استثناء', false]);
 }
 clearTimeout(HARD);

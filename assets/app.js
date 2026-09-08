@@ -91,19 +91,77 @@ function go(view, fn){
   window.scrollTo(0, 0);
   fn();
 }
-/* منتقي اللغة. الواجهة بس: محتوى الامتحان بيضل ألماني — ترجمته بتلغي
-   الامتحان، لأن قراءة التعليمة الألمانية جزء من الاختبار. */
-const elLang = document.getElementById('lang');
-if (elLang){
-  elLang.innerHTML = I18N.LANGS.map(l =>
-    `<option value="${l.id}"${l.id === I18N.lang ? ' selected' : ''}>${
-      esc(l.name)}</option>`).join('');
-  elLang.onchange = () => {
-    I18N.setLang(elLang.value);
-    // إعادة رسم الشاشة الحالية باللغة الجديدة
-    redraw();
-  };
+/* ============ الإعدادات ============ */
+/* لغة، مظهر، حجم خط — شاشة كاملة مو قوائم بالشريط. الشريط ضيّق على
+   الموبايل، وأزرار كبيرة واضحة أسهل بكتير لمين مو متعوّد على التقنية —
+   وهدول بالضبط ناسنا.
+
+   الواجهة بس بتنترجم: محتوى الامتحان بيضل ألماني، لأن قراءة التعليمة
+   الألمانية جزء من الاختبار. */
+const THEMES = ['system', 'light', 'dark'];
+const SIZES  = [0.9, 1, 1.15, 1.35];      // مضروب بحجم الخط الأساسي
+
+function applyLook(){
+  const th = load('b1.theme', 'system');
+  // 'system' = بلا سمة صريحة، فالـCSS بيتبع prefers-color-scheme
+  if (th === 'system') delete document.documentElement.dataset.theme;
+  else document.documentElement.dataset.theme = th;
+
+  let sz = load('b1.size', 1);
+  if (!SIZES.includes(sz)) sz = 1;
+  document.documentElement.style.setProperty('--fs', (16 * sz) + 'px');
 }
+
+/* ★ الإعدادات بترويسة الصفحة الرئيسية، مو ورا زرّ ⚙.
+   الزرّ كان بيفتح شاشة لحالها: يعني ضغطتين وخروج من الصفحة تا يكبّر
+   الخط أو يبدّل لغته. ومين ما بيقرا الألماني ما كان يعرف إنّ ⚙ تعني
+   إعدادات أصلاً. هلق الأعلام والأزرار ظاهرة أول ما يفتح التطبيق. */
+function setbarHTML(){
+  const th = load('b1.theme', 'system');
+  let sz = load('b1.size', 1);
+  if (!SIZES.includes(sz)) sz = 1;
+  const i = SIZES.indexOf(sz);
+  const ic = { system: '🖥', light: '☀', dark: '🌙' };
+
+  return `<div class="setbar" role="group" aria-label="${esc(t('settings'))}">
+    <div class="setgrp">
+      ${I18N.LANGS.map(l => `<button class="chip${l.id === I18N.lang ? ' on' : ''}"
+        data-lang="${esc(l.id)}" title="${esc(l.name)}"
+        aria-label="${esc(l.name)}">${esc(l.flag)}</button>`).join('')}
+    </div>
+    <div class="setgrp">
+      ${THEMES.map(x => `<button class="chip${x === th ? ' on' : ''}"
+        data-theme="${esc(x)}" title="${esc(t(x === 'system' ? 'themeSystem'
+          : x === 'light' ? 'themeLight' : 'themeDark'))}">${ic[x]}</button>`).join('')}
+    </div>
+    <div class="setgrp">
+      <button class="chip" data-size="-" ${i === 0 ? 'disabled' : ''}
+        title="${esc(t('smaller'))}" aria-label="${esc(t('smaller'))}">A−</button>
+      <button class="chip" data-size="+" ${i === SIZES.length - 1 ? 'disabled' : ''}
+        title="${esc(t('bigger'))}" aria-label="${esc(t('bigger'))}">A+</button>
+    </div>
+  </div>`;
+}
+
+/* بعد أي تبديل منعيد رسم الرئيسية: العلم المعلّم بيتغيّر، والاتجاه
+   بينقلب مع العربي، وحجم الخط بيبان فوراً على نفس الصفحة. */
+function wireSetbar(){
+  app.querySelectorAll('[data-lang]').forEach(b => b.onclick = () => {
+    I18N.setLang(b.dataset.lang); screenHome();
+  });
+  app.querySelectorAll('[data-theme]').forEach(b => b.onclick = () => {
+    save('b1.theme', b.dataset.theme); applyLook(); screenHome();
+  });
+  app.querySelectorAll('[data-size]').forEach(b => b.onclick = () => {
+    let sz = load('b1.size', 1);
+    if (!SIZES.includes(sz)) sz = 1;
+    const k = Math.min(SIZES.length - 1,
+                Math.max(0, SIZES.indexOf(sz) + (b.dataset.size === '+' ? 1 : -1)));
+    save('b1.size', SIZES[k]); applyLook(); screenHome();
+  });
+}
+
+applyLook();
 I18N.apply();
 
 /* الكتالوج بيعرض الامتحانات المقفولة للتشويق — تحسين، مو شرط.
@@ -111,13 +169,6 @@ I18N.apply();
 async function loadCatalog(id){
   try { return (API.catalog ? await API.catalog(id) : []) || []; }
   catch { return []; }
-}
-
-/* إعادة رسم الشاشة الحالية بمكانها — بعد تبديل اللغة. بلا تمرير
-   لفوق: المستخدم بدّل اللغة، مو بدّه يطلع من مكانه. */
-function redraw(){
-  elBack.textContent = t('back');
-  if (S.render) S.render(); else screenHome();
 }
 
 elBack.onclick = () => {
@@ -178,37 +229,50 @@ function screenCode(msg){
       <p class="sub">${esc(t('codeHint'))}</p>
       ${msg ? `<div class="instr" style="color:var(--bad)">${esc(msg)}</div>` : ''}
       <div class="card">
-        <input id="code" class="codeinput" type="text" inputmode="latin"
-               autocapitalize="characters" autocomplete="off"
-               placeholder="XX-XXXX-XXXX" aria-label="Zugangscode">
+        <input id="code" class="codeinput" type="text" inputmode="text"
+               autocapitalize="characters" autocorrect="off" spellcheck="false"
+               autocomplete="one-time-code"
+               placeholder="B14827519366" aria-label="${esc(t('codeTitle'))}">
+        <p class="sub" style="margin:6px 0 0">${esc(t('codeExample'))}</p>
         <button class="btn" id="godo" style="width:100%;margin-top:10px">${esc(t('codeButton'))}</button>
       </div>`;
 
     const inp = document.getElementById('code');
     const btn = document.getElementById('godo');
+
+    /* الكود بينكتب متل ما هو مكتوب بالرسالة: بلا فراغات ولا شرطات.
+       كنا منضيف فراغات للقراءة، بس الكود بيوصل عبر واتساب — وهناك ما
+       بينعرف إذا الفراغ واحد أو اتنين، فبيصير سؤال بلا داعي. يلي
+       بيلصق كود قديم بشرطات ما بينكسر: بينشالوا هون وبـcode_norm.
+
+       ★ وبلا maxlength: المتصفّح بيقصّ الملصوق **قبل** ما يوصلنا، فكود
+       منسوخ من واتساب مع فراغاته (١٥ خانة) كان بيوصل ناقص آخر رقمين.
+       الحدّ هون، بعد التنضيف، على الخانات الحقيقية. */
+    inp.oninput = () => {
+      inp.value = inp.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12);
+    };
+
     const send = async () => {
       const code = inp.value.trim();
       if (!code) return inp.focus();
-      btn.disabled = true; btn.textContent = 'Wird geprüft …';
+      btn.disabled = true; btn.textContent = t('codeChecking');
       let r;
       try { r = await API.redeem(code); }
       catch { r = { ok: false, error: 'network' }; }
-      btn.disabled = false; btn.textContent = 'Freischalten';
+      btn.disabled = false; btn.textContent = t('codeButton');
       if (r && r.ok) return boot();
       if (r && r.error === 'too_many_attempts'){
         const m = Math.ceil((r.retry_after || 900) / 60);
-        return screenCode(`Zu viele Versuche. Bitte in ${m} Minute${
-          m === 1 ? '' : 'n'} noch einmal probieren.`);
+        return screenCode(t('codeErrTooMany', { t: I18N.plural(m, 'nMinute') }));
       }
-      screenCode({
-        invalid_code: 'Dieser Code ist unbekannt.',
-        already_used: 'Dieser Code wurde bereits verwendet.',
-        revoked:      'Dieser Code wurde gesperrt.',
-        code_exhausted: 'Dieser Code wurde bereits auf allen erlaubten Geräten '
-                      + 'benutzt. Bitte wenden Sie sich an Ihren Kurs.',
-        device_limit: 'Die Höchstzahl an Geräten ist erreicht.',
-        network:      'Keine Verbindung. Bitte später versuchen.'
-      }[r && r.error] || 'Der Code konnte nicht eingelöst werden.');
+      screenCode(t({
+        invalid_code:   'codeErrUnknown',
+        already_used:   'codeErrUsed',
+        revoked:        'codeErrRevoked',
+        code_exhausted: 'codeErrExhausted',
+        device_limit:   'codeErrDevices',
+        network:        'codeErrNetwork'
+      }[r && r.error] || 'codeErrOther'));
     };
     btn.onclick = send;
     inp.onkeydown = e => { if (e.key === 'Enter') send(); };
@@ -314,6 +378,7 @@ function screenHome(){
       ? `<div class="abos">${S.levels.map(aboRow).join('')}</div>` : '';
 
     app.innerHTML = `
+      ${setbarHTML()}
       <h1>${esc(t('welcome'))}</h1>
       ${abo}
       <p class="sub">${lvl ? esc(t('homeIntro', { level: name(lvl) }))
@@ -330,8 +395,10 @@ function screenHome(){
       ${nMist ? `<button class="tile drill" id="drill">
         <span class="n">↻</span>
         <span class="grow"><span style="font-weight:600">${esc(t('repeat'))}</span>
-          <div class="meta">${plural(nMist, 'nTask')} fällig${
-            review.mastered ? ` · ${review.mastered} sitzen schon` : ''} · ohne Zeit</div></span>
+          <div class="meta">${esc(t('due', { n: plural(nMist, 'nTask') }))}${
+            review.mastered
+              ? ' · ' + esc(t('sitting', { n: plural(review.mastered, 'nSits') })) : ''
+            } · ${esc(t('noTime'))}</div></span>
         <span class="chev">›</span>
       </button>`
       : (review.total ? `<div class="tile drill done">
@@ -342,6 +409,7 @@ function screenHome(){
       </div>` : '')}
       ${cards}`;
 
+    wireSetbar();
     app.querySelectorAll('.tile[data-id]').forEach(b =>
       b.onclick = () => openModell(b.dataset.id));
     app.querySelectorAll('[data-lvl]').forEach(b =>
@@ -594,8 +662,10 @@ function screenExam(run, resumeLeft){
       </section>`).join('');
 
     app.innerHTML = nav + body +
-      `<div class="bottombar"><div class="inner">
-         <span class="progress" id="prog">0 / ${runItems(run).length}</span>
+      `<div class="bottombar">
+         <div class="progbar"><i id="progfill"></i></div>
+         <div class="inner">
+         <span class="progress" id="prog"></span>
          <button class="btn grey" id="pause">${esc(t('pause'))}</button>
          <button class="btn grow" id="submit">${esc(t('submit'))}</button>
        </div></div>`;
@@ -603,7 +673,15 @@ function screenExam(run, resumeLeft){
     run.parts.forEach(p => bindInputs(p));
     updateProgress();
     markCurrentPart();
-    document.getElementById('submit').onclick = () => finish(run, false);
+    /* الوقت محدود والزرّ كبير — التسليم بالغلط بيصير. لو في أسئلة بلا
+       إجابة، منسأل ومنقول كم، بدل ما نسلّم بصمت. */
+    document.getElementById('submit').onclick = () => {
+      const items = runItems(run);
+      const open  = items.length - items.filter(answered).length;
+      if (!open) return finish(run, false);
+      ask(t('openAsk', { n: plural(open, 'nOpen') }),
+          () => finish(run, false), t('submitAnyway'), t('keepGoing'));
+    };
     const pz = document.getElementById('pause');
     if (run.drill) { pz.remove(); stopTimer(); }     // Übung läuft ohne Uhr
     else {
@@ -775,10 +853,17 @@ function renderItem(sec, it){
   }
   else if (sec.format === 'matching' || sec.format === 'wordbank'){
     const chosen = S.answers[it.id] || '';
-    body = `<select data-sel="${esc(it.id)}">
-      <option value="">${esc(t('choose'))}</option>
-      ${sec.bank.map(o => `<option value="${esc(o.key)}"${o.key === chosen ? ' selected' : ''}>${esc(o.key)}${o.text ? ' — ' + esc(o.text).slice(0, 70) : ''}</option>`).join('')}
-    </select>`;
+    /* أزرار حروف بدل قائمة منسدلة.
+       القائمة بتطلب: ضغطة، قراءة، تمرير، إصابة — وبخمستعشر خيار على
+       موبايل هاد صعب لمين مو متعوّد. الأزرار بتبيّن كل الحروف مرة وحدة
+       وبتنضغط بضغطة. ونصّ البنك أصلاً معروض فوق الأسئلة. */
+    body = `<div class="keys" data-keys="${esc(it.id)}" role="group">${
+      sec.bank.map(o => `<button type="button" class="key${
+        o.key === chosen ? ' sel' : ''}" data-key="${esc(it.id)}|${esc(o.key)}"
+        title="${esc(o.text || o.key)}">${esc(o.key)}</button>`).join('')}
+      ${chosen ? `<button type="button" class="key clr" data-key="${esc(it.id)}|"
+        title="${esc(t('choose'))}">✕</button>` : ''}
+    </div>`;
   }
   return `<div class="q" id="q_${esc(it.id)}">${head}${body}</div>`;
 }
@@ -795,10 +880,11 @@ function syncBank(sec){
     const v = S.answers[it.id];
     if (v && v !== 'X') used.set(v, it.id);
   });
-  scope.querySelectorAll('[data-sel]').forEach(sl => {
-    const id = sl.dataset.sel;
-    [...sl.options].forEach(o => {
-      if (o.value) o.disabled = used.has(o.value) && used.get(o.value) !== id;
+  scope.querySelectorAll('[data-keys]').forEach(box => {
+    const id = box.dataset.keys;
+    box.querySelectorAll('[data-key]').forEach(b => {
+      const k = b.dataset.key.split('|')[1];
+      b.disabled = !!k && used.has(k) && used.get(k) !== id;
     });
   });
 }
@@ -824,14 +910,17 @@ function bindInputs(sec){
       updateProgress();
     };
   });
-  scope.querySelectorAll('[data-sel]').forEach(sl => {
-    sl.onchange = () => {
-      const v = sl.value;
-      if (v) S.answers[sl.dataset.sel] = v; else delete S.answers[sl.dataset.sel];
-      markPart(sec.id);
-      syncBank(sec);
-      updateProgress();
-    };
+  scope.querySelectorAll('[data-key]').forEach(b => b.onclick = () => {
+    const [id, key] = b.dataset.key.split('|');
+    if (key) S.answers[id] = key; else delete S.answers[id];
+    markPart(sec.id);
+    // نعيد رسم المجموعة: التحديد بيتغيّر وزرّ المسح بيظهر أو بيختفي
+    const q  = b.closest('.q');
+    const it = sec.items.find(x => x.id === id);
+    q.outerHTML = renderItem(sec, it);
+    bindInputs(sec);
+    syncBank(sec);
+    updateProgress();
   });
   syncBank(sec);
   scope.querySelectorAll('[data-txt]').forEach(ta => {
@@ -856,8 +945,12 @@ const answered = it => {
 function updateProgress(){
   saveSession(S.run);
   const items = runItems(S.run);
+  const done  = items.filter(answered).length;
   const p = document.getElementById('prog');
-  if (p) p.textContent = `${items.filter(answered).length} / ${items.length}`;
+  // «١٢ من ٤٠» أوضح من «12 / 40» لواحد مو متعوّد على الاختصارات
+  if (p) p.textContent = t('progress', { done, total: items.length });
+  const f = document.getElementById('progfill');
+  if (f) f.style.width = items.length ? (done / items.length * 100) + '%' : '0';
 }
 
 /* Pause: der Timer hält an und die Aufgaben werden verdeckt — wie eine
@@ -1059,10 +1152,11 @@ function finish(run, auto){
     grade(run);
   };
 
-  if (auto) return go2();
-  const missing = runItems(run).filter(it => !answered(it)).length;
-  if (!missing) return go2();
-  ask(`${missing} Aufgabe(n) ohne Antwort. Trotzdem abgeben?`, go2, 'Abgeben');
+  /* ★ السؤال عن الأسئلة الفاضية بيصير عند زرّ التسليم، مو هون.
+     كان بالاتنين — فالطالب يلي بيسلّم ناقص كان يشوف نفس التحذير مرتين
+     ورا بعض. وهاد كمان كان آخر نص ألماني مثبّت بالتطبيق.
+     هون منسلّم على طول: مين وصل لهون خلص قرّر. */
+  go2();
 }
 
 /* Antwort lesbar machen: "B — Bildband: Babys im Garten" */

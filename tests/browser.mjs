@@ -128,9 +128,11 @@ await page.addInitScript(fx => {
       ? [{ id:'r1', title:'Wortschatz Reisen', kind:'text',
            body:'## Verben\n\nfahren, fliegen, ankommen\n\n## Nomen\n\nder Zug, das Gleis' }]
       : [],
-    redeem: async code => code === 'B1-TEST-0001'
-      ? (state.redeemed = true, { ok: true, levels: ['b1'] })
-      : { ok: false, error: 'invalid_code' },
+    // متل code_norm بالخادم: الشرطات والمسافات والحالة ما بتفرق
+    redeem: async code =>
+      String(code).toUpperCase().replace(/[^A-Z0-9]/g, '') === 'B14827519366'
+        ? (state.redeemed = true, { ok: true, levels: ['b1'] })
+        : { ok: false, error: 'invalid_code' },
     index: async (lvl) => lvl !== 'b1' ? { modelle: [] } : ({ modelle: [{ id: fx.test.slug, uuid: fx.test.id,
       title: fx.test.title, subtitle: fx.test.subtitle,
       blocks: fx.test.blocks, aufgaben: 61,
@@ -195,13 +197,44 @@ await page.waitForSelector('#code', { timeout: 5000 });
 check('بلا اشتراك ← شاشة الكود', await page.locator('#code').isVisible());
 
 // ---- ٢) كود غلط ----
-await page.fill('#code', 'WRONG');
+await page.fill('#code', 'B10000000000');
 await page.evaluate(() => document.getElementById('godo').click());
 await page.waitForTimeout(300);
 check('الكود الغلط بيعطي رسالة', (await page.textContent('body')).includes('unbekannt'));
 
-// ---- ٣) كود صح ----
-await page.fill('#code', 'B1-TEST-0001');
+// ---- ٢أ) ★ الحقل بينضّف وهو عم ينكتب، وبلا فراغات ----
+// الكود بينوزّع بواتساب، وهناك ما بينعرف إذا الفراغ واحد أو اتنين —
+// فالكود بيضل شكل واحد بكل مكان: حروف كبيرة وأرقام بس.
+await page.fill('#code', '');
+await page.type('#code', 'b1 4827-5193 66', { delay: 5 });
+check('★ الفراغات والشرطات بتنشال وهو عم يكتب',
+      await page.inputValue('#code') === 'B14827519366');
+
+// ---- ٢ب) ★ الصيغة القديمة بشرطات لسا بتتقبل ----
+await page.fill('#code', '');
+await page.type('#code', 'b1-7k2m-9xqp', { delay: 5 });
+check('★ والقديم بشرطات ما بينكسر',
+      await page.inputValue('#code') === 'B17K2M9XQP');
+
+// ---- ٢ج) ★ رسالة الخطأ بتتترجم كمان ----
+// كل نصوص شاشة الكود كانت مكتوبة ألماني بالكود مباشرة — يعني طالب
+// عربي بيغلط بالكود وبيقرا «Dieser Code ist unbekannt».
+await page.evaluate(() => { I18N.setLang('ar'); screenCode(); });
+await page.waitForSelector('#code');
+await page.fill('#code', 'B10000000000');
+await page.evaluate(() => document.getElementById('godo').click());
+await page.waitForTimeout(300);
+const arErr = await page.textContent('#app');
+check('★ الخطأ بالعربي مو بالألماني',
+      arErr.includes('مو معروف') && !arErr.includes('unbekannt'));
+check('★ وعنوان الشاشة والزرّ كمان',
+      arErr.includes('الدخول') && arErr.includes('تفعيل')
+      && !arErr.includes('Freischalten'));
+await page.evaluate(() => { I18N.setLang('de'); screenCode(); });
+await page.waitForSelector('#code');
+
+// ---- ٣) كود صح — ملصوق مع فراغات متل ما بينلصق من واتساب ----
+await page.fill('#code', ' B1 4827 5193 66 ');
 await page.evaluate(() => document.getElementById('godo').click());
 await page.waitForSelector('.tile[data-id]', { timeout: 5000 });
 check('الكود الصح بيفتح القائمة', await page.locator('.tile[data-id]').count() > 0);
@@ -210,6 +243,21 @@ check('الكود الصح بيفتح القائمة', await page.locator('.tile
 await page.evaluate(() => document.querySelector('.tile[data-id]').click());
 await page.waitForSelector('[data-block]', { timeout: 5000 });
 check('الامتحان انفتح وفيه ٣ كتل', await page.locator('[data-block]').count() === 3);
+
+// ★ «Zurück» كان نص أزرق بلا إطار ولا أرضية — المستخدم ما كان يشوفه
+//   كزرّ. الفحص بيقيسه وهو ظاهر فعلاً، مو مخفي بالرئيسية.
+const bk = await page.evaluate(() => {
+  const b = document.getElementById('btnBack');
+  if (!b || b.offsetParent === null) return null;
+  const st = getComputedStyle(b);
+  return { h: b.getBoundingClientRect().height,
+           border: parseFloat(st.borderTopWidth),
+           bg: st.backgroundColor };
+});
+check(`★ زرّ الرجوع ظاهر كزرّ (ارتفاع ${bk && Math.round(bk.h)}, إطار ${
+        bk && bk.border})`,
+      !!bk && bk.h >= 44 && bk.border > 0
+      && bk.bg !== 'rgba(0, 0, 0, 0)' && bk.bg !== 'transparent');
 
 // ---- ٥) ★ الحلول مو موجودة بالمتصفّح قبل التسليم ----
 const leaked = await page.evaluate(() => {
@@ -226,6 +274,59 @@ await page.evaluate(() => {
   if (btn) btn.click();
 });
 await page.waitForTimeout(400);
+
+// ---- ٦أ) أزرار الحروف بدل القوائم المنسدلة ----
+// قائمة بخمستعشر خيار على موبايل صعبة لمين مو متعوّد: ضغطة، قراءة،
+// تمرير، إصابة. الأزرار بتبيّن كل الحروف مرة وحدة.
+check('★ ما ضل ولا قائمة منسدلة بالأسئلة',
+      await page.locator('.q select').count() === 0);
+const nKeys = await page.locator('.keys .key').count();
+check(`أزرار الحروف موجودة (${nKeys})`, nKeys > 0);
+check('حجم الزرّ ≥ ٤٤ بكسل (قابل للضغط بالإصبع)',
+      await page.evaluate(() => {
+        const b = document.querySelector('.keys .key');
+        const r = b.getBoundingClientRect();
+        return Math.min(r.width, r.height) >= 44;
+      }));
+
+// الضغط بيختار، والضغط على ✕ بيمسح
+await page.locator('.keys .key').first().click();
+await page.waitForTimeout(250);
+check('★ الضغط بيختار الحرف',
+      await page.locator('.keys .key.sel').count() === 1);
+check('وبيطلع زرّ مسح', await page.locator('.keys .key.clr').count() >= 1);
+
+// نفس الحرف ما بينعاد بسؤال تاني («Jede Überschrift passt nur einmal»)
+check('★ الحرف المستعمل بينقفل بباقي الأسئلة',
+      await page.locator('.keys .key[disabled]').count() > 0);
+
+await page.locator('.keys .key.clr').first().click();
+await page.waitForTimeout(250);
+check('★ زرّ المسح بيشيل الاختيار',
+      await page.locator('.keys .key.sel').count() === 0);
+
+// ---- ٦ب) شريط التقدّم ----
+check('★ شريط التقدّم موجود', await page.locator('#progfill').count() === 1);
+const p0 = await page.textContent('#prog');
+check(`وبيقول كم انحلّ (${p0.trim()})`, /0.*40|40/.test(p0));
+await page.locator('.keys .key').first().click();
+await page.waitForTimeout(250);
+const w = await page.evaluate(() => document.getElementById('progfill').style.width);
+check(`★ وبيتحرّك مع الإجابة (${w})`, w && parseFloat(w) > 0);
+
+// ---- ٦ج) تحذير قبل التسليم ----
+// الوقت محدود والزرّ كبير — التسليم بالغلط بيصير.
+await page.evaluate(() => document.getElementById('submit').click());
+await page.waitForSelector('.modal', { timeout: 4000 });
+check('★ نافذة وحدة بس، مو تنتين',
+      await page.locator('.modalback').count() === 1);
+const warn = await page.textContent('.modal');
+check(`★ التسليم بأسئلة ناقصة بيسأل أول (${warn.replace(/\s+/g,' ').trim().slice(0,42)})`,
+      /ohne Antwort/.test(warn));
+await page.evaluate(() => document.querySelector('.modal [data-no]').click());
+await page.waitForTimeout(300);
+check('★ و«كمّل الحلّ» ما بيسلّم', await page.locator('.score').count() === 0);
+
 // منعبّي الإجابات الصح مباشرةً بالحالة، وبعدين منسلّم
 const submitted = await page.evaluate(() => {
   S.answers = {};
@@ -250,11 +351,20 @@ await page.evaluate(() => {
   if (btn) btn.click();
 });
 await page.waitForTimeout(400);
+// ★ منسلّم من الزرّ الحقيقي مع أسئلة ناقصة — هون كان التحذير بيطلع
+//   مرتين: الزرّ بيسأل، وfinish() بتسأل كمان بعد «نعم». الطالب كان
+//   يضغط «سلّم» ويرجع يشوف نفس السؤال، فيظن إنّ الضغطة ما مشيت.
 await page.evaluate(() => {
   S.answers = {};
-  runItems(S.run).forEach(it => { S.answers[it.id] = 'ZZZ'; });
-  finish(S.run, true);
+  runItems(S.run).slice(2).forEach(it => { S.answers[it.id] = 'ZZZ'; });
+  bindInputs && 0;                       // بس تا يضل الرسم متل ما هو
 });
+await page.evaluate(() => document.getElementById('submit').click());
+await page.waitForSelector('.modal', { timeout: 4000 });
+await page.evaluate(() => document.querySelector('.modal [data-yes]').click());
+await page.waitForTimeout(600);
+check('★ بعد «سلّم برضو» ما بيرجع يسأل مرة تانية',
+      await page.locator('.modalback').count() === 0);
 await page.waitForSelector('.score', { timeout: 5000 });
 check('كل الإجابات غلط ← ٠٪', (await page.textContent('.pct')).includes('0 %'));
 check('الحل الصحيح بيبيّن بعد التسليم',
@@ -292,40 +402,96 @@ const loaded = await page.evaluate(() => window.__loaded || []);
 check(`★ ولا نداء لتحميل امتحان مقفول (${loaded.join(', ') || 'ولا واحد'})`,
       !loaded.includes('modell-02') && !loaded.includes('modell-03'));
 
-// ---- ٨ج) لغة الواجهة ----
-// الواجهة بس بتنترجم. محتوى الامتحان بيضل ألماني: قراءة التعليمة
-// الألمانية جزء من الاختبار، وترجمتها بتلغي التدرّب.
-check('منتقي اللغة موجود بتلات لغات',
-      await page.locator('#lang option').count() === 3);
+// ---- ٨ج) الإعدادات: بترويسة الرئيسية مباشرة ----
+// كانت ورا زرّ ⚙: ضغطتين وخروج من الصفحة تا يبدّل لغته. ومين ما بيقرا
+// الألماني ما بيعرف إنّ الترس يعني إعدادات — العلم بيعرفه بلا قراءة.
+await page.waitForSelector('.setbar');
+check('★ ما ضل زرّ ⚙ بالشريط العلوي',
+      await page.locator('#btnSet').count() === 0);
+check('★ الإعدادات ظاهرة بالرئيسية بلا ما يضغط شي',
+      await page.locator('.setbar').isVisible());
+// أهداف اللمس: أي زرّ أصغر من ٤٤ بكسل بينضغط غلط على الموبايل
+const small = await page.evaluate(() => [...document.querySelectorAll('.btn,.chip,.icon-btn')]
+  .filter(b => b.offsetParent !== null)          // المخفي مو هدف لمس
+  .filter(b => b.getBoundingClientRect().height < 44)
+  .map(b => b.textContent.trim().slice(0, 20)));
+check(`★ ولا زرّ أصغر من ٤٤ بكسل${small.length ? ' — ' + small.join(', ') : ''}`,
+      small.length === 0);
 
-await page.selectOption('#lang', 'ar');
-await page.waitForTimeout(500);
+check('اللغات التلاتة أزرار مو قائمة',
+      await page.locator('[data-lang]').count() === 3);
+check('والمظهر تلات خيارات',
+      await page.locator('[data-theme]').count() === 3);
+// ★ علم مو اسم لغة: الاسم بالألماني ما بيساعد مين ما بيقرا الألماني
+const flags = await page.locator('[data-lang]').allTextContents();
+check(`★ الأزرار أعلام مو أسامي (${flags.join(' ')})`,
+      flags.includes('🇩🇪') && flags.includes('🇺🇦')
+      && !flags.some(f => /Deutsch|Українська/.test(f)));
+
+// --- المظهر ---
+await page.evaluate(() => document.querySelector('[data-theme="dark"]').click());
+await page.waitForTimeout(300);
+check('★ الوضع الغامق بيشتغل',
+      await page.getAttribute('html', 'data-theme') === 'dark');
+check('وبينحفظ', await page.evaluate(() => localStorage.getItem('b1.theme')) === '"dark"');
+await page.evaluate(() => document.querySelector('[data-theme="system"]').click());
+await page.waitForTimeout(300);
+check('★ و«متل الجهاز» بيشيل السمة الصريحة',
+      await page.getAttribute('html', 'data-theme') === null);
+
+// --- حجم الخط ---
+const fs0 = await page.evaluate(() =>
+  getComputedStyle(document.body).fontSize);
+await page.evaluate(() => document.querySelector('[data-size="+"]').click());
+await page.waitForTimeout(300);
+const fs1 = await page.evaluate(() => getComputedStyle(document.body).fontSize);
+check(`★ A+ بيكبّر الخط (${fs0} → ${fs1})`, parseFloat(fs1) > parseFloat(fs0));
+await page.evaluate(() => document.querySelector('[data-size="-"]').click());
+await page.waitForTimeout(300);
+check('وA− بيرجّعه',
+      (await page.evaluate(() => getComputedStyle(document.body).fontSize)) === fs0);
+
+// --- اللغة ---
+await page.evaluate(() => document.querySelector('[data-lang="ar"]').click());
+await page.waitForTimeout(400);
 check('★ الواجهة صارت عربي',
       /أهلاً/.test(await page.textContent('#app')));
 check('★ والاتجاه انقلب لليمين',
       await page.getAttribute('html', 'dir') === 'rtl');
-check('★ والجمع العربي صح (مثنّى)',
-      /نموذجين|نموذج/.test(await page.textContent('.upsell')));
 
-await page.selectOption('#lang', 'uk');
-await page.waitForTimeout(500);
+await page.evaluate(() => document.querySelector('[data-lang="uk"]').click());
+await page.waitForTimeout(400);
 check('★ والأوكرانية شغّالة',
       /Вітаємо/.test(await page.textContent('#app')));
 check('والاتجاه رجع لليسار',
       await page.getAttribute('html', 'dir') === 'ltr');
-
-// الاختيار لازم ينحفظ بين الجلسات
 check('★ اللغة انحفظت',
       await page.evaluate(() => localStorage.getItem('b1.lang')) === 'uk');
 
-// ★ ولا اسم امتحان انترجم — العناوين محتوى، مو واجهة
+await page.evaluate(() => document.querySelector('[data-lang="de"]').click());
+await page.waitForTimeout(400);
+await page.waitForSelector('.tile');
+check('★ التبديل ما بيطلّع الطالب من الرئيسية',
+      /Willkommen/.test(await page.textContent('#app')));
 check('★ عناوين الامتحانات ضلّت متل ما هي',
       /PETRA/.test(await page.textContent('#app')));
 
-await page.selectOption('#lang', 'de');
-await page.waitForTimeout(500);
-check('والرجوع للألماني شغّال',
-      /Willkommen/.test(await page.textContent('#app')));
+// ★ ولا كلمة ألمانية بواجهة غير ألمانية.
+// بلاطة «المراجعة» ضلّت ألمانية بالعربي شهر كامل — المفاتيح كانت
+// بالقاموس، بس نسيت أستعملها. الفحص بيدوّر على الكلمات الألمانية
+// الشائعة بالواجهة بدل ما يتّكل على المراجعة بالعين.
+await page.evaluate(() => document.querySelector('[data-lang="ar"]').click());
+await page.waitForTimeout(300);
+await page.waitForSelector('.tile');
+const arTxt = await page.textContent('#app');
+const leftDe = ['fällig', 'sitzen schon', 'ohne Zeit', 'Wörter', 'Willkommen',
+                'Modelltest', 'beantwortet'].filter(w => arTxt.includes(w));
+check(`★ ما ضلّت كلمة ألمانية بالواجهة العربية${
+        leftDe.length ? ' — ' + leftDe.join(', ') : ''}`, leftDe.length === 0);
+
+await page.evaluate(() => document.querySelector('[data-lang="de"]').click());
+await page.waitForTimeout(300);
+await page.waitForSelector('.tile');
 
 // ---- ٩) بطاقة الاشتراك ----
 // كانت المعلومة تطلع بس لما يكون في أكتر من مستوى، فالطالب العادي ما

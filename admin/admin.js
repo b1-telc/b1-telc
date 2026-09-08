@@ -32,6 +32,14 @@ const dtf = new Intl.DateTimeFormat('de-DE',
 const fmtDate = s => s ? dtf.format(new Date(s)) : '—';
 const fmtDT   = s => s ? new Date(s).toLocaleString('de-DE') : '—';
 
+/* Der Code wird genau so angezeigt, wie er gespeichert ist: B14827519366.
+   Vorher standen hier Leerzeichen als Lesehilfe — aber weitergegeben wird
+   der Code über WhatsApp, und dort ist nicht zu erkennen, ob es ein oder
+   zwei Leerzeichen sind. Der Code selbst hat keine, also zeigt ihn auch
+   niemand mit. (Beim Einlösen räumt code_norm() sie ohnehin weg, falls
+   sie doch jemand tippt.) */
+const fmtCode = c => String(c ?? '');
+
 /* ============ الاتصال ============ */
 function storeSession(s){
   session = s;
@@ -216,7 +224,7 @@ async function screenUsers(){
         <b>${esc(u.name || 'ohne Namen')}</b>
         ${u.note ? `<div style="color:var(--muted);font-size:13px">${esc(u.note)}</div>` : ''}
         ${(u.codes || []).map(c =>
-          `<div class="mono" style="color:var(--muted);font-size:12px">${esc(c.code)}</div>`
+          `<div class="mono" style="color:var(--muted);font-size:12px">${esc(fmtCode(c.code))}</div>`
         ).join('')}
       </td>
       <td>${subs.length ? subs.map(s => {
@@ -289,7 +297,7 @@ function userDialog(u){
     <h2>Abo ${esc((s.levels || []).join(', ') || '—')}</h2>
     <p class="sub" style="margin-bottom:8px">
       ${esc(s.status)} · läuft bis ${fmtDate(s.current_period_end)}
-      ${s.code ? ` · Code <span class="mono">${esc(s.code)}</span>` : ''}</p>
+      ${s.code ? ` · Code <span class="mono">${esc(fmtCode(s.code))}</span>` : ''}</p>
     <div class="row">
       <label>Enddatum
         <input id="d_end${i}" type="date"
@@ -328,7 +336,7 @@ function userDialog(u){
       ${(u.codes || []).length ? `<div class="wrap"><table>
         <tr><th>Code</th><th>Stufe</th><th>eingelöst</th></tr>
         ${u.codes.map(c => `<tr>
-          <td class="mono">${esc(c.code)}</td>
+          <td class="mono">${esc(fmtCode(c.code))}</td>
           <td class="mono">${esc((c.levels || []).join(', '))}</td>
           <td>${fmtDate(c.at)}</td></tr>`).join('')}
       </table></div>` : '<p class="sub">Noch keinen Code eingelöst.</p>'}
@@ -405,13 +413,15 @@ async function screenCodes(){
 
     <div class="card">
       <div class="row">
-        <label>Anzahl<input id="c_n" type="number" value="5" min="1" max="200"></label>
-        ${pickerHTML('c_lvl', levels, codeLevel, {
-          extra: l => `data-live="${l.live}" data-pub="${l.published ? 1 : 0}"` })}
+        <!-- Die Art steht zuerst: sie entscheidet, welche der folgenden
+             Felder überhaupt gelten (Tage oder Stunden, Testauswahl). -->
         <label>Art<select id="c_kind">
           <option value="full" selected>Vollzugang</option>
           <option value="demo">Demo</option>
         </select></label>
+        <label>Anzahl<input id="c_n" type="number" value="1" min="1" max="200"></label>
+        ${pickerHTML('c_lvl', levels, codeLevel, {
+          extra: l => `data-live="${l.live}" data-pub="${l.published ? 1 : 0}"` })}
         <label id="c_days_l">Tage<select id="c_days">
           <option value="30" selected>30</option><option value="90">90</option>
           <option value="180">180</option><option value="365">365</option>
@@ -442,7 +452,7 @@ async function screenCodes(){
       <tr><th>Code</th><th>Status</th><th>Stufen</th><th>Gültig</th><th>Umfang</th>
           <th>Aktivierungen</th><th>Notiz</th><th>erstellt</th><th></th></tr>
       ${codes.map(c => { const [cls, txt] = state(c); return `<tr>
-        <td class="mono"><b>${esc(c.code)}</b></td>
+        <td class="mono"><b>${esc(fmtCode(c.code))}</b></td>
         <td><span class="pill ${cls}">${txt}</span></td>
         <td>${esc((c.levels || []).join(', '))}</td>
         <td>${c.duration_days ? c.duration_days + ' Tage' : ''}${
@@ -553,10 +563,13 @@ async function screenCodes(){
     if (!made) return;
     document.getElementById('c_out').innerHTML =
       `<h2>Neu erzeugt</h2><div class="codes">
-         ${made.map(c => `<div class="mono">${esc(c)}</div>`).join('')}</div>
+         ${made.map(c => `<div class="mono">${esc(fmtCode(c))}</div>`).join('')}</div>
+       <p class="sub" style="margin:8px 0 0">Genau so weitergeben — ohne
+          Leerzeichen. Beim Einlösen sind Leerzeichen, Bindestriche und
+          Groß-/Kleinschreibung trotzdem egal.</p>
        <button class="btn sm grey" id="c_copy" style="margin-top:10px">Kopieren</button>`;
     document.getElementById('c_copy').onclick = () => {
-      navigator.clipboard?.writeText(made.join('\n'))
+      navigator.clipboard?.writeText(made.map(fmtCode).join('\n'))
         .then(() => toast('Kopiert')).catch(() => toast('Kopieren nicht möglich'));
     };
   };
@@ -1003,7 +1016,7 @@ const STALE_MSG = '⚠ Die Datenbank ist noch nicht aktualisiert — bitte '
    بتفشل بصمت بطريقتها، وولا وحدة بتقول السبب. الرقم بيخلّي اللوحة تقوله.
 
    لما يتضاف ترحيل: يزيد الرقم هون وبـ0019_version.sql. */
-const SCHEMA_MIN = 19;
+const SCHEMA_MIN = 22;
 let schemaHave = null;      // null = لسا ما انفحص
 
 async function checkSchema(){

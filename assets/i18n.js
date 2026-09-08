@@ -10,10 +10,14 @@
 
 const I18N = (() => {
 
+  /* العلم بيتعرف من بعيد وبلا قراءة — وهاد المطلوب من منتقي لغة: مين
+     ما بيقرا الألماني لازم يلاقي لغته بلا ما يقرا شي.
+     العربي ما إله علم: هي لغة عشرين بلد، وأي علم منختاره بيقصي الباقي.
+     فبيوقف حرف «ع» مكانه — بينقرا من أي عربي وما بينسب اللغة لبلد. */
   const LANGS = [
-    { id: 'de', name: 'Deutsch',    dir: 'ltr' },
-    { id: 'ar', name: 'العربية',    dir: 'rtl' },
-    { id: 'uk', name: 'Українська', dir: 'ltr' }
+    { id: 'de', name: 'Deutsch',    flag: '🇩🇪', dir: 'ltr' },
+    { id: 'ar', name: 'العربية',    flag: 'ع',  dir: 'rtl' },
+    { id: 'uk', name: 'Українська', flag: '🇺🇦', dir: 'ltr' }
   ];
 
   const DICT = {
@@ -32,6 +36,17 @@ const I18N = (() => {
                 'erhalten. Der Code wird nur einmal gebraucht — danach bleibt ' +
                 'dieses Gerät angemeldet.',
       codeButton: 'Freischalten',
+      codeChecking: 'Wird geprüft …',
+      codeExample: 'Beispiel: B14827519366',
+      codeErrTooMany: 'Zu viele Versuche. Bitte in {t} noch einmal probieren.',
+      codeErrUnknown: 'Dieser Code ist unbekannt. Bitte die Ziffern noch einmal prüfen.',
+      codeErrUsed: 'Dieser Code wurde bereits verwendet.',
+      codeErrRevoked: 'Dieser Code wurde gesperrt.',
+      codeErrExhausted: 'Dieser Code wurde bereits auf allen erlaubten Geräten benutzt. '
+                      + 'Bitte wenden Sie sich an Ihren Kurs.',
+      codeErrDevices: 'Die Höchstzahl an Geräten ist erreicht.',
+      codeErrNetwork: 'Keine Verbindung. Bitte später versuchen.',
+      codeErrOther: 'Der Code konnte nicht eingelöst werden.',
 
       welcome: 'Willkommen 👋',
       homeIntro: 'Wählen Sie einen Modelltest. Jeder Test hat die Prüfungsteile ' +
@@ -121,6 +136,18 @@ const I18N = (() => {
       again: 'Wiederholen',
       taskHead: 'Aufgabe',
 
+      settings: 'Einstellungen',
+      themeSystem: 'Wie das Gerät',
+      themeLight: 'Hell',
+      themeDark: 'Dunkel',
+      smaller: 'Kleiner',
+      bigger: 'Größer',
+      progress: '{done} von {total} beantwortet',
+      openAsk: '{n} ohne Antwort. Trotzdem abgeben?',
+      submitAnyway: 'Trotzdem abgeben',
+      keepGoing: 'Weiter bearbeiten',
+      nOpen: { one: '{n} Aufgabe ist noch', other: '{n} Aufgaben sind noch' },
+
       nTask:    { one: '{n} Aufgabe',     other: '{n} Aufgaben' },
       nMinute:  { one: '{n} Minute',      other: '{n} Minuten' },
       nTest:    { one: '{n} Modelltest',  other: '{n} Modelltests' },
@@ -145,6 +172,17 @@ const I18N = (() => {
       codeHint: 'أدخل رمز الدخول. أخذته عند الشراء. الرمز بينستعمل مرة ' +
                 'وحدة — وبعدها بيضل هالجهاز مسجّل.',
       codeButton: 'تفعيل',
+      codeChecking: 'عم نفحص …',
+      codeExample: 'مثال: B14827519366',
+      codeErrTooMany: 'محاولات كتير. جرّب بعد {t}.',
+      codeErrUnknown: 'هالرمز مو معروف. راجع الأرقام مرة تانية.',
+      codeErrUsed: 'هالرمز مستعمل من قبل.',
+      codeErrRevoked: 'هالرمز متوقّف.',
+      codeErrExhausted: 'هالرمز انستعمل على كل الأجهزة المسموحة. '
+                      + 'احكي مع الدورة تبعك.',
+      codeErrDevices: 'وصلت لأقصى عدد أجهزة.',
+      codeErrNetwork: 'ما في اتصال. جرّب بعد شوي.',
+      codeErrOther: 'ما قدرنا نفعّل الرمز.',
 
       welcome: 'أهلاً 👋',
       homeIntro: 'اختر نموذج امتحان. كل نموذج فيه أقسام الامتحان التحريري ' +
@@ -239,6 +277,19 @@ const I18N = (() => {
       again: 'إعادة',
       taskHead: 'السؤال',
 
+      settings: 'الإعدادات',
+      themeSystem: 'متل الجهاز',
+      themeLight: 'فاتح',
+      themeDark: 'غامق',
+      smaller: 'أصغر',
+      bigger: 'أكبر',
+      progress: 'انحلّ {done} من {total}',
+      openAsk: '{n} بلا إجابة. تسلّم برضو؟',
+      submitAnyway: 'سلّم برضو',
+      keepGoing: 'كمّل الحلّ',
+      nOpen: { zero: 'ما في سؤال', one: 'في سؤال', two: 'في سؤالين',
+               few: 'في {n} أسئلة', many: 'في {n} سؤال', other: 'في {n} سؤال' },
+
       nTask:    { zero: 'ولا سؤال', one: 'سؤال واحد', two: 'سؤالين',
                   few: '{n} أسئلة', many: '{n} سؤال', other: '{n} سؤال' },
       nMinute:  { zero: 'ولا دقيقة', one: 'دقيقة', two: 'دقيقتين',
@@ -273,6 +324,17 @@ const I18N = (() => {
                 'Код потрібен лише один раз — далі пристрій залишається ' +
                 'підключеним.',
       codeButton: 'Активувати',
+      codeChecking: 'Перевіряємо …',
+      codeExample: 'Приклад: B14827519366',
+      codeErrTooMany: 'Забагато спроб. Спробуйте через {t}.',
+      codeErrUnknown: 'Такий код невідомий. Перевірте цифри ще раз.',
+      codeErrUsed: 'Цей код уже використано.',
+      codeErrRevoked: 'Цей код заблоковано.',
+      codeErrExhausted: 'Цей код уже використано на всіх дозволених пристроях. '
+                      + 'Зверніться до свого курсу.',
+      codeErrDevices: 'Досягнуто максимальну кількість пристроїв.',
+      codeErrNetwork: 'Немає зв’язку. Спробуйте пізніше.',
+      codeErrOther: 'Код не вдалося активувати.',
 
       welcome: 'Вітаємо 👋',
       homeIntro: 'Оберіть пробний тест. Кожен тест містить частини письмового ' +
@@ -364,6 +426,19 @@ const I18N = (() => {
 
       again: 'Повторити',
       taskHead: 'Завдання',
+
+      settings: 'Налаштування',
+      themeSystem: 'Як на пристрої',
+      themeLight: 'Світлий',
+      themeDark: 'Темний',
+      smaller: 'Менше',
+      bigger: 'Більше',
+      progress: '{done} з {total} виконано',
+      openAsk: '{n} без відповіді. Усе одно здати?',
+      submitAnyway: 'Усе одно здати',
+      keepGoing: 'Продовжити',
+      nOpen: { one: '{n} завдання', few: '{n} завдання',
+               many: '{n} завдань', other: '{n} завдання' },
 
       nTask:    { one: '{n} завдання', few: '{n} завдання',
                   many: '{n} завдань', other: '{n} завдання' },
