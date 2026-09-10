@@ -23,14 +23,17 @@ So one of two things is true, and you need to know which:
 Check it: Cloudflare dashboard → Workers → `b1-telc` → Settings → Builds →
 *Branch*.
 
-If it says `main`, pick one:
+**Decided (2026-09-09): `kiko-branch` stays the working branch, `main` is
+not merged into.** So if that setting says `main`, change it to
+`kiko-branch` — do not merge.
 
-```bash
-# أ) merge the work into main (a pull request, or directly)
-git checkout main && git merge kiko-branch && git push origin main
+Whoever changes it should know what it means: `main` was last touched on
+30 August and stays that way. Anyone reading the repository on GitHub sees
+`main` by default and will not find recent work, including `content/`. Use
+the branch switcher, or these links:
 
-# ب) or point Cloudflare at kiko-branch in that same settings page
-```
+- [`content/` on kiko-branch](https://github.com/HouzaifaAlyousef/B1-telc/tree/kiko-branch/content)
+- locally: `git fetch origin kiko-branch && git checkout kiko-branch`
 
 Verify: open `https://b1-telc.b1-telc.workers.dev` and check that the
 settings bar (🇩🇪 🇸🇦 🇺🇦 ☀ 🌙 A− A+) is at the top of the start page. If it
@@ -81,13 +84,23 @@ numbers behind it: [19-capacity.md](19-capacity.md).
 Without it the student still gets the automatic checks (word count, greeting,
 closing, spelling) and grades themselves. With it they get a full correction.
 
+> ⚠ **The key goes in the terminal, never in a file.** Do not paste it into
+> this document, or any file in the repository — GitHub's secret scanner
+> will block the push, and a key that sat in a commit has to be replaced.
+> Type the command with your key directly into the shell.
+
 ```bash
 # ١) free key, no credit card: https://aistudio.google.com/apikey
-supabase secrets set GEMINI_API_KEY=…
+supabase secrets set GEMINI_API_KEY=DEIN_KEY_HIER_EINSETZEN_NICHT_SPEICHERN
 
 # ٢) deploy
 supabase functions deploy correct-writing
 ```
+
+If a key did end up in a commit: put the placeholder back, `git commit
+--amend --no-edit`, push — and replace the key at
+[aistudio.google.com/apikey](https://aistudio.google.com/apikey) anyway.
+**Never** use GitHub's "allow the secret" link; that publishes it.
 
 **Verify:** do a Schriftlicher Ausdruck in the app and press
 *Korrektur anfordern*.
@@ -108,13 +121,13 @@ Details: [14-writing-correction.md](14-writing-correction.md).
 Without it every demo code stays manual work for you.
 
 ```bash
-# ١) @BotFather → /newbot → copy the token
+# ١) @BotFather → /newbot → copy the token Claude here it is the token "8872809572:AAFRlLp6Rq58XtVVmwNieMpFhM8S5aSlg74"
 # ٢) invent a webhook secret
 openssl rand -hex 32
 
 # ٣) three secrets
 supabase secrets set \
-  TELEGRAM_BOT_TOKEN='…' \
+  TELEGRAM_BOT_TOKEN='8872809572:AAFRlLp6Rq58XtVVmwNieMpFhM8S5aSlg74' \
   TELEGRAM_WEBHOOK_SECRET='…' \
   APP_URL='https://b1-telc.b1-telc.workers.dev'
 
@@ -132,6 +145,17 @@ curl -sS "https://api.telegram.org/bot<TOKEN>/setWebhook" \
 **Verify:** message your bot `/start` — four language buttons should appear.
 
 Full walkthrough and troubleshooting: [18-telegram-bot.md](18-telegram-bot.md).
+
+---
+
+## 4b. New exam material goes through `content/`
+
+Not a step you have to do now — but when you hand PDFs to another AI, put
+the result in `content/<anbieter>/<stufe>/modell-NN/`. The tree exists and
+is checked by `node tools/check_content.mjs`.
+
+Only the telc B1 template is written. Every other level needs one real PDF
+before its template can exist: [21-content-folders.md](21-content-folders.md).
 
 ---
 
