@@ -148,6 +148,48 @@ check "★ vorlagen.js محدّث من docs/vorlage/*.txt" $?
 grep -q 'src="vorlagen.js"' admin/index.html
 check "اللوحة بتحمّل vorlagen.js" $?
 
+# ---------- الترحيلات بتنقرا ----------
+# ★ كان بالبايبلاين بس، فخطأ نحوي بيمرق محلياً وبيوقف البناء بعد
+#   الدفع. Postgres حيّ ما بيكفي: بيقبل أشياء المحلّل السكوني
+#   بيرفضها (الإسناد لحقل جوّا %rowtype مثلاً).
+python3 tools/check_sql.py >/dev/null 2>&1
+check "★ كل الترحيلات بتنقرا (نفس فحص البايبلاين)" $?
+
+# ---------- بذور مولّدة من content/ ----------
+# ★ انلدغنا قبل: أجزاء b1 ضلّت مولّدة من ١٦ نموذج بعد ما صاروا ١٧،
+#   ومين لصقهن فاته نموذج كامل بلا ما ينتبه. الفحص هون بدل الانتباه.
+#
+# ★ وبالدوران على كل مستوى معبّى، مو بقايمة مكتوبة بالإيد: أي مستوى
+#   جديد بينضاف بيندخل بالفحص لحاله. قايمة مثبّتة معناها إنّ مستوى
+#   جديد بيمرق بلا فحص وما حدا بينتبه.
+SEEDED=0
+for D in content/*/*/; do
+  P=$(basename "$(dirname "$D")"); L=$(basename "$D")
+  [ -f "supabase/seed/$L.sql" ] || continue
+  grep -q "content/$P/$L" "supabase/seed/$L.sql" 2>/dev/null || continue
+  SEEDED=$((SEEDED + 1))
+
+  node tools/content_to_seed.mjs "$P/$L" "supabase/seed/$L.sql" >/dev/null 2>&1
+  git diff --quiet -- "supabase/seed/$L.sql" 2>/dev/null
+  check "★ supabase/seed/$L.sql مطابق لـcontent/$P/$L" $?
+
+  # كل نموذج معبّى لازم يوصل للبذور — مو بس يمرق الفحص
+  WANT=$(node tools/check_content.mjs "$P/$L" 2>/dev/null | grep -c "✓ $P/$L")
+  GOT=$(grep -c "^insert into tests" "supabase/seed/$L.sql")
+  [ "$WANT" = "$GOT" ]
+  check "★ وكل نماذجه وصلت ($GOT من $WANT)" $?
+done
+[ "$SEEDED" -gt 0 ]
+check "★ في بذور مولّدة من content/ ($SEEDED مستوى)" $?
+
+# الأجزاء المقسّمة لازم تتبع ملفاتها الكاملة
+for F in supabase/seed/parts/*-1.sql; do
+  L=$(basename "$F" -1.sql)
+  ./tools/split_seed.sh "$L" >/dev/null 2>&1
+done
+git diff --quiet -- supabase/seed/parts/ 2>/dev/null
+check "★ والأجزاء مطابقة للملفات الكاملة" $?
+
 # ---------- setup.sql مطابق للترحيلات ----------
 ./tools/build_setup.sh >/dev/null 2>&1
 git diff --quiet -- supabase/setup.sql 2>/dev/null

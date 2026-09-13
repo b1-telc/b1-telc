@@ -121,6 +121,227 @@ begin
     perform t_check('مدّة برّا المدى مرفوضة', SQLERRM like '%months_out_of_range%');
   end;
 
+  -- ── المجموعة بدل الأشخاص ──
+  delete from bot_admins;
+  insert into bot_admins (telegram_id, label) values (-1009999, 'المجموعة');
+
+  perform bot_demo_code(900077, 900077, 'dritter', 'ar', 'req-b1');
+  r := bot_request_access(900077, 2);
+  req := (r->>'request_id')::uuid;
+
+  -- ★ نفس الشخص، بس الضغطة جوّا المجموعة المسجّلة
+  begin
+    perform bot_decide_request(tg_liar, req, true, null, null);
+    perform t_check('★★ برّا المجموعة مرفوض', false);
+  exception when others then
+    perform t_check('★★ نفس الشخص برّا المجموعة مرفوض', SQLERRM like '%not_bot_admin%');
+  end;
+
+  r := bot_decide_request(tg_liar, req, true, null, -1009999);
+  perform t_check('★★ وجوّا المجموعة بيمرق — العضوية هي الصلاحية',
+                  (r->>'ok')::boolean and r->>'status' = 'approved');
+  perform t_check('★ ومين قرّر انسجّل شخص مو مجموعة',
+    (select decided_by from access_requests where id = req) = tg_liar);
+
+  -- ★ مجموعة تانية مو مسجّلة ما بتشتغل
+  perform bot_demo_code(900078, 900078, 'vierter', 'ar', 'req-b1');
+  req := (bot_request_access(900078, 1)->>'request_id')::uuid;
+  begin
+    perform bot_decide_request(tg_liar, req, true, null, -1000001);
+    perform t_check('★★ مجموعة مو مسجّلة مرفوضة', false);
+  exception when others then
+    perform t_check('★★ مجموعة تانية مو مسجّلة مرفوضة', SQLERRM like '%not_bot_admin%');
+  end;
+
   raise notice '';
   raise notice '  كل اختبارات طلبات الوصول نجحت ✓';
+end $$;
+
+-- ── الحجز ──
+do $$
+declare
+  boss bigint := 910001; mate bigint := 910002; grp bigint := -1009999;
+  r jsonb; req uuid; n int;
+begin
+  raise notice '';
+  raise notice '── حجز الطلب ──';
+  -- ★ منبلّش من صفر: أكواد النماذج يلي قبل بتزيّف العدّ تحت
+  delete from access_requests; delete from bot_admins; delete from access_codes;
+  insert into bot_admins (telegram_id, label) values (grp, 'المجموعة');
+
+  perform bot_demo_code(910100, 910100, 'kunde', 'de', 'req-b1');
+  r := bot_request_access(910100, 3, 'de');
+  req := (r->>'request_id')::uuid;
+
+  -- الحجز
+  r := bot_reserve_request(boss, req, 'Boss', 15, grp);
+  perform t_check('الحجز اشتغل', (r->>'ok')::boolean and r->>'by' = 'Boss');
+  perform t_check('★ ووقته ١٥ دقيقة',
+    (select reserve_until from access_requests where id = req) > now() + interval '14 min');
+
+  -- ★ ما حدا بيسرقه
+  r := bot_reserve_request(mate, req, 'Mate', 15, grp);
+  perform t_check('★★ التاني ما بيقدر يحجزه ومكتوبله مين ماسكه',
+                  not (r->>'ok')::boolean and (r->>'taken')::boolean and r->>'by' = 'Boss');
+  perform t_check('★ والحجز ما تغيّر',
+    (select reserved_by from access_requests where id = req) = boss);
+
+  -- ★ ولا بيقرّر بدله
+  r := bot_decide_request(mate, req, true, null, grp);
+  perform t_check('★★ ولا بيقدر يوافق بدله', not (r->>'ok')::boolean and (r->>'taken')::boolean);
+  perform t_check('★★ وما انعمل كود',
+    (select count(*) from access_codes where note like 'telegram-full:%') = 0);
+
+  -- صاحب الحجز بيقرّر عادي
+  r := bot_decide_request(boss, req, true, null, grp);
+  perform t_check('★ صاحب الحجز بيوافق', (r->>'ok')::boolean);
+  perform t_check('★★ والكود ٣ تفعيلات',
+    (select max_uses from access_codes where code = r->>'code') = 3);
+  perform t_check('★ ومدّته ٣ شهور',
+    (select duration_days from access_codes where code = r->>'code') = 90);
+
+  -- ── الانتهاء بيحرّره ──
+  delete from access_requests; delete from access_codes;
+  perform bot_demo_code(910200, 910200, 'zwei', 'de', 'req-b1');
+  req := (bot_request_access(910200, 1, 'de')->>'request_id')::uuid;
+  perform bot_reserve_request(boss, req, 'Boss', 15, grp);
+
+  perform t_check('قبل الانتهاء ما في شي للكنس',
+                  jsonb_array_length(bot_sweep_reservations()) = 0);
+
+  -- منرجّع الوقت للورا بدل ما ننطر ربع ساعة
+  update access_requests set reserve_until = now() - interval '1 min' where id = req;
+
+  r := bot_sweep_reservations();
+  perform t_check('★★ بعد الانتهاء الكنس بيرجّعه للتنبيه',
+                  jsonb_array_length(r) = 1 and (r->0->>'reserved_name') = 'Boss');
+  perform t_check('★★ والكنس التاني ما بيرجّعه مرّتين',
+                  jsonb_array_length(bot_sweep_reservations()) = 0);
+
+  -- ★ وبعد الانتهاء صار حرّ لأي حدا
+  r := bot_decide_request(mate, req, false, 'soon', grp);
+  perform t_check('★★ وبعد الانتهاء غيره بيقدر يقرّر', (r->>'ok')::boolean);
+
+  -- ★ الحجز ما بيمرق من برّا المجموعة
+  delete from access_requests;
+  perform bot_demo_code(910300, 910300, 'drei', 'de', 'req-b1');
+  req := (bot_request_access(910300, 1, 'de')->>'request_id')::uuid;
+  begin
+    perform bot_reserve_request(mate, req, 'Mate', 15, null);
+    perform t_check('★★ حجز من برّا المجموعة مرفوض', false);
+  exception when others then
+    perform t_check('★★ حجز من برّا المجموعة مرفوض', SQLERRM like '%not_bot_admin%');
+  end;
+
+  raise notice '';
+  raise notice '  كل اختبارات الحجز نجحت ✓';
+end $$;
+
+-- ── تجريبي لكل مستوى ──
+insert into levels (id, title, sort, published, provider, stufe)
+values ('req-b2', 'ReqTest B2', 1, true, 'reqtest', 'B2')
+on conflict (id) do nothing;
+insert into tests (level_id, slug, title, blocks, aufgaben, published, sort)
+values ('req-b2', 'n1', 'B2 ERSTER', '[]'::jsonb, 5, true, 1)
+on conflict (level_id, slug) do nothing;
+
+do $$
+declare tg bigint := 920001; r1 jsonb; r2 jsonb; r3 jsonb; n int;
+begin
+  raise notice '';
+  raise notice '── تجريبي لكل مستوى ──';
+  delete from telegram_demos; delete from telegram_users;
+  delete from access_codes where note like 'telegram:%';
+
+  r1 := bot_demo_code(tg, tg, 'kunde', 'ar', 'req-b1');
+  perform t_check('أخد تجريبي B1', (r1->>'ok')::boolean and not (r1->>'again')::boolean);
+
+  -- ★★ الباگ: قبل، هون كان بيرجّع كود B1 ويقول «أخدت من قبل»
+  r2 := bot_demo_code(tg, tg, 'kunde', 'ar', 'req-b2');
+  perform t_check('★★ وبياخد تجريبي B2 كمان — مو «أخدت من قبل»',
+                  (r2->>'ok')::boolean and not (r2->>'again')::boolean);
+  perform t_check('★★ وكود B2 غير كود B1', r2->>'code' <> r1->>'code');
+  perform t_check('★ وكل كود لمستواه',
+    (select levels[1] from access_codes where code = r2->>'code') = 'req-b2'
+    and (select levels[1] from access_codes where code = r1->>'code') = 'req-b1');
+
+  -- ★ والرجعة لنفس المستوى لسا بتعطي نفس الكود
+  r3 := bot_demo_code(tg, tg, 'kunde', 'ar', 'req-b1');
+  perform t_check('★★ والرجعة لـB1 بتعطي **نفس** كود B1 مو جديد',
+                  (r3->>'again')::boolean and r3->>'code' = r1->>'code');
+
+  select count(*) into n from access_codes where note = 'telegram:' || tg;
+  perform t_check('★★ فالمجموع كودين بس مو تلاتة (' || n || ')', n = 2);
+
+  -- ★ والحدّ لسا هو هو: تجريبي وبس
+  perform t_check('★ التجريبي لسا ٢٤ ساعة وامتحان واحد وتفعيل واحد',
+    (select bool_and(duration_hours = 24 and duration_days = 0
+                     and array_length(test_slugs,1) = 1 and max_uses = 1)
+       from access_codes where note = 'telegram:' || tg));
+
+  raise notice '';
+  raise notice '  كل اختبارات التجريبي لكل مستوى نجحت ✓';
+end $$;
+
+-- ── «كودي» والتنبيه و«مستوى تاني» ──
+do $$
+declare tg bigint := 930001; boss bigint := 930002; grp bigint := -1009999;
+        r jsonb; v_code text; u uuid;
+begin
+  raise notice '';
+  raise notice '── كودي · التنبيه · مستوى تاني ──';
+  delete from access_requests; delete from telegram_demos; delete from telegram_users;
+  delete from subscriptions; delete from access_codes; delete from bot_admins;
+  insert into bot_admins (telegram_id) values (grp);
+
+  -- بلا تجريبي: لا أكواد، وكل المستويات لسا ما انجرّبت
+  perform t_check('★ بلا تجريبي: ما في أكواد',
+                  jsonb_array_length(bot_my_codes(tg)) = 0);
+  perform t_check('★ وكل المستويات لسا ما انجرّبت',
+                  jsonb_array_length(bot_untried_levels(tg)) >= 2);
+
+  r := bot_demo_code(tg, tg, 'kunde', 'de', 'req-b1');
+  v_code := r->>'code';
+  perform t_check('★★ «كودي» بيرجّع كوده', jsonb_array_length(bot_my_codes(tg)) = 1);
+  perform t_check('★ ومعه المستوى والامتحان',
+                  (bot_my_codes(tg)->0->>'kind') = 'demo'
+                  and (bot_my_codes(tg)->0->>'stufe') = 'B1'
+                  and (bot_my_codes(tg)->0->>'test') is not null);
+
+  -- ★ «جرّب مستوى تاني»: B1 انشال من القايمة، B2 لسا فيها
+  perform t_check('★★ B1 انشال من «جرّب مستوى تاني»',
+    not exists (select 1 from jsonb_array_elements(bot_untried_levels(tg)) e
+                 where e->>'id' = 'req-b1'));
+  perform t_check('★★ وB2 لسا معروض',
+    exists (select 1 from jsonb_array_elements(bot_untried_levels(tg)) e
+             where e->>'id' = 'req-b2'));
+
+  -- ── التنبيه قبل الانتهاء ──
+  -- كود ما انفعّل: ما إله اشتراك، فما إله وقت ينتهي
+  perform t_check('★★ كود ما انفعّل ما بينتنبّه — ما إله وقت أصلاً',
+                  jsonb_array_length(bot_sweep_expiring()) = 0);
+
+  -- الطالب فعّله: صار إله اشتراك ينتهي بعد ٢٤ ساعة
+  insert into auth.users (id) values (gen_random_uuid()) returning id into u;
+  insert into profiles (id, is_admin) values (u, false);
+  insert into subscriptions (user_id, levels, current_period_end, access_code_id, status)
+  values (u, array['req-b1'], now() + interval '24 hours',
+          (select id from access_codes where code = v_code), 'active');
+
+  perform t_check('★ وباقيله ٢٤ ساعة: لسا بدري على التنبيه',
+                  jsonb_array_length(bot_sweep_expiring()) = 0);
+
+  -- منقرّب الانتهاء بدل ما ننطر ٢٣ ساعة
+  update subscriptions set current_period_end = now() + interval '40 minutes'
+   where access_code_id = (select id from access_codes where code = v_code);
+
+  r := bot_sweep_expiring();
+  perform t_check('★★ باقي ٤٠ دقيقة ← التنبيه بينطلق',
+                  jsonb_array_length(r) = 1 and (r->0->>'chat_id')::bigint = tg
+                  and (r->0->>'stufe') = 'B1');
+  perform t_check('★★ والكنس التاني ما بينبّه مرّتين',
+                  jsonb_array_length(bot_sweep_expiring()) = 0);
+
+  raise notice '';
+  raise notice '  كل اختبارات كودي والتنبيه نجحت ✓';
 end $$;

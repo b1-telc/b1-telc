@@ -4554,3 +4554,640 @@ revoke all on function bot_demo_code(bigint,bigint,text,text,text)
 create or replace function schema_version()
 returns int language sql immutable as $$ select 24 $$;
 grant execute on function schema_version() to authenticated, anon;
+
+-- ═══════════════════════════════════════════════
+-- 0025_group_admin.sql
+-- ═══════════════════════════════════════════════
+-- =====================================================================
+-- 0025_group_admin — المجموعة كلها بتوافق، مو أشخاص بأسمائهن
+--
+-- كان لازم كل واحد بيوافق ينتسجّل برقمه. بمجموعة بيدخلها ويطلع منها
+-- ناس، هاد بيصير قايمة تانية لازم تتزامن بالإيد — ومين نسي يتشال
+-- بيضل موافق.
+--
+-- ★ العضوية بالمجموعة هي الصلاحية.
+--   بطاقة الطلب ما بتوصل إلا لمجموعتك، ومين مو فيها ما بيشوف الزرّ
+--   أصلاً. وcb.message.chat.id تلغرام بيحطّه مو المستخدم، فما بينزوّر.
+--   (التحويل بيضيّع الأزرار، فما في طريق يوصل الزرّ لبرّا المجموعة.)
+--
+-- bot_admins صار بيقبل النوعين: رقم شخص (موجب) أو رقم مجموعة (سالب).
+-- الموافقة بتمرق لو **أي** واحد فيهن مسجّل.
+-- =====================================================================
+
+comment on table bot_admins is
+  'مين بيوافق على طلبات الوصول: رقم شخص (موجب) أو رقم مجموعة (سالب)';
+
+drop function if exists bot_decide_request(bigint, uuid, boolean, text);
+
+create or replace function bot_decide_request(
+  p_admin_telegram_id bigint,
+  p_request_id        uuid,
+  p_approve           boolean,
+  p_reason            text   default null,
+  p_chat_id           bigint default null
+) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare v_r access_requests%rowtype; v_u telegram_users%rowtype;
+        v_code text; v_id uuid;
+begin
+  -- ★ هون الحدّ: الشخص مسجّل، أو الضغطة جاية من مجموعة مسجّلة.
+  if not (bot_is_admin(p_admin_telegram_id)
+          or (p_chat_id is not null and bot_is_admin(p_chat_id))) then
+    raise exception 'not_bot_admin';
+  end if;
+
+  select * into v_r from access_requests where id = p_request_id for update;
+  if not found then raise exception 'request_not_found'; end if;
+  if v_r.status <> 'pending' then
+    return jsonb_build_object('ok', false, 'already', v_r.status);
+  end if;
+
+  select * into v_u from telegram_users where telegram_id = v_r.telegram_id;
+
+  if p_approve then
+    if v_r.level_id is null then raise exception 'level_gone'; end if;
+    v_code := new_access_code(v_r.level_id);
+    insert into access_codes (code, levels, duration_days, duration_hours,
+                              test_slugs, max_devices, max_uses, note)
+    values (v_code, array[v_r.level_id], v_r.months * 30, 0,
+            null, 2, 1, 'telegram-full:' || v_r.telegram_id)
+    returning id into v_id;
+
+    update access_requests
+       set status = 'approved', code_id = v_id, decided_at = now(),
+           decided_by = p_admin_telegram_id
+     where id = p_request_id;
+  else
+    update access_requests
+       set status = 'rejected', reason = left(p_reason, 64), decided_at = now(),
+           decided_by = p_admin_telegram_id
+     where id = p_request_id;
+  end if;
+
+  -- decided_by بيضل الشخص مو المجموعة: بدنا نعرف مين قرّر فعلاً
+  return jsonb_build_object('ok', true,
+    'status',  case when p_approve then 'approved' else 'rejected' end,
+    'code',    v_code,
+    'months',  v_r.months,
+    'reason',  left(p_reason, 64),
+    'chat_id', v_u.chat_id,
+    'lang',    v_u.lang,
+    'username', v_u.username);
+end $$;
+revoke all on function bot_decide_request(bigint, uuid, boolean, text, bigint)
+  from public, anon, authenticated;
+
+create or replace function schema_version()
+returns int language sql immutable as $$ select 25 $$;
+grant execute on function schema_version() to authenticated, anon;
+
+-- ═══════════════════════════════════════════════
+-- 0026_reject_text.sql
+-- ═══════════════════════════════════════════════
+-- =====================================================================
+-- 0026_reject_text — سبب رفض بخطّ إيدك، ولغة بتتحدّث
+--
+-- ★ مشكلتين طلعوا بالاستعمال:
+--
+--   ١. الأسباب الأربعة الجاهزة ما بتكفي. أحياناً بدّك تكتب للطالب شي
+--      خاص فيه. العمود كان ٦٤ حرف — بيكفي لمفتاح، مو لجملة.
+--
+--   ٢. لغة الطالب كانت بتنحفظ وقت التجريبي وبس. مين أخد التجريبي
+--      بالعربي وبعدين طلب الوصول بالألماني، كان بياخد الردّ بالعربي.
+--      اللغة لازم تتحدّث مع كل خطوة بيختارها الطالب.
+-- =====================================================================
+
+alter table access_requests
+  alter column reason type varchar(300);
+
+drop function if exists bot_request_access(bigint, int);
+
+create or replace function bot_request_access(
+  p_telegram_id bigint,
+  p_months      int,
+  p_lang        text default null
+) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare v_u telegram_users%rowtype; v_r access_requests%rowtype; v_lvl levels%rowtype;
+        v_lang text;
+begin
+  if p_months is null or p_months < 1 or p_months > 12 then
+    raise exception 'months_out_of_range';
+  end if;
+
+  select * into v_u from telegram_users where telegram_id = p_telegram_id;
+  if not found then raise exception 'no_demo_yet'; end if;
+
+  -- ★ آخر لغة اختارها هي لغته. الردّ بيوصله فيها حتى لو أخد التجريبي بغيرها.
+  --
+  -- متغيّر لحاله مو v_u.lang := …: Postgres بيقبل الإسناد لحقل جوّا
+  -- %rowtype، بس المحلّل السكوني (pglast بالـCI) ما بيقدر يحلّ نوع
+  -- الصفّ بلا قاعدة فبيرفضه. ومنّا شغلة تستاهل نضعّف الفحص لأجلها.
+  v_lang := nullif(trim(coalesce(p_lang, '')), '');
+  if v_lang is null then
+    v_lang := v_u.lang;
+  elsif v_lang is distinct from v_u.lang then
+    v_lang := left(v_lang, 8);
+    update telegram_users set lang = v_lang where telegram_id = p_telegram_id;
+  end if;
+
+  select * into v_r from access_requests
+   where telegram_id = p_telegram_id and status = 'pending';
+  if found then
+    select * into v_lvl from levels where id = v_r.level_id;
+    return jsonb_build_object('ok', true, 'again', true, 'request_id', v_r.id,
+      'months', v_r.months, 'username', v_u.username, 'lang', v_lang,
+      'level_id', v_r.level_id, 'stufe', v_lvl.stufe, 'provider', v_lvl.provider);
+  end if;
+
+  insert into access_requests (telegram_id, level_id, months)
+  values (p_telegram_id, v_u.level_id, p_months)
+  returning * into v_r;
+
+  select * into v_lvl from levels where id = v_r.level_id;
+  return jsonb_build_object('ok', true, 'again', false, 'request_id', v_r.id,
+    'months', v_r.months, 'username', v_u.username, 'lang', v_lang,
+    'level_id', v_r.level_id, 'stufe', v_lvl.stufe, 'provider', v_lvl.provider);
+end $$;
+revoke all on function bot_request_access(bigint, int, text)
+  from public, anon, authenticated;
+
+-- السبب الحرّ بيوصل كامل، مو مقصوص على ٦٤
+create or replace function bot_decide_request(
+  p_admin_telegram_id bigint,
+  p_request_id        uuid,
+  p_approve           boolean,
+  p_reason            text   default null,
+  p_chat_id           bigint default null
+) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare v_r access_requests%rowtype; v_u telegram_users%rowtype;
+        v_code text; v_id uuid;
+begin
+  if not (bot_is_admin(p_admin_telegram_id)
+          or (p_chat_id is not null and bot_is_admin(p_chat_id))) then
+    raise exception 'not_bot_admin';
+  end if;
+
+  select * into v_r from access_requests where id = p_request_id for update;
+  if not found then raise exception 'request_not_found'; end if;
+  if v_r.status <> 'pending' then
+    return jsonb_build_object('ok', false, 'already', v_r.status);
+  end if;
+
+  select * into v_u from telegram_users where telegram_id = v_r.telegram_id;
+
+  if p_approve then
+    if v_r.level_id is null then raise exception 'level_gone'; end if;
+    v_code := new_access_code(v_r.level_id);
+    insert into access_codes (code, levels, duration_days, duration_hours,
+                              test_slugs, max_devices, max_uses, note)
+    values (v_code, array[v_r.level_id], v_r.months * 30, 0,
+            null, 2, 1, 'telegram-full:' || v_r.telegram_id)
+    returning id into v_id;
+
+    update access_requests
+       set status = 'approved', code_id = v_id, decided_at = now(),
+           decided_by = p_admin_telegram_id
+     where id = p_request_id;
+  else
+    update access_requests
+       set status = 'rejected', reason = left(p_reason, 300), decided_at = now(),
+           decided_by = p_admin_telegram_id
+     where id = p_request_id;
+  end if;
+
+  return jsonb_build_object('ok', true,
+    'status',  case when p_approve then 'approved' else 'rejected' end,
+    'code',    v_code,
+    'months',  v_r.months,
+    'reason',  left(p_reason, 300),
+    'chat_id', v_u.chat_id,
+    'lang',    v_u.lang,
+    'username', v_u.username);
+end $$;
+revoke all on function bot_decide_request(bigint, uuid, boolean, text, bigint)
+  from public, anon, authenticated;
+
+create or replace function schema_version()
+returns int language sql immutable as $$ select 26 $$;
+grant execute on function schema_version() to authenticated, anon;
+
+-- ═══════════════════════════════════════════════
+-- 0027_reserve.sql
+-- ═══════════════════════════════════════════════
+-- =====================================================================
+-- 0027_reserve — حجز الطلب متل تذكرة
+--
+-- بمجموعة فيها أكتر من شخص، تنين بيفتحوا نفس الطلب وتنين بيردّوا.
+-- الحجز بيحلّها: مين بياخده بيصير إله وحده لمدّة، والباقي بيشوفوا
+-- مين ماسكه.
+--
+-- ★ الحجز بينتهي لحاله بالوقت، مو بمسح صفّ.
+--   reserve_until بالماضي = الطلب صار حرّ. ما في مهمّة لازم تشتغل
+--   لتحرّره، وما في طلب بيضل محجوز للأبد لأنّ التنبيه ما وصل.
+--
+-- ★ التنبيه بيتبعت مرّة وحدة (nudged_at)، ومين بيبعته هو أول تحديث
+--   بيوصل بعد الانتهاء — أو pg_cron لو ظبّطتها. بالحالتين نفس الدالة.
+-- =====================================================================
+
+alter table access_requests
+  add column if not exists reserved_by   bigint,
+  add column if not exists reserved_name text,
+  add column if not exists reserve_until timestamptz,
+  add column if not exists nudged_at     timestamptz,
+  add column if not exists card_chat     bigint,
+  add column if not exists card_msg      bigint;
+
+-- الكنس بيدوّر على المحجوزين المنتهيين بس
+create index if not exists access_requests_sweep_idx
+  on access_requests (reserve_until)
+  where status = 'pending' and reserved_by is not null and nudged_at is null;
+
+-- ---------------------------------------------------------------------
+-- وين بطاقة الطلب بالمجموعة — لنعرف شو نعدّل وعلى شو نردّ
+-- ---------------------------------------------------------------------
+create or replace function bot_set_card(
+  p_request_id uuid, p_chat bigint, p_msg bigint
+) returns void
+language sql security definer set search_path = public as $$
+  update access_requests set card_chat = p_chat, card_msg = p_msg
+   where id = p_request_id;
+$$;
+revoke all on function bot_set_card(uuid, bigint, bigint)
+  from public, anon, authenticated;
+
+-- ---------------------------------------------------------------------
+-- الحجز
+-- ---------------------------------------------------------------------
+create or replace function bot_reserve_request(
+  p_admin_telegram_id bigint,
+  p_request_id        uuid,
+  p_name              text,
+  p_minutes           int    default 15,
+  p_chat_id           bigint default null
+) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare v_r access_requests%rowtype;
+begin
+  if not (bot_is_admin(p_admin_telegram_id)
+          or (p_chat_id is not null and bot_is_admin(p_chat_id))) then
+    raise exception 'not_bot_admin';
+  end if;
+  if p_minutes < 1 or p_minutes > 1440 then raise exception 'minutes_out_of_range'; end if;
+
+  select * into v_r from access_requests where id = p_request_id for update;
+  if not found then raise exception 'request_not_found'; end if;
+  if v_r.status <> 'pending' then
+    return jsonb_build_object('ok', false, 'already', v_r.status);
+  end if;
+
+  -- محجوز لواحد تاني ولسا ما انتهى: ما بينسرق
+  if v_r.reserved_by is not null and v_r.reserved_by <> p_admin_telegram_id
+     and v_r.reserve_until > now() then
+    return jsonb_build_object('ok', false, 'taken', true,
+      'by', v_r.reserved_name, 'until', v_r.reserve_until);
+  end if;
+
+  update access_requests
+     set reserved_by = p_admin_telegram_id,
+         reserved_name = left(p_name, 64),
+         reserve_until = now() + make_interval(mins => p_minutes),
+         nudged_at = null                     -- حجز جديد = تنبيه جديد
+   where id = p_request_id
+  returning * into v_r;
+
+  return jsonb_build_object('ok', true, 'by', v_r.reserved_name,
+    'until', v_r.reserve_until, 'minutes', p_minutes);
+end $$;
+revoke all on function bot_reserve_request(bigint, uuid, text, int, bigint)
+  from public, anon, authenticated;
+
+-- ---------------------------------------------------------------------
+-- الكنس: مين انتهى حجزه ولسا ما قرّر
+-- ★ بيعلّم nudged_at بنفس الاستعلام، فتشغيلين بنفس اللحظة ما بيبعتوا
+--   تنبيهين — يلي بياخد الصفّ أوّل بياخده وحده.
+-- ---------------------------------------------------------------------
+create or replace function bot_sweep_reservations()
+returns jsonb
+language sql security definer set search_path = public as $$
+  with due as (
+    update access_requests r set nudged_at = now()
+     where r.status = 'pending' and r.reserved_by is not null
+       and r.nudged_at is null and r.reserve_until <= now()
+       and r.id in (select id from access_requests
+                     where status = 'pending' and reserved_by is not null
+                       and nudged_at is null and reserve_until <= now()
+                     for update skip locked)
+    returning r.id, r.reserved_by, r.reserved_name, r.card_chat, r.card_msg, r.months
+  )
+  select coalesce(jsonb_agg(to_jsonb(due)), '[]'::jsonb) from due;
+$$;
+revoke all on function bot_sweep_reservations()
+  from public, anon, authenticated;
+
+-- ---------------------------------------------------------------------
+-- القرار: بيحترم الحجز، والكود صار ٣ تفعيلات
+-- ---------------------------------------------------------------------
+create or replace function bot_decide_request(
+  p_admin_telegram_id bigint,
+  p_request_id        uuid,
+  p_approve           boolean,
+  p_reason            text   default null,
+  p_chat_id           bigint default null
+) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare v_r access_requests%rowtype; v_u telegram_users%rowtype;
+        v_code text; v_id uuid;
+begin
+  if not (bot_is_admin(p_admin_telegram_id)
+          or (p_chat_id is not null and bot_is_admin(p_chat_id))) then
+    raise exception 'not_bot_admin';
+  end if;
+
+  select * into v_r from access_requests where id = p_request_id for update;
+  if not found then raise exception 'request_not_found'; end if;
+  if v_r.status <> 'pending' then
+    return jsonb_build_object('ok', false, 'already', v_r.status);
+  end if;
+
+  -- ★ محجوز لواحد تاني ولسا وقته: هو يلي بيقرّر. بعد ما ينتهي بيصير حرّ.
+  if v_r.reserved_by is not null and v_r.reserved_by <> p_admin_telegram_id
+     and v_r.reserve_until > now() then
+    return jsonb_build_object('ok', false, 'taken', true,
+      'by', v_r.reserved_name, 'until', v_r.reserve_until);
+  end if;
+
+  select * into v_u from telegram_users where telegram_id = v_r.telegram_id;
+
+  if p_approve then
+    if v_r.level_id is null then raise exception 'level_gone'; end if;
+    v_code := new_access_code(v_r.level_id);
+    -- ٣ تفعيلات: الطالب بيقدر يفتحه على جهاز تاني أو بعد ما يمسح الكاش
+    insert into access_codes (code, levels, duration_days, duration_hours,
+                              test_slugs, max_devices, max_uses, note)
+    values (v_code, array[v_r.level_id], v_r.months * 30, 0,
+            null, 2, 3, 'telegram-full:' || v_r.telegram_id)
+    returning id into v_id;
+
+    update access_requests
+       set status = 'approved', code_id = v_id, decided_at = now(),
+           decided_by = p_admin_telegram_id
+     where id = p_request_id;
+  else
+    update access_requests
+       set status = 'rejected', reason = left(p_reason, 300), decided_at = now(),
+           decided_by = p_admin_telegram_id
+     where id = p_request_id;
+  end if;
+
+  return jsonb_build_object('ok', true,
+    'status',  case when p_approve then 'approved' else 'rejected' end,
+    'code',    v_code,
+    'months',  v_r.months,
+    'reason',  left(p_reason, 300),
+    'chat_id', v_u.chat_id,
+    'lang',    v_u.lang,
+    'username', v_u.username);
+end $$;
+revoke all on function bot_decide_request(bigint, uuid, boolean, text, bigint)
+  from public, anon, authenticated;
+
+create or replace function schema_version()
+returns int language sql immutable as $$ select 27 $$;
+grant execute on function schema_version() to authenticated, anon;
+
+-- ═══════════════════════════════════════════════
+-- 0028_demo_per_level.sql
+-- ═══════════════════════════════════════════════
+-- =====================================================================
+-- 0028_demo_per_level — تجريبي لكل مستوى، مو تجريبي واحد للأبد
+--
+-- كان: telegram_users.code_id عمود واحد، فحساب واحد = كود واحد للأبد.
+-- يعني مين جرّب B1 وبعدين بدّه يجرّب B2 بياخد «أخدت نسختك من قبل»
+-- ومعه كود B1 — وهو ما شاف B2 بحياته. هاد بيقفل باب مبيعات مفتوح.
+--
+-- صار: جدول (telegram_id, level_id) — تجريبي واحد **لكل مستوى**.
+--
+-- ★ شو تغيّر بحدود الأمان؟ مين بدّه يجمّع أكواد كان بياخد واحد، صار
+--   بياخد بعدد المستويات المنشورة. وكل واحد فيهن لسا: ٢٤ ساعة،
+--   امتحان واحد، تفعيل واحد، مستوى مختلف. يعني ما ربح ولا امتحان
+--   زيادة عن يلي بدّه يجرّبه فعلاً.
+--
+-- ★ والرجعة لنفس المستوى لسا بتعطي **نفس** الكود مو كود جديد.
+-- =====================================================================
+
+create table if not exists telegram_demos (
+  telegram_id bigint not null
+              references telegram_users(telegram_id) on delete cascade,
+  level_id    text   not null references levels(id) on delete cascade,
+  code_id     uuid   references access_codes(id) on delete set null,
+  created_at  timestamptz not null default now(),
+  primary key (telegram_id, level_id)
+);
+alter table telegram_demos enable row level security;   -- service_role بس
+
+-- يلي أخدوا تجريبي قبل هالترحيل: كودهم بينتقل لمستواه
+insert into telegram_demos (telegram_id, level_id, code_id)
+select telegram_id, level_id, code_id
+  from telegram_users
+ where code_id is not null and level_id is not null
+on conflict (telegram_id, level_id) do nothing;
+
+create or replace function bot_demo_code(
+  p_telegram_id bigint,
+  p_chat_id     bigint,
+  p_username    text,
+  p_lang        text,
+  p_level_id    text
+) returns jsonb
+language plpgsql security definer set search_path = public as $$
+declare
+  v_d    telegram_demos%rowtype;
+  v_code access_codes%rowtype;
+  v_slug text;
+  v_test text;
+  v_lvl  levels%rowtype;
+  v_new  text;
+begin
+  if p_telegram_id is null or p_chat_id is null then
+    raise exception 'telegram_id_required';
+  end if;
+
+  select * into v_lvl from levels where id = p_level_id and published;
+  if not found then raise exception 'level_not_found'; end if;
+
+  -- هوّيته بتنحدّث دايماً: آخر لغة وآخر مستوى اختارهن
+  insert into telegram_users (telegram_id, chat_id, username, lang, level_id)
+  values (p_telegram_id, p_chat_id, left(p_username, 64), left(p_lang, 8), v_lvl.id)
+  on conflict (telegram_id) do update
+    set chat_id = excluded.chat_id, username = excluded.username,
+        lang = excluded.lang, level_id = excluded.level_id;
+
+  -- ★ رجع لنفس المستوى: نفس الكود، مو كود جديد
+  select * into v_d from telegram_demos
+   where telegram_id = p_telegram_id and level_id = v_lvl.id;
+  if found and v_d.code_id is not null then
+    select * into v_code from access_codes where id = v_d.code_id;
+    if found then
+      select t.title into v_test from tests t
+       where t.level_id = v_code.levels[1] and t.slug = v_code.test_slugs[1];
+      return jsonb_build_object(
+        'ok', true, 'again', true, 'code', v_code.code,
+        'level_id', v_lvl.id, 'provider', v_lvl.provider, 'stufe', v_lvl.stufe,
+        'test', v_test, 'hours', v_code.duration_hours,
+        'used', code_uses(v_code.id), 'max_uses', v_code.max_uses);
+    end if;
+  end if;
+
+  -- أول امتحان منشور بالمستوى — هو يلي بينفتح بالتجريبي
+  select t.slug, t.title into v_slug, v_test
+    from tests t where t.level_id = v_lvl.id and t.published
+   order by t.sort, t.slug limit 1;
+  if v_slug is null then raise exception 'no_published_test'; end if;
+
+  v_new := new_access_code(v_lvl.id);
+
+  -- ★ القيم مثبّتة: تجريبي وبس. ما في معامل بيوصل لهون من برّا.
+  insert into access_codes (code, levels, duration_days, duration_hours,
+                            test_slugs, max_devices, max_uses, note)
+  values (v_new, array[v_lvl.id], 0, 24, array[v_slug], 1, 1,
+          'telegram:' || p_telegram_id)
+  returning * into v_code;
+
+  insert into telegram_demos (telegram_id, level_id, code_id)
+  values (p_telegram_id, v_lvl.id, v_code.id)
+  on conflict (telegram_id, level_id) do update set code_id = excluded.code_id;
+
+  -- العمود القديم بيضل يحمل الأخير: bot_request_access بتاخد منه
+  -- المستوى يلي الطالب عم يطلب وصول كامل إله
+  update telegram_users set code_id = v_code.id where telegram_id = p_telegram_id;
+
+  return jsonb_build_object(
+    'ok', true, 'again', false, 'code', v_new,
+    'level_id', v_lvl.id, 'provider', v_lvl.provider, 'stufe', v_lvl.stufe,
+    'test', v_test, 'hours', 24, 'used', 0, 'max_uses', 1);
+end $$;
+revoke all on function bot_demo_code(bigint,bigint,text,text,text)
+  from public, anon, authenticated;
+
+create or replace function schema_version()
+returns int language sql immutable as $$ select 28 $$;
+grant execute on function schema_version() to authenticated, anon;
+
+-- ═══════════════════════════════════════════════
+-- 0029_bot_status.sql
+-- ═══════════════════════════════════════════════
+-- =====================================================================
+-- 0029_bot_status — «كودي»، وتنبيه قبل الانتهاء، و«جرّب مستوى تاني»
+--
+-- تلات ثغرات بنفس اللحظة: الطالب أخد كوده، وبعدين ضيّع الرسالة، أو
+-- خلص وقته وهو ما انتبه، أو خلص الامتحان وما بيعرف إنّ في مستوى تاني
+-- بيقدر يجرّبه. كلهن بيوصلوا لنفس المكان: سؤال إلك بالخاص، أو زبون راح.
+--
+-- ★ التنبيه بينبعت مرّة وحدة لكل كود (warned_at بنفس استعلام الكنس مع
+--   skip locked) — نفس مبدأ تنبيه الحجز. نداء زيادة ما بيضرّ.
+-- =====================================================================
+
+alter table telegram_demos
+  add column if not exists warned_at timestamptz;
+
+-- الكنس بيدوّر على يلي قرب ينتهي ولسا ما انتنبّه
+create index if not exists telegram_demos_warn_idx
+  on telegram_demos (code_id) where warned_at is null;
+
+-- ---------------------------------------------------------------------
+-- «كودي»: كل أكواده، وكم باقي لكل واحد
+-- ---------------------------------------------------------------------
+create or replace function bot_my_codes(p_telegram_id bigint)
+returns jsonb
+language sql security definer set search_path = public stable as $$
+  select coalesce(jsonb_agg(x order by x.ends nulls last), '[]'::jsonb) from (
+    -- التجريبي: من جدول التجريبيات
+    select jsonb_build_object(
+             'code', c.code, 'kind', 'demo',
+             'provider', l.provider, 'stufe', l.stufe, 'level_id', l.id,
+             'test', (select t.title from tests t
+                       where t.level_id = c.levels[1] and t.slug = c.test_slugs[1]),
+             'used', code_uses(c.id), 'max_uses', c.max_uses,
+             'ends', s.current_period_end,
+             'hours', c.duration_hours) x,
+           s.current_period_end ends
+      from telegram_demos d
+      join access_codes c on c.id = d.code_id
+      join levels l on l.id = d.level_id
+      left join subscriptions s on s.access_code_id = c.id and s.status = 'active'
+     where d.telegram_id = p_telegram_id and c.revoked_at is null
+    union all
+    -- الوصول الكامل: من الطلبات الموافَق عليها
+    select jsonb_build_object(
+             'code', c.code, 'kind', 'full',
+             'provider', l.provider, 'stufe', l.stufe, 'level_id', l.id,
+             'test', null,
+             'used', code_uses(c.id), 'max_uses', c.max_uses,
+             'ends', s.current_period_end,
+             'months', r.months) x,
+           s.current_period_end ends
+      from access_requests r
+      join access_codes c on c.id = r.code_id
+      join levels l on l.id = r.level_id
+      left join subscriptions s on s.access_code_id = c.id and s.status = 'active'
+     where r.telegram_id = p_telegram_id and r.status = 'approved'
+       and c.revoked_at is null
+  ) x;
+$$;
+revoke all on function bot_my_codes(bigint) from public, anon, authenticated;
+
+-- ---------------------------------------------------------------------
+-- مستويات ما جرّبها بعد — «جرّب مستوى تاني»
+-- ---------------------------------------------------------------------
+create or replace function bot_untried_levels(p_telegram_id bigint)
+returns jsonb
+language sql security definer set search_path = public stable as $$
+  select coalesce(jsonb_agg(jsonb_build_object(
+           'id', l.id, 'provider', l.provider, 'stufe', l.stufe, 'title', l.title)
+           order by l.provider nulls last, stufe_rank(l.stufe), l.id), '[]')
+    from levels l
+   where l.published
+     and exists (select 1 from tests t where t.level_id = l.id and t.published)
+     and not exists (select 1 from telegram_demos d
+                      where d.telegram_id = p_telegram_id and d.level_id = l.id);
+$$;
+revoke all on function bot_untried_levels(bigint) from public, anon, authenticated;
+
+-- ---------------------------------------------------------------------
+-- الكنس: مين تجريبيّه بيخلص خلال ساعة ولسا ما انتنبّه
+--
+-- ★ شرط الاشتراك مقصود: الكود يلي ما انفعّل أبداً ما إله وقت ينتهي.
+--   تنبيه «باقي ساعة» لواحد ما فتح التطبيق أصلاً بيربكه مو بيساعده.
+-- ---------------------------------------------------------------------
+create or replace function bot_sweep_expiring(p_within interval default '1 hour')
+returns jsonb
+language sql security definer set search_path = public as $$
+  with due as (
+    update telegram_demos d set warned_at = now()
+     where d.warned_at is null
+       and d.code_id in (
+             select d2.code_id from telegram_demos d2
+               join subscriptions s on s.access_code_id = d2.code_id
+                                   and s.status = 'active'
+              where d2.warned_at is null
+                and s.current_period_end > now()
+                and s.current_period_end <= now() + p_within
+              for update of d2 skip locked)
+    returning d.telegram_id, d.level_id, d.code_id
+  )
+  select coalesce(jsonb_agg(jsonb_build_object(
+           'telegram_id', due.telegram_id, 'chat_id', u.chat_id, 'lang', u.lang,
+           'provider', l.provider, 'stufe', l.stufe,
+           'ends', s.current_period_end)), '[]'::jsonb)
+    from due
+    join telegram_users u on u.telegram_id = due.telegram_id
+    join levels l on l.id = due.level_id
+    join subscriptions s on s.access_code_id = due.code_id and s.status = 'active';
+$$;
+revoke all on function bot_sweep_expiring(interval) from public, anon, authenticated;
+
+create or replace function schema_version()
+returns int language sql immutable as $$ select 29 $$;
+grant execute on function schema_version() to authenticated, anon;

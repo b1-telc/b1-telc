@@ -37,10 +37,18 @@ const supa = Deno.serve({ port: PORT_SUPA, onListen() {} }, async (req) => {
 /* ---- تلغرام مزيّف ---- */
 type Sent = { method: string; body: any };
 const sent: Sent[] = [];
+// ★ بيرجّع message_id متل تلغرام الحقيقي: الدالة بتحفظه لتعرف وين
+//   البطاقة، وبلاه التنبيه ما بيلاقي شو يعدّل
+let mid = 1000;
+let botName = "TestPruefungBot";
 const tgSrv = Deno.serve({ port: PORT_TG, onListen() {} }, async (req) => {
   const method = new URL(req.url).pathname.split("/").pop()!;
-  sent.push({ method, body: await req.json().catch(() => ({})) });
-  return new Response(JSON.stringify({ ok: true, result: {} }),
+  const body = await req.json().catch(() => ({}));
+  sent.push({ method, body });
+  const result = method === "sendMessage"
+    ? { message_id: ++mid, chat: { id: body?.chat_id } }
+    : method === "getMe" ? { username: botName } : {};
+  return new Response(JSON.stringify({ ok: true, result }),
                       { headers: { "content-type": "application/json" } });
 });
 
@@ -49,7 +57,7 @@ Deno.env.set("SUPABASE_SERVICE_ROLE_KEY", "SERVICE_KEY");
 Deno.env.set("TELEGRAM_BOT_TOKEN", "T0KEN");
 Deno.env.set("TELEGRAM_WEBHOOK_SECRET", "s3cret");
 Deno.env.set("APP_URL", "https://b1-telc.example.dev");
-Deno.env.set("ADMIN_CHAT_ID", "424242");
+Deno.env.set("ADMIN_CHAT_ID", "-1004242");   // مجموعة، مو شخص
 
 /* نداءات api.telegram.org بتتحوّل للسيرفر المزيّف */
 const realFetch = globalThis.fetch;
@@ -100,6 +108,10 @@ const last = (m = "sendMessage") => [...sent].reverse().find(s => s.method === m
 const toChat = (id: number) =>
   [...sent].reverse().find(x => x.method === "sendMessage" && x.body?.chat_id === id)?.body;
 const kb = () => last()?.reply_markup?.inline_keyboard ?? [];
+const lastOf = (m: string) => [...sent].reverse().find(x => x.method === m)?.body;
+/* اللوحة الثابتة: reply_markup.keyboard مو inline_keyboard */
+const perm = (id: number) =>
+  (toChat(id)?.reply_markup?.keyboard ?? []).flat().map((b: any) => b.text);
 const flat = () => kb().flat();
 
 const TG_ID = 987654321;
@@ -131,6 +143,12 @@ check("★ وفيهن العربي والأوكراني والإنكليزي",
    مؤسسة وحدة معناها ما في شي تختار — السؤال وقتها ضغطة بلا معنى. */
 sent.length = 0;
 await post(click("g|ar"));
+/* ★ الشرح بيجي قبل الأزرار: الطالب لازم يعرف شو رح ياخد */
+const introMsg = sent.filter(x => x.method === "sendMessage")[0]?.body;
+check("★★ بعد اختيار اللغة بيشرح شو رح ياخد",
+      /رمز مجّاني/.test(String(introMsg?.text))
+      && /٢٤ ساعة/.test(String(introMsg?.text)));
+check("★ وبلغته يلي اختارها", !/kostenlos|Welcome/.test(String(introMsg?.text)));
 const stufen = flat().filter((b: any) => String(b.callback_data).startsWith("l|"));
 check(`★ مؤسسة وحدة ← بيقفز للدرجات مباشرة (${stufen.length})`, stufen.length >= 1);
 check("★ والنص بالعربي", /اختار المستوى/.test(String(last()?.text)));
@@ -149,6 +167,8 @@ check(`★ مؤسستين ← بيسأل عن المؤسسة أول (${provs.map
       provs.length === 2);
 sent.length = 0;
 await post(click("p|ar|BotPruefung"));
+check("★★ و«رجوع» ما بيعيد الشرح — بيلخبط مو بيساعد",
+      !sent.some(x => /رمز مجّاني/.test(String(x.body?.text))));
 check("★ واختيار المؤسسة بيعرض درجاتها هي بس",
       flat().some((b: any) => b.callback_data === "l|ar|bot-x-b1")
       && !flat().some((b: any) => b.callback_data === "l|ar|b1"));
@@ -217,62 +237,185 @@ check("جسم مو JSON بيرد ٢٠٠", r.status === 200);
 
 /* ---- ١٠) الوصول الكامل: الطلب ---- */
 psql(`delete from access_requests; delete from bot_admins;`);
-const BOSS = 424242;              // قناتك = رقمك هون
+const GROUP = -1004242;           // مجموعة الموافقات
+const BOSS  = 700001;             // إنت — عضو فيها
+const MATE  = 700002;             // شريكك — عضو كمان، وما هو مسجّل لحاله
 sent.length = 0;
 await post(click("l|ar|b1"));     // كوده التجريبي (تكرار)
-check("★ مع الكود بيطلع زرّ الوصول الكامل",
-      flat().some((b: any) => b.callback_data === "f|ar"));
-check("★ وزرّ مشاركة فيه رابط مو callback",
-      flat().some((b: any) => typeof b.url === "string" && b.url.includes("t.me/share")));
+check(`★ مع الكود بتطلع لوحة ثابتة (${perm(TG_ID).length} أزرار)`,
+      perm(TG_ID).length === 5);
+check("★ وهي بالعربي",
+      perm(TG_ID).includes("🎁 نسختي التجريبية") && perm(TG_ID).includes("🔓 وصول كامل"));
+check("★ وبتضل ظاهرة (is_persistent)",
+      toChat(TG_ID)?.reply_markup?.is_persistent === true);
+
+/* ★ ضغطة زرّ بتوصل كنصّ — والنصّ لحاله بيقول اللغة، بلا جدول جلسات */
+sent.length = 0;
+await post(msg("🌐 اللغة"));
+check("★ زرّ «اللغة» بيعرض اللغات بلا ما يكتب /sprache", flat().length === 4);
+
+/* ★ getMe فشل: أحسن نصّ بلا رابط من رابط مكسور.
+   لازم يجي **قبل** أوّل مشاركة ناجحة — botUsername بتخزّن الاسم
+   وما بترجع تسأل، فبعدها ما بينوصل لهالمسار أبداً. */
+botName = "";
+sent.length = 0;
+await post(msg("📣 شارك البوت"));
+check("★★ بلا اسم بوت: نصّ بلا رابط مكسور",
+      !/t\.me\//.test(String(last()?.text)) && !last()?.reply_markup);
+botName = "TestPruefungBot";
 
 sent.length = 0;
-await post(click("f|ar"));
+await post(msg("📣 Bot teilen", "ar"));
+check("★ زرّ ألماني ← رسالة ألمانية حتى لو جهازه عربي",
+      /kostenlos/.test(String(last()?.text)));
+check("★★ والمشاركة مو تلغرام بس: واتساب كمان",
+      flat().some((b: any) => String(b.url).includes("t.me/share"))
+      && flat().some((b: any) => String(b.url).includes("wa.me/?text=")));
+check("★★ والرابط بـ<code> — ضغطة بتنسخه لأي مطرح",
+      /<code>https:\/\/t\.me\/TestPruefungBot<\/code>/.test(String(last()?.text)));
+
+
+sent.length = 0;
+await post(msg("🔓 وصول كامل"));
 check("★ بيسأل لكم شهر",
       ["m|ar|1","m|ar|2","m|ar|3"].every(d => flat().some((b: any) => b.callback_data === d)));
 
 sent.length = 0;
 await post(click("m|ar|3"));
 check("★ الطالب بيوصله «استنى»", /طلبك وصل/.test(String(toChat(TG_ID)?.text)));
-const adminMsg = toChat(BOSS);
-check("★★ وإنت بيوصلك الطلب بقناتك",
+const adminMsg = toChat(GROUP);
+check("★★ والطلب بيوصل المجموعة",
       !!adminMsg && /طلب وصول كامل/.test(String(adminMsg.text)) && /3/.test(String(adminMsg.text)));
-const reqId = (String(adminMsg?.reply_markup?.inline_keyboard?.[0]?.[0]?.callback_data)
-               .split("|")[1]) ?? "";
-check(`★ ومعه زرّي وافق/ارفض (${reqId.slice(0, 8)}…)`, /^[0-9a-f-]{36}$/.test(reqId));
+const cardKb = adminMsg?.reply_markup?.inline_keyboard?.flat() ?? [];
+const reqId = String(cardKb[0]?.callback_data ?? "").split("|")[1] ?? "";
+check(`★ وأوّل شي زرّ حجز لحاله (${cardKb.map((b:any)=>b.text).join()})`,
+      cardKb.length === 1 && String(cardKb[0].callback_data).startsWith("V|"));
+check(`★ ومعه رقم الطلب (${reqId.slice(0, 8)}…)`, /^[0-9a-f-]{36}$/.test(reqId));
+
+/* ---- ٩ب) ★ «كودي» و«جرّب مستوى تاني» ---- */
+sent.length = 0;
+await post(msg("🎟 كودي"));
+const mine = String(toChat(TG_ID)?.text ?? "");
+check("★★ «كودي» بيرجّع كوده والمستوى وكم باقي",
+      new RegExp(`<code>${code}</code>`).test(mine)
+      && /telc · B1/.test(mine) && /(ما انفعّل|باقي)/.test(mine));
+check("★ ومعه الرابط", mine.includes("https://b1-telc.example.dev"));
+
+// حساب جديد ما أخد ولا كود
+sent.length = 0;
+await post({ message: { chat: { id: 66601 }, from: { id: 66601 }, text: "🎟 كودي" } });
+check("★ ومين ما أخد كود بياخد جواب مفهوم مو رسالة فاضية",
+      /ما أخدت ولا كود/.test(String(toChat(66601)?.text)));
+
+// ★ «جرّب مستوى تاني»: b1 انشال، bot-x-b1 معروض
+psql(`insert into levels (id,title,provider,stufe,published)
+        values ('oth-a2','Other A2','otherprov','A2',true) on conflict do nothing;
+      insert into tests (level_id,slug,title,blocks,aufgaben,published,sort)
+        values ('oth-a2','oth-01','A2 M1','[]'::jsonb,0,true,1) on conflict do nothing;`);
+sent.length = 0;
+await post(msg("🎁 نسختي التجريبية"));   // بيعرض المؤسسات — مو المقصود
+sent.length = 0;
+await post(click("l|ar|b1"));            // نفس كوده + زرّ مستوى تاني
+// ★ عناصر sent شكلها {method, body} — الجسم هو يلي فيه النصّ
+const oth = [...sent].filter(x => x.method === "sendMessage"
+             && x.body?.chat_id === TG_ID).pop()?.body;
+check("★★ مع الكود بيطلع «جرّب مستوى تاني»",
+      /جرّب مستوى تاني/.test(String(oth?.text)));
+const othKb = (oth?.reply_markup?.inline_keyboard ?? []).flat();
+check("★★ وفيه المستوى يلي ما جرّبه، وما فيه يلي جرّبه",
+      othKb.some((b: any) => b.callback_data === "l|ar|oth-a2")
+      && !othKb.some((b: any) => b.callback_data === "l|ar|b1"));
+psql(`delete from tests where level_id='oth-a2'; delete from levels where id='oth-a2';`);
+
+/* ---- ١٠ب) ★ الحجز ---- */
+const clickAs = (id: number, data: string, msgId = 22) => post({ callback_query: {
+  id: "r" + msgId, data, from: { id, username: id === BOSS ? "boss" : "mate" },
+  message: { chat: { id: GROUP }, message_id: msgId, text: "طلب" } } });
+
+psql(`insert into bot_admins (telegram_id, label) values (${GROUP}, 'المجموعة')
+      on conflict do nothing;`);
+sent.length = 0;
+await clickAs(BOSS, `V|${reqId}`);
+check("★ الحجز بيكتب مين حجزه وكم دقيقة",
+      /محجوز لـ@boss/.test(String(lastOf("editMessageText")?.text))
+      && /15 دقيقة/.test(String(lastOf("editMessageText")?.text)));
+const afterRes = lastOf("editMessageText")?.reply_markup?.inline_keyboard?.flat() ?? [];
+check("★ وبعدها بس بتطلع أزرار القرار",
+      afterRes.length === 2 && String(afterRes[0].callback_data).startsWith("A|"));
+check("★★ واسم الحاجز مكتوب جوّا الأزرار — ما حدا يضغط غلط",
+      afterRes.every((b: any) => String(b.text).includes("@boss")));
+
+sent.length = 0;
+await clickAs(MATE, `V|${reqId}`);
+check("★★ التاني ما بيقدر يحجزه — تنبيه إله لحاله",
+      /محجوز لـ@boss/.test(String(lastOf("answerCallbackQuery")?.text)));
+sent.length = 0;
+await clickAs(MATE, `A|${reqId}`);
+check("★★ ولا بيقدر يوافق بدله",
+      /محجوز لـ@boss/.test(String(lastOf("answerCallbackQuery")?.text)));
+check("★★ وما انعمل كود",
+      psql(`select count(*) from access_codes where note like 'telegram-full:%';`) === "0");
+
+/* ---- ١٠ج) ★ انتهى الوقت ---- */
+psql(`update access_requests set reserve_until = now() - interval '1 min'
+       where id = '${reqId}';`);
+sent.length = 0;
+await post(msg("شي عادي"));          // أي تحديث بيكنس
+await new Promise((r) => setTimeout(r, 250));
+check("★★ بعد الانتهاء البوت بينبّه بالمجموعة",
+      sent.some(x => x.method === "sendMessage" && x.body?.chat_id === GROUP
+                && /انتهى وقت الحجز/.test(String(x.body?.text))));
+check("★★ والبطاقة بترجع لزرّ الحجز",
+      String(lastOf("editMessageReplyMarkup")?.reply_markup
+             ?.inline_keyboard?.[0]?.[0]?.callback_data).startsWith("V|"));
+sent.length = 0;
+await post(msg("مرّة تانية"));
+await new Promise((r) => setTimeout(r, 250));
+check("★★ والتنبيه ما بينبعت مرّتين",
+      !sent.some(x => /انتهى وقت الحجز/.test(String(x.body?.text))));
 
 /* ---- ١١) ★★ الحدّ: حدا مو أدمن بيضغط «وافق» ---- */
 sent.length = 0;
 await post({ callback_query: { id: "cbX", data: `A|${reqId}`,
   from: { id: 777001, username: "liar", language_code: "ar" },
-  message: { chat: { id: 777001 } } } });
-check("★★ غريب ضغط «وافق» ← ما عندك صلاحية",
-      /ما عندك صلاحية/.test(String(last()?.text)));
+  message: { chat: { id: 777001 }, message_id: 11 } } });
+check("★★ غريب ضغط «وافق» ← تنبيه إله لحاله مو رسالة بالمجموعة",
+      /ما عندك صلاحية/.test(String(lastOf("answerCallbackQuery")?.text))
+      && !sent.some(x => x.method === "sendMessage"));
 check("★★ وما انعمل ولا كود كامل",
       psql(`select count(*) from access_codes where note like 'telegram-full:%';`) === "0");
 check("★★ والطلب لسا معلّق",
       psql(`select status from access_requests where id='${reqId}';`) === "pending");
 
 /* ---- ١٢) إنت بتوافق ---- */
-psql(`insert into bot_admins (telegram_id) values (${BOSS});`);
+// ★ منسجّل **المجموعة** مو الأشخاص — العضوية هي الصلاحية
+psql(`insert into bot_admins (telegram_id, label) values (${GROUP}, 'المجموعة')
+      on conflict (telegram_id) do nothing;`);
 sent.length = 0;
 await post({ callback_query: { id: "cbA", data: `A|${reqId}`,
   from: { id: BOSS, username: "boss", language_code: "de" },
-  message: { chat: { id: BOSS } } } });
+  message: { chat: { id: GROUP }, message_id: 22, text: "طلب" } } });
 const full = psql(`select code || '/' || duration_days || '/' ||
                      coalesce(array_length(test_slugs,1)::text,'كل')
                    from access_codes where note like 'telegram-full:%';`);
 check(`★ انعمل كود كامل: ٩٠ يوم وكل الامتحانات (${full})`, /\/90\/كل$/.test(full));
 check("★ والطالب وصله الكود",
       /تمّت الموافقة/.test(String(toChat(TG_ID)?.text)));
-check("★ وإنت وصلك تأكيد", /انبعت الكود/.test(String(toChat(BOSS)?.text)));
+check("★★ ورسالة الطلب انختمت: مين وافق مكتوب",
+      /وافق @boss/.test(String(lastOf("editMessageText")?.text)));
+check("★★ وBOSS نفسه مو مسجّل — مرق بالعضوية بس",
+      psql(`select count(*) from bot_admins where telegram_id = ${BOSS};`) === "0");
+check("★★ وأزرارها راحت — ما حدا بيقدر يغيّر القرار",
+      lastOf("editMessageText") !== undefined
+      && lastOf("editMessageText").reply_markup === undefined);
 
 /* ---- ١٣) ★ ضغطة تانية على نفس الطلب ---- */
 sent.length = 0;
 await post({ callback_query: { id: "cbA2", data: `A|${reqId}`,
   from: { id: BOSS, username: "boss", language_code: "de" },
-  message: { chat: { id: BOSS } } } });
+  message: { chat: { id: GROUP }, message_id: 22, text: "طلب" } } });
 check("★ الموافقة التانية بتقول «سبق وانبتّ فيه»",
-      /سبق وانبتّ/.test(String(last()?.text)));
+      /سبق وانبتّ/.test(String(lastOf("answerCallbackQuery")?.text)));
 check("★ وضلّ كود كامل واحد",
       psql(`select count(*) from access_codes where note like 'telegram-full:%';`) === "1");
 
@@ -287,24 +430,120 @@ await post({ callback_query: { id: "c2", data: "m|de|1",
 const req2 = psql(`select id from access_requests where telegram_id=55502 and status='pending';`);
 sent.length = 0;
 await post({ callback_query: { id: "c3", data: `R|${req2}`,
-  from: { id: BOSS }, message: { chat: { id: BOSS } } } });
-check(`★ «ارفض» بيعرض أسباب (${flat().length})`,
-      flat().length === 4 && flat().every((b: any) => String(b.callback_data).startsWith("X|")));
+  from: { id: MATE }, message: { chat: { id: GROUP }, message_id: 33, text: "طلب" } } });
+const rk = lastOf("editMessageReplyMarkup")?.reply_markup?.inline_keyboard?.flat() ?? [];
+check(`★ «ارفض» بيبدّل الأزرار بأسباب بنفس الرسالة (${rk.length})`,
+      rk.length === 5 && rk.filter((b: any) =>
+        String(b.callback_data).startsWith("X|")).length === 4);
+check("★ ومعهن زرّ سبب بخطّ إيدك",
+      rk.some((b: any) => String(b.callback_data).startsWith("W|")));
 sent.length = 0;
 await post({ callback_query: { id: "c4", data: `X|${req2}|soon`,
-  from: { id: BOSS }, message: { chat: { id: BOSS } } } });
+  from: { id: MATE }, message: { chat: { id: GROUP }, message_id: 33, text: "طلب" } } });
 check("★ الطالب وصله سبب الرفض بلغته هو (ألماني)",
       /nicht bewilligt/.test(String(toChat(55502)?.text))
       && /später/.test(String(toChat(55502)?.text)));
+check("★★ وشريكك (عضو تاني، مو مسجّل) قدر يرفض كمان",
+      psql(`select decided_by from access_requests where id='${req2}';`) === String(MATE));
+check("★★ ورسالة الطلب انختمت بالرفض وبلا أزرار",
+      /رفض/.test(String(lastOf("editMessageText")?.text))
+      && lastOf("editMessageText").reply_markup === undefined);
 check("★ والسبب انحفظ",
       psql(`select reason from access_requests where id='${req2}';`) === "soon");
 check("★ ورفض ما بيعمل كود",
       psql(`select count(*) from access_codes where note like 'telegram-full:%';`) === "1");
 
-/* ---- ١٥) /id بيرجّع رقمك ---- */
+/* ---- ١٤ب) ★ سبب رفض بخطّ إيدك ---- */
+psql(`delete from telegram_users where telegram_id = 55503;`);
+await post({ callback_query: { id: "d1", data: "l|de|b1",
+  from: { id: 55503, username: "drei", language_code: "de" },
+  message: { chat: { id: 55503 } } } });
+await post({ callback_query: { id: "d2", data: "m|de|2",
+  from: { id: 55503, username: "drei", language_code: "de" },
+  message: { chat: { id: 55503 } } } });
+const req3 = psql(`select id from access_requests where telegram_id=55503 and status='pending';`);
+
+sent.length = 0;
+await post({ callback_query: { id: "d3", data: `W|${req3}|77`,
+  from: { id: MATE }, message: { chat: { id: GROUP }, message_id: 77, text: "طلب" } } });
+const ask = last();
+check("★ زرّ الكتابة بيطلب ردّ (force_reply)",
+      ask?.reply_markup?.force_reply === true);
+check(`★ والوسم فيه رقم الطلب ورقم الرسالة`,
+      String(ask?.text).includes(req3) && /:77/.test(String(ask?.text)));
+
+sent.length = 0;
+await post({ message: { chat: { id: GROUP }, from: { id: MATE, username: "mate" },
+  text: "Bitte zuerst die Testversion nutzen, danke!",
+  reply_to_message: { text: String(ask?.text).replace(/<[^>]+>/g, "") } } });
+check("★★ ردّك انبعت للطالب متل ما كتبته",
+      /Bitte zuerst die Testversion/.test(String(toChat(55503)?.text)));
+check("★★ وبلغته: العنوان ألماني مو عربي",
+      /nicht bewilligt/.test(String(toChat(55503)?.text)));
+check("★ وانحفظ كامل بالقاعدة",
+      psql(`select reason from access_requests where id='${req3}';`)
+        === "Bitte zuerst die Testversion nutzen, danke!");
+check("★ وبطاقة الطلب انختمت بنفس النص",
+      /Bitte zuerst/.test(String(lastOf("editMessageText")?.text))
+      && lastOf("editMessageText").message_id === 77);
+
+/* ---- ١٤ج) ★ اللغة بتتحدّث مع الطلب ---- */
+psql(`delete from access_requests; delete from telegram_users where telegram_id = 55504;`);
+await post({ callback_query: { id: "e1", data: "l|ar|b1",
+  from: { id: 55504, username: "vier", language_code: "ar" },
+  message: { chat: { id: 55504 } } } });
+check("الطالب أخد التجريبي بالعربي",
+      psql(`select lang from telegram_users where telegram_id=55504;`) === "ar");
+await post({ callback_query: { id: "e2", data: "m|de|1",
+  from: { id: 55504, username: "vier", language_code: "ar" },
+  message: { chat: { id: 55504 } } } });
+check("★★ وطلب الوصول بالألماني ← لغته المحفوظة صارت de",
+      psql(`select lang from telegram_users where telegram_id=55504;`) === "de");
+
+/* ---- ١٤د) ★ تنبيه «باقي أقلّ من ساعة» ---- */
+// الطالب فعّل كوده، فصار إله اشتراك ينتهي بعد ٢٤ ساعة
+psql(`delete from subscriptions;
+      insert into auth.users (id) values ('cccccccc-0000-0000-0000-000000000009')
+        on conflict do nothing;
+      insert into profiles (id, is_admin)
+        values ('cccccccc-0000-0000-0000-000000000009', false)
+        on conflict (id) do nothing;
+      insert into subscriptions (user_id, levels, current_period_end,
+                                 access_code_id, status)
+      select 'cccccccc-0000-0000-0000-000000000009', array['b1'],
+             now() + interval '24 hours', d.code_id, 'active'
+        from telegram_demos d where d.telegram_id = ${TG_ID} and d.level_id = 'b1';`);
+sent.length = 0;
+await post(msg("شي عادي"));
+await new Promise((r) => setTimeout(r, 300));
+check("★ باقيله ٢٤ ساعة: ما في تنبيه",
+      !sent.some(x => /أقلّ من ساعة/.test(String(x.body?.text))));
+
+// منقرّب الانتهاء بدل ما ننطر ٢٣ ساعة
+psql(`update subscriptions set current_period_end = now() + interval '40 minutes';`);
+sent.length = 0;
+await post(msg("شي عادي"));
+await new Promise((r) => setTimeout(r, 300));
+check("★★ باقي ٤٠ دقيقة ← التنبيه وصل الطالب",
+      /أقلّ من ساعة/.test(String(toChat(TG_ID)?.text)));
+check("★★ ومعه زرّ الوصول الكامل — أقوى لحظة بيع",
+      (toChat(TG_ID)?.reply_markup?.inline_keyboard ?? []).flat()
+        .some((b: any) => String(b.callback_data).startsWith("f|")));
+sent.length = 0;
+await post(msg("شي عادي"));
+await new Promise((r) => setTimeout(r, 300));
+check("★★ والتنبيه ما بينبعت مرّتين",
+      !sent.some(x => /أقلّ من ساعة/.test(String(x.body?.text))));
+
+/* ---- ١٥) ★ /id انشال ---- */
 sent.length = 0;
 await post(msg("/id"));
-check("/id بيرجّع رقم تلغرام", String(last()?.text).includes(String(TG_ID)));
+check("★ /id ما عاد يكشف أرقام — بيرجّع لاختيار اللغة", flat().length === 4);
+sent.length = 0;
+await post({ message: { chat: { id: -1001234567890 },
+  from: { id: TG_ID, username: "kiko" }, text: "/id" } });
+check("★ ولا بالمجموعة كمان",
+      !/-1001234567890<\/code>/.test(String(last()?.text ?? "")));
 
 await supa.shutdown(); await tgSrv.shutdown();
 const bad = R.filter(x => !x[1]);
