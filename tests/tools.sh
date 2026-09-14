@@ -165,17 +165,42 @@ check "★ كل الترحيلات بتنقرا (نفس فحص البايبلا�
 SEEDED=0
 for D in content/*/*/; do
   P=$(basename "$(dirname "$D")"); L=$(basename "$D")
-  [ -f "supabase/seed/$L.sql" ] || continue
-  grep -q "content/$P/$L" "supabase/seed/$L.sql" 2>/dev/null || continue
+
+  # ★ الاسم بياخد المؤسسة كمان.
+  # كان بيشتقّ «supabase/seed/<درجة>.sql» وبس — وأوّل ما صار في مؤسستين
+  # بنفس الدرجة (ÖSD A1 وGoethe A1)، الملف صار ملك وحدة والتانية
+  # انتخطّت **بصمت**: مستوى كامل برّا الفحص، وهاد بالضبط الشي يلي هالفحص
+  # موجود ليمنعه. القديم بيضل شغّال، والجديد بياخد <مؤسسة>-<درجة>.sql.
+  SEED=""
+  for C in "supabase/seed/$P-$L.sql" "supabase/seed/$L.sql"; do
+    [ -f "$C" ] && grep -q "content/$P/$L" "$C" 2>/dev/null && { SEED="$C"; break; }
+  done
+
+  WANT=$(node tools/check_content.mjs "$P/$L" 2>/dev/null | grep -c "✓ $P/$L")
+
+  # ★ معبّى وبلا بذور = محتوى ما رح يوصل لولا طالب، وما حدا بينتبه.
+  # القوالب الفاضية ما إلها بذور وهاد طبيعي، فالتنبيه بيطلع لما يكون
+  # في نماذج معبّاية فعلاً.
+  # ★ استثناء واحد، موثّق: telc/b1 بذوره مولّدة من data/ مو من content/
+  # (ومعرّف مستواه «b1» من أيام ما كان في مستوى واحد). مغطّى بفحص تاني
+  # فوق — «content/telc/b1 مطابق لـdata/» — يعني مغطّى بس من طريق تانية.
+  if [ -z "$SEED" ] && [ "$P/$L" = "telc/b1" ]; then continue; fi
+
+  if [ -z "$SEED" ]; then
+    if [ "$WANT" != 0 ]; then
+      false
+      check "★ content/$P/$L فيه $WANT نموذج معبّى بلا ملف بذور" $?
+    fi
+    continue
+  fi
   SEEDED=$((SEEDED + 1))
 
-  node tools/content_to_seed.mjs "$P/$L" "supabase/seed/$L.sql" >/dev/null 2>&1
-  git diff --quiet -- "supabase/seed/$L.sql" 2>/dev/null
-  check "★ supabase/seed/$L.sql مطابق لـcontent/$P/$L" $?
+  node tools/content_to_seed.mjs "$P/$L" "$SEED" >/dev/null 2>&1
+  git diff --quiet -- "$SEED" 2>/dev/null
+  check "★ $SEED مطابق لـcontent/$P/$L" $?
 
   # كل نموذج معبّى لازم يوصل للبذور — مو بس يمرق الفحص
-  WANT=$(node tools/check_content.mjs "$P/$L" 2>/dev/null | grep -c "✓ $P/$L")
-  GOT=$(grep -c "^insert into tests" "supabase/seed/$L.sql")
+  GOT=$(grep -c "^insert into tests" "$SEED")
   [ "$WANT" = "$GOT" ]
   check "★ وكل نماذجه وصلت ($GOT من $WANT)" $?
 done
@@ -189,6 +214,103 @@ for F in supabase/seed/parts/*-1.sql; do
 done
 git diff --quiet -- supabase/seed/parts/ 2>/dev/null
 check "★ والأجزاء مطابقة للملفات الكاملة" $?
+
+# ---------- حجم الصور ----------
+# ★ الطالب على موبايل بشبكة ضعيفة، وصور الامتحان بتنجاب وحدة وحدة برابط
+#   موقّع. مسح صفحة بـPNG بيطلع ٢ ميغا — بلا خسارة يعني بيخزّن ضجيج
+#   الماسح حرف بحرف. نفس الصفحة بـJPEG ٨٥ بتصير ٢٦٠ ك.ب والنص متل ما هو.
+#   الحدّ هون تا ما ترجع وحدة كبيرة تندسّ بصمت.
+#
+# ★ العنوان بلا $( ) بداخله. استبدال الأمر بينفّذ **قبل** ما ينقرا `$?`
+#   وبيدعسه بنتيجته هو — فالفحص كان بيطبع الملف المخالف وبيقول ✓ بنفس
+#   السطر. منبدّل الأسطر بتوسيع متغيّر، وبلا صدفة تانية.
+BIG=$(find content -path '*/img/*' -type f -size +500k 2>/dev/null | head -5)
+[ -z "$BIG" ]
+check "★ ما في صورة أكبر من ٥٠٠ ك.ب بـcontent/${BIG:+ — ${BIG//$'\n'/ }}" $?
+
+# وPNG بمحتوى ممسوح = الصيغة الغلط. الأداة بتحوّلهن:
+#   python3 tools/shrink_images.py content
+PNGS=$(find content -path '*/img/*.png' -type f | wc -l)
+[ "$PNGS" = 0 ]
+check "★ ولا PNG بصور الامتحانات ($PNGS) — tools/shrink_images.py" $?
+
+python3 -c "import ast,sys; ast.parse(open('tools/shrink_images.py').read())"
+check "shrink_images.py صحيح نحوياً" $?
+
+# ★ الدلو مسطّح: كل الصور بتنزل جنب بعض تحت img/، فالاسم لازم يكون
+#   فريد بكل المستويات مو بالمستوى لحاله.
+#
+#   انلدغنا: ÖSD كان عنده m01-lv3.png وtelc عنده m01-lv3.jpg — الامتداد
+#   لحاله كان بيفرق بينهن. أوّل ما انحوّلت ÖSD لـJPEG صاروا نفس الاسم،
+#   وهاد ما بان إلا لما وقف الرفع بوجه المستخدم. الفحص هون بدل الوجع.
+#   (الجداد بياخدوا بادئة مستواهم: oesd-a1-… · goethe-a1-… — وtelc B1
+#    ضل بلا بادئة لأنّ صوره مرفوعة بالإنتاج من زمان.)
+#   content/ لحاله: data/img نسخة منه لـtelc B1 (sync_b1_content.mjs)،
+#   وضمّها بيعطي كل صور B1 «مكرّرة» وهي نفس الصورة. والرفع أصلاً من
+#   content/.
+DUP=$(find content -path '*/img/*' -type f ! -name '.gitkeep' -printf '%f\n' \
+      | sort | uniq -d | head -5 | tr '\n' ' ')
+[ -z "$DUP" ]
+check "★ أسماء الصور فريدة بكل المستويات (الدلو مسطّح)${DUP:+ — $DUP}" $?
+
+# ---------- فحص الجاهزية ----------
+# ★ health.sql أداة تشخيص: لازم تشتغل **على قاعدة فاضية** كمان، لأنّ
+#   هيك بالضبط حالة مين بيشغّلها. فحص بيموت على المشكلة يلي المفروض
+#   يشخّصها بلا فايدة — وهاد صار بأوّل نسخة منه.
+if psql -h /tmp -p "${PGPORT:-5433}" -U postgres -c '' 2>/dev/null; then
+  psql -h /tmp -p "${PGPORT:-5433}" -U postgres -q \
+    -c "drop database if exists healthtest;" -c "create database healthtest;" >/dev/null 2>&1
+
+  OUT=$(psql -h /tmp -p "${PGPORT:-5433}" -U postgres -d healthtest \
+        -f supabase/health.sql 2>&1)
+  [ $? = 0 ] && ! echo "$OUT" | grep -q "^ERROR"
+  check "★ health.sql بيشتغل على قاعدة فاضية بلا ما يموت" $?
+
+  echo "$OUT" | grep -q "شغّل supabase/setup.sql"
+  check "★ وبيقول شو لازم يعمل مو بس «فيه خطأ»" $?
+
+  # وعلى قاعدة كاملة: لازم يمرق وما يشتكي من السكيما
+  psql -h /tmp -p "${PGPORT:-5433}" -U postgres -d healthtest -q \
+    -f supabase/tests/bootstrap.sql >/dev/null 2>&1
+  psql -h /tmp -p "${PGPORT:-5433}" -U postgres -d healthtest -q \
+    -f supabase/setup.sql >/dev/null 2>&1
+  OUT=$(psql -h /tmp -p "${PGPORT:-5433}" -U postgres -d healthtest \
+        -f supabase/health.sql 2>&1)
+  ! echo "$OUT" | grep -q "^ERROR"
+  check "★ وعلى سكيما كاملة كمان" $?
+
+  echo "$OUT" | grep -qE "نسخة السكيما.*✅|✅.*نسخة السكيما"
+  check "★ وبيعرف إنّ السكيما صارت محدّثة" $?
+
+  # ★ والفحص لازم يمسك صور ناقصة — وإلا ما إله فايدة
+  psql -h /tmp -p "${PGPORT:-5433}" -U postgres -d healthtest -q >/dev/null 2>&1 <<'SQL'
+insert into levels (id, title, published, provider, stufe)
+  values ('ht-b1','HT B1',true,'ht','B1') on conflict do nothing;
+insert into tests (level_id, slug, title, blocks, aufgaben, published, sort)
+  values ('ht-b1','ht-01','HT',  '[]'::jsonb, 1, true, 1) on conflict do nothing;
+insert into sections (test_id, section_id, title, format, config, sort)
+  select t.id,'lv3','LV3','matching','{"bankImage":"img/ht-01.jpg"}'::jsonb,0
+    from tests t where t.slug='ht-01' on conflict do nothing;
+SQL
+  psql -h /tmp -p "${PGPORT:-5433}" -U postgres -d healthtest \
+    -f supabase/health.sql 2>&1 | grep -q "ناقصة"
+  check "★★ وبيمسك صورة مطلوبة ومو مرفوعة" $?
+
+  # وبعد ما تنرفع بيرضى
+  psql -h /tmp -p "${PGPORT:-5433}" -U postgres -d healthtest -q >/dev/null 2>&1 <<'SQL'
+insert into storage.buckets (id, name) values ('exam-images','exam-images')
+  on conflict do nothing;
+insert into storage.objects (bucket_id, name) values ('exam-images','img/ht-01.jpg');
+SQL
+  psql -h /tmp -p "${PGPORT:-5433}" -U postgres -d healthtest \
+    -f supabase/health.sql 2>&1 | grep -q "1 من 1 مرفوعة"
+  check "★★ وبيرضى لما تنرفع" $?
+
+  psql -h /tmp -p "${PGPORT:-5433}" -U postgres -q \
+    -c "drop database healthtest;" >/dev/null 2>&1
+else
+  echo "  · Postgres مو شغّال — تخطّي فحص health.sql"
+fi
 
 # ---------- setup.sql مطابق للترحيلات ----------
 ./tools/build_setup.sh >/dev/null 2>&1
