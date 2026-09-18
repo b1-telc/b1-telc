@@ -91,12 +91,12 @@ Lösung: A
 A) dass sich Menschen in Wohn und Arbeitsräumen wohler fühlen.
 B) chinesische Möbel in Europa zu verkaufen.
 C) Materialien für neue Bauprojekte zu entwickeln.
-Lösung: C
+Lösung: A
 [8] Die Leute, die sich beraten lassen wollen,
 A) besprechen mit Frau Eigenmann zuerst ihre Wünsche.
 B) laden Frau Eigenmann zuerst in ihre Wohnung ein.
 C) schicken Frau Eigenmann zuerst einen Plan der Wohnung.
-Lösung: B
+Lösung: A
 [9] Die Firmenkunden von Frau Eigenmann
 A) bezahlen besonders wenig für die Beratung.
 B) sind meist erfolgreiche Unternehmen.
@@ -294,7 +294,8 @@ Minuten: 8
 Punkte: 5
 Maximum: 25
 Anweisung: Entscheiden Sie, ob die Aussagen richtig oder falsch sind.
-Hinweis: Hinweis: Die Hörtexte sind in der PDF-Vorlage nicht enthalten. Dieser Teil dient zum Wiederholen der Aussagen und zum Vergleich mit der Lösung — nicht zum Hörtraining.
+Hörtext: telc-b1-m16-hv1.mp3
+Wiedergaben: 2
 Aufgaben:
 [41] Die Sprecherin fühlt sich durch Handys gestört.
 Lösung: richtig
@@ -315,7 +316,8 @@ Minuten: 14
 Punkte: 2.5
 Maximum: 25
 Anweisung: Entscheiden Sie, ob die Aussagen richtig oder falsch sind.
-Hinweis: Hinweis: Die Hörtexte sind in der PDF-Vorlage nicht enthalten. Dieser Teil dient zum Wiederholen der Aussagen und zum Vergleich mit der Lösung — nicht zum Hörtraining.
+Hörtext: telc-b1-m16-hv2.mp3
+Wiedergaben: 2
 Aufgaben:
 [46] Das Kino Freie Filmbühne ist in Burgoberdorf.
 Lösung: richtig
