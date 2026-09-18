@@ -57,6 +57,16 @@ const page = await browser.newPage();
 page.on('pageerror', e => { console.log('  ✗ JS-Fehler:', e.message); results.push(['بلا أخطاء JS', false]); });
 
 // نحقن API مزيّف قبل ما يشتغل app.js
+/* ★ `new Audio()` مو عنصر بالـDOM، فالمنتقيات ما بتشوفه. منلفّ الباني
+   قبل ما يشتغل التطبيق ومنمسك كل تسجيل انعمل — هيك منفحص «وقف فعلاً»
+   بدل ما نفحص إنّ الزرّ اختفى (الزرّ بيختفي والصوت بيكمّل). */
+await page.addInitScript(() => {
+  const Real = window.Audio;
+  window.__audios = [];
+  window.Audio = function(...a){ const x = new Real(...a); window.__audios.push(x); return x; };
+  window.Audio.prototype = Real.prototype;
+});
+
 await page.addInitScript(fx => {
   /* ★ الطابور بينحفظ بين الفتحات.
      الخادم الحقيقي بيتذكّر مين بالطابور، فالمزيّف لازم يتذكّر كمان —
@@ -97,9 +107,59 @@ await page.addInitScript(fx => {
     })
   });
 
+  /* ★ امتحان على شكل ÖSD/Goethe: بلوك الكتابة فيه قسمين — استمارة
+     (بلا حدّ أدنى كلمات) ورسالة — وما في brief ولا criteria ولا grades.
+     التجهيزة الأصلية كلها telc B1، ولهيك أربع أعطال ما ظهرت فيها:
+     شاشة بيضا من renderBrief، صفر نقطة، زرّ تصحيح مفقود، واستمارة
+     بتنصحّح بدل الرسالة. */
+  const OESD = {
+    id: 'modell-a2-01', uuid: 'oesd-uuid-1', title: 'ÖSD-Probe',
+    subtitle: 'ÖSD Zertifikat A1',
+    blocks: [{ id: 'block-schreiben', title: 'Schreiben', hint: 'Teil 1–2',
+               parts: ['s1','s2'], minutes: 30, maxPoints: 20,
+               availablePoints: 20, missing: 0 },
+             { id: 'block-lesen', title: 'Lesen', hint: 'gemischt',
+               parts: ['lv9'], minutes: 5, maxPoints: 2,
+               availablePoints: 2, missing: 0 }],
+    sections: [
+      { id: 's1', group: 'Schreiben', title: 'Schreiben, Teil 1 (Formular)',
+        minutes: 10, format: 'writing', maxPoints: 10,
+        instruction: 'Schreiben Sie die fünf fehlenden Informationen in das Formular.',
+        passages: [{ paragraphs: [{ t: 'Anmeldung: Sportverein', b: true },
+                                  { t: 'Name, Vorname: (1) …', b: false }] }],
+        items: [{ id: 'oesd-s1-i1', num: '1', text: 'Formular ausfüllen',
+                  points: ['Name','Adresse','Telefon','Sportart','Datum'] }] },
+      /* ★ على شكل DTZ Lesen Teil 3: بنفس القسم سؤال صح-خطأ (خيارين
+         r/f) وسؤال A/B/C. قبل الإصلاح كان سؤال الصح-خطأ بلا خيارات
+         أبداً — undefined.map وشاشة بيضا. */
+      { id: 'lv9', group: 'Lesen', title: 'Lesen, gemischt', minutes: 5,
+        format: 'mc', maxPoints: 2,
+        instruction: 'Richtig oder falsch? Und welche Antwort passt?',
+        items: [
+          { id: 'mix-tf', num: '90', text: 'Der Kurs ist kostenlos.',
+            options: [{ key: 'r', text: 'Richtig' }, { key: 'f', text: 'Falsch' }] },
+          { id: 'mix-mc', num: '91', text: 'Wann beginnt der Kurs?',
+            options: [{ key: 'A', text: 'Montag' }, { key: 'B', text: 'Dienstag' },
+                      { key: 'C', text: 'Mittwoch' }] },
+          // ★ سؤال ناقصه الخيارات: غلط محتوى وارد. المطلوب إنّ الصفحة
+          //   تضل تشتغل وتقول شو ناقص، مو تطلع بيضا وتاخد معها القسم كله
+          { id: 'mix-broken', num: '92', text: 'Aufgabe ohne Auswahl.' },
+        ] },
+      { id: 's2', group: 'Schreiben', title: 'Schreiben, Teil 2 (E-Mail)',
+        minutes: 20, format: 'writing', maxPoints: 10,
+        instruction: 'Schreiben Sie eine E-Mail an Ihre Freundin Rafaela.',
+        items: [{ id: 'oesd-s2-i1', num: '2', text: 'E-Mail schreiben',
+                  minWords: 30,
+                  points: ['Dank für die Einladung','Wann Sie ankommen',
+                           'Was Sie mitbringen'] }] },
+    ]
+  };
+
   // نفس منطق submit_attempt: التصحيح من الحلول، والأسئلة ما بتحملها
   const grade = (blockId, answers) => {
-    const parts = fx.test.blocks.find(b => b.id === blockId).parts;
+    const blk = fx.test.blocks.find(b => b.id === blockId);
+    if (!blk) return { ok: true, points: 0, max_points: 0, pct: null, results: [] };
+    const parts = blk.parts;
     const rows = items.filter(i => parts.includes(i.sec.section_id)
                                 && i.sec.format !== 'writing'
                                 && fx.answers[i.id]);
@@ -138,6 +198,8 @@ await page.addInitScript(fx => {
       { id: 'modell-01', title: 'PETRA', aufgaben: 61, minutes: 150, open: true },
       { id: 'modell-02', title: 'EVA1',  aufgaben: 60, minutes: 150, open: false },
       { id: 'modell-03', title: 'SOPHIE',aufgaben: 59, minutes: 150, open: false }
+    ] : lvl === 'a2' ? [
+      { id: OESD.id, title: OESD.title, aufgaben: 2, minutes: 30, open: true }
     ] : [],
     resources: async lvl => lvl === 'b1'
       ? [{ id:'r1', title:'Wortschatz Reisen', kind:'text',
@@ -158,13 +220,17 @@ await page.addInitScript(fx => {
     waitlist: async () => state.waiting
       ? { waiting: true, position: state.pos, total: state.total, open: !state.full }
       : { waiting: false },
-    index: async (lvl) => lvl !== 'b1' ? { modelle: [] } : ({ modelle: [{ id: fx.test.slug, uuid: fx.test.id,
+    index: async (lvl) => lvl === 'a2' ? { modelle: [{ id: OESD.id, uuid: OESD.uuid,
+      title: OESD.title, subtitle: OESD.subtitle, blocks: OESD.blocks,
+      aufgaben: 2, minutes: 30 }] }
+      : lvl !== 'b1' ? { modelle: [] } : ({ modelle: [{ id: fx.test.slug, uuid: fx.test.id,
       title: fx.test.title, subtitle: fx.test.subtitle,
       blocks: fx.test.blocks, aufgaben: 61,
       minutes: fx.test.blocks.reduce((a,b) => a + b.minutes, 0) }] }),
     // منسجّل كل نداء تحميل: «ما بينحمّل محتوى المقفول» خاصية سلوكية،
     // مو شي بينفحص بالبحث عن كلمات بالصفحة
-    test: async (id) => { (window.__loaded ||= []).push(id); return shape(); },
+    test: async (id) => { (window.__loaded ||= []).push(id);
+                          return id === OESD.id ? JSON.parse(JSON.stringify(OESD)) : shape(); },
     imageUrl: async () => null,
     audioUrl: async () => '/tone.wav',
     reviewSummary: async () => ({
@@ -709,7 +775,9 @@ check('المستوى الحالي معلّم',
 
 await page.evaluate(() => document.querySelector('[data-lvl="a2"]').click());
 await page.waitForTimeout(600);
-check('التبديل لـA2 بيغيّر القائمة', await page.locator('.tile[data-id]').count() === 0);
+check('التبديل لـA2 بيغيّر القائمة',
+      await page.locator('.tile[data-id]').count() === 1
+      && await page.locator('.tile[data-id="modell-a2-01"]').count() === 1);
 check('A2 صار المعلّم',
       /telc · A2/.test(await page.locator('.abo.on').textContent()));
 check('الاختيار انحفظ', await page.evaluate(() => localStorage.getItem('b1.level')) === '"a2"');
@@ -780,6 +848,67 @@ check('★ بعد مرتين الزرّ بينقفل',
       await page.locator('.audio [data-play]').isDisabled());
 check('الرسالة صارت «ما في تشغيل بعد»',
       (await page.textContent('.audio [data-left]')).includes('keine'));
+
+/* ★ الطلعة من الامتحان لازم توقّف الصوت.
+   `new Audio()` كائن بالذاكرة ماسكه الـclosure، مو عنصر بالصفحة —
+   استبدال app.innerHTML بيشيل الزرّ وشريط التقدّم وبيخلّي الصوت شغّال.
+   الطالب بيطلع على شاشة تانية والتسجيل بيكمّل بأذنه. */
+{
+  await page.evaluate(() => screenHome());   // نبدأ من شاشة نضيفة
+  await page.waitForTimeout(200);
+  await page.evaluate(() => document.querySelector('.tile[data-id]').click());
+  await page.waitForSelector('[data-block="block-hv"]');
+  await page.evaluate(() => document.querySelector('[data-block="block-hv"]').click());
+  await page.waitForTimeout(300);
+  // #start موجود بالحالتين: «ابدأ» لو ما في جلسة، و«من جديد» لو في
+  await page.waitForSelector('#start', { timeout: 8000 });
+  await page.evaluate(() => document.getElementById('start').click());
+  await page.waitForSelector('.audio [data-play]', { timeout: 8000 });
+  await page.evaluate(() => document.querySelector('.audio [data-play]').click());
+  await page.waitForFunction(() => (window.__audios || []).some(a => !a.paused),
+                             { timeout: 8000 });
+  check('★ الصوت عم يشتغل فعلاً', true);
+
+  await page.evaluate(() => screenHome());
+  await page.waitForTimeout(250);
+  const stillOn = await page.evaluate(() => (window.__audios || []).filter(a => !a.paused).length);
+  check(`★★ الطلعة من الامتحان بتوقّف الصوت (${stillOn} لسا شغّال)`, stillOn === 0);
+}
+
+/* ★ الحدّ لازم يعيش بعد «وقف» و«كمّل».
+   كان `let left = plays` جوّا الرسم: وقف الامتحان ورجوعه بيعيد الرسم
+   وبيرجّع العدّاد لتنتين — يعني حدّ التشغيلتين بينلتفّ عليه بضغطتين. */
+{
+  await page.evaluate(() => document.querySelector('.tile[data-id]').click());
+  await page.waitForSelector('[data-block="block-hv"]');
+  await page.evaluate(() => document.querySelector('[data-block="block-hv"]').click());
+  await page.waitForTimeout(300);
+  await page.waitForSelector('#start', { timeout: 8000 });
+  await page.evaluate(() => document.getElementById('start').click());
+  await page.waitForSelector('.audio [data-play]', { timeout: 8000 });
+  check('بداية جديدة ← تنتين من جديد',
+        (await page.textContent('.audio [data-left]')).includes('2'));
+
+  await page.evaluate(() => document.querySelector('.audio [data-play]').click());
+  await page.waitForFunction(
+    () => /Noch einmal/.test(document.querySelector('.audio [data-play]').textContent),
+    { timeout: 8000 });
+  check('بعد تشغيلة وحدة ← وحدة باقية',
+        (await page.textContent('.audio [data-left]')).includes('1'));
+
+  // «وقف» ← «إنهاء» (بيطلع لشاشة النموذج) ← ورجوع بـ«كمّل»
+  await page.evaluate(() => document.getElementById('pause').click());
+  await page.waitForSelector('.modalback [data-exit]', { timeout: 8000 });
+  await page.evaluate(() => document.querySelector('.modalback [data-exit]').click());
+  await page.waitForSelector('[data-block="block-hv"]', { timeout: 8000 });
+  await page.evaluate(() => document.querySelector('[data-block="block-hv"]').click());
+  await page.waitForSelector('#resume', { timeout: 8000 });
+  await page.evaluate(() => document.getElementById('resume').click());
+  await page.waitForSelector('.audio [data-play]', { timeout: 8000 });
+  const leftTxt = await page.textContent('.audio [data-left]');
+  check(`★★ بعد «وقف/كمّل» بتضل وحدة، ما بترجع تنتين (${leftTxt.trim()})`,
+        leftTxt.includes('1') && !leftTxt.includes('2'));
+}
 
 await page.evaluate(() => { S.answers = {}; finish(S.run, true); });
 await page.waitForSelector('.score');
@@ -865,6 +994,91 @@ check('المعايير الثلاثة مع تبريرها', await page.locator(
 check('الخطأ معروض مع البديل',
       ai.includes('Ich fliege') && ai.includes('Ich fliege gern'));
 check('زرّ الطلب اختفى بعد النجاح', await page.locator('#aigo').isHidden());
+
+// ---- ١٢) ★ مستوى مو telc B1: بلوك كتابة فيه استمارة ورسالة ----
+// هون كانت الأعطال الأربعة كلها، وما حدا فحصهن لأنّ التجهيزة telc B1.
+await page.evaluate(() => { window.__state.fb = null; });
+await page.evaluate(() => screenHome());
+await page.waitForTimeout(300);
+await page.evaluate(() => switchLevel('a2'));
+await page.waitForSelector('.tile[data-id="modell-a2-01"]', { timeout: 5000 });
+await page.evaluate(() => document.querySelector('.tile[data-id="modell-a2-01"]').click());
+await page.waitForSelector('[data-block="block-schreiben"]');
+await page.evaluate(() => document.querySelector('[data-block="block-schreiben"]').click());
+await page.waitForTimeout(300);
+await page.evaluate(() => {
+  const b = [...document.querySelectorAll('button')].find(x => /Start/i.test(x.textContent));
+  if (b) b.click();
+});
+await page.waitForTimeout(400);
+check('★ بلوك الكتابة بقسمين فتح بلا خطأ',
+      (await page.textContent('#app')).includes('Formular'));
+check('★ و«اكتب ١٠٠ كلمة» ما طلعت بمهمّة A1',
+      !(await page.textContent('#app')).includes('mindestens 100 Wörter'));
+
+// الطالب بيكتب: كلمة بالاستمارة ورسالة بالجزء التاني
+await page.evaluate(() => {
+  const m = S.run.parts.find(p => p.id === 's1');
+  const w = S.run.parts.find(p => p.id === 's2');
+  S.answers[m.items[0].id] = 'Kostic, Emina';
+  S.answers[w.items[0].id] = 'Liebe Rafaela, vielen Dank fuer deine Einladung. '
+    + 'Ich komme am Freitag mit dem Zug an und bleibe drei Tage. '
+    + 'Ich bringe Kuchen mit. Viele Gruesse, Ahmad';
+  finish(S.run, true);
+});
+await page.waitForSelector('.score', { timeout: 5000 });
+check('★ شاشة النتيجة فيها بطاقة تصحيح — قبل هيك ما كان في ولا زرّ',
+      (await page.textContent('#app')).includes('Korrektur'));
+check('★ بطاقة وحدة على الرسالة، مو زرّ كمان للاستمارة',
+      await page.locator('#wpart').count() === 1
+      && /E-Mail/.test(await page.textContent('#wpart')));
+
+await page.evaluate(() => document.getElementById('wpart').click());
+await page.waitForSelector('#aiwrap', { timeout: 5000 });
+const oesdTxt = await page.textContent('#app');
+check('★ شاشة الكتابة فتحت بلا brief وبلا شاشة بيضا',
+      oesdTxt.includes('Liebe Rafaela') && oesdTxt.includes('Korrektur'));
+check('★ وبلا معايير ما في صندوق تقييم ذاتي',
+      !oesdTxt.includes('Bewerten Sie jedes Kriterium selbst')
+      && await page.locator('#wres').count() === 0);
+await page.waitForSelector('#aigo');
+await page.evaluate(() => document.getElementById('aigo').click());
+await page.waitForSelector('#aiout .crit', { timeout: 8000 });
+check('★ والتصحيح الآلي اشتغل على هالمستوى كمان',
+      await page.locator('#aiout .crit').count() === 3);
+
+/* ---- ١٣) ★ قسم بيخلط صح-خطأ مع A/B/C (شكل DTZ Lesen Teil 3) ----
+   القسم معلّم mc، وسؤال الصح-خطأ ما إله خيارات بالمحتوى الأصلي —
+   renderItem كان بيعمل undefined.map والشاشة كلها بتطلع بيضا. */
+await page.evaluate(() => screenHome());
+await page.waitForTimeout(200);
+await page.evaluate(() => document.querySelector('.tile[data-id="modell-a2-01"]').click());
+await page.waitForSelector('[data-block="block-lesen"]');
+await page.evaluate(() => document.querySelector('[data-block="block-lesen"]').click());
+await page.waitForSelector('#start');
+await page.evaluate(() => document.getElementById('start').click());
+await page.waitForSelector('#q_mix-tf', { timeout: 5000 });
+check('★ القسم المختلط فتح — السؤالين الاتنين ظاهرين',
+      await page.locator('#q_mix-tf .opt').count() === 2
+      && await page.locator('#q_mix-mc .opt').count() === 3);
+check('★ سؤال الصح-خطأ بيطلع Richtig/Falsch مضغوطين بسطر',
+      (await page.textContent('#q_mix-tf')).includes('Richtig')
+      && await page.locator('#q_mix-tf .opts.inline').count() === 1);
+check('★ وسؤال A/B/C بيضل عريض متل باقي الـmc',
+      await page.locator('#q_mix-mc .opts.inline').count() === 0);
+
+// نجاوب ومنسلّم — لازم ينحسبوا، مو ينمرقوا كأنهن ما انوجدوا
+await page.evaluate(() => {
+  document.querySelector('[data-opt="mix-tf|f"]').click();
+  document.querySelector('[data-opt="mix-mc|B"]').click();
+});
+await page.waitForTimeout(150);
+check('★ الاختيار انسجّل بالحالة',
+      await page.evaluate(() => S.answers['mix-tf'] === 'f' && S.answers['mix-mc'] === 'B'));
+check('★★ سؤال ناقصه الخيارات ما بيطيّح الصفحة — بيقول شو ناقص',
+      await page.locator('#q_mix-broken.isbad').count() === 1
+      && (await page.textContent('#q_mix-broken')).includes('Antwortmöglichkeiten')
+      && await page.locator('#q_mix-tf .opt').count() === 2);
 
 await browser.close();
 server.close();

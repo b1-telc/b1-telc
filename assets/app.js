@@ -14,6 +14,7 @@ const S = {
   answers: {},      // { itemId: Antwort }
   dropped: {},      // { itemId: [früher gewählte Buchstaben] } — werden durchgestrichen
   checks: {},       // { itemId: [Leitpunkt abgehakt?] } — Selbstkontrolle beim Brief
+  plays:  {},       // { sectionId: كم مرّة انشغّل الصوت } — بينحفظ مع الجلسة
   tick: null,       // Timer
   left: 0,          // verbleibende Sekunden
   view: 'home',
@@ -82,7 +83,18 @@ function stopTimer(){
 }
 
 /* ============ Navigation ============ */
+/* ★ `new Audio()` مو عنصر بالصفحة: استبدال app.innerHTML بيشيل الأزرار
+   وشريط التقدّم، بس الصوت كائن بالذاكرة ماسكه الـclosure — وبيضل شغّال
+   بعد ما الطالب يطلع من الامتحان، ويسمع الحلول على شاشة تانية. لهيك
+   منسجّل كل تسجيل، ومنوقّفه عند كل تنقّل. */
+const LIVE = new Set();
+function stopAudio(){
+  for (const a of LIVE) { try { a.pause(); a.src = ''; } catch {} }
+  LIVE.clear();
+}
+
 function go(view, fn){
+  stopAudio();
   S.view = view;
   // آخر دالة رسم: تبديل اللغة بيعيد نداءها بمكانها. الشاشات بتاخد
   // وسائط (نتيجة، جولة…)، فإعادة بنائها من اسم الشاشة بيضيّعهن.
@@ -714,6 +726,19 @@ function blockRun(m, id){
 }
 const runItems = run => run.parts.flatMap(p => p.items);
 
+/* ★ نفس قاعدة writing_start بالسيرفر، حرفياً: بالبلوك في أكتر من قسم
+   format=writing — استمارة، تلفون-نوتيتس، ورسالة. المقصود بالتصحيح هو
+   يلي إله حدّ أدنى كلمات؛ وإذا ما في، أول واحد بالترتيب. لو العميل
+   اختار غير ما بيختار السيرفر، الطالب بيشوف تصحيح نصّ تاني غير يلي كتبه. */
+function pickWriting(parts){
+  const w = parts.filter(p => p.format === 'writing');
+  return w.find(p => p.items[0] && p.items[0].minWords) || w[0] || null;
+}
+
+/* تحت هالحدّ ما في شي ينصحّح — تلفون-نوتيتس بتطلع خمس كلمات. نفس الرقم
+   مفروض بـwriting_start، لأنّ الحصّة بتنحرق بالسيرفر مو بالمتصفّح. */
+const AI_MIN_WORDS = 12;
+
 /* Die letzte Prüfung noch einmal ansehen — mit den damals gegebenen Antworten. */
 function reviewRun(m, blockId){
   const r = (load('b1.progress', {})[m.id] || {})[blockId];
@@ -738,6 +763,7 @@ function screenIntro(run){
   S.run = run;
   S.answers = {};
   S.dropped = {};
+  S.plays   = {};
   // Übungen kennen weder Entwurf noch angefangene Sitzung
   const sess = run.drill ? null : loadSession(run.id);
   stopTimer();
@@ -777,12 +803,14 @@ function screenIntro(run){
       </div>`;
     document.getElementById('start').onclick = () => {
       clearSession(run.id);
-      S.answers = {}; S.dropped = {};
+      S.answers = {}; S.dropped = {}; S.plays = {};
       screenExam(run);
     };
     const res = document.getElementById('resume');
     if (res) res.onclick = () => {
       S.answers = { ...sess.answers }; S.dropped = { ...sess.dropped };
+      // ★ «كمّل» لازم ترجّع كم مرّة انشغّل الصوت كمان، مو بس الأجوبة
+      S.plays = { ...(sess.plays || {}) };
       screenExam(run, sess.left);
     };
   });
@@ -882,7 +910,9 @@ const wordCount = s => String(s || '').trim().split(/\s+/).filter(Boolean).lengt
 
 function checksHTML(it, text){
   const n    = wordCount(text);
-  const min  = it.minWords || 100;
+  // ★ نفس الغلط يلي كان بشاشة النتيجة: `|| 100` كان بيطالب طالب A1
+  //   بمئة كلمة باستمارة من خمس خانات. اللي ما إله حدّ ما بينعرضله سطر.
+  const min  = it.minWords || 0;
   const body = String(text || '');
   const tail = body.slice(-140);          // السلام بيكون بالآخر، مو بأي مطرح
   const pts  = it.points || [];
@@ -894,7 +924,7 @@ function checksHTML(it, text){
   return `<div class="checks">
     <h3>${esc(t('checksTitle'))}</h3>
     <ul>
-      ${row(n >= min, t('chkWords', { n, min }))}
+      ${min ? row(n >= min, t('chkWords', { n, min })) : ''}
       ${row(GREET.test(body), t('chkGreeting'))}
       ${row(CLOSE.test(tail), t('chkClosing'))}
     </ul>
@@ -908,20 +938,26 @@ function checksHTML(it, text){
 }
 
 function renderBrief(sec){
-  const b = sec.brief, it = sec.items[0];
+  /* ★ «brief» شكل telc B1 لحاله: رسالة واردة بتحية وفقرات وتوقيع.
+     ÖSD وGoethe وDTZ وtelc B2 بيحطّوا نصّ المهمّة بـpassages، وما عندهن
+     brief أصلاً — فـ`b.intro` كانت ترمي TypeError والشاشة تطلع بيضا.
+     ونفس الشي لـpoints وminWords: اللي مو موجود ما بينعرض. */
+  const b = sec.brief, it = sec.items[0] || {};
+  const pts = it.points || [];
   return `
+    ${b ? `
     ${b.intro ? `<p class="briefintro">${esc(b.intro)}</p>` : ''}
     <div class="brief">
-      <p class="anrede">${esc(b.greeting)}</p>
-      ${b.paragraphs.map(p => `<p>${esc(p)}</p>`).join('')}
+      ${b.greeting ? `<p class="anrede">${esc(b.greeting)}</p>` : ''}
+      ${(b.paragraphs || []).map(p => `<p>${esc(p)}</p>`).join('')}
       ${b.signature ? `<p class="sig">${esc(b.signature)}</p>` : ''}
-    </div>
+    </div>` : ''}
     <div class="task">
-      <p>${esc(sec.instruction)}</p>
-      <ul>${it.points.map(p => `<li>${esc(p)}</li>`).join('')}</ul>
+      ${sec.instruction ? `<p>${esc(sec.instruction)}</p>` : ''}
+      ${pts.length ? `<ul>${pts.map(p => `<li>${esc(p)}</li>`).join('')}</ul>` : ''}
       ${(sec.hints || []).map(h => `<p class="hint">${esc(h)}</p>`).join('')}
-      ${(sec.hints || []).some(h => /mindestens/i.test(h)) ? ''
-        : `<p class="hint">Schreiben Sie mindestens ${it.minWords} Wörter.</p>`}
+      ${(it.minWords && !(sec.hints || []).some(h => /mindestens/i.test(h)))
+        ? `<p class="hint">Schreiben Sie mindestens ${it.minWords} Wörter.</p>` : ''}
     </div>`;
 }
 
@@ -938,35 +974,57 @@ function renderAudio(sec){
     if (!el) return;
     if (!url){ el.innerHTML = `<p class="sub">${esc(t('audioFailed'))}</p>`; return; }
 
-    let left = plays;
+    /* ★ الحدّ بيتحمّل بالجلسة، مو بمتغيّر بالشاشة. كان `let left = plays`
+       جوّا الرسم: أي إعادة رسم بترجّعه للأول — «وقف الامتحان» وبعدين
+       «كمّل» بتعطي تشغيلتين جداد كل مرّة، والحدّ يلي المفروض يشبه
+       الامتحان الحقيقي بيصير بلا معنى.
+       وبعد التسليم الحدّ بينشال: الامتحان خلص، والمراجعة مو امتحان. */
+    const limited = S.view === 'exam';
+    let used = limited ? (S.plays[sec.id] || 0) : 0;
+    const left = () => Math.max(0, plays - used);
+
     el.innerHTML = `
-      <button class="btn" data-play>${esc(t('audioPlay'))}</button>
-      <span class="sub" data-left>${esc(plural(left, 'audioLeft'))}</span>
+      <button class="btn" data-play></button>
+      <span class="sub" data-left></span>
       <div class="audiobar"><i></i></div>`;
     const audio = new Audio(url);
     audio.preload = 'auto';
+    LIVE.add(audio);
     const btn  = el.querySelector('[data-play]');
     const info = el.querySelector('[data-left]');
     const bar  = el.querySelector('.audiobar i');
 
+    const paint = (running) => {
+      const n = left();
+      btn.disabled = running || n <= 0;
+      btn.textContent = running ? '⏸ Läuft …'
+                      : n <= 0 ? t('audioDone')
+                      : used === 0 ? t('audioPlay') : t('audioAgain');
+      info.textContent = n > 0 ? plural(n, 'audioLeft') : t('audioNone');
+    };
+    paint(false);
+
     audio.addEventListener('timeupdate', () => {
       if (audio.duration) bar.style.width = (audio.currentTime / audio.duration * 100) + '%';
     });
-    audio.addEventListener('ended', () => {
-      left--;
-      btn.disabled = left <= 0;
-      btn.textContent = left > 0 ? t('audioAgain') : t('audioDone');
-      info.textContent = left > 0 ? plural(left, 'audioLeft') : t('audioNone');
-      bar.style.width = '100%';
-    });
+    audio.addEventListener('ended', () => { bar.style.width = '100%'; paint(false); });
+
+    const spend = (n) => {
+      used += n;
+      if (limited){ S.plays[sec.id] = used; saveSession(S.run); }
+    };
+
     btn.onclick = () => {
-      if (left <= 0) return;
-      btn.disabled = true;
-      btn.textContent = '⏸ Läuft …';
+      if (left() <= 0) return;
+      // ★ الحصّة بتنحسب عند الضغط، مو عند نهاية التسجيل: وإلا الطالب
+      //   بيسمع نصّه وبيطلع من الشاشة، وبيرجع بتشغيلة كاملة بجيبته.
+      spend(1);
+      paint(true);
       // kein Zurückspulen: jede Wiedergabe startet von vorn und läuft durch
       audio.currentTime = 0;
       audio.play().catch(() => {
-        btn.disabled = false; btn.textContent = t('audioPlay');
+        spend(-1);                       // ما اشتغل فعلاً — ما بتنحسب
+        paint(false);
         info.textContent = 'Wiedergabe nicht möglich';
       });
     };
@@ -1027,10 +1085,18 @@ function renderItem(sec, it){
   if (sec.format === 'mc' || sec.format === 'truefalse'){
     const opts = sec.format === 'truefalse'
       ? [{ key: 'r', text: 'Richtig' }, { key: 'f', text: 'Falsch' }]
-      : it.options;
+      : (it.options || []);
+    /* ★ سؤال بلا خيارات كان بيعمل undefined.map — شاشة بيضا، وما بتعرف
+       وين ولا ليش. هلق بيقول شو ناقص بمطرحه. */
+    if (!opts.length)
+      return `<div class="q isbad" id="q_${esc(it.id)}">${head}
+        <p class="sub">${esc(t('itemBroken'))}</p></div>`;
+    // صح-خطأ جوّا قسم mc (DTZ): نفس الشكل المضغوط تبع قسم الصح-خطأ
+    const tf = sec.format === 'truefalse'
+            || (opts.length === 2 && opts[0].key === 'r' && opts[1].key === 'f');
     const chosen = S.answers[it.id];
     const gone = S.dropped[it.id] || [];
-    body = `<div class="opts ${sec.format === 'truefalse' ? 'inline' : ''}">${
+    body = `<div class="opts ${tf ? 'inline' : ''}">${
       opts.map(o => `<label class="opt${o.key === chosen ? ' sel' : ''}${gone.includes(o.key) ? ' dropped' : ''}" data-opt="${esc(it.id)}|${esc(o.key)}">
         <input type="radio" name="q_${esc(it.id)}" value="${esc(o.key)}"${o.key === chosen ? ' checked' : ''}>
         <span class="k">${esc(o.key)}</span><span class="grow">${esc(o.text)}</span>
@@ -1266,7 +1332,7 @@ const sessKey = runId => `b1.session.${S.modell ? S.modell.id : '-'}.${runId}`;
 function saveSession(run){
   if (!run || run.drill || S.view !== 'exam') return;
   save(sessKey(run.id), {
-    answers: S.answers, dropped: S.dropped, left: S.left,
+    answers: S.answers, dropped: S.dropped, left: S.left, plays: S.plays,
     date: new Date().toLocaleDateString('de-DE')
   });
 }
@@ -1369,6 +1435,9 @@ function finish(run, auto){
 function answerLabel(sec, it, k){
   if (!k) return 'keine Antwort';
   if (sec.format === 'truefalse') return k === 'r' ? 'Richtig' : 'Falsch';
+  // صح-خطأ جوّا قسم mc: «Richtig» أوضح من «r — Richtig»
+  if ((k === 'r' || k === 'f') && (it.options || []).length === 2
+      && it.options[0].key === 'r') return k === 'r' ? 'Richtig' : 'Falsch';
   if (sec.bank){
     const o = sec.bank.find(x => x.key === k);
     return o ? (o.text ? `${k} — ${o.text}` : k) : '—';
@@ -1425,13 +1494,42 @@ function screenResult(run, points, max, pct, right, total){
       return head + script + cards;
     }).join('');
 
+    /* ★ قسم كتابة جوّا بلوك فيه غيره.
+       شاشة التصحيح الآلي كانت بتطلع بس لما البلوك كلّه قسم كتابة واحد
+       — وهاد صحيح لـtelc B1 بس. بـÖSD وGoethe بلوك الكتابة قسمين
+       (استمارة ورسالة)، وبـtelc B2 الكتابة جوّا بلوك القراءة والاستماع.
+       يعني أربع مستويات من خمسة ما كان فيهن زرّ تصحيح أصلاً.
+
+       بطاقة وحدة، مو زرّ لكل قسم: السيرفر بيصحّح قسم واحد بالبلوك،
+       فلازم نعرض بالضبط هيداك — وإلا الطالب بيدفع من حصّته على استمارة. */
+    const wPart = pickWriting(run.parts);
+    const wText = wPart ? (S.answers[wPart.items[0].id] || '').trim() : '';
+    const wWords = wText.split(/\s+/).filter(Boolean).length;
+
     app.innerHTML =
       scoreCard(points, max, pct, `${right} von ${total} Aufgaben richtig`) +
+      (wPart ? `<div class="card" style="margin-top:16px">
+        <h2>${esc(t('correction'))}</h2>
+        <p class="sub" style="margin:0 0 10px">${esc(
+          wWords >= AI_MIN_WORDS ? t('aiIntro') : t('aiErrShort'))}</p>
+        ${wWords >= AI_MIN_WORDS ? `<button class="btn" id="wpart">${
+          esc(wPart.title || t('correction'))}</button>` : ''}
+      </div>` : '') +
       `<h2 style="margin:18px 0 10px">${esc(t('correction'))}</h2>${perPart}
       <div class="bottombar"><div class="inner">
         <button class="btn ghost grow" id="again">${esc(t('again'))}</button>
         <button class="btn grow" id="back">${esc(t('overview'))}</button>
       </div></div>`;
+
+    // نفس الشاشة، بس على قسم الكتابة — ومعرّف الجولة بيضل هو معرّف
+    // البلوك، لأنّ المحاولة بالقاعدة محفوظة بالبلوك
+    const wBtn = document.getElementById('wpart');
+    if (wBtn) wBtn.onclick = () => {
+      const rec = (load('b1.progress', {})[S.modell.id] || {})[run.id] || {};
+      screenWriting({ ...run, parts: [wPart],
+                      sub: () => screenResult(run, points, max, pct, right, total) },
+                    { attemptId: rec.attemptId });
+    };
 
     document.getElementById('again').onclick = () =>
       run.drill ? drillRun().then(r => r ? screenIntro(r) : screenHome())
@@ -1445,32 +1543,38 @@ function screenResult(run, points, max, pct, right, total){
    Jedes Kriterium A=5 / B=3 / C=1 / D=0, die Summe wird mit 3 multipliziert. */
 function screenWriting(run, saved){
   const sec = run.parts[0];
+  /* ★ التقييم الذاتي هو تمرين telc: تلات معايير بحروف. غير telc ما
+     بيعطي معايير بالمحتوى، فالصندوق بينشال — بس التصحيح الآلي بيضل.
+     بلا هالسطر: sec.criteria.map على undefined، والشاشة بتنهار. */
+  const crits = sec.criteria || [];
   const it = sec.items[0];
   const mine = (S.answers[it.id] || '').trim();
   const words = mine.split(/\s+/).filter(Boolean).length;
   const grades = { ...(saved && saved.grades || {}) };
+  // ★ مو كل قسم كتابة إله حدّ أدنى. كان مكتوب `it.minWords || 100`،
+  //   يعني طالب A1 يشوف «اكتب ١٠٠ كلمة على الأقل» ببريد من تلات جمل.
+  const minW = it.minWords || 0;
 
   go('result', () => {
     app.innerHTML = `
       <div class="card">
         <h2>${esc(t('yourText'))}</h2>
         <p class="sub">${esc(plural(words, 'words'))}${
-          words < (it.minWords || 100)
-            ? ' ' + esc(t('minWords', { n: it.minWords || 100 })) : ''}</p>
+          minW && words < minW ? ' ' + esc(t('minWords', { n: minW })) : ''}</p>
         <div class="passage" style="margin:0"><div class="body">${esc(mine || '(kein Text geschrieben)')}</div></div>
       </div>
       <div class="card">
         <h2>${esc(t('taskHead'))}</h2>
         ${renderBrief(sec)}
       </div>
-      <div class="card">
+      ${crits.length ? `<div class="card">
         <h2>${esc(t('grading'))}</h2>
         <p class="sub">${esc(t('rateSelf'))}</p>
-        ${sec.criteria.map((c, i) => `
+        ${crits.map((c, i) => `
           <div class="crit">
             <h3>${esc(c.title)}</h3>
             <p class="sub" style="margin:0 0 8px">${esc(c.hint)}</p>
-            <div class="opts inline">${sec.grades.map(g =>
+            <div class="opts inline">${(sec.grades || []).map(g =>
               `<label class="opt" data-crit="${i}|${esc(g.key)}">
                  <input type="radio" name="crit${i}" value="${esc(g.key)}">
                  <span class="k">${esc(g.key)}</span>
@@ -1478,42 +1582,49 @@ function screenWriting(run, saved){
                </label>`).join('')}</div>
           </div>`).join('')}
         <div id="wres"></div>
-      </div>
+      </div>` : ''}
       <div class="card" id="aiwrap">
         <h2>${esc(t('correction'))}</h2>
         <p class="sub" style="margin:0">${esc(t('preparing'))}</p>
       </div>
-      <div class="bottombar"><div class="inner">
-        <button class="btn ghost grow" id="again">${esc(t('again'))}</button>
-        <button class="btn grow" id="back">${esc(t('overview'))}</button>
+      <div class="bottombar"><div class="inner">${run.sub
+        ? `<button class="btn grow" id="back">${esc(t('back'))}</button>`
+        : `<button class="btn ghost grow" id="again">${esc(t('again'))}</button>
+           <button class="btn grow" id="back">${esc(t('overview'))}</button>`}
       </div></div>`;
 
     app.querySelectorAll('[data-crit]').forEach(lb => {
       lb.onclick = () => {
         const [i, key] = lb.dataset.crit.split('|');
-        grades[i] = sec.grades.find(g => g.key === key).points;
+        grades[i] = (sec.grades || []).find(g => g.key === key).points;
         lb.closest('.opts').querySelectorAll('.opt').forEach(x => x.classList.remove('sel'));
         lb.classList.add('sel');
-        if (Object.keys(grades).length < sec.criteria.length) return;
+        if (Object.keys(grades).length < crits.length) return;
 
         const points = Object.values(grades).reduce((a, b) => a + b, 0) * sec.factor;
-        const pct = saveResult(run, points, sec.maxPoints, { grades: { ...grades } });
-        document.getElementById('wres').innerHTML =
-          scoreCard(points, sec.maxPoints, pct, '');
+        /* ★ بالشاشة الفرعية معرّف الجولة هو معرّف البلوك كلّه. لو حفظنا،
+           تقييم الرسالة بيمحي نتيجة البلوك (القراءة والاستماع معها). */
+        const pct = run.sub ? Math.round(points / sec.maxPoints * 100)
+                            : saveResult(run, points, sec.maxPoints, { grades: { ...grades } });
+        const box = document.getElementById('wres');
+        if (box) box.innerHTML = scoreCard(points, sec.maxPoints, pct, '');
       };
     });
     if (saved){                              // gespeicherte Bewertung wiederherstellen
       Object.entries(grades).forEach(([i, pts]) => {
-        const g = sec.grades.find(x => x.points === pts);
+        const g = (sec.grades || []).find(x => x.points === pts);
         const lb = g && app.querySelector(`[data-crit="${i}|${g.key}"]`);
         if (lb){ lb.classList.add('sel'); lb.querySelector('input').checked = true; }
       });
-      if (saved.points !== null && saved.points !== undefined)
-        document.getElementById('wres').innerHTML =
-          scoreCard(saved.points, sec.maxPoints, saved.pct, '');
+      // بلا معايير ما في صندوق نتيجة — وقتها ما في وين ننزّل العلامة
+      const box = document.getElementById('wres');
+      if (box && saved.points !== null && saved.points !== undefined)
+        box.innerHTML = scoreCard(saved.points, sec.maxPoints, saved.pct, '');
     }
-    document.getElementById('again').onclick = () => screenIntro(run);
-    document.getElementById('back').onclick  = () => screenModell(S.modell);
+    const againBtn = document.getElementById('again');
+    if (againBtn) againBtn.onclick = () => screenIntro(run);
+    document.getElementById('back').onclick  = () =>
+      run.sub ? run.sub() : screenModell(S.modell);
 
     const box = document.getElementById('aiwrap');
     if (box) renderAiBox(box, run, saved && saved.attemptId, mine);
@@ -1552,6 +1663,7 @@ function renderAiBox(box, run, attemptId, text){
       quota_exceeded: 'aiErrQuota',
       not_entitled:   'aiErrNoSub',
       empty_text:     'aiErrEmpty',
+      too_short:      'aiErrShort',
       not_configured: 'aiErrSetup',
       bad_model:      'aiErrSetup',   // إعداد غلط عند الأدمن، مو غلط الطالب
       refused:        'aiErrRefused',
