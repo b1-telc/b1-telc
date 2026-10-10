@@ -75,7 +75,11 @@ const Markup = (() => {
           const b = /^\*\*.*\*\*$/.test(t);
           paragraphs.push({ t: b ? t.replace(/^\*\*|\*\*$/g, '').trim() : t, b });
         });
-        if (paragraphs.length) passages.push({ paragraphs });
+        /* ★ وين بينعرض النص: قبل أي سؤال انقفل لهلق. هيك بيضل تداخل
+           النصّ والأسئلة متل المصدر (نص ← سؤال ١،٢ ← نص ← سؤال ٣…)
+           بدل ما كل النصوص تطلع فوق وكل الأسئلة تحت. القيمة = عدد
+           الأسئلة يلي قبله. القديم (بلا before) بينعرض كله فوق متل قبل. */
+        if (paragraphs.length) passages.push({ paragraphs, before: sec.items.length });
       }
       buf = [];
     };
@@ -419,20 +423,26 @@ const Markup = (() => {
         L.push('Extra:', JSON.stringify(extra, null, 1));
       }
 
-      if (s.passages && s.passages.length){
+      /* ★ النصوص والأسئلة متداخلة حسب مرساة before: كل نص بينكتب قبل
+         السؤال يلي مرساته عنده، تماماً متل المصدر. نص بلا before (مبني
+         بالإيد أو بيانات قديمة) مرساته صفر فبيطلع فوق متل قبل. */
+      const ps = s.passages || [], items = s.items || [];
+      let pi = 0, opened = false;
+      const pushText = () => {
         L.push('Text:');
-        s.passages.forEach((p, i) => {
-          if (i) L.push('§§§');
-          (p.paragraphs || []).forEach(x => L.push(x.b ? `**${x.t}**` : x.t));
-        });
-      }
+        (ps[pi].paragraphs || []).forEach(x => L.push(x.b ? `**${x.t}**` : x.t));
+        pi++; opened = false;              // بعد كل نص لازم Aufgaben: جديدة
+      };
+      const flush = upto => { while (pi < ps.length && (ps[pi].before ?? 0) <= upto) pushText(); };
+
+      flush(0);                            // النصوص يلي قبل السؤال الأول
       if (s.bank && s.bank.length){
         L.push('Auswahl:');
         s.bank.forEach(o => L.push(`${o.key} = ${o.text || ''}`));
       }
-
-      L.push('Aufgaben:');
-      (s.items || []).forEach(it => {
+      items.forEach((it, idx) => {
+        if (idx) flush(idx);               // نص متداخل قبل هالسؤال
+        if (!opened){ L.push('Aufgaben:'); opened = true; }
         L.push(`[${it.id}] ${String(it.text || '').replace(/\s+/g, ' ').trim()}`);
         (it.options || []).forEach(o => L.push(`${o.key}) ${o.text}`));
         if (it.minWords != null) L.push(`Mindestwörter: ${it.minWords}`);
@@ -443,6 +453,8 @@ const Markup = (() => {
             ? (it.answer === 'r' ? 'richtig' : 'falsch') : it.answer}`);
         }
       });
+      flush(items.length);                 // نصوص بالآخر (لو في)
+      if (!items.length) L.push('Aufgaben:');   // قسم بلا أسئلة: نفس القديم
     });
     return L.join('\n') + '\n';
   }
