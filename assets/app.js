@@ -828,8 +828,7 @@ function screenExam(run, resumeLeft){
       <section class="part" id="part-${esc(p.id)}">
         ${run.parts.length > 1 ? `<h2 class="parthead">${esc(p.title)}</h2>
           <div class="instr">${esc(p.instruction)}</div>` : ''}
-        ${renderPassages(p)}${renderBank(p)}
-        ${p.items.map(it => renderItem(p, it)).join('')}
+        ${renderPartBody(p)}
       </section>`).join('');
 
     app.innerHTML = nav + body +
@@ -1031,6 +1030,42 @@ function renderAudio(sec){
   }).catch(() => {});
 
   return `<div class="audio" id="${slot}"><p class="sub">${esc(t('audioLoading'))}</p></div>`;
+}
+
+/* ★ متن القسم: النصوص والأسئلة سوا.
+   المصدر بيكتب نص ← أسئلته ← نص تاني ← أسئلته (متل Goethe A1: نص أول
+   مع سؤال ١،٢ وبعدين نص تاني مع ٣،٤،٥). كل فقرة نصّ عندها مرساة
+   `before` = عدد الأسئلة يلي قبلها، فمنعرضها بمطرحها الصحيح.
+
+   الحالات يلي ما بتتداخل (brief تبع telc B1، والهورتكست بالامتحان،
+   والقسم بلا نصوص) بتضل متل قبل: كل شي فوق بعدين الأسئلة. القديم
+   (نصوص بلا `before`) مرساته صفر فبيطلع كله فوق — نفس السلوك السابق. */
+function renderPartBody(sec){
+  const items = sec.items || [];
+  const itemsHTML = () => items.map(it => renderItem(sec, it)).join('');
+
+  // brief / هورتكست بالامتحان / بلا نصوص: ما في تداخل — متل قبل تماماً
+  if (sec.brief || (sec.audio && S.view === 'exam')
+      || !sec.passages || !sec.passages.length)
+    return renderPassages(sec) + renderBank(sec) + itemsHTML();
+
+  const ps = sec.passages;
+  const passHTML = p => `<div class="passage">
+      ${p.title ? `<h3>${esc(p.title)}</h3>` : ''}
+      ${(p.paragraphs || []).map(x =>
+        `<p${x.b ? ' class="strong"' : ''}>${esc(x.t)}</p>`).join('')}
+    </div>`;
+
+  let out = renderAudio(sec) + renderBank(sec);   // الصوت والاختيارات فوق
+  let pi = 0;
+  const flush = upto => { while (pi < ps.length && (ps[pi].before ?? 0) <= upto) out += passHTML(ps[pi++]); };
+  flush(0);                                       // نص قبل السؤال الأول
+  items.forEach((it, idx) => {
+    if (idx) flush(idx);                          // نص متداخل قبل هالسؤال
+    out += renderItem(sec, it);
+  });
+  flush(items.length);                            // نصوص بالآخر (لو في)
+  return out;
 }
 
 function renderPassages(sec){

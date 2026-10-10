@@ -186,6 +186,19 @@ Lösung: f
         p.items[1].text === 'Aussage zwei.');
   check('★ والفقرة التانية فيها متنها',
         JSON.stringify(p.passages[1]).includes('Kurse jeden Montag'));
+  /* ★ تداخل النص والأسئلة: النص الأول قبل السؤال الأول (before=0)،
+     والنص التاني بعد سؤالين (before=2). هيك العارض بيعرض:
+     نص ← سؤال ١،٢ ← نص ← سؤال ٣،٤. */
+  check(`★ مرساة النص الأول صفر (${p.passages[0].before})`,
+        p.passages[0].before === 0);
+  check(`★ مرساة النص التاني بعد سؤالين (${p.passages[1].before})`,
+        p.passages[1].before === 2);
+  // round-trip: الذهاب والإياب لازم يحفظ المرساة وترتيب التداخل
+  const rt = M.parse(M.serialize({ title: 'T', blocks: [], sections: [p] }))
+             .test.sections[0];
+  check('★ round-trip حفظ تداخل النص والأسئلة',
+        JSON.stringify(rt.passages.map(x => x.before)) === '[0,2]'
+        && rt.items.length === 4);
 }
 
 /* ---- الذهاب والإياب على شي مبني بالإيد ---- */

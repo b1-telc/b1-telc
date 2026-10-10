@@ -23,7 +23,11 @@ const strip = t => ({
     bankTitle: s.bankTitle || undefined, bankImage: s.bankImage || undefined,
     pointsPerItem: s.pointsPerItem ?? undefined,
     maxPoints: s.maxPoints, availablePoints: s.availablePoints, missing: s.missing,
-    bank: s.bank, passages: s.passages,
+    bank: s.bank,
+    // ★ `before` حقل محسوب (متل availablePoints): مرساة عرض النص بين
+    //   الأسئلة. بيانات B1 ما فيها before وكلها نصّ واحد لكل قسم، فمنقارن
+    //   الفقرات بلاه. تداخل النصوص محكوم بفحص خاص بـtests/parse.mjs.
+    passages: (s.passages || []).map(p => ({ paragraphs: p.paragraphs, title: p.title })),
     brief: s.brief, hints: s.hints, criteria: s.criteria,
     grades: s.grades, factor: s.factor,
     items: (s.items || []).map(i => ({
