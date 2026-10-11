@@ -208,8 +208,7 @@ elBack.onclick = () => {
     screenResources();
   } else if (S.view === 'praxis'){
     // zurück zur Teilliste der Fertigkeit
-    const b = S.modell && S.modell.blocks.find(x => x.id === S.praxisSkill);
-    if (S.modell && b) screenSkill(S.modell, b); else screenHome();
+    if (S.modell && S.praxisSkill) screenSkill(S.praxisSkill); else screenHome();
   } else if (S.view === 'skill'){
     screenHome();
   } else {
@@ -253,6 +252,7 @@ async function boot(){
     return;
   }
   S.catalog = await loadCatalog(S.level);
+  if (isPraxis()){ try { S.modell = await praxisTest(); } catch { S.modell = null; } }
   screenHome();
 }
 
@@ -382,16 +382,19 @@ function screenHome(){
       ? S.catalog
       : S.index.modelle.map(m => ({ ...m, open: true }));
 
-    /* Goethe: nach Fertigkeit üben — die Blöcke des (einen) Tests sind die
-       Bereiche (Lesen, Hören …), nicht mehr einzelne Modelltests. */
-    const praxisBlocks = isPraxis() && S.index.modelle[0] && S.index.modelle[0].blocks;
-    const cards = praxisBlocks && praxisBlocks.length
-      ? praxisBlocks.map(b => `<button class="tile" data-skill="${esc(b.id)}">
-          <span class="n">${skillIcon(b.title)}</span>
-          <span class="grow"><span style="font-weight:600">${esc(b.title)}</span>
-            <div class="meta">${plural((b.parts || []).length, 'nPart')}</div></span>
+    /* Goethe: nach Fertigkeit üben — die Fertigkeiten (Lesen, Hören …)
+       statt einzelner Modelltests. Jede Fertigkeit zeigt, wie viele Teile
+       sie hat. */
+    const skills = (isPraxis() && S.modell) ? praxisSkills(S.modell) : null;
+    const cards = skills && skills.length
+      ? skills.map(sk => {
+          const nParts = S.modell.blocks.filter(b => blockSkill(S.modell, b) === sk).length;
+          return `<button class="tile" data-skill="${esc(sk)}">
+          <span class="n">${skillIcon(sk)}</span>
+          <span class="grow"><span style="font-weight:600">${esc(sk)}</span>
+            <div class="meta">${plural(nParts, 'nPart')}</div></span>
           <span class="chev">›</span>
-        </button>`).join('')
+        </button>`; }).join('')
       : list.map((m, i) => {
       const frei = m.open !== false && open.has(m.id);
       return `<button class="tile${frei ? '' : ' locked'}"
@@ -531,10 +534,13 @@ async function switchLevel(id){
   S.level = id;
   save('b1.level', id);
   Object.keys(modellCache).forEach(k => delete modellCache[k]);
+  S.modell = null;
   app.innerHTML = `<div class="empty">${esc(t('moment'))}</div>`;
   try { S.index = await API.index(id); }
   catch { return void toast(t('levelFailed')); }
   S.catalog = await loadCatalog(id);
+  // Goethe: die Fertigkeiten kommen aus dem (einen) Test — vorab laden
+  if (isPraxis()){ try { S.modell = await praxisTest(); } catch { S.modell = null; } }
   screenHome();
 }
 
@@ -583,125 +589,134 @@ function showResource(r){
 
 /* ============ Üben nach Abschnitt (Goethe) ============
    Statt ganzer Modelltests übt man hier Fertigkeit für Fertigkeit:
-   Startseite → Lesen/Hören/Schreiben/Sprechen → Teil → alle Aufgaben
+   Startseite → Lesen/Hören/Schreiben/Sprechen → Teil → alle Übungen
    des Teils, ohne Zeit und ohne Punkte. Der Stand wird gespeichert.
-   Für jeden Text gibt es einen Knopf „Antworten anzeigen": die Lösungen
-   kommen erst dann vom Server (reveal_answers) und färben grün/rot —
+
+   Aufbau: Fertigkeit = `group` des Abschnitts · Teil = Block · Übung =
+   Abschnitt (zwei Texte + Aufgaben). Jede Übung hat einen eigenen Knopf
+   „Antworten anzeigen" (grün/rot), der ganze Teil einen „Zurücksetzen".
+   Die Lösungen kommen erst beim Aufdecken vom Server (reveal_answers) —
    der Schlüssel bleibt bis dahin geschützt wie überall sonst.
 
    Nur für Goethe aktiv; telc/ÖSD/DTZ bleiben beim Modelltest-System. */
 const isPraxis = () => /^goethe/.test(S.level || '');
-const skillIcon = title => /hör/i.test(title) ? '🎧'
-  : /schreib/i.test(title) ? '✍️' : /sprech/i.test(title) ? '🗣️' : '📖';
+const skillIcon = s => /hör/i.test(s) ? '🎧'
+  : /schreib/i.test(s) ? '✍️' : /sprech/i.test(s) ? '🗣️' : '📖';
 
 /* Der (einzige) Goethe-Test, voll geladen und gecacht. */
 async function praxisTest(){
   const first = S.index && S.index.modelle && S.index.modelle[0];
   return first ? loadModell(first.id) : null;
 }
-
-async function openSkill(blockId){
-  let m;
-  try { m = await praxisTest(); } catch { m = null; }
-  if (!m) return toast(t('loadFailed'));
-  S.modell = m;
-  const b = m.blocks.find(x => x.id === blockId);
-  if (!b) return toast(t('loadFailed'));
-  screenSkill(m, b);
+/* Fertigkeit eines Blocks = `group` seines ersten Abschnitts. */
+const blockSkill = (m, b) => {
+  const s = m.sections.find(x => x.id === (b.parts || [])[0]);
+  return s ? (s.group || b.title) : b.title;
+};
+/* die Fertigkeiten in fester Reihenfolge, nur die vorhandenen */
+function praxisSkills(m){
+  const order = ['Lesen', 'Hören', 'Hörverstehen', 'Schreiben', 'Sprechen'];
+  const have = [...new Set((m.blocks || []).map(b => blockSkill(m, b)))];
+  return have.sort((a, c) => {
+    const ia = order.findIndex(x => a.startsWith(x));
+    const ic = order.findIndex(x => c.startsWith(x));
+    return (ia < 0 ? 99 : ia) - (ic < 0 ? 99 : ic);
+  });
 }
 
-function screenSkill(m, b){
+function openSkill(skill){
+  const m = S.modell;
+  if (!m) return toast(t('loadFailed'));
+  screenSkill(skill);
+}
+
+/* Fertigkeit → Liste der Teile (Blöcke). */
+function screenSkill(skill){
   stopTimer();
+  const m = S.modell;
   go('skill', () => {
-    S.praxisSkill = b.id;
-    const prog  = (load('b1.praxis', {})[S.level]) || {};
-    const parts = b.parts.map(id => m.sections.find(s => s.id === id)).filter(Boolean);
+    S.praxisSkill = skill;
+    const prog   = (load('b1.praxis', {})[S.level]) || {};
+    const blocks = m.blocks.filter(b => blockSkill(m, b) === skill);
     app.innerHTML = `
-      <h1>${esc(b.title)}</h1>
+      <h1>${esc(skill)}</h1>
       <p class="sub">${esc(t('praxisPick'))}</p>
-      ${parts.map(p => {
-        const done = prog[p.id] ? Object.keys(prog[p.id]).filter(k =>
-          String(prog[p.id][k] ?? '').trim() !== '').length : 0;
-        const meta = [plural(p.items.length, 'nTask'),
-          done ? t('praxisDone', { n: done, total: p.items.length }) : '']
-          .filter(Boolean).join(' · ');
-        return `<div class="blockcard"><button class="tile" data-part="${esc(p.id)}">
-          <span class="grow"><span style="font-weight:600">${esc(p.title)}</span>
+      ${blocks.map(b => {
+        const nItems = b.parts.reduce((a, id) => {
+          const s = m.sections.find(x => x.id === id); return a + (s ? s.items.length : 0);
+        }, 0);
+        const ans  = prog[b.id] || {};
+        const done = Object.keys(ans).filter(k => String(ans[k] ?? '').trim() !== '').length;
+        const meta = [plural(nItems, 'nTask'),
+          done ? t('praxisDone', { n: done, total: nItems }) : ''].filter(Boolean).join(' · ');
+        return `<div class="blockcard"><button class="tile" data-part="${esc(b.id)}">
+          <span class="grow"><span style="font-weight:600">${esc(b.title)}</span>
             <div class="meta">${esc(meta)}</div></span>
           <span class="chev">›</span></button></div>`;
       }).join('')}`;
     app.querySelectorAll('[data-part]').forEach(x =>
-      x.onclick = () => screenPractice(m, x.dataset.part));
+      x.onclick = () => screenPractice(x.dataset.part));
   });
 }
 
-/* Stand pro Teil: { [level]: { [partId]: { itemId: Antwort } } } */
+/* Stand pro Teil: { [level]: { [blockId]: { itemId: Antwort } } } */
 function praxisSave(){
   const all = load('b1.praxis', {});
-  (all[S.level] ||= {})[S.praxisPart] = { ...S.answers };
+  (all[S.level] ||= {})[S.praxisBlock] = { ...S.answers };
   save('b1.praxis', all);
 }
 
-/* Die Texte und Aufgaben eines Teils in Gruppen: jeder Text mit seinen
-   eigenen Aufgaben und einem eigenen „Antworten anzeigen"-Knopf. */
-function praxisGroups(sec){
-  const items = sec.items || [], ps = sec.passages || [];
-  if (!ps.length) return [{ texts: [], items }];
-  const groups = [];
-  let pi = 0, g = { texts: [], items: [] };
-  const flush = upto => {
-    while (pi < ps.length && (ps[pi].before ?? 0) <= upto){
-      if (g.items.length){ groups.push(g); g = { texts: [], items: [] }; }
-      g.texts.push(ps[pi++]);
-    }
-  };
-  items.forEach((it, idx) => { flush(idx); g.items.push(it); });
-  flush(items.length);
-  if (g.texts.length || g.items.length) groups.push(g);
-  return groups;
+/* Eine Übung = ein Abschnitt: seine Texte und Aufgaben verschränkt
+   (renderPartBody) plus ein „Antworten anzeigen"-Knopf für die ganze Übung. */
+function praxisSetHTML(sec){
+  const ids = (sec.items || []).map(it => it.id);
+  const gradable = sec.format !== 'writing' && ids.length;
+  return `<section class="part praxisset" id="part-${esc(sec.id)}">
+    ${sec.title ? `<h2 class="setnum">${esc(sec.title)}</h2>` : ''}
+    ${sec.instruction ? `<div class="instr">${esc(sec.instruction)}</div>` : ''}
+    ${renderPartBody(sec)}
+    ${gradable ? `<button class="btn ghost reveal" data-reveal="${esc(sec.id)}"
+      data-ids="${esc(ids.join(','))}" disabled>${esc(t('reveal'))}</button>` : ''}
+  </section>`;
 }
 
-function praxisBody(sec){
-  const passHTML = p => `<div class="passage">
-      ${p.title ? `<h3>${esc(p.title)}</h3>` : ''}
-      ${(p.paragraphs || []).map(x =>
-        `<p${x.b ? ' class="strong"' : ''}>${esc(x.t)}</p>`).join('')}
-    </div>`;
-  const gradable = sec.format !== 'writing';
-  return renderAudio(sec) + renderBank(sec) + praxisGroups(sec).map((g, gi) => {
-    const ids = g.items.map(it => it.id);
-    return `<div class="pgroup" data-group="${gi}">
-      ${g.texts.map(passHTML).join('')}
-      ${g.items.map(it => renderItem(sec, it)).join('')}
-      ${gradable && ids.length ? `<button class="btn ghost reveal" data-reveal="${gi}"
-        data-ids="${esc(ids.join(','))}" disabled>${esc(t('reveal'))}</button>` : ''}
-    </div>`;
-  }).join('');
-}
-
-function screenPractice(m, partId){
-  const sec = m.sections.find(s => s.id === partId);
-  if (!sec) return;
+/* Teil (Block) → alle Übungen, ohne Zeit/Punkte, mit Zurücksetzen. */
+function screenPractice(blockId){
+  const m = S.modell;
+  const b = m && m.blocks.find(x => x.id === blockId);
+  if (!b) return;
+  const secs = b.parts.map(id => m.sections.find(s => s.id === id)).filter(Boolean);
   stopTimer();
-  S.modell = m;
-  S.praxisPart = partId;
-  S.run = { id: partId, drill: true, parts: [sec], title: sec.title, maxPoints: 0 };
-  const saved = (load('b1.praxis', {})[S.level] || {})[partId] || {};
+  S.praxisBlock = blockId;
+  const saved = (load('b1.praxis', {})[S.level] || {})[blockId] || {};
   S.answers = { ...saved };
   S.dropped = {}; S.checks = {};
+  S.run = { id: blockId, drill: true, parts: secs, title: b.title, maxPoints: 0 };
   go('praxis', () => {
     app.innerHTML = `
-      <h1>${esc(sec.title)}</h1>
-      ${sec.instruction ? `<div class="instr">${esc(sec.instruction)}</div>` : ''}
+      <h1>${esc(b.title)}</h1>
       <p class="sub">${esc(t('praxisHint'))}</p>
-      <section class="part" id="part-${esc(sec.id)}">${praxisBody(sec)}</section>`;
-    bindInputs(sec);
-    praxisBindReveal(sec);
+      ${secs.map(praxisSetHTML).join('')}
+      <button class="btn ghost reset" id="praxisReset">${esc(t('praxisReset'))}</button>`;
+    secs.forEach(bindInputs);
+    praxisBindReveal(secs);
     praxisSyncButtons();
+    document.getElementById('praxisReset').onclick = () =>
+      ask(t('praxisResetAsk'), () => praxisReset(secs), t('praxisReset'));
   });
 }
 
-/* Knopf ist erst aktiv, wenn alle Aufgaben des Textes beantwortet sind. */
+/* Antworten des ganzen Teils löschen und frisch neu zeichnen. */
+function praxisReset(secs){
+  secs.forEach(sec => (sec.items || []).forEach(it => {
+    delete S.answers[it.id]; delete S.dropped[it.id];
+  }));
+  praxisSave();
+  toast(t('praxisResetDone'));
+  screenPractice(S.praxisBlock);
+}
+
+/* Knopf ist erst aktiv, wenn alle Aufgaben der Übung beantwortet sind. */
 function praxisSyncButtons(){
   document.querySelectorAll('[data-reveal]').forEach(btn => {
     if (btn.classList.contains('done')) return;
@@ -713,9 +728,12 @@ function praxisSyncButtons(){
   });
 }
 
-function praxisBindReveal(sec){
+function praxisBindReveal(secs){
+  const byId = {};
+  secs.forEach(s => { byId[s.id] = s; });
   document.querySelectorAll('[data-reveal]').forEach(btn => {
     btn.onclick = async () => {
+      const sec = byId[btn.dataset.reveal];
       const ids = btn.dataset.ids.split(',').filter(Boolean);
       btn.disabled = true;
       const was = btn.textContent;
@@ -728,19 +746,19 @@ function praxisBindReveal(sec){
       }
       const by = {};
       (res.answers || []).forEach(a => { if (a.id) by[a.id] = a; });
-      ids.forEach(id => praxisColor(sec, id, by[id]));
+      ids.forEach(id => praxisColor(id, by[id]));
       btn.textContent = t('revealed');
       btn.classList.add('done');
-      // Nach dem Aufdecken bleibt die Gruppe stehen — kein Ändern mehr
-      const grp = btn.closest('.pgroup');
-      if (grp) grp.querySelectorAll('[data-opt],[data-key]')
+      // Nach dem Aufdecken bleibt die Übung stehen — kein Ändern mehr
+      const set = btn.closest('.praxisset');
+      if (set) set.querySelectorAll('[data-opt],[data-key]')
         .forEach(el => el.classList.add('locked'));
     };
   });
 }
 
 /* Grün = richtig, Rot = die falsch gewählte Antwort. */
-function praxisColor(sec, id, a){
+function praxisColor(id, a){
   const q = document.getElementById('q_' + id);
   if (!q || !a) return;
   const mine = S.answers[id];

@@ -1,26 +1,30 @@
-# WINFRIED
-Untertitel: 17 Aufgaben · 45 Minuten
+# Goethe A1 — Üben
+Untertitel: Lesen · Schreiben
 
-## Block: block-lesen
-Titel: Lesen
-Minuten: 25
-Hinweis: Aufgaben 1–15
-Punkte: 15
-Teile: lv1, lv2, lv3
+## Block: lv1
+Titel: Lesen · Teil 1
+Minuten: 0
+Punkte: 50
+Teile: lv1-01, lv1-02, lv1-03, lv1-04, lv1-05, lv1-06, lv1-07, lv1-08, lv1-09, lv1-10
 
-## Block: block-schreiben
-Titel: Schreiben
-Minuten: 20
-Hinweis: Aufgaben 16–21
-Punkte: 15
-Teile: s1, s2
-
-
-### Teil: lv1
-Format: truefalse
-Titel: Lesen, Teil 1
-Gruppe: Lesen
+## Block: s1
+Titel: Schreiben · Teil 1 (Formular)
 Minuten: 10
+Punkte: 5
+Teile: s1
+
+## Block: s2
+Titel: Schreiben · Teil 2 (Brief)
+Minuten: 10
+Punkte: 10
+Teile: s2
+
+
+### Teil: lv1-01
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 1
+Minuten: 0
 Punkte: 1
 Maximum: 5
 Anweisung: Lesen Sie die beiden Texte und die Aufgaben 1 bis 5. Kreuzen Sie an: Richtig oder Falsch.
@@ -54,82 +58,324 @@ Lösung: f
 [5] Frau Stein will am Freitag Dr. Falk treffen.
 Lösung: r
 
-### Teil: lv2
-Format: mc
-Titel: Lesen, Teil 2
-Gruppe: Lesen
-Minuten: 10
-Punkte: 1
-Maximum: 5
-Anweisung: Lesen Sie die Texte und die Aufgaben 6 bis 10. Wo finden Sie Informationen? Kreuzen Sie an: a oder b.
-Aufgaben:
-[6] Sie wollen viele Freunde zu Ihrem Geburtstag einladen. Sie suchen einen Ort.
-A) www.raum-in-koeln.de: Raum für Tanz, Sport, Hochzeiten und andere private Feiern zu vermieten. Auch abends Termine frei, günstige Preise.
-B) www.wohnen-in-koeln.de: Schöne Zimmer und Apartments für 2 - 12 Wochen im Großraum Köln zu interessanten Preisen.
-Lösung: A
-[7] Der Computer ist kaputt. Sie können ihn nicht allein reparieren.
-A) www.computer-loesungen.de: Für alles, was mit Computern, Druckern, Scannern, Internet usw. zu tun hat. Auch Reparaturen.
-B) www.technohaus.de: Gebrauchte Kühlschränke, Herde, Waschmaschinen, Computer, Drucker, Fernseher, Radios, Handys usw. zu supergünstigen Preisen!
-Lösung: A
-[8] Sie möchten am Samstagabend mit Freunden tanzen gehen.
-A) www.tanzen-macht-spass.de: Tanzschule Renz. Informieren Sie sich jetzt über die neuen Tanzkurse für Jugendliche und Erwachsene. Bitte bestellen Sie unseren Tanzplan.
-B) www.wohin-am-wochenende.de: Ins Aladin! Das neue Tanz-Restaurant! Erst gut essen, dann Tanzen - die ganze Nacht! Freitag - Samstag haben wir bis 4 Uhr geöffnet.
-Lösung: B
-[9] Sie möchten am Wochenende Fußball spielen.
-A) www.freizeitsport-freiburg.de: Basketball, Fitness, Fußball und mehr. Montags bis donnerstags 18.30 bis 21.00 Uhr im Südpark am See.
-B) www.fc-1897.de/training: Der Fußballklub FC 1897 sucht Spieler und Spielerinnen. Treffpunkt: Sportanlage Ulrichsplatz, sonntags 10-12 Uhr. Keine Anmeldung.
-Lösung: B
-[10] Sie studieren und möchten ein bisschen arbeiten.
-A) Tel.: 0176 - 55 44 321 (Unsere Bäckerei braucht Hilfe. Wir suchen eine junge Frau / einen jungen Mann im Verkauf am Samstag von 7 bis 11 Uhr.)
-B) Tel.: 0160 - 683 456 20 (Junge Verkäuferin / Junger Verkäufer gesucht für Zeitungskiosk. 42 Stunden / Woche, bei guter Bezahlung.)
-Lösung: A
-
-### Teil: lv3
+### Teil: lv1-02
 Format: truefalse
-Titel: Lesen, Teil 3
 Gruppe: Lesen
-Minuten: 5
+Titel: Übung 2
+Minuten: 0
 Punkte: 1
 Maximum: 5
-Anweisung: Lesen Sie die Texte und die Aufgaben 11 bis 15. Kreuzen Sie an: Richtig oder Falsch.
+Anweisung: Lesen Sie die beiden Texte und die Aufgaben 1 bis 5. Kreuzen Sie an: Richtig oder Falsch.
 Text:
-**Vor einem Blumenladen**
-Neu! Neu! Neu! Neu! Neu!
-Liebe Kunden!
-Ab sofort haben wir auch sonntags von 9-12 Uhr für Sie geöffnet!
+**Hallo Li**
+Hallo Li,
+danke für deine Mail. Dein Zug kommt hier in Hannover um 12.36 Uhr an. Ich bin ab 12.15 Uhr im Hauptbahnhof und warte auf dich vor der Auskunft.
+Du kannst mich den ganzen Vormittag auf meinem Handy (++49 173 62 205 59) erreichen.
+Deine Karin
 Aufgaben:
-[11] Am Sonntagvormittag bekommen Sie hier Blumen.
+[1] Lis Zug kommt nach halb eins an.
+Lösung: r
+[2] Karin wartet den ganzen Vormittag vor der Auskunft.
+Lösung: f
+Text:
+**Liebe Carmen**
+Liebe Carmen,
+am kommenden Sonntag habe ich Geburtstag. Ich möchte gerne mit dir feiern und lade dich herzlich zu meiner Party am Samstagabend ein.
+Wir fangen um 21 Uhr an. Ist das okay für dich? Es werden viele Leute da sein, die du auch kennst.
+Kannst du vielleicht einen Salat mitbringen? Und vergiss bitte nicht einen Pullover oder eine Jacke! Wir wollen nämlich draußen im Garten feiern.
+Ich freue mich sehr auf dich!
+Bis zum Wochenende
+Ralf
+Aufgaben:
+[3] Ralf hatte am letzten Wochenende Geburtstag.
+Lösung: f
+[4] Ralf hat nur zwei oder drei Leute eingeladen.
+Lösung: f
+[5] Die Party findet draußen statt.
+Lösung: r
+
+### Teil: lv1-03
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 3
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die beiden Texte und die Aufgaben 1 bis 5. Kreuzen Sie an: Richtig oder Falsch.
+Text:
+**Liebe Nora**
+Liebe Nora,
+ich bin nächste Woche drei Tage – von Montag bis Mittwoch – in Weimar. Ich muss viel arbeiten, habe viele Termine. Aber am Dienstag ab 18.00 Uhr habe ich Zeit. Können wir uns dann sehen?
+Ich wohne im Hotel „Drei Kronen" in der Parkstraße. Das Hotel hat ein sehr gutes Restaurant. Wir können dorthin gehen. Was denkst du? Ich freue mich auf dich!
+Alles Liebe
+Renate
+Aufgaben:
+[1] Renate macht in Weimar Urlaub.
+Lösung: f
+[2] Sie möchte am Abend mit Nora zusammen essen.
 Lösung: r
 Text:
-**Im Restaurant**
-Liebe Gäste,
-im nächsten Monat kocht bei uns ein Koch aus Kalkutta indische Spezialitäten.
-Wir freuen uns auf Ihren Besuch.
+**Liebe Sportsfreunde vom Verein 1896**
+Liebe Sportsfreunde vom Verein 1896,
+auch dieses Jahr wollen wir wieder unseren Sommerausflug machen. Wir fahren mit dem Bus an den Dümmer See. Dort wollen wir wandern und in einem netten Restaurant zu Mittag essen.
+Abfahrt ist am 27. Juni um 9 Uhr vor dem Vereinshaus. Die Busfahrt kostet 10 Euro pro Person; das Essen und die Getränke zahlt jeder allein.
+Liebe Freunde, bitte meldet euch bald an!
+Bis dann
+Heinz Paschke
 Aufgaben:
-[12] Jeden Montag bietet das Restaurant indisches Essen an.
+[3] Die Sportsfreunde machen jeden Sommer einen Ausflug.
+Lösung: r
+[4] Der Bus wartet vor dem Vereinshaus.
+Lösung: r
+[5] Für die Fahrt und das Essen bezahlt jeder 10 Euro.
 Lösung: f
+
+### Teil: lv1-04
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 4
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die beiden Texte und die Aufgaben 1 bis 5. Kreuzen Sie an: Richtig oder Falsch.
 Text:
-**Bei der Straßenbahn**
-Linie 8:
-Ab 1.5. nur bis Hauptbahnhof.
-Zur Weiterfahrt nach Huchting: Linie 1 oder Bus Nr. 53.
+**Hallo Christian**
+Hallo Christian,
+ich verstehe Deine Mail nicht! Hast Du nun eine neue Wohnung oder nicht? Und wie geht es mit dem Studium?
+Wir wollen uns am Samstag alle treffen und vielleicht im chinesischen Restaurant essen. Kommst Du mit? Michi und Carola sind auch dabei, und noch zwei Freunde von mir aus Berlin. Sie sind auch sehr nett.
+Ruf mich auf dem Handy an, okay?
+Matthias
 Aufgaben:
-[13] Es ist der 2. Mai, 21 Uhr. Sie können jetzt nicht zum Hauptbahnhof fahren.
-Lösung: f
-Text:
-**An einer Haustür**
-Sehr geehrte Interessenten,
-es gibt leider keine Besichtigungen mehr. Die 3-Zimmer-Wohnung im 3. Stock ist schon vermietet.
-Aufgaben:
-[14] Sie können die Wohnung nicht besichtigen.
+[1] Matthias will am Samstag mit seinen Freunden zusammen sein.
+Lösung: r
+[2] Christian soll Matthias anrufen.
 Lösung: r
 Text:
-**Im Bahnhof**
-Sehr geehrte Fahrgäste!
-Ab 22 Uhr sind unsere Schalter geschlossen. Fahrkarten bekommen Sie dann an unseren Automaten.
+**Liebe Frau Müller**
+Liebe Frau Müller,
+Sie wissen ja, ich wohne seit sechs Monaten in dem kleinen Apartment neben Ihrer Wohnung. Im Moment bin ich aber nicht in Leipzig, ich bin in London und mache ein Praktikum bei British Airways, das ist sehr wichtig für mein Studium.
+Am Wochenende kommt meine Schwester nach Leipzig und sie möchte in meiner Wohnung übernachten. Sie hat einen Schlüssel für die Wohnung, aber sie kann vielleicht das Gas nicht anmachen, und das Licht und Wasser usw. – da gibt es sicher ein paar Probleme! Können Sie ihr bitte helfen?
+Ich danke Ihnen, Sie sind wirklich sehr freundlich!
+Im Juli bin ich wieder in Leipzig, bis dahin ganz herzliche Grüße von
+Michaela Berger
 Aufgaben:
-[15] Ab 22 Uhr können Sie keine Fahrkarten mehr kaufen.
+[3] Michaela hat ein Zimmer in Frau Müllers Wohnung.
 Lösung: f
+[4] Michaela ist zurzeit in England.
+Lösung: r
+[5] Die Schwester will im Juli bei Michaela wohnen.
+Lösung: f
+
+### Teil: lv1-05
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 5
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die beiden Texte und die Aufgaben 1 bis 5. Kreuzen Sie an: Richtig oder Falsch.
+Text:
+**Hallo Jasmin**
+Hallo Jasmin,
+ich habe morgen frei! Ich kann schon am Mittag nach Berlin kommen und nicht erst abends spät. Kannst du mich abholen? Mein Zug kommt um 12.30 Uhr an. Am besten treffen wir uns vor dem Bahnhof, dann warte ich auf dich. Ist das okay für dich? Schreib mir bitte schnell oder ruf mich an.
+Bis morgen, ich freue mich.
+Roberto
+Aufgaben:
+[1] Roberto will Jasmin noch anrufen.
+Lösung: f
+[2] Roberto kommt am Abend nach Berlin.
+Lösung: f
+Text:
+**Liebe Claudia, lieber Holger**
+Liebe Claudia, lieber Holger,
+wir haben seit zwei Wochen endlich eine neue Wohnung, sehr hell und groß, 85 m². Und sie hat einen schönen Balkon (Südseite!).
+Am nächsten Samstag wollen wir eine kleine Party machen, so ab 18 Uhr. Viele Leute kommen, auch Leute aus dem Haus. Die Nachbarn hier sind sehr nett.
+Habt ihr auch Zeit und Lust? Dann könnt ihr euch die Wohnung ansehen. Wir machen auch ein kleines Essen. Ihr könnt gerne noch etwas zu trinken mitbringen und vielleicht auch Musik, unsere CDs sind nämlich noch in der alten Wohnung.
+Könnt ihr kommen? Schreibt uns doch eine kurze Mail. Ach ja, die Adresse ist Sandweg 12, 3. Stock.
+Dann hoffentlich bis Samstag, viele Grüße
+Karin + Tom
+Aufgaben:
+[3] Karin und Tom wohnen jetzt im Sandweg.
+Lösung: r
+[4] Sie kennen die Nachbarn noch nicht.
+Lösung: f
+[5] Die Gäste sollen Musik mitbringen.
+Lösung: r
+
+### Teil: lv1-06
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 6
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die beiden Texte und die Aufgaben 1 bis 5. Kreuzen Sie an: Richtig oder Falsch.
+Text:
+**Sehr geehrte Frau Helbich**
+Sehr geehrte Frau Helbich,
+ich möchte meine Tochter Andrea entschuldigen. Sie hat Fieber und kann nicht zur Schule kommen. Nächste Woche kann sie wieder kommen. Können Sie mir bitte die Hausaufgaben sagen – am besten per Mail?
+Danke und viele Grüße
+Julia Schmidt
+Aufgaben:
+[1] Das Kind von Frau Schmidt ist krank.
+Lösung: r
+[2] Frau Schmidt möchte die Hausaufgaben wissen.
+Lösung: r
+Text:
+**Hallo Robert**
+Hallo Robert,
+wie geht es dir? Du, Robert, wir möchten nächsten Sommer an der Nordsee Urlaub machen. Du warst doch letzten Sommer dort. Kannst du mir ein paar Tipps geben, kannst du mir etwas empfehlen? Vielleicht fahren wir auch ein paar Tage nach Hamburg. Kennst du gute Hotels? Welche Sehenswürdigkeiten gibt es dort?
+Wir können uns ja bald mal wieder treffen. Dann lade ich dich zu einem Glas Wein ein.
+Viele Grüße
+Fabian
+Aufgaben:
+[3] Fabian sucht Informationen über Urlaub an der Nordsee.
+Lösung: r
+[4] Robert und Fabian waren noch nie an der Nordsee.
+Lösung: f
+[5] Fabian möchte Robert in Hamburg treffen.
+Lösung: f
+
+### Teil: lv1-07
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 7
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die beiden Texte und die Aufgaben 1 bis 5. Kreuzen Sie an: Richtig oder Falsch.
+Text:
+**Hallo Kristina**
+Hallo Kristina,
+vielen Dank für die Einladung zu deiner Party. Ich komme gern. Du schreibst, ich kann bei dir übernachten. Vielen Dank! Dann muss ich kein Hotel suchen.
+Ich habe noch eine Frage: Kann ich auch meine Freundin Andrea mitbringen? Sie kommt aus Spanien und ist zurzeit bei mir auf Besuch. Schreib mir kurz! Danke und bis bald.
+Ich freue mich auf die Party!
+Liebe Grüße
+Maria
+Aufgaben:
+[1] Maria übernachtet im Hotel.
+Lösung: f
+[2] Maria hat Besuch aus Spanien.
+Lösung: r
+Text:
+**Lieber Herr Schmidt**
+Lieber Herr Schmidt,
+vielen Dank für Ihre Mail. Leider kann ich Sie am Montag, dem 18. März, um 15 Uhr nicht besuchen. Ich habe an diesem Tag noch andere Kundentermine.
+Wir können uns aber nach 19 Uhr treffen oder gerne auch am 19. März. An diesem Tag habe ich den ganzen Tag frei.
+Viele Grüße
+Georg Bauer
+Aufgaben:
+[3] Herr Bauer möchte Herrn Schmidt besuchen.
+Lösung: r
+[4] Herr Bauer hat am 18. März abends Zeit.
+Lösung: r
+[5] Herr Bauer hat am 19. März keine Termine.
+Lösung: r
+
+### Teil: lv1-08
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 8
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Anweisung: Lesen Sie die beiden Texte und die Aufgaben 1 bis 6. Kreuzen Sie an: Richtig oder Falsch.
+Text:
+**Sehr geehrter Herr Lohmann**
+Sehr geehrter Herr Lohmann,
+leider kann ich morgen, am Donnerstag, nicht zu unserem Termin nach Berlin kommen. Ich hatte im Urlaub einen Unfall mit dem Fahrrad. Mein Bein tut sehr weh und ich glaube, ich habe auch ein bisschen Fieber.
+Morgen muss ich deshalb zum Arzt gehen. Ich rufe Sie morgen Abend an. Wir können dann einen anderen Termin ausmachen.
+Viele Grüße
+Franz Bauer
+Aufgaben:
+[1] Herr Bauer ist krank.
+Lösung: r
+[2] Er hat am Donnerstag Urlaub.
+Lösung: f
+[3] Er war schon beim Arzt.
+Lösung: f
+Text:
+**Information der Arztpraxis Dr. Scholl**
+Liebe Patienten,
+wir sind im Urlaub. In dringenden Fällen können Sie den ärztlichen Notdienst anrufen: Tel.: 069 19292 oder unseren Kollegen Dr. Meisner: Tel. 069 45 99 23.
+Ab dem 1. September sind wir wieder für Sie da. Beachten Sie unsere neuen Öffnungszeiten: Mo.–Fr. von 8–18 Uhr, Mittagspause: 13–14 Uhr, am Mittwoch schließen wir bereits um 13 Uhr.
+Notfallsprechstunde ab 1. September auch samstagvormittags von 9–12 Uhr.
+Ihr Praxisteam
+Aufgaben:
+[4] Die Praxis ist geschlossen.
+Lösung: r
+[5] Dr. Scholl hat eine neue Telefonnummer.
+Lösung: f
+[6] Im September können Sie jeden Nachmittag zu Dr. Scholl gehen.
+Lösung: f
+
+### Teil: lv1-09
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 9
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die beiden Texte und die Aufgaben 1 bis 5. Kreuzen Sie an: Richtig oder Falsch.
+Text:
+**Die ABC-Sprachschule wird 10 Jahre alt**
+Liebe Kolleginnen und Kollegen,
+auch Sprachschulen haben Geburtstag! Deshalb möchte ich Sie gerne zu unserer „Geburtstagsfeier" einladen.
+Das Fest – mit Essen aus vielen Ländern – ist am Donnerstag, dem 15. Mai, ab 19.00 Uhr im Gasthof „Zur Linde". Ein Bus holt Sie um 17.30 Uhr vor dem Eingang unserer Schule ab und bringt Sie auch wieder zurück.
+Ich freue mich auf Ihr Kommen!
+Ihre Kerstin Steinborn
+Aufgaben:
+[1] Die Feier ist in der Sprachschule.
+Lösung: f
+[2] Die Feier ist am Wochenende.
+Lösung: f
+[3] Man muss mit dem Auto zum Fest fahren.
+Lösung: f
+Text:
+**Liebe Claudia**
+Liebe Claudia,
+herzlichen Dank für deine Einladung. Ich habe mich wirklich sehr darüber gefreut.
+Leider kann ich aber am Wochenende nicht kommen. Meine Schwester muss ab Mittwoch ins Krankenhaus und ich muss mich um ihre Kinder kümmern.
+Schade! Vielleicht das nächste Mal.
+Liebe Grüße
+Deine Lisa
+Aufgaben:
+[4] Lisa geht schon am Mittwoch zu Claudia.
+Lösung: f
+[5] Lisas Schwester ist krank.
+Lösung: r
+
+### Teil: lv1-10
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 10
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die beiden Texte und die Aufgaben 1 bis 5. Kreuzen Sie an: Richtig oder Falsch.
+Text:
+**Im Hausflur**
+Sehr geehrte Mieter,
+am Freitag, dem 02.04., kommt die Firma Elektro Schneider und baut im Keller und Treppenhaus neue Lampen ein. Wir möchten Sie darüber informieren, dass es dann in der Zeit von 8 bis 11 Uhr und von 13 bis 15.30 Uhr im ganzen Haus keinen Strom gibt.
+Mit freundlichen Grüßen
+Ihre Hausverwaltung
+Aufgaben:
+[1] Die Firma prüft alle Lampen im Haus.
+Lösung: f
+[2] Die Mieter können um 14 Uhr den Elektroherd nicht benutzen.
+Lösung: r
+Text:
+**Am Eingang des Einwohnermeldeamts**
+Das Einwohnermeldeamt macht am Montag, dem 19. Oktober, eine Mitarbeiterversammlung. Aus diesem Grund bleibt das Amt an diesem Tag nachmittags geschlossen. Wir bitten um Ihr Verständnis.
+Ab Dienstag, dem 20. Oktober, stehen wir Ihnen wieder den ganzen Tag zur Verfügung.
+Aufgaben:
+[3] Das Einwohnermeldeamt ist am 19. Oktober den ganzen Tag geschlossen.
+Lösung: f
+[4] Die Mitarbeiter arbeiten an diesem Montag nur vormittags.
+Lösung: f
+[5] Am Dienstag ist das Einwohnermeldeamt geöffnet.
+Lösung: r
+
 
 ### Teil: s1
 Format: writing
@@ -152,6 +398,7 @@ Punkt: (2) Davon Kinder: 2
 Punkt: (3) PLZ, Urlaubsort: Seeheim
 Punkt: (4) Zahlungsweise (Bar oder Kreditkarte): Bar
 Punkt: (5) Reisetermin: Sonntag
+
 ### Teil: s2
 Format: writing
 Titel: Schreiben, Teil 2
@@ -173,4 +420,3 @@ Mindestwoerter: 30
 Punkt: Warum schreiben Sie?
 Punkt: Uhrzeit?
 Punkt: Schlüssel?
-

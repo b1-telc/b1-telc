@@ -4,4 +4,4 @@
 
 | Ordner | Name | Aufgaben | Minuten | Punkte |
 |---|---|---|---|---|
-| [modell-01](modell-01/) | **WINFRIED** | 17 | 45 | 30 |
+| [modell-01](modell-01/) | **Goethe A1 — Üben** | 53 | 20 | 65 |
