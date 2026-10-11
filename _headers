@@ -8,6 +8,28 @@
 /manifest.webmanifest
   Cache-Control: public, max-age=0, must-revalidate
 
+# ★ كود التطبيق والتنسيق: لازم يتفحصوا كل مرة كمان. بلا هالقاعدة
+#   المتصفّح/Cloudflare بيخزّنهن، فبعد كل نشر الطالب بيضل على نسخة
+#   قديمة — app.js قديم مع محتوى جديد = شاشة مكسورة. أسماء الملفّات
+#   ثابتة (بلا hash)، فالتحقّق كل مرة هو الطريق الآمن.
+/assets/app.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/assets/style.css
+  Cache-Control: public, max-age=0, must-revalidate
+
+/assets/api.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/assets/i18n.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/assets/config.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
 # الأيقونات ما بتتغيّر
 /assets/icons/*
   Cache-Control: public, max-age=31536000, immutable
