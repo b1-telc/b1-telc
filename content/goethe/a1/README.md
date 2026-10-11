@@ -4,4 +4,4 @@
 
 | Ordner | Name | Aufgaben | Minuten | Punkte |
 |---|---|---|---|---|
-| [modell-01](modell-01/) | **Goethe A1 — Üben** | 68 | 20 | 75 |
+| [modell-01](modell-01/) | **Goethe A1 — Üben** | 103 | 20 | 110 |

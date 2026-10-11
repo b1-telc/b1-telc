@@ -10,8 +10,8 @@ Teile: lv1-01, lv1-02, lv1-03, lv1-04, lv1-05, lv1-06, lv1-07, lv1-08, lv1-09, l
 ## Block: lv2
 Titel: Lesen · Teil 2
 Minuten: 0
-Punkte: 10
-Teile: lv2-01, lv2-02
+Punkte: 45
+Teile: lv2-01, lv2-02, lv2-03, lv2-04, lv2-05, lv2-06, lv2-07, lv2-08, lv2-09
 
 ## Block: s1
 Titel: Schreiben · Teil 1 (Formular)
@@ -474,6 +474,216 @@ Lösung: a
 [10] Sie sind in Wiesbaden und möchten mit dem Zug am Mittag in Hamburg sein.
 A) www.reiseauskunft.bahn.de — ab Hamburg 12.18 → an Wiesbaden 16.52 · Dauer 4:34 · 1× Umsteigen · ICE, S
 B) www.reiseauskunft.bahn.de — ab Wiesbaden 08.09 → an Hamburg 12.40 · Dauer 4:31 · 1× Umsteigen · S, ICE
+Lösung: b
+
+### Teil: lv2-03
+Format: mc
+Gruppe: Lesen
+Titel: Übung 3
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die Texte und die Aufgaben 6 bis 10. Wo finden Sie Informationen? Kreuzen Sie an: a oder b.
+Aufgaben:
+[6] Sie studieren in Frankfurt und möchten eine Wohnung mieten.
+A) www.goetheuni-frankfurt.de — Wohnen in Frankfurt. Wohngemeinschaften · Plätze im Studentenwohnheim · Ein- und Zwei-Zimmer-Wohnungen
+B) www.agentur-spiess.com — Agentur Spiess. Wir finden für Sie ein neues Zuhause. Günstige Kaufangebote: Häuser · Wohnungen · Apartments
+Lösung: a
+[7] Wie kommt man vom Hamburger Bahnhof zum Hamburger Flughafen?
+A) www.flughafen-service.de — Flughafen Hamburg. Unsere Service-Leistungen: Flughafenhotel · Restaurants · Einkaufen / Banken / Geldwechsel · Besucherführungen
+B) www.hh-flughafen.de — Abflug · Ankunft · Parken · Flughafenbus → Hamburg Hauptbahnhof, Hamburg Altona
+Lösung: b
+[8] Sie suchen ein Angebot für Ihre Urlaubsreise.
+A) www.travel-muenchen.de — Der Reiseladen bietet an: Heute Abend aktuell! „Meine schönste Reise" – unsere Mitarbeiter erzählen von ihren Expeditionen! Um 20 Uhr im Laden.
+B) www.lastminute.de — Spanien, Abflug 27.8. ab Hannover, Hotel Soller 370,– Euro/Woche mit Halbpension. Türkei, Abflug 28.8. ab Hamburg, Club Side 465,– Euro/Woche
+Lösung: b
+[9] Sie suchen eine Wohnung für Ihren Urlaub.
+A) www.st-peter-ording.de — Schöne 3-Zimmerwohnung im Zentrum von St. Peter Ording. 5 Minuten zum Meer. 450 € kalt + Nebenkosten. Keine Küche.
+B) www.ferienandernordsee.de — Ferienhäuser und -wohnungen. Alle Größen. Das ganze Jahr. Auch auf den Inseln: Sylt, Juist, Amrum, Langeoog
+Lösung: b
+[10] Sie arbeiten in Deutschland. In Ihrer Freizeit möchten Sie Fußball spielen.
+A) www.goal.de — Aktuelle Informationen aus der Welt des Fußballs. Hier finden Sie alles über die Spiele · die Fußballstars · die Ergebnisse · die Mannschaften
+B) www.vereinssport.de — Welcher Verein für meinen Sport? Klicken Sie an: Tennis / Squash · Leichtathletik · Radsport · Fußball / Basketball · Schwimmen / Wasserball
+Lösung: b
+
+### Teil: lv2-04
+Format: mc
+Gruppe: Lesen
+Titel: Übung 4
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die Texte und die Aufgaben 6 bis 10. Wo finden Sie Informationen? Kreuzen Sie an: a oder b.
+Aufgaben:
+[6] Sie suchen ein billiges Fahrrad.
+A) www.guenstiger-online.de — Fahrrad, rot, 2 Jahre alt, 3 Gänge, für nur 60 EURO zu verkaufen.
+B) www.kaufboerse.de — Verkaufe: billigen Motorroller, 200 EURO, außerdem Fahrradtaschen, 30 EURO das Stück.
+Lösung: a
+[7] Sie wollen in Deutschland Urlaub machen und auch weiter Deutsch lernen.
+A) www.urlaub-zuhause.de — Urlaub in Deutschland: Attraktive Angebote für die ganze Familie. Ferien auf dem Bauernhof: Lernen Sie die Natur kennen.
+B) www.sprachzentrum-berlin.de — Feriensprachkurse in der deutschen Hauptstadt im Sommer und im Herbst mit großem kulturellem Angebot. Alle Stufen
+Lösung: b
+[8] Sie möchten in Deutschland auf dem Rhein eine Schiffsreise machen und auch die Stadt Rüdesheim besuchen.
+A) www.bahn.de — Tagesfahrten mit dem Zug. Besuchen Sie Rüdesheim, 49 Euro pro Person, Wanderung durch die Weinberge und andere Aktivitäten
+B) www.hessen-tourismus.de — Rheinische Party auf dem Wasser. Abendbuffet, Brunchbuffet, Besuch der Stadt Rüdesheim, Abendprogramm
+Lösung: b
+[9] Sie suchen für Ihren Freund eine Arbeit. Ihr Freund kann nur am Wochenende arbeiten. Er hat keinen Führerschein.
+A) Tel.: 06191/13 55 — Fahrer/-in gesucht, samstags und sonntags, gute Bezahlung, einfache Arbeit.
+B) Tel.: 06191/24 30 — Gesucht: Mitarbeiter in der Großküche eines Restaurants, Bezahlung nach Stunden, Stunde: 6 EURO.
+Lösung: b
+[10] Sie möchten mit Freunden am Sonntagmittag Chinesisch essen gehen. Wohin gehen Sie?
+A) Restaurant Asia-Land — Chinesische und indonesische Spezialitäten. Montag – Ruhetag. Öffnungszeiten von 11.30 – 22 Uhr. Tel.: 0611/56 88 92
+B) Restaurant Zum Lotusgarten — China-Restaurant. Täglich von 18 – 23 Uhr. Großer Garten. Tel.: 0611/23 55 91
+Lösung: a
+
+### Teil: lv2-05
+Format: mc
+Gruppe: Lesen
+Titel: Übung 5
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die Texte und die Aufgaben 6 bis 10. Wo finden Sie Informationen? Kreuzen Sie an: a oder b.
+Aufgaben:
+[6] Sie möchten Urlaub am Meer machen.
+A) www.staedtereisen.de — Ferien in deutschen Städten. Lernen Sie Berlin, München, Köln und andere Städte in Deutschland kennen. Pauschalangebote mit Hotel und Reiseführer
+B) www.familienferien.de — Familienferien in der Natur an der Nordsee und Ostsee. Wassersport, Schwimmkurse und vieles mehr.
+Lösung: b
+[7] Sie suchen einen Fußballverein.
+A) www.fge.de — Werden Sie Mitglied in unserem Verein. Alle Sportarten · Alle Altersstufen · Jahresbeitrag 12 Euro pro Monat
+B) www.ballania.de — Bei uns können Sie alles machen, was mit Wassersport zu tun hat. Wasserball, Surfen, Wassergymnastik und vieles mehr. Einfach Mitglied werden.
+Lösung: a
+[8] Sie sind in Frankfurt und möchten am Abend in Wien sein. Sie möchten mit dem Zug fahren.
+A) www.reiseauskunft-bahn.de — Frankfurt ab 12.21 → Wien an 19.48 · Dauer 7:20 · Gleis 5
+B) www.reiseportal.de — Frankfurt ab 23.00 → Wien an 09.38 · Dauer 10:38 · Gleis 6
+Lösung: a
+[9] Sie suchen einen billigen Fernseher.
+A) www.tv-und-partner.de — Günstig zu verkaufen: DVD-Recorder, 1 Jahr Garantie, mit diesem Gerät können Sie ohne Probleme Ihre Lieblingsprogramme im Fernsehen aufnehmen.
+B) www.hifi-und-co.com — Neueröffnung mit super Angeboten. Farbfernseher HD-tauglich zu günstigen Preisen
+Lösung: b
+[10] Ihr Freund möchte Deutsch lernen. Er kann noch kein Deutsch.
+A) www.vhs.de — Nächste Woche beginnen unsere Anfängerkurse Deutsch als Fremdsprache. Schnell anmelden – es sind noch wenige Plätze frei.
+B) www.sprachschule-mitte.de — Deutsch für den Beruf – schriftliche Geschäftskorrespondenz. Haben Sie schon Deutsch gelernt? (Stufe A2 oder B1?) Dann ist dieser Kurs der richtige für Sie!
+Lösung: a
+
+### Teil: lv2-06
+Format: mc
+Gruppe: Lesen
+Titel: Übung 6
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die Texte und die Aufgaben 6 bis 10. Wo finden Sie Informationen? Kreuzen Sie an: a oder b.
+Aufgaben:
+[6] Sie suchen Informationen über München.
+A) www.muenchen-outdoor.de — Ihr Outdoor-Laden jetzt auch in München. Alles für Ihren Urlaub. Campingsachen, Schlafsäcke, Rucksäcke, Fahrräder
+B) www.meine-stadt.de — Klicken Sie auf eine Stadt in Deutschland. Klicken Sie dann auf Hotels · Sehenswürdigkeiten · Was ist los in …
+Lösung: b
+[7] Sie möchten in einem Restaurant Fisch essen.
+A) www.viva-andaluz.com — Essen in angenehmer Atmosphäre. Fleisch- und Fischspezialitäten aus dem Mittelmeerraum. Öffnungszeiten täglich 18 – 24 Uhr
+B) www.tapas-co.de — Tapas und Co. Lebensmittelimport aus Spanien und Südamerika. Fische und Meeresfrüchte. Auch online bestellen
+Lösung: a
+[8] Sie machen im Sommer einen Deutschkurs in Berlin. Sie suchen ein billiges Zimmer.
+A) www.wohnungsfinder.de — Supergünstige 1-Zimmer-Wohnungen und Apartments überall in Deutschland. Angebote gibt es jeden Monat.
+B) www.wohnungsboerse.de — Suche dringend für Juli kleine Wohnung oder Zimmer in Berlin – gerne auch möbliert. Bitte rufen Sie mich an: 0033-1-567 88 88
+Lösung: a
+[9] Sie suchen eine Arbeit. Sie können nicht Auto fahren.
+A) www.euro-pizza.de — Euro-Pizza sucht Fahrer für die Auslieferung von Pizzen und Getränken. Ab sofort
+B) www.praxis-markt.de — Praxis-Markt sucht ab sofort Verkäufer/Verkäuferinnen. Arbeitszeiten flexibel · gute Bezahlung
+Lösung: b
+[10] Sie suchen einen neuen Kühlschrank. Er soll nicht mehr als 300 Euro kosten.
+A) www.alles-fuer-die-kueche.de — Superangebote von Ihrem Küchenspezialisten. Alles, was Sie in der Küche brauchen, zu günstigen Preisen.
+B) www.kuechenchef.de — Keine Idee, was Sie kochen können? Mehr als 300 Kochrezepte auf dieser Seite. Einfach ausprobieren.
+Lösung: a
+
+### Teil: lv2-07
+Format: mc
+Gruppe: Lesen
+Titel: Übung 7
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die Texte und die Aufgaben 6 bis 10. Wo finden Sie Informationen? Kreuzen Sie an: a oder b.
+Aufgaben:
+[6] Sie möchten am Sonntagmittag essen gehen und draußen sitzen.
+A) www.zur-muehle.de — Restaurant Zur Mühle. Täglich wechselnde Mahlzeiten. Essen und Trinken im Garten. Öffnungszeiten täglich 19 – 24 Uhr
+B) www.zum-schwan.de — Zum Schwan – Speiserestaurant. Großer Garten mitten in der Natur. 12 – 15 Uhr günstiger Mittagstisch
+Lösung: b
+[7] Sie möchten ein neues Fahrrad kaufen.
+A) www.fahrrad-bauer.com — Fahrradmechanik Bauer. Fahrradreparaturen – professionell und günstig.
+B) www.bike-und-co.de — Bike & Co – Fahrräder in allen Preisklassen. Neu und gebraucht · Auch Sporträder · Wir kaufen auch Ihr altes Rad
+Lösung: b
+[8] Sie möchten am Wochenende tanzen gehen.
+A) www.weber-tanz.de — Tanzschule Weber. Sie wollen tanzen lernen? Von Standard bis Latin / auch Einzelkurse. Kurse Mo – Fr ab 19 Uhr. Samstags Kurse für Anfänger
+B) www.velvet.de — Discoparty im Velvet-Club. Wie jeden Samstag auch diese Woche die Ü30 Party – für alle, die Spaß haben wollen
+Lösung: b
+[9] Sie möchten mit drei Freunden Hessen kennenlernen.
+A) www.deutsche-bahn.de — Hessenticket jetzt für nur 31 Euro. Bis zu 5 Personen können für 31 Euro einen Tag durch ganz Hessen fahren. So viel Sie wollen – mit Bus und Bahn
+B) www.ticketshop.com — Ticketshop Event – jetzt auch in Hessen. Jetzt im Vorverkauf Karten für Musicals, Shows, Konzerte. Bequem von zu Hause bestellen
+Lösung: a
+[10] Es ist Samstag. Ihr Computer ist kaputt. Sie suchen schnell Hilfe.
+A) www.compuservice.de — Probleme mit Ihrem Computer? Wir reparieren Ihren Computer schnell und zuverlässig. 24-Stunden-Service.
+B) www.techniker.de — Wir kaufen Ihre Altgeräte: von Toastern bis zu Computern, von Kühlschränken bis zu Smartphones. Samstags bis 20 Uhr geöffnet.
+Lösung: a
+
+### Teil: lv2-08
+Format: mc
+Gruppe: Lesen
+Titel: Übung 8
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die Texte und die Aufgaben 6 bis 10. Welche Anzeige ist interessant für Sie? Markieren Sie a oder b.
+Aufgaben:
+[6] Sie haben noch einen alten Schrank, den Sie nicht mehr brauchen.
+A) Telefon 069 / 17 34 44 — Abholservice. Wir holen ab: Möbel, Kleider, Werkzeug, Elektrogeräte, Fahrräder. Bitte werfen Sie nichts weg – rufen Sie uns an!
+B) Telefon 069 / 23 54 76 — Rotes Kreuz. Am Donnerstag holen wir gerne bei Ihnen ab: Kleidung, Schuhe, Spielwaren und Bücher.
+Lösung: a
+[7] Sie möchten frisches Obst und Gemüse kaufen. Sie arbeiten den ganzen Tag und haben wenig Zeit zum Einkaufen.
+A) Telefon 069 / 21 76 98 — Neueröffnung! Bauernhof Obstler. Jeden Vormittag geöffnet von 9 – 12 Uhr. Kostenlose Preisliste
+B) Telefon 06237 / 34 67 89 — Grüne Kiste. Eier von gesunden Hühnern, frische Tomaten, Kartoffeln und vieles mehr. Alles aus kontrolliert biologischem Anbau – wir liefern nach Hause.
+Lösung: b
+[8] Sie haben Probleme mit Ihrem Computer.
+A) Telefon 069 / 15 12 34 — Neuer Computer und kein Durchblick? E-Mail und Internet – und keine Nerven mehr? PC-Doktor hilft schnell und kommt sogar ins Haus!
+B) Telefon 069 / 36 78 09 — Computer-Markt. Kompetente Beratung beim PC-Kauf. Wir bieten Ihnen neue und gebrauchte Geräte zu Spitzenpreisen.
+Lösung: a
+[9] Sie suchen eine Wohnung in Köln für den Sommer.
+A) Telefon 06232 / 56 82 — Kleines Häuschen in Köln, ruhige Lage, S-Bahn-Station, ab sofort zu vermieten.
+B) Telefon 069 / 17 17 18 — Wer zieht von Juni bis August in unser schönes Haus in Köln und kümmert sich um Garten und Katze?
+Lösung: b
+[10] Sie sind Koch und suchen eine neue Stelle.
+A) Telefon 06221 / 19 20 35 — Koch / Köchin. Möchten Sie in einer Ferienpension im Schwarzwald arbeiten? Dann melden Sie sich bitte.
+B) Telefon 06221 / 44 33 21 — Koch, selbstständig, mit langjähriger Erfahrung, sucht neue Angebote, auch gerne im Ausland.
+Lösung: a
+
+### Teil: lv2-09
+Format: mc
+Gruppe: Lesen
+Titel: Übung 9
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die Texte und die Aufgaben 6 bis 10. Welche Anzeige passt? Markieren Sie a oder b.
+Aufgaben:
+[6] Sie fahren jeden Tag mit dem Auto nach Berlin zur Arbeit und suchen Mitfahrer.
+A) Telefon 040 / 445081 — Suche Mitfahrer nach Berlin am 22.03., ca. 7.30 Uhr, Rückfahrt ca. 15 Uhr am 23.03.
+B) Telefon 07296 / 235455 — Ich bin Ihr neuer Mitfahrer nach Berlin: Mo – Fr, 8 – 17.30 Uhr, Benzinkostenbeteiligung
+Lösung: b
+[7] Sie möchten neue Leute kennenlernen.
+A) www.dr-horch.de — Sie reden, ich höre Ihnen zu! Termine auch am Abend · Alle Krankenversicherungen · Denken Sie an Ihre Karte!
+B) www.kaffeklatsch-hh.de — Auch nicht gern allein? Nette Leute zum Kaffee treffen · Di/Mi/Fr, ab 15 Uhr · Weitere Informationen bei uns im Internet.
+Lösung: b
+[8] Ihre Kinder (7 und 9 Jahre) machen gern Sport und möchten in einen Verein eintreten.
+A) Telefon 089 / 5566228 — FC Laim 1880 sucht junge Talente! Kostenloses Probetraining für junge Spieler von 5 bis 15: Mi. – Fr. 16.30 – 18 Uhr.
+B) Telefon 089 / 4441234 — Fußballclub (Kreisklasse B) bietet: tolle Rasenplätze, Supertrainer und mehr. Wir erwarten: Einsatz, Zuverlässigkeit, fertige Spielerpersönlichkeiten (Jugendliche oder älter).
+Lösung: a
+[9] Sie suchen einen Job für den Nachmittag.
+A) Telefon 0711 / 656565 — Arbeiten, wo und wann Sie mögen, auch Teilzeit, im In- und Ausland.
+B) Telefon 0711 / 9080855 — Bieten interessante und gut bezahlte Teilzeitarbeit; Mo – Fr von 8 – 12 Uhr. Rufen Sie uns noch heute an.
+Lösung: a
+[10] Sie möchten Ihre alte Küche verkaufen.
+A) Telefon 0541 / 37489 — Suche ständig alte Schränke, Tische, Sessel, auch kleine Elektrogeräte. Zahle Höchstpreise. An- und Verkauf Schneider
+B) Telefon 0511 / 3789675 — Hilfe! Wir, 2 Studenten, suchen für unsere WG dringend alles für die Küche. Preis VB, wir holen die Sachen natürlich ab!
 Lösung: b
 
 ### Teil: s1
