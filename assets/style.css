@@ -172,6 +172,14 @@ h3{font-size:1em; margin:0 0 4px}
 .opt .k{font-weight:700; color:var(--brand-dark); flex:none}
 .opt.correct{border-color:var(--ok); background:var(--ok-soft)}
 .opt.wrong{border-color:var(--bad); background:var(--bad-soft)}
+
+/* Üben nach Abschnitt: Antworten anzeigen (grün/rot) */
+.pgroup{margin-bottom:8px}
+.reveal{width:100%; margin:4px 0 20px}
+.reveal.done{border-color:var(--ok); color:var(--ok); cursor:default}
+.key.correct{border-color:var(--ok); background:var(--ok-soft); color:var(--ok)}
+.key.wrong{border-color:var(--bad); background:var(--bad-soft); color:var(--bad)}
+.locked{pointer-events:none}
 select,textarea{
   font-family:inherit; font-size:.95em; color:var(--ink); background:var(--card);
   border:1.5px solid var(--line); border-radius:10px; padding:10px 12px; width:100%;

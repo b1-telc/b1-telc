@@ -206,6 +206,12 @@ elBack.onclick = () => {
     if (S.run && S.run.drill) screenHome(); else screenModell(S.modell);
   } else if (S.view === 'resource'){
     screenResources();
+  } else if (S.view === 'praxis'){
+    // zurück zur Teilliste der Fertigkeit
+    const b = S.modell && S.modell.blocks.find(x => x.id === S.praxisSkill);
+    if (S.modell && b) screenSkill(S.modell, b); else screenHome();
+  } else if (S.view === 'skill'){
+    screenHome();
   } else {
     screenHome();
   }
@@ -376,7 +382,17 @@ function screenHome(){
       ? S.catalog
       : S.index.modelle.map(m => ({ ...m, open: true }));
 
-    const cards = list.map((m, i) => {
+    /* Goethe: nach Fertigkeit üben — die Blöcke des (einen) Tests sind die
+       Bereiche (Lesen, Hören …), nicht mehr einzelne Modelltests. */
+    const praxisBlocks = isPraxis() && S.index.modelle[0] && S.index.modelle[0].blocks;
+    const cards = praxisBlocks && praxisBlocks.length
+      ? praxisBlocks.map(b => `<button class="tile" data-skill="${esc(b.id)}">
+          <span class="n">${skillIcon(b.title)}</span>
+          <span class="grow"><span style="font-weight:600">${esc(b.title)}</span>
+            <div class="meta">${plural((b.parts || []).length, 'nPart')}</div></span>
+          <span class="chev">›</span>
+        </button>`).join('')
+      : list.map((m, i) => {
       const frei = m.open !== false && open.has(m.id);
       return `<button class="tile${frei ? '' : ' locked'}"
         ${frei ? `data-id="${esc(m.id)}"` : 'disabled'}>
@@ -428,7 +444,9 @@ function screenHome(){
       const h  = ms == null ? null : Math.floor(ms / 3600000);
       const soon = h != null && h < 24 * 7;
       const only = S.sub && S.sub.scope && S.sub.scope[l.id];
-      const n = only ? only.length
+      // Goethe: نظام أقسام مو نماذج — فما منعدّ «نماذج»
+      const n = (l.id === S.level && isPraxis()) ? 0
+              : only ? only.length
               : (l.id === S.level ? (S.index && S.index.modelle || []).length : 0);
       return `<button class="abo${l.id === S.level ? ' on' : ''}${
         soon ? ' soon' : ''}" data-lvl="${esc(l.id)}"
@@ -460,8 +478,9 @@ function screenHome(){
       ${setbarHTML()}
       <h1>${esc(t('welcome'))}</h1>
       ${abo}
-      <p class="sub">${lvl ? esc(t('homeIntro', { level: name(lvl) }))
-                            : esc(t('homeIntroPlain'))}</p>
+      <p class="sub">${isPraxis() ? esc(t('praxisHome'))
+        : lvl ? esc(t('homeIntro', { level: name(lvl) }))
+              : esc(t('homeIntroPlain'))}</p>
       <button class="tile" id="resbtn">
         <span class="n">📖</span>
         <span class="grow"><span style="font-weight:600">${esc(t('material'))}</span>
@@ -491,6 +510,8 @@ function screenHome(){
     wireSetbar();
     app.querySelectorAll('.tile[data-id]').forEach(b =>
       b.onclick = () => openModell(b.dataset.id));
+    app.querySelectorAll('.tile[data-skill]').forEach(b =>
+      b.onclick = () => openSkill(b.dataset.skill));
     app.querySelectorAll('[data-lvl]').forEach(b =>
       b.onclick = () => switchLevel(b.dataset.lvl));
     const addc = document.getElementById('addcode');
@@ -558,6 +579,184 @@ function showResource(r){
     app.innerHTML = `<h1>${esc(r.title)}</h1>
       <div class="card readable">${html || `<p class="sub">${esc(t('empty'))}</p>`}</div>`;
   });
+}
+
+/* ============ Üben nach Abschnitt (Goethe) ============
+   Statt ganzer Modelltests übt man hier Fertigkeit für Fertigkeit:
+   Startseite → Lesen/Hören/Schreiben/Sprechen → Teil → alle Aufgaben
+   des Teils, ohne Zeit und ohne Punkte. Der Stand wird gespeichert.
+   Für jeden Text gibt es einen Knopf „Antworten anzeigen": die Lösungen
+   kommen erst dann vom Server (reveal_answers) und färben grün/rot —
+   der Schlüssel bleibt bis dahin geschützt wie überall sonst.
+
+   Nur für Goethe aktiv; telc/ÖSD/DTZ bleiben beim Modelltest-System. */
+const isPraxis = () => /^goethe/.test(S.level || '');
+const skillIcon = title => /hör/i.test(title) ? '🎧'
+  : /schreib/i.test(title) ? '✍️' : /sprech/i.test(title) ? '🗣️' : '📖';
+
+/* Der (einzige) Goethe-Test, voll geladen und gecacht. */
+async function praxisTest(){
+  const first = S.index && S.index.modelle && S.index.modelle[0];
+  return first ? loadModell(first.id) : null;
+}
+
+async function openSkill(blockId){
+  let m;
+  try { m = await praxisTest(); } catch { m = null; }
+  if (!m) return toast(t('loadFailed'));
+  S.modell = m;
+  const b = m.blocks.find(x => x.id === blockId);
+  if (!b) return toast(t('loadFailed'));
+  screenSkill(m, b);
+}
+
+function screenSkill(m, b){
+  stopTimer();
+  go('skill', () => {
+    S.praxisSkill = b.id;
+    const prog  = (load('b1.praxis', {})[S.level]) || {};
+    const parts = b.parts.map(id => m.sections.find(s => s.id === id)).filter(Boolean);
+    app.innerHTML = `
+      <h1>${esc(b.title)}</h1>
+      <p class="sub">${esc(t('praxisPick'))}</p>
+      ${parts.map(p => {
+        const done = prog[p.id] ? Object.keys(prog[p.id]).filter(k =>
+          String(prog[p.id][k] ?? '').trim() !== '').length : 0;
+        const meta = [plural(p.items.length, 'nTask'),
+          done ? t('praxisDone', { n: done, total: p.items.length }) : '']
+          .filter(Boolean).join(' · ');
+        return `<div class="blockcard"><button class="tile" data-part="${esc(p.id)}">
+          <span class="grow"><span style="font-weight:600">${esc(p.title)}</span>
+            <div class="meta">${esc(meta)}</div></span>
+          <span class="chev">›</span></button></div>`;
+      }).join('')}`;
+    app.querySelectorAll('[data-part]').forEach(x =>
+      x.onclick = () => screenPractice(m, x.dataset.part));
+  });
+}
+
+/* Stand pro Teil: { [level]: { [partId]: { itemId: Antwort } } } */
+function praxisSave(){
+  const all = load('b1.praxis', {});
+  (all[S.level] ||= {})[S.praxisPart] = { ...S.answers };
+  save('b1.praxis', all);
+}
+
+/* Die Texte und Aufgaben eines Teils in Gruppen: jeder Text mit seinen
+   eigenen Aufgaben und einem eigenen „Antworten anzeigen"-Knopf. */
+function praxisGroups(sec){
+  const items = sec.items || [], ps = sec.passages || [];
+  if (!ps.length) return [{ texts: [], items }];
+  const groups = [];
+  let pi = 0, g = { texts: [], items: [] };
+  const flush = upto => {
+    while (pi < ps.length && (ps[pi].before ?? 0) <= upto){
+      if (g.items.length){ groups.push(g); g = { texts: [], items: [] }; }
+      g.texts.push(ps[pi++]);
+    }
+  };
+  items.forEach((it, idx) => { flush(idx); g.items.push(it); });
+  flush(items.length);
+  if (g.texts.length || g.items.length) groups.push(g);
+  return groups;
+}
+
+function praxisBody(sec){
+  const passHTML = p => `<div class="passage">
+      ${p.title ? `<h3>${esc(p.title)}</h3>` : ''}
+      ${(p.paragraphs || []).map(x =>
+        `<p${x.b ? ' class="strong"' : ''}>${esc(x.t)}</p>`).join('')}
+    </div>`;
+  const gradable = sec.format !== 'writing';
+  return renderAudio(sec) + renderBank(sec) + praxisGroups(sec).map((g, gi) => {
+    const ids = g.items.map(it => it.id);
+    return `<div class="pgroup" data-group="${gi}">
+      ${g.texts.map(passHTML).join('')}
+      ${g.items.map(it => renderItem(sec, it)).join('')}
+      ${gradable && ids.length ? `<button class="btn ghost reveal" data-reveal="${gi}"
+        data-ids="${esc(ids.join(','))}" disabled>${esc(t('reveal'))}</button>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function screenPractice(m, partId){
+  const sec = m.sections.find(s => s.id === partId);
+  if (!sec) return;
+  stopTimer();
+  S.modell = m;
+  S.praxisPart = partId;
+  S.run = { id: partId, drill: true, parts: [sec], title: sec.title, maxPoints: 0 };
+  const saved = (load('b1.praxis', {})[S.level] || {})[partId] || {};
+  S.answers = { ...saved };
+  S.dropped = {}; S.checks = {};
+  go('praxis', () => {
+    app.innerHTML = `
+      <h1>${esc(sec.title)}</h1>
+      ${sec.instruction ? `<div class="instr">${esc(sec.instruction)}</div>` : ''}
+      <p class="sub">${esc(t('praxisHint'))}</p>
+      <section class="part" id="part-${esc(sec.id)}">${praxisBody(sec)}</section>`;
+    bindInputs(sec);
+    praxisBindReveal(sec);
+    praxisSyncButtons();
+  });
+}
+
+/* Knopf ist erst aktiv, wenn alle Aufgaben des Textes beantwortet sind. */
+function praxisSyncButtons(){
+  document.querySelectorAll('[data-reveal]').forEach(btn => {
+    if (btn.classList.contains('done')) return;
+    const ids = btn.dataset.ids.split(',').filter(Boolean);
+    btn.disabled = !ids.every(id => {
+      const v = S.answers[id];
+      return v !== undefined && String(v).trim() !== '';
+    });
+  });
+}
+
+function praxisBindReveal(sec){
+  document.querySelectorAll('[data-reveal]').forEach(btn => {
+    btn.onclick = async () => {
+      const ids = btn.dataset.ids.split(',').filter(Boolean);
+      btn.disabled = true;
+      const was = btn.textContent;
+      btn.textContent = t('revealing');
+      let res;
+      try { res = await API.reveal(ids); } catch { res = null; }
+      if (!res || !res.ok){
+        btn.textContent = was; btn.disabled = false;
+        return void toast(t('revealFailed'));
+      }
+      const by = {};
+      (res.answers || []).forEach(a => { if (a.id) by[a.id] = a; });
+      ids.forEach(id => praxisColor(sec, id, by[id]));
+      btn.textContent = t('revealed');
+      btn.classList.add('done');
+      // Nach dem Aufdecken bleibt die Gruppe stehen — kein Ändern mehr
+      const grp = btn.closest('.pgroup');
+      if (grp) grp.querySelectorAll('[data-opt],[data-key]')
+        .forEach(el => el.classList.add('locked'));
+    };
+  });
+}
+
+/* Grün = richtig, Rot = die falsch gewählte Antwort. */
+function praxisColor(sec, id, a){
+  const q = document.getElementById('q_' + id);
+  if (!q || !a) return;
+  const mine = S.answers[id];
+  q.querySelectorAll('.opt').forEach(opt => {
+    const k = opt.dataset.opt.split('|')[1];
+    if (k === a.answer) opt.classList.add('correct');
+    else if (k === mine) opt.classList.add('wrong');
+  });
+  q.querySelectorAll('.key[data-key]').forEach(b => {
+    const k = b.dataset.key.split('|')[1];
+    if (k === a.answer) b.classList.add('correct');
+    else if (k === mine) b.classList.add('wrong');
+  });
+  q.classList.add(mine === a.answer ? 'isok' : 'isbad');
+  if (a.explanation && !q.querySelector('.why'))
+    q.insertAdjacentHTML('beforeend', `<div class="why">${esc(a.explanation)}</div>`);
 }
 
 /* ============ Prüfungsteile eines Modelltests ============ */
@@ -1250,6 +1449,7 @@ const answered = it => {
 };
 
 function updateProgress(){
+  if (S.view === 'praxis'){ praxisSave(); praxisSyncButtons(); return; }
   saveSession(S.run);
   const items = runItems(S.run);
   const done  = items.filter(answered).length;
@@ -1736,7 +1936,7 @@ function showAi(out, btn, fb){
 }
 
 // beim Schließen/Wegwischen den Stand sichern
-addEventListener('pagehide', () => saveSession(S.run));
-addEventListener('visibilitychange', () => { if (document.hidden) saveSession(S.run); });
+addEventListener('pagehide', () => { if (S.view === 'praxis') praxisSave(); else saveSession(S.run); });
+addEventListener('visibilitychange', () => { if (document.hidden){ if (S.view === 'praxis') praxisSave(); else saveSession(S.run); } });
 
 boot();

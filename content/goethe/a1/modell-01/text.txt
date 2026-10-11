@@ -111,7 +111,7 @@ Lösung: f
 Text:
 **Bei der Straßenbahn**
 Linie 8:
-Ab 15. nur bis Hauptbahnhof.
+Ab 1.5. nur bis Hauptbahnhof.
 Zur Weiterfahrt nach Huchting: Linie 1 oder Bus Nr. 53.
 Aufgaben:
 [13] Es ist der 2. Mai, 21 Uhr. Sie können jetzt nicht zum Hauptbahnhof fahren.
