@@ -177,6 +177,9 @@ h3{font-size:1em; margin:0 0 4px}
 .pgroup{margin-bottom:8px}
 .reveal{width:100%; margin:4px 0 20px}
 .reveal.done{border-color:var(--ok); color:var(--ok); cursor:default}
+.praxisset{margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid var(--line)}
+.praxisset .setnum{font-size:1.05em; color:var(--brand-dark); margin:18px 0 6px}
+.reset{width:100%; margin:8px 0 28px; color:var(--bad); border-color:var(--bad)}
 .key.correct{border-color:var(--ok); background:var(--ok-soft); color:var(--ok)}
 .key.wrong{border-color:var(--bad); background:var(--bad-soft); color:var(--bad)}
 .locked{pointer-events:none}
