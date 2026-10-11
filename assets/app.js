@@ -1321,6 +1321,23 @@ function renderBank(sec){
       `<li><span class="k">${esc(o.key)}</span>${esc(o.text)}</li>`).join('')}</ul></div>`;
 }
 
+/* ★ Goethe, Lesen Teil 2: jede Wahl ist eine Anzeige / Mini-Website.
+   Der Optionstext ist „Kopf — Rumpf": beginnt der Kopf mit einer URL,
+   wird die Anzeige wie ein kleines Browserfenster gezeichnet, sonst wie
+   eine Anzeige mit Titel. Trennzeichen ist der Geviertstrich „ — "
+   (im Rumpf kommen nur Halbgeviert „ – " und Punkte vor). Kein Treffer
+   → normale Option. */
+function adParts(text){
+  const s = String(text || '').trim();
+  let m = s.match(/^((?:https?:\/\/|www\.)[^\s—:]+)\s*[—:]\s*([\s\S]*)$/);
+  if (m) return { bar: m[1], body: m[2].trim(), web: true };
+  m = s.match(/^((?:https?:\/\/|www\.)\S+)\s+([\s\S]+)$/);
+  if (m) return { bar: m[1], body: m[2].trim(), web: true };
+  m = s.match(/^(.+?)\s+—\s+([\s\S]+)$/);
+  if (m) return { bar: m[1].trim(), body: m[2].trim(), web: false };
+  return null;
+}
+
 function renderItem(sec, it){
   const head = `<div class="qhead"><span class="qnum">${esc(it.num || it.id)}</span>
     <span class="qtext grow">${esc(it.text)}</span></div>`;
@@ -1348,11 +1365,20 @@ function renderItem(sec, it){
             || (opts.length === 2 && opts[0].key === 'r' && opts[1].key === 'f');
     const chosen = S.answers[it.id];
     const gone = S.dropped[it.id] || [];
+    const anz = isPraxis() && !tf;        // Goethe Teil 2: Anzeigen zeichnen
     body = `<div class="opts ${tf ? 'inline' : ''}">${
-      opts.map(o => `<label class="opt${o.key === chosen ? ' sel' : ''}${gone.includes(o.key) ? ' dropped' : ''}" data-opt="${esc(it.id)}|${esc(o.key)}">
+      opts.map(o => {
+        const ad = anz ? adParts(o.text) : null;
+        const inner = ad
+          ? `<span class="ad${ad.web ? ' web' : ''}"><span class="adbar">${esc(ad.bar)}</span>${
+              ad.body ? `<span class="adbody">${esc(ad.body)}</span>` : ''}</span>`
+          : `<span class="grow">${esc(o.text)}</span>`;
+        const kl = ad ? String(o.key).toLowerCase() : o.key;
+        return `<label class="opt${ad ? ' anzeige' : ''}${o.key === chosen ? ' sel' : ''}${
+          gone.includes(o.key) ? ' dropped' : ''}" data-opt="${esc(it.id)}|${esc(o.key)}">
         <input type="radio" name="q_${esc(it.id)}" value="${esc(o.key)}"${o.key === chosen ? ' checked' : ''}>
-        <span class="k">${esc(o.key)}</span><span class="grow">${esc(o.text)}</span>
-      </label>`).join('')}</div>`;
+        <span class="k">${esc(kl)}</span>${inner}
+      </label>`; }).join('')}</div>`;
   }
   else if (sec.format === 'matching' || sec.format === 'wordbank'){
     const chosen = S.answers[it.id] || '';

@@ -5,7 +5,13 @@ Untertitel: Lesen · Schreiben
 Titel: Lesen · Teil 1
 Minuten: 0
 Punkte: 50
-Teile: lv1-01, lv1-02, lv1-03, lv1-04, lv1-05, lv1-06, lv1-07, lv1-08, lv1-09, lv1-10
+Teile: lv1-01, lv1-02, lv1-03, lv1-04, lv1-05, lv1-06, lv1-07, lv1-08, lv1-09, lv1-10, lv1-11
+
+## Block: lv2
+Titel: Lesen · Teil 2
+Minuten: 0
+Punkte: 10
+Teile: lv2-01, lv2-02
 
 ## Block: s1
 Titel: Schreiben · Teil 1 (Formular)
@@ -161,7 +167,7 @@ Michaela Berger
 Aufgaben:
 [3] Michaela hat ein Zimmer in Frau Müllers Wohnung.
 Lösung: f
-[4] Michaela ist zurzeit in England.
+[4] Michaela studiert jetzt in England.
 Lösung: r
 [5] Die Schwester will im Juli bei Michaela wohnen.
 Lösung: f
@@ -376,6 +382,99 @@ Lösung: f
 [5] Am Dienstag ist das Einwohnermeldeamt geöffnet.
 Lösung: r
 
+### Teil: lv1-11
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 11
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die beiden Texte und die Aufgaben 1 bis 5. Kreuzen Sie an: Richtig oder Falsch.
+Text:
+**Hallo Julia**
+Hallo Julia,
+ich muss heute länger im Büro bleiben. Ich weiß noch nicht, wie lange. Aber um 20 Uhr kann ich nicht beim Kino sein. Können wir morgen Abend ins Kino gehen? Auch um 20 Uhr? Ist das ok für dich?
+Tut mir leid.
+Liebe Grüße
+Andrea
+Aufgaben:
+[1] Andrea muss heute lange arbeiten.
+Lösung: r
+[2] Sie möchte Julia morgen treffen.
+Lösung: r
+Text:
+**Liebe Frau Schmidt**
+Liebe Frau Schmidt,
+wir fahren doch nächsten Montag in den Urlaub, in die Türkei. Können Sie bitte nach der Post und den Blumen sehen? Als Dankeschön möchte ich Sie gerne zu einem Essen bei mir zu Hause einladen. Wann haben Sie Zeit? Dann gebe ich Ihnen auch die Wohnungsschlüssel.
+Danke
+Julia Berger
+Aufgaben:
+[3] Frau Berger braucht Hilfe.
+Lösung: r
+[4] Frau Schmidt soll die Schlüssel abholen.
+Lösung: f
+[5] Frau Berger möchte ein Essen machen.
+Lösung: r
+
+### Teil: lv2-01
+Format: mc
+Gruppe: Lesen
+Titel: Übung 1
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die Texte und die Aufgaben 6 bis 10. Wo finden Sie Informationen? Kreuzen Sie an: a oder b.
+Aufgaben:
+[6] Sie wollen viele Freunde zu Ihrem Geburtstag einladen. Sie suchen einen Ort.
+A) www.raum-in-koeln.de — Raum für Tanz, Sport, Hochzeiten und andere private Feiern zu vermieten. Auch abends Termine frei, günstige Preise.
+B) www.wohnen-in-koeln.de — Schöne Zimmer und Apartments für 2 – 12 Wochen im Großraum Köln zu interessanten Preisen.
+Lösung: a
+[7] Der Computer ist kaputt. Sie können ihn nicht allein reparieren.
+A) www.computer-loesungen.de — Für alles, was mit Computern, Druckern, Scannern, Internet usw. zu tun hat. Auch Reparaturen.
+B) www.technohaus.de — Gebrauchte Kühlschränke, Herde, Waschmaschinen, Computer, Drucker, Fernseher, Radios, Handys usw. zu supergünstigen Preisen!
+Lösung: a
+[8] Sie möchten am Samstagabend mit Freunden tanzen gehen.
+A) www.tanzen-macht-spass.de — Tanzschule Renz. Informieren Sie sich jetzt über die neuen Tanzkurse für Jugendliche und Erwachsene. Bitte bestellen Sie unseren Tanzplan.
+B) www.wohin-am-wochenende.de — Ins Aladin! Das neue Tanz-Restaurant! Erst gut essen, dann tanzen – die ganze Nacht! Freitag – Samstag haben wir bis 4 Uhr geöffnet.
+Lösung: b
+[9] Sie möchten am Wochenende Fußball spielen.
+A) www.freizeitsport-freiburg.de — Basketball, Fitness, Fußball und mehr. Montags bis donnerstags 18.30 bis 21.00 Uhr im Südpark am See.
+B) www.fc-1897.de/training — Der Fußballklub FC 1897 sucht Spieler und Spielerinnen. Treffpunkt: Sportanlage Ulrichsplatz, sonntags 10 – 12 Uhr. Keine Anmeldung.
+Lösung: b
+[10] Sie studieren und möchten ein bisschen arbeiten.
+A) 0176 – 55 44 321 — Unsere Bäckerei braucht Hilfe. Wir suchen eine junge Frau / einen jungen Mann im Verkauf am Samstag von 7 bis 11 Uhr.
+B) 0160 – 683 456 20 — Junge Verkäuferin / Junger Verkäufer gesucht für Zeitungskiosk. 42 Stunden / Woche, bei guter Bezahlung.
+Lösung: a
+
+### Teil: lv2-02
+Format: mc
+Gruppe: Lesen
+Titel: Übung 2
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die Texte und die Aufgaben 6 bis 10. Wo finden Sie Informationen? Kreuzen Sie an: a oder b.
+Aufgaben:
+[6] Sie möchten mit dem Schiff auf dem Rhein fahren.
+A) www.schiff-ruedesheim.de — Hotel – Pension „Schiff". Einzel- und Doppelzimmer mit Dusche / WC. Restaurant mit Rhein-Terrasse. Preise · über uns · Buchung
+B) www.bingen-ruedesheimer.de — Bingen-Rüdesheimer Rheinschiffe. Täglich von Rüdesheim nach Koblenz. Alle Abfahrtszeiten und Preise hier.
+Lösung: b
+[7] Sie möchten Deutsch in Deutschland lernen.
+A) www.sprachenfuchs.de — Sprachinstitut Fuchs, Dresden, Prager Str. 4. Deutsch · Englisch · Französisch · Russisch. Die Schule · Die Kurse · Die Preise · Kontakt
+B) www.eviva.com — Eviva-idiomas. Sprachkurse für Deutsche: Spanisch auf Mallorca, Englisch auf Malta. Unsere Preise · Unser Unterricht · Buchungen
+Lösung: a
+[8] Sie möchten ein Zugticket im Internet kaufen.
+A) www.der.com — Deutsches Reisebüro. Ticketbestellungen und Reservierungen für Flüge weltweit, Deutsche Bahn, Eurobus, 24-Stunden-Service. E-Mail · Ticketbestellung
+B) www.red.com — Reisedienst GmbH. Ticketservice für Theater, Konzerte, Busreisen in Deutschland und nach Polen, Tschechien und Ungarn. Konzertservice · Theater · Busreisen
+Lösung: a
+[9] Sie möchten Informationen über den Bodensee.
+A) www.bodensee.de — Touristeninformation Bodensee. Urlaubsorte · Hotelservice · Ferienwohnungen · Rundreisen
+B) www.rottenmeier.de — Hans Rottenmeier: Ferienwohnungen am Bodensee. Häuser · Preise · Kontakt
+Lösung: a
+[10] Sie sind in Wiesbaden und möchten mit dem Zug am Mittag in Hamburg sein.
+A) www.reiseauskunft.bahn.de — ab Hamburg 12.18 → an Wiesbaden 16.52 · Dauer 4:34 · 1× Umsteigen · ICE, S
+B) www.reiseauskunft.bahn.de — ab Wiesbaden 08.09 → an Hamburg 12.40 · Dauer 4:31 · 1× Umsteigen · S, ICE
+Lösung: b
 
 ### Teil: s1
 Format: writing

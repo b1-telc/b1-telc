@@ -177,6 +177,20 @@ h3{font-size:1em; margin:0 0 4px}
 .pgroup{margin-bottom:8px}
 .reveal{width:100%; margin:4px 0 20px}
 .reveal.done{border-color:var(--ok); color:var(--ok); cursor:default}
+/* Goethe Lesen Teil 2: Anzeigen wie kleine Website-Fenster */
+.opt.anzeige{flex-direction:row; align-items:stretch; gap:10px; padding:10px; cursor:pointer}
+.opt.anzeige > input{align-self:center}
+.opt.anzeige > .k{align-self:center; text-transform:lowercase}
+.opt.anzeige.correct, .opt.anzeige.wrong{background:transparent}
+.opt.anzeige.correct .ad{border-color:var(--ok)}
+.opt.anzeige.wrong .ad{border-color:var(--bad)}
+.ad{flex:1; min-width:0; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:var(--card)}
+.ad .adbar{display:block; padding:6px 10px; font-size:.8em; color:var(--muted);
+  background:var(--brand-soft); border-bottom:1px solid var(--line); font-weight:600;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.ad.web .adbar{font-family:ui-monospace,Menlo,Consolas,monospace; color:var(--brand-dark)}
+.ad.web .adbar::before{content:"🌐 "}
+.ad .adbody{display:block; padding:10px 12px; font-size:.9em; line-height:1.55; white-space:pre-line}
 .praxisset{margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid var(--line)}
 .praxisset .setnum{font-size:1.05em; color:var(--brand-dark); margin:18px 0 6px}
 .reset{width:100%; margin:8px 0 28px; color:var(--bad); border-color:var(--bad)}
