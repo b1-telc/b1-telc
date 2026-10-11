@@ -190,7 +190,12 @@ h3{font-size:1em; margin:0 0 4px}
   overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 .ad.web .adbar{font-family:ui-monospace,Menlo,Consolas,monospace; color:var(--brand-dark)}
 .ad.web .adbar::before{content:"🌐 "}
-.ad .adbody{display:block; padding:10px 12px; font-size:.9em; line-height:1.55; white-space:pre-line}
+.ad .adbody{display:block; padding:10px 12px; font-size:.9em; line-height:1.5}
+.adline{display:block}
+.adline + .adline{margin-top:3px}
+.adline.bullet{padding-inline-start:15px; position:relative}
+.adline.bullet::before{content:"•"; position:absolute; inset-inline-start:3px; color:var(--brand)}
+.ad .adbody b{color:var(--ink); font-weight:700}
 .praxisset{margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid var(--line)}
 .praxisset .setnum{font-size:1.05em; color:var(--brand-dark); margin:18px 0 6px}
 .reset{width:100%; margin:8px 0 28px; color:var(--bad); border-color:var(--bad)}

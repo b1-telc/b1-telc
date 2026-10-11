@@ -1338,6 +1338,20 @@ function adParts(text){
   return null;
 }
 
+/* Anzeigentext mehrzeilig: „|" trennt Zeilen, **…** ist fett, eine Zeile
+   mit •/►/- davor wird zum Aufzählungspunkt. So liest sich die Anzeige wie
+   im Original, nicht wie ein Fließtext. */
+function adBodyHTML(body){
+  return String(body || '').split('|').map(seg => {
+    let s = seg.trim();
+    if (!s) return '';
+    let cls = 'adline';
+    if (/^[•►\-]\s+/.test(s)){ s = s.replace(/^[•►\-]\s+/, ''); cls += ' bullet'; }
+    s = esc(s).replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+    return `<span class="${cls}">${s}</span>`;
+  }).join('');
+}
+
 function renderItem(sec, it){
   const head = `<div class="qhead"><span class="qnum">${esc(it.num || it.id)}</span>
     <span class="qtext grow">${esc(it.text)}</span></div>`;
@@ -1371,7 +1385,7 @@ function renderItem(sec, it){
         const ad = anz ? adParts(o.text) : null;
         const inner = ad
           ? `<span class="ad${ad.web ? ' web' : ''}"><span class="adbar">${esc(ad.bar)}</span>${
-              ad.body ? `<span class="adbody">${esc(ad.body)}</span>` : ''}</span>`
+              ad.body ? `<span class="adbody">${adBodyHTML(ad.body)}</span>` : ''}</span>`
           : `<span class="grow">${esc(o.text)}</span>`;
         const kl = ad ? String(o.key).toLowerCase() : o.key;
         return `<label class="opt${ad ? ' anzeige' : ''}${o.key === chosen ? ' sel' : ''}${
