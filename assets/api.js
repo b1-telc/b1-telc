@@ -304,6 +304,11 @@ const API = (() => {
 
   const submitDrill = answers => rpc('submit_drill', { p_answers: answers });
 
+  /* وضع التمرين (Goethe): يرجّع حلول أسئلة محدّدة — بلا تسجيل محاولة ولا
+     تأثير على المراجعة — تا يلوّنها زرّ «إظهار الإجابات» أخضر/أحمر.
+     نفس حارس الصلاحية: بس أسئلة امتحان مجاني أو مشترَك فيه. */
+  const reveal = ids => rpc('reveal_answers', { p_item_ids: ids });
+
   /* أسئلة مستحقّة للمراجعة اليوم، مع سياق قسمها — بدونه ما بتنحلّ.
      المتقن (صندوق > ٥) وغير المستحقّ ما بينجابوا. */
   async function mistakes(){
@@ -327,7 +332,7 @@ const API = (() => {
 
   return { configured, deviceId, loadSession, ensureSession, signInAnonymously,
            redeem, waitlist, subscription, levels, myLevels, index, catalog, test, resources, imageUrl, audioUrl,
-           submitAttempt, submitDrill, mistakes, reviewSummary, attempts,
+           submitAttempt, submitDrill, reveal, mistakes, reviewSummary, attempts,
            reportProblem,
            correctWriting, writingFeedback,
            signOut: () => storeSession(null),

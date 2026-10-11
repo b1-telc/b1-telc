@@ -81,6 +81,18 @@ const I18N = (() => {
                  'der schriftlichen Prüfung {level} — mit der echten Prüfungszeit.',
       homeIntroPlain: 'Wählen Sie einen Modelltest. Jeder Test hat die ' +
                       'Prüfungsteile der schriftlichen Prüfung — mit der echten Prüfungszeit.',
+      /* Üben nach Abschnitt (Goethe) */
+      praxisHome: 'Wählen Sie einen Bereich und üben Sie — ohne Zeit, ohne Noten.',
+      praxisPick: 'Wählen Sie einen Teil.',
+      praxisHint: 'Ohne Zeit, ohne Punkte. Ihr Stand wird gespeichert. '
+                + 'Nach jedem Text können Sie die Antworten anzeigen.',
+      praxisDone: '{n} von {total} beantwortet',
+      reveal: 'Antworten anzeigen',
+      revealing: 'Lädt …',
+      revealed: 'Antworten angezeigt ✓',
+      revealFailed: 'Antworten konnten nicht geladen werden.',
+      nPart: { one: '{n} Teil', other: '{n} Teile' },
+
       material: 'Lesematerial',
       materialMeta: 'Wortschatz und Hinweise · jederzeit',
       materialEmpty: 'Für diese Prüfung ist noch nichts hinterlegt.',
