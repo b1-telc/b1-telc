@@ -1345,7 +1345,7 @@ function adBodyHTML(body){
   return String(body || '').split('|').map(seg => {
     let s = seg.trim();
     if (!s) return '';
-    let cls = 'adline';
+    let cls = 'wcline';
     if (/^[•►\-]\s+/.test(s)){ s = s.replace(/^[•►\-]\s+/, ''); cls += ' bullet'; }
     s = esc(s).replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
     return `<span class="${cls}">${s}</span>`;
@@ -1384,11 +1384,11 @@ function renderItem(sec, it){
       opts.map(o => {
         const ad = anz ? adParts(o.text) : null;
         const inner = ad
-          ? `<span class="ad${ad.web ? ' web' : ''}"><span class="adbar">${esc(ad.bar)}</span>${
-              ad.body ? `<span class="adbody">${adBodyHTML(ad.body)}</span>` : ''}</span>`
+          ? `<span class="wc${ad.web ? ' web' : ''}"><span class="wcbar">${esc(ad.bar)}</span>${
+              ad.body ? `<span class="wcbody">${adBodyHTML(ad.body)}</span>` : ''}</span>`
           : `<span class="grow">${esc(o.text)}</span>`;
         const kl = ad ? String(o.key).toLowerCase() : o.key;
-        return `<label class="opt${ad ? ' anzeige' : ''}${o.key === chosen ? ' sel' : ''}${
+        return `<label class="opt${ad ? ' webcard' : ''}${o.key === chosen ? ' sel' : ''}${
           gone.includes(o.key) ? ' dropped' : ''}" data-opt="${esc(it.id)}|${esc(o.key)}">
         <input type="radio" name="q_${esc(it.id)}" value="${esc(o.key)}"${o.key === chosen ? ' checked' : ''}>
         <span class="k">${esc(kl)}</span>${inner}
