@@ -685,7 +685,7 @@ from (values
     ('sf1-20', '2', 'Englisch und Chinesisch|Chinesisch und Englisch', null),
     ('sf1-20', '3', 'C', null),
     ('sf1-20', '4', 'A', null),
-    ('sf1-20', '5', 'kein Telefon|keine|noch keine|hat kein Telefon|kein Telefonanschluss', null),
+    ('sf1-20', '5', 'kein Telefon|keine|kein|noch keine|hat kein Telefon|kein Telefonanschluss', null),
     ('sf1-21', '1', 'München', null),
     ('sf1-21', '2', 'ledig|nicht verheiratet', null),
     ('sf1-21', '3', 'Fahrer', null),
