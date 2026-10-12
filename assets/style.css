@@ -160,6 +160,8 @@ h3{font-size:1em; margin:0 0 4px}
 .q .qtext{font-weight:600; font-size:15.5px}
 .opts{display:grid; gap:8px}
 .opts.inline{grid-template-columns:1fr 1fr}
+/* Teil 2: die zwei Anzeigen nebeneinander (wie im Test) */
+.opts.cards{grid-template-columns:1fr 1fr; gap:12px; align-items:stretch}
 .opt{
   display:flex; align-items:center; gap:10px; border:1.5px solid var(--line);
   border-radius:10px; padding:13px 14px; cursor:pointer; font-size:.95em;
@@ -288,6 +290,10 @@ textarea{min-height:230px; line-height:1.8; direction:ltr; text-align:left}
 @media (max-width:520px){
   .opts.inline{grid-template-columns:1fr}
   main{padding:14px 12px 20px}
+}
+/* Anzeigen brauchen mehr Breite — auf schmalen Schirmen untereinander */
+@media (max-width:640px){
+  .opts.cards{grid-template-columns:1fr}
 }
 
 /* صورة بنك الإعلانات (Leseverstehen Teil 3) */
