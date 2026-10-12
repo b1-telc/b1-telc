@@ -22,8 +22,8 @@ Teile: lv3-01, lv3-02, lv3-03, lv3-04, lv3-05, lv3-06, lv3-07, lv3-08, lv3-09, l
 ## Block: s1
 Titel: Schreiben · Teil 1 (Formular)
 Minuten: 0
-Punkte: 30
-Teile: sf1-01, sf1-02, sf1-03, sf1-04, sf1-05, sf1-06
+Punkte: 90
+Teile: sf1-01, sf1-02, sf1-03, sf1-04, sf1-05, sf1-06, sf1-07, sf1-08, sf1-09, sf1-10, sf1-11, sf1-12, sf1-13, sf1-14, sf1-15, sf1-16, sf1-17, sf1-18
 
 ## Block: s2
 Titel: Schreiben · Teil 2 (Brief)
@@ -1338,7 +1338,253 @@ Lösung: falsch
 ### Teil: sf1-01
 Format: formular
 Gruppe: Schreiben
-Titel: Übung 1 — Bodensee-Rundfahrt
+Titel: Übung 1 — Sprachenschule Lingua
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Sprachenschule Lingua", "subtitle": "Anmeldung", "rows": [
+ {"label":"Familienname","val":"Gonman"},
+ {"label":"Vorname","blank":1},
+ {"label":"Geburtsdatum","val":"16.06.1985"},
+ {"label":"Geburtsort","blank":2},
+ {"label":"Muttersprache","val":"Englisch"},
+ {"label":"andere Sprachen","blank":3},
+ {"label":"schon Deutsch gelernt?","blank":4},
+ {"label":"Tageszeit","val":"Nachmittag"},
+ {"label":"Termin","blank":5}
+] } }
+Text:
+Ihr Freund Marco aus England, geboren am 15.06.1985 in London, möchte im September einen Deutschkurs in Deutschland machen. Er ist Anfänger. Er hat am Nachmittag Zeit. In der Schule hat er Französisch und Spanisch gelernt. Er bekommt ein Anmeldeformular von der Sprachschule Lingua.
+Aufgaben:
+[1] Vorname
+Lösung: Marco
+[2] Geburtsort
+Lösung: London
+[3] andere Sprachen
+Lösung: Französisch und Spanisch|Französisch, Spanisch|Spanisch und Französisch
+[4] schon Deutsch gelernt?
+A) ja
+B) nein
+Lösung: B
+[5] Termin
+Lösung: September|im September
+
+### Teil: sf1-02
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 2 — Suchen Sie neue Freunde
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Suchen Sie neue Freunde", "subtitle": "Anmeldung", "rows": [
+ {"label":"Familienname","val":"Rodriguez"},
+ {"label":"Vorname","val":"Malte"},
+ {"label":"Geburtsdatum","blank":1},
+ {"label":"Geburtsort","val":"Madrid"},
+ {"label":"Muttersprache","val":"Spanisch"},
+ {"label":"Wohnort","blank":2},
+ {"label":"Geschlecht","blank":3},
+ {"label":"Beruf","blank":4},
+ {"label":"Welche Bücher mögen Sie?","blank":5}
+] } }
+Text:
+Ihre Freundin Malte Rodriguez aus Spanien, geboren am 18. Juli 1982. Seit einem Jahr wohnt sie in Berlin. Sie ist Ärztin und arbeitet im Krankenhaus. Sie liest in der Freizeit Reiseführer im Buchklub Leseratte.
+Aufgaben:
+[1] Geburtsdatum
+Lösung: 18. Juli 1982|18.07.1982|18.7.1982
+[2] Wohnort
+Lösung: Berlin
+[3] Geschlecht
+A) Männlich
+B) Weiblich
+Lösung: B
+[4] Beruf
+Lösung: Ärztin
+[5] Welche Bücher mögen Sie?
+Lösung: Reiseführer
+
+### Teil: sf1-03
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 3 — Kindergarten Lichtblick
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Kindergarten Lichtblick", "subtitle": "Anmeldung", "rows": [
+ {"label":"Familienname","val":"Pjetrov"},
+ {"label":"Vorname des Kindes","blank":1},
+ {"label":"Geburtsdatum","val":"24.02.2009"},
+ {"label":"Geburtsort","val":"Moskau"},
+ {"label":"Muttersprache","blank":2},
+ {"label":"Eintrittstermin","blank":3},
+ {"label":"Alter des Kindes","val":"5 Jahre"},
+ {"label":"Beruf des Vaters","blank":4},
+ {"label":"Zeit","blank":5}
+] } }
+Text:
+Ihre russischen Freunde Fiodor und Lana haben eine Tochter. Sie wollen ihre Tochter Anna im Kindergarten anmelden. Der Vater ist Student und er will Sportlehrer werden. Sie wollen ihre Tochter am Vormittag in den Kindergarten bringen, denn ihre Mutter muss am Vormittag zur Arbeit gehen. Anna soll im September in den Kindergarten gehen.
+Aufgaben:
+[1] Vorname des Kindes
+Lösung: Anna
+[2] Muttersprache
+Lösung: Russisch
+[3] Eintrittstermin
+Lösung: September|im September
+[4] Beruf des Vaters
+Lösung: Student
+[5] Zeit
+A) Vormittag
+B) Nachmittag
+Lösung: A
+
+### Teil: sf1-04
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 4 — Die besten Kurse in Hamburg
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Die besten Kurse in Hamburg", "subtitle": "Anmeldung", "rows": [
+ {"label":"Nachname, Vorname","val":"Pini Paola"},
+ {"label":"Kurs","blank":1},
+ {"label":"Dauer des Kurses","blank":2},
+ {"label":"Bitte ankreuzen (Zimmer)","blank":3},
+ {"label":"Bitte ankreuzen (Frühstück)","blank":4},
+ {"label":"Wohnort","blank":5}
+] } }
+Text:
+Ihre Freundin Paola Pini aus Mondenah will nächstes Jahr von 18 bis 31 Oktober in Hamburg einen Exporthandelkurs besuchen. Sie sucht ein Angebot für Übernachtung mit dem Frühstück. Es soll nicht so teuer sein.
+Aufgaben:
+[1] Kurs
+Lösung: Exporthandelkurs|Exporthandel
+[2] Dauer des Kurses
+Lösung: von 18 bis 31 Oktober|18 bis 31 Oktober|18. bis 31. Oktober
+[3] Zimmer
+A) mit Zimmer
+B) ohne Zimmer
+Lösung: A
+[4] Frühstück
+A) mit Frühstück
+B) Ohne Frühstück
+Lösung: A
+[5] Wohnort
+Lösung: Mondenah
+
+### Teil: sf1-05
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 5 — Blumen für Ihre Liebsten
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Blumen für Ihre Liebsten", "subtitle": "", "rows": [
+ {"label":"Name, Vorname","val":"Schwerti,","blank":1},
+ {"label":"Straße / Hausnummer","val":"Ludwigsstr. 8"},
+ {"label":"Wohnort","val":"14193","blank":2},
+ {"label":"Stock","blank":3},
+ {"label":"Geburtstag","blank":4},
+ {"label":"Zeit","blank":5},
+ {"label":"Zahlung","val":"Kreditkarte (X)"}
+] } }
+Text:
+Ihr Kollege Igor Schwerti möchte seiner Mutter Elena Blumen mit einer Geburtstagskarte schicken. Sie hat am Samstag 20.10 Geburtstag. Sie wohnt in den 7. Stock, Ludwigsstr. 8, 14193 Berlin. Seine Mutter ist erst um 14 Uhr zu Hause.
+Aufgaben:
+[1] Vorname
+Lösung: Elena
+[2] Wohnort
+Lösung: Berlin
+[3] Stock
+Lösung: 7. Stock|7|7.|siebter Stock
+[4] Geburtstag
+Lösung: Samstag 20.10|20.10|Samstag, 20.10
+[5] Zeit
+Lösung: 14 Uhr|um 14 Uhr|14.00 Uhr
+
+### Teil: sf1-06
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 6 — Nachhilfeunterricht für Kinder
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Nachhilfeunterricht für Kinder", "subtitle": "Anmeldung", "rows": [
+ {"label":"Kind 1 — Nachname, Vorname","val":"Verdi, Paula"},
+ {"label":"Alter","blank":1},
+ {"label":"Hilfe in?","blank":2},
+ {"label":"Kind 2 — Nachname, Vorname","val":"Verdi,","blank":3},
+ {"label":"Alter","val":"8 Jahre"},
+ {"label":"Hilfe in?","blank":4},
+ {"label":"Zahlung","blank":5}
+] } }
+Text:
+Ihr Freund Antonio Verdi möchte seine Kinder (Paula 12 und Pietro 8) bei der Stundenhilfe anmelden. Die Familie ist seit drei Monaten in Deutschland. Beide Kinder brauchen Hilfe bei den Hausaufgaben. Die Tochter Paula in Englisch, der Sohn in Deutsch. Antonio möchte jeden Monat das Geld überweisen.
+Aufgaben:
+[1] Alter (Paula)
+Lösung: 12|12 Jahre|zwölf
+[2] Hilfe in? (Paula)
+Lösung: Englisch
+[3] Vorname (Kind 2)
+Lösung: Pietro
+[4] Hilfe in? (Kind 2)
+Lösung: Deutsch
+[5] Zahlung
+A) bar
+B) Überweisung
+C) Kreditkarte
+Lösung: B
+
+### Teil: sf1-07
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 7 — Reise.com
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Buchen Sie hier Ihren Urlaub, Reise.com", "subtitle": "Anmeldung", "rows": [
+ {"label":"Nachname, Vorname","val":"Schneider, Markus"},
+ {"label":"Anzahl der Personen","blank":1},
+ {"label":"Davon Kinder","blank":2},
+ {"label":"Urlaubsort","blank":3},
+ {"label":"Bitte ankreuzen","blank":4},
+ {"label":"Zahlung","blank":5}
+] } }
+Text:
+Ihr Kollege, Markus Schneider macht mit seiner Frau und seinen 3 Töchter (5, 7 und 11 Jahre alt) Urlaub in Spanien. Im Reisebüro bucht er für den nächsten Montag eine Schifffahrt nach Ibiza. Herr Schneider möchte mit der Kreditkarte bezahlen.
+Aufgaben:
+[1] Anzahl der Personen
+Lösung: 5|fünf
+[2] Davon Kinder
+Lösung: 3|drei
+[3] Urlaubsort
+Lösung: Ibiza
+[4] Zimmer
+A) Einzelzimmer
+B) Doppelzimmer
+Lösung: B
+[5] Zahlung
+A) bar
+B) Überweisung
+C) Kreditkarte
+Lösung: C
+
+### Teil: sf1-08
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 8 — Bodensee-Rundfahrt
 Minuten: 0
 Punkte: 1
 Maximum: 5
@@ -1370,10 +1616,10 @@ Lösung: A
 [5] Reisetermin
 Lösung: Sonntag|nächster Sonntag|am Sonntag|nächsten Sonntag
 
-### Teil: sf1-02
+### Teil: sf1-09
 Format: formular
 Gruppe: Schreiben
-Titel: Übung 2 — Sportclub von 1896
+Titel: Übung 9 — Sportclub von 1896
 Minuten: 0
 Punkte: 1
 Maximum: 5
@@ -1407,10 +1653,10 @@ B) Überweisung
 C) Kreditkarte
 Lösung: C
 
-### Teil: sf1-03
+### Teil: sf1-10
 Format: formular
 Gruppe: Schreiben
-Titel: Übung 3 — Sprachschule
+Titel: Übung 10 — Sprachschule NEWbornSCHOOL
 Minuten: 0
 Punkte: 1
 Maximum: 5
@@ -1445,10 +1691,10 @@ B) von 13 – 16 Uhr
 C) von 17 – 20 Uhr
 Lösung: A
 
-### Teil: sf1-04
+### Teil: sf1-11
 Format: formular
 Gruppe: Schreiben
-Titel: Übung 4 — Patienteninformation
+Titel: Übung 11 — Patienteninformation
 Minuten: 0
 Punkte: 1
 Maximum: 5
@@ -1480,44 +1726,10 @@ Lösung: seit gestern|gestern
 [5] Was fehlt Ihnen?
 Lösung: Fieber|39 Grad Fieber|Ich habe Fieber
 
-### Teil: sf1-05
+### Teil: sf1-12
 Format: formular
 Gruppe: Schreiben
-Titel: Übung 5 — Bestellung
-Minuten: 0
-Punkte: 1
-Maximum: 5
-Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
-Extra:
-{ "form": { "title": "Buchbestellung", "subtitle": "Anmeldung", "rows": [
- {"label":"Name","val":"Karamanlis"},
- {"label":"Vorname","val":"Eleni"},
- {"label":"Straße","blank":1},
- {"label":"PLZ / Ort","val":"63067","blank":2},
- {"label":"Geburtsdatum","blank":3},
- {"label":"Bestellung","blank":4},
- {"label":"Zahlungsweise","blank":5}
-] } }
-Text:
-Ihre Freundin Eleni Karamanlis möchte das Buch Pluspunkt Deutsch A1 im Internet bestellen. Sie hat keine Kreditkarte. Sie wohnt in der Berliner Straße 29 in Offenbach. Sie ist am 2. März 1980 geboren.
-Aufgaben:
-[1] Straße
-Lösung: Berliner Straße 29|Berliner Straße
-[2] Ort
-Lösung: Offenbach
-[3] Geburtsdatum
-Lösung: 2. März 1980|02.03.1980|2.3.1980
-[4] Bestellung
-Lösung: Pluspunkt Deutsch A1|Pluspunkt Deutsch
-[5] Zahlungsweise
-A) bar (bei Empfang)
-B) Kreditkarte
-Lösung: A
-
-### Teil: sf1-06
-Format: formular
-Gruppe: Schreiben
-Titel: Übung 6 — Ferienwohnung
+Titel: Übung 12 — Ferienwohnung
 Minuten: 0
 Punkte: 1
 Maximum: 5
@@ -1551,6 +1763,230 @@ A) Flugzeug
 B) Zug
 C) Auto
 Lösung: C
+
+### Teil: sf1-13
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 13 — Buchbestellung
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Buchbestellung", "subtitle": "", "rows": [
+ {"label":"Name","val":"Karamanlis"},
+ {"label":"Vorname","val":"Eleni"},
+ {"label":"Straße","blank":1},
+ {"label":"PLZ / Ort","val":"63067","blank":2},
+ {"label":"Geburtsdatum","blank":3},
+ {"label":"Bestellung","blank":4},
+ {"label":"Zahlungsweise","blank":5}
+] } }
+Text:
+Ihre Freundin Eleni Karamanlis möchte das Buch Pluspunkt Deutsch A1 im Internet bestellen. Sie hat keine Kreditkarte. Sie wohnt in der Berliner Straße 29 in Offenbach. Sie ist am 2. März 1980 geboren.
+Aufgaben:
+[1] Straße
+Lösung: Berliner Straße 29|Berliner Straße
+[2] Ort
+Lösung: Offenbach
+[3] Geburtsdatum
+Lösung: 2. März 1980|02.03.1980|2.3.1980
+[4] Bestellung
+Lösung: Pluspunkt Deutsch A1|Pluspunkt Deutsch
+[5] Zahlungsweise
+A) bar (bei Empfang)
+B) Kreditkarte
+Lösung: A
+
+### Teil: sf1-14
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 14 — Hotel Seeblick
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Hotel Seeblick – Cuxhaven", "subtitle": "Reservierung", "rows": [
+ {"label":"Name","val":"Kirkpatrick"},
+ {"label":"Vorname","val":"Julian"},
+ {"label":"Straße","val":"Urbanstraße 12"},
+ {"label":"PLZ / Ort","val":"10961","blank":1},
+ {"label":"Anreise","val":"3. Juni"},
+ {"label":"Abreise","blank":2},
+ {"label":"Zimmer","blank":3},
+ {"label":"Frühstück","blank":4},
+ {"label":"Besondere Wünsche","blank":5}
+] } }
+Text:
+Ihr Freund, Julian Kirkpatrick, möchte im Hotel Seeblick in Cuxhaven ein Zimmer für sich und seine Frau vom 3.–8. Juni reservieren. Sie möchten nicht im Hotel frühstücken. Er möchte gern einen Fernseher im Zimmer haben und zwei Fahrräder mieten. Julian wohnt in Berlin.
+Aufgaben:
+[1] Ort
+Lösung: Berlin
+[2] Abreise
+Lösung: 8. Juni|8.6.
+[3] Zimmer
+A) Einzelzimmer
+B) Doppelzimmer
+Lösung: B
+[4] Frühstück
+A) Frühstück
+B) kein Frühstück
+Lösung: B
+[5] Besondere Wünsche
+Lösung: Fernseher und zwei Fahrräder|Fernseher im Zimmer und zwei Fahrräder|einen Fernseher und zwei Fahrräder mieten
+
+### Teil: sf1-15
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 15 — Sportverein TGB
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Sportverein TGB", "subtitle": "Anmeldung", "rows": [
+ {"label":"Name des Kindes","val":"Pinnow"},
+ {"label":"Vorname des Kindes","blank":1},
+ {"label":"Straße","val":"Leibnizstraße 35"},
+ {"label":"PLZ / Ort","val":"60385 Frankfurt"},
+ {"label":"Alter","val":"12 Jahre"},
+ {"label":"Geschlecht","blank":2},
+ {"label":"Interessen","blank":3},
+ {"label":"Monatsbeitrag","blank":4},
+ {"label":"Zahlungsweise","blank":5}
+] } }
+Text:
+Ihre Freundin, Kristina Pinnow, möchte ihren Sohn Oleg beim Sportverein TGB anmelden. Oleg ist 12 Jahre alt und möchte Fußball spielen. Familie Pinnow wohnt in 60385 Frankfurt, in der Leibnizstraße 35. Frau Pinnow möchte den Mitgliedsbeitrag alle drei Monate überweisen.
+Aufgaben:
+[1] Vorname des Kindes
+Lösung: Oleg
+[2] Geschlecht
+A) männlich
+B) weiblich
+Lösung: A
+[3] Interessen
+Lösung: Fußball
+[4] Monatsbeitrag
+A) 5 € (Kinder bis 12 Jahre)
+B) 8 € (Kinder von 13 – 18 Jahren)
+Lösung: A
+[5] Zahlungsweise
+A) monatlich
+B) vierteljährlich
+C) halbjährlich
+Lösung: B
+
+### Teil: sf1-16
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 16 — Anmeldung Sprachzentrum
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Anmeldung – Sprachzentrum", "subtitle": "", "rows": [
+ {"label":"Familienname","val":"Rodriguez"},
+ {"label":"Vorname","val":"Juan"},
+ {"label":"Postleitzahl, Wohnort","blank":1},
+ {"label":"Straße, Hausnummer","blank":2},
+ {"label":"Telefon","val":"089 / 2935546"},
+ {"label":"Beruf","blank":3},
+ {"label":"Kurs / Kursnummer","blank":4},
+ {"label":"Termin","blank":5}
+] } }
+Text:
+Ihr Freund, Juan Rodriguez, geboren am 12.10.1985, möchte einen Deutschkurs an der Volkshochschule machen. Er ist kein Anfänger, er hat schon die A1-Prüfung gemacht. Er ist Taxifahrer von Beruf und arbeitet abends. Er möchte vormittags einen Kurs besuchen. Juan wohnt in München, in der Danklstraße 15. Die Postleitzahl ist 81371.
+Aufgaben:
+[1] Postleitzahl, Wohnort
+Lösung: 81371 München|81371, München
+[2] Straße, Hausnummer
+Lösung: Danklstraße 15
+[3] Beruf
+Lösung: Taxifahrer
+[4] Kurs / Kursnummer
+A) Deutsch Anfänger – A1
+B) Deutsch Fortgeschrittene – A2
+Lösung: B
+[5] Termin
+A) montags – freitags, 9 – 12 Uhr
+B) montags – freitags, 18 – 21 Uhr
+Lösung: A
+
+### Teil: sf1-17
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 17 — Sportverein TUS Neustadt
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Sportverein TUS – Neustadt", "subtitle": "Anmeldung", "rows": [
+ {"label":"Familienname","val":"Gonzalez"},
+ {"label":"Vorname","val":"Alberto"},
+ {"label":"Straße, Hausnummer","val":"Aachener Straße 12"},
+ {"label":"Postleitzahl, Wohnort","val":"50567 Köln"},
+ {"label":"Alter","blank":1},
+ {"label":"Geschlecht","blank":2},
+ {"label":"Interessen / Sportarten","blank":3},
+ {"label":"Zahlungsweise","blank":4},
+ {"label":"Ab wann wollen Sie beim Verein mitmachen?","val":"ab","blank":5}
+] } }
+Text:
+Ihr Freund Alberto Gonzalez möchte sich in einem Sportverein anmelden. Er ist 30 Jahre alt, seine Hobbys sind Schwimmen und Ballspiele. Er möchte ab sofort in den Sportverein. Er hat keine Kreditkarte. Heute ist der 1. Dezember.
+Aufgaben:
+[1] Alter
+Lösung: 30|30 Jahre|dreißig
+[2] Geschlecht
+A) männlich
+B) weiblich
+Lösung: A
+[3] Interessen / Sportarten
+Lösung: Schwimmen und Ballspiele|Schwimmen und Ballspiele|Ballspiele und Schwimmen
+[4] Zahlungsweise
+A) bar
+B) Kreditkarte
+Lösung: A
+[5] Ab wann wollen Sie beim Verein mitmachen?
+Lösung: sofort|ab sofort|1. Dezember|heute
+
+### Teil: sf1-18
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 18 — Online-Versand Prado
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Online-Versand Prado – Jeans für alle", "subtitle": "Bestellung", "rows": [
+ {"label":"Familienname","val":"Brodsky"},
+ {"label":"Vorname","val":"Sergej"},
+ {"label":"Straße, Hausnummer","blank":1},
+ {"label":"Postleitzahl, Wohnort","blank":2},
+ {"label":"Bestellung: Jeans, Prado 511 — Menge","val":"2"},
+ {"label":"Farbe","blank":3},
+ {"label":"Größe","blank":4},
+ {"label":"Mein Zahlungswunsch","blank":5}
+] } }
+Text:
+Ihr Bekannter Sergej Brodsky möchte online zwei Jeans Modell Prado 511 in Schwarz bestellen. Er hat die Größe 34/32 und möchte mit Rechnung bezahlen. Er wohnt in Frankfurt, in der Dahlmannstraße 15, die Postleitzahl ist 60385.
+Aufgaben:
+[1] Straße, Hausnummer
+Lösung: Dahlmannstraße 15
+[2] Postleitzahl, Wohnort
+Lösung: 60385 Frankfurt|60385, Frankfurt
+[3] Farbe
+Lösung: Schwarz
+[4] Größe
+Lösung: 34/32
+[5] Mein Zahlungswunsch
+A) Überweisung
+B) online mit Kreditkarte
+Lösung: A
+
 
 ### Teil: s2
 Format: writing
