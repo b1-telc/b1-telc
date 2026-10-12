@@ -21,9 +21,9 @@ Teile: lv3-01, lv3-02, lv3-03, lv3-04, lv3-05, lv3-06, lv3-07, lv3-08, lv3-09, l
 
 ## Block: s1
 Titel: Schreiben · Teil 1 (Formular)
-Minuten: 10
-Punkte: 5
-Teile: s1
+Minuten: 0
+Punkte: 30
+Teile: sf1-01, sf1-02, sf1-03, sf1-04, sf1-05, sf1-06
 
 ## Block: s2
 Titel: Schreiben · Teil 2 (Brief)
@@ -1335,27 +1335,222 @@ Aufgaben:
 [7] Schon heute können Sie in der Taunusstraße Brötchen kaufen.
 Lösung: falsch
 
-### Teil: s1
-Format: writing
-Titel: Schreiben, Teil 1 (Formular)
+### Teil: sf1-01
+Format: formular
 Gruppe: Schreiben
-Minuten: 10
-Punkte: 5
+Titel: Übung 1 — Bodensee-Rundfahrt
+Minuten: 0
+Punkte: 1
 Maximum: 5
-Anweisung: Ihre Freundin Eva Kadavy macht mit ihrem Mann und ihren beiden Söhnen (8 und 11 Jahre alt) Urlaub in Seeheim. Im Reisebüro bucht sie für den nächsten Sonntag eine Busfahrt um den Bodensee. Frau Kadavy hat keine Kreditkarte. Helfen Sie Ihrer Freundin und schreiben Sie die fünf fehlenden Informationen in das Formular.
-Auswahltitel: Formular
-Bild: img/goethe-a1-m01-s1.jpg
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Bodensee-Rundfahrt", "subtitle": "Anmeldung", "rows": [
+ {"label":"Familienname, Vorname","val":"Kadavy, Eva"},
+ {"label":"Anzahl der Personen","blank":1},
+ {"label":"Davon Kinder","blank":2},
+ {"label":"Urlaubsadresse","val":"Hotel Schönblick"},
+ {"label":"Straße, Hausnummer","val":"Burgstraße 34"},
+ {"label":"PLZ, Urlaubsort","val":"78014","blank":3},
+ {"label":"Zahlungsweise","blank":4},
+ {"label":"Reisetermin","blank":5}
+] } }
 Text:
-**Bodensee-Rundfahrt Anmeldung**
 Ihre Freundin Eva Kadavy macht mit ihrem Mann und ihren beiden Söhnen (8 und 11 Jahre alt) Urlaub in Seeheim. Im Reisebüro bucht sie für den nächsten Sonntag eine Busfahrt um den Bodensee. Frau Kadavy hat keine Kreditkarte.
-Helfen Sie Ihrer Freundin und schreiben Sie die fünf fehlenden Informationen in das Formular.
 Aufgaben:
-[16] Schreiben Sie die fünf fehlenden Informationen in das Formular (Aufgaben 16–20):
-Punkt: (1) Anzahl der Personen: 4
-Punkt: (2) Davon Kinder: 2
-Punkt: (3) PLZ, Urlaubsort: Seeheim
-Punkt: (4) Zahlungsweise (Bar oder Kreditkarte): Bar
-Punkt: (5) Reisetermin: Sonntag
+[1] Anzahl der Personen
+Lösung: 4|vier
+[2] Davon Kinder
+Lösung: 2|zwei
+[3] Urlaubsort
+Lösung: Seeheim
+[4] Zahlungsweise
+A) Bar
+B) Kreditkarte
+Lösung: A
+[5] Reisetermin
+Lösung: Sonntag|nächster Sonntag|am Sonntag|nächsten Sonntag
+
+### Teil: sf1-02
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 2 — Sportclub von 1896
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Sportclub von 1896", "subtitle": "Anmeldung", "rows": [
+ {"label":"Name, Vorname","val":"Kassem, Munir"},
+ {"label":"Straße / Hausnummer","val":"Mundsburger Damm 29"},
+ {"label":"Wohnort","val":"22087","blank":1},
+ {"label":"Telefon","val":"020 / 299 11 45"},
+ {"label":"E-Mail","val":"kassem24@web.de"},
+ {"label":"Beruf","blank":2},
+ {"label":"Alter","blank":3},
+ {"label":"Sport","blank":4},
+ {"label":"Zahlung","blank":5}
+] } }
+Text:
+Ihr Freund Munir Kassem kommt aus Ägypten und wohnt jetzt in Hamburg. Er ist 35 Jahre alt und von Beruf Arzt. In seiner Freizeit will er in einem Verein Fußball spielen. Bezahlen will er mit Kreditkarte.
+Aufgaben:
+[1] Wohnort
+Lösung: Hamburg
+[2] Beruf
+Lösung: Arzt
+[3] Alter
+Lösung: 35|35 Jahre|fünfunddreißig
+[4] Sport
+Lösung: Fußball
+[5] Zahlung
+A) bar
+B) Überweisung
+C) Kreditkarte
+Lösung: C
+
+### Teil: sf1-03
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 3 — Sprachschule
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Sprachschule NEWbornSCHOOL", "subtitle": "Anmeldung", "rows": [
+ {"label":"Familienname","val":"Legrand"},
+ {"label":"Vorname","val":"Yvonne"},
+ {"label":"Geburtsdatum","val":"17.4.1993"},
+ {"label":"Geburtsort","blank":1},
+ {"label":"Muttersprache","val":"Französisch"},
+ {"label":"Andere Sprachen","blank":2},
+ {"label":"Schon Deutsch gelernt?","val":"ja"},
+ {"label":"Wie lange?","blank":3},
+ {"label":"Kurstermin","blank":4},
+ {"label":"Kurszeit","blank":5}
+] } }
+Text:
+Ihre Freundin Yvonne Legrand aus Frankreich, geboren am 17.4.1993 in Lyon, möchte vom 1. bis zum 28. August einen Deutschkurs in Deutschland besuchen. Sie hat schon sechs Monate Deutsch gelernt. Sie hat am Vormittag Zeit. In der Schule hat sie Englisch gelernt.
+Aufgaben:
+[1] Geburtsort
+Lösung: Lyon
+[2] Andere Sprachen
+Lösung: Englisch
+[3] Wie lange?
+Lösung: sechs Monate|6 Monate
+[4] Kurstermin
+Lösung: vom 1. bis 28. August|1. bis 28. August|1.–28. August|1. bis zum 28. August
+[5] Kurszeit
+A) von 9 – 12 Uhr
+B) von 13 – 16 Uhr
+C) von 17 – 20 Uhr
+Lösung: A
+
+### Teil: sf1-04
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 4 — Patienteninformation
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Dr. Arnold Friedrich", "subtitle": "Patienteninformation", "rows": [
+ {"label":"Name, Vorname","val":"Serjakov, Vladimir"},
+ {"label":"Telefon","val":"040 / 456 78 89"},
+ {"label":"Straße, Hausnummer","val":"August-Bebel-Str. 22"},
+ {"label":"Postleitzahl, Wohnort","val":"20969","blank":1},
+ {"label":"Alter","blank":2},
+ {"label":"Krankenkasse","val":"AOK"},
+ {"label":"Beruf","blank":3},
+ {"label":"Seit wann sind Sie krank?","blank":4},
+ {"label":"Was fehlt Ihnen?","blank":5},
+ {"label":"Datum","val":"16.06."}
+] } }
+Text:
+Ihr Freund Vladimir Serjakov, 30 Jahre alt, kommt aus Sankt Petersburg in Russland und lebt seit einem Monat in Hamburg. Er hat eine neue Stelle bei TUI als Reiseleiter. Seit gestern hat er 39 Grad Fieber. Heute geht er zum Arzt.
+Aufgaben:
+[1] Wohnort
+Lösung: Hamburg
+[2] Alter
+Lösung: 30|30 Jahre|dreißig
+[3] Beruf
+Lösung: Reiseleiter
+[4] Seit wann sind Sie krank?
+Lösung: seit gestern|gestern
+[5] Was fehlt Ihnen?
+Lösung: Fieber|39 Grad Fieber|Ich habe Fieber
+
+### Teil: sf1-05
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 5 — Bestellung
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Buchbestellung", "subtitle": "Anmeldung", "rows": [
+ {"label":"Name","val":"Karamanlis"},
+ {"label":"Vorname","val":"Eleni"},
+ {"label":"Straße","blank":1},
+ {"label":"PLZ / Ort","val":"63067","blank":2},
+ {"label":"Geburtsdatum","blank":3},
+ {"label":"Bestellung","blank":4},
+ {"label":"Zahlungsweise","blank":5}
+] } }
+Text:
+Ihre Freundin Eleni Karamanlis möchte das Buch Pluspunkt Deutsch A1 im Internet bestellen. Sie hat keine Kreditkarte. Sie wohnt in der Berliner Straße 29 in Offenbach. Sie ist am 2. März 1980 geboren.
+Aufgaben:
+[1] Straße
+Lösung: Berliner Straße 29|Berliner Straße
+[2] Ort
+Lösung: Offenbach
+[3] Geburtsdatum
+Lösung: 2. März 1980|02.03.1980|2.3.1980
+[4] Bestellung
+Lösung: Pluspunkt Deutsch A1|Pluspunkt Deutsch
+[5] Zahlungsweise
+A) bar (bei Empfang)
+B) Kreditkarte
+Lösung: A
+
+### Teil: sf1-06
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 6 — Ferienwohnung
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Ferienwohnung am Meer", "subtitle": "Anmeldung", "rows": [
+ {"label":"Familienname","val":"Pellizzari"},
+ {"label":"Vorname","val":"Paolo"},
+ {"label":"Anzahl der Personen","blank":1},
+ {"label":"davon Kinder","blank":2},
+ {"label":"Alter der Kinder","val":"2–7"},
+ {"label":"Wie viele Schlafzimmer?","val":"2"},
+ {"label":"Brauchen Sie eine Küche?","blank":3},
+ {"label":"Anreise","val":"25. Juni"},
+ {"label":"Abreise","blank":4},
+ {"label":"Wie reisen Sie an?","blank":5}
+] } }
+Text:
+Ihr Freund Paolo Pellizzari aus Turin möchte mit seiner Familie (Ehefrau, drei Kinder, 2–7 Jahre alt) an der Ostsee Urlaub machen. Paolo hat drei Wochen Urlaub, vom 25.6. bis zum 15.7. Er sucht eine ruhige Wohnung am Meer, zwei Schlafzimmer, Wohnraum mit Küche, Bad. Paolo will mit dem Auto nach Deutschland kommen.
+Aufgaben:
+[1] Anzahl der Personen
+Lösung: 5|fünf
+[2] davon Kinder
+Lösung: 3|drei
+[3] Brauchen Sie eine Küche?
+Lösung: ja
+[4] Abreise
+Lösung: 15. Juli|15.7.|15.07.
+[5] Wie reisen Sie an?
+A) Flugzeug
+B) Zug
+C) Auto
+Lösung: C
 
 ### Teil: s2
 Format: writing

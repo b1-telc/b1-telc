@@ -758,21 +758,47 @@ function praxisBindReveal(secs){
 }
 
 /* Grün = richtig, Rot = die falsch gewählte Antwort. */
+/* ★ مقارنة «ذكية» لخانة النموذج: بلا حساسية لحروف كبيرة/صغيرة، بتتجاهل
+   المسافات الزايدة وعلامات الترقيم، وبتقبل بدائل مفصولة بـ«|» بالحل. */
+function normFill(s){
+  return String(s == null ? '' : s)
+    .toLowerCase()
+    .replace(/[.,;:!?/()\[\]„""'»«]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+function fillMatch(mine, answer){
+  const m = normFill(mine);
+  if (!m) return false;
+  return String(answer).split('|').some(alt => normFill(alt) === m);
+}
+
 function praxisColor(id, a){
   const q = document.getElementById('q_' + id);
   if (!q || !a) return;
   const mine = S.answers[id];
-  q.querySelectorAll('.opt').forEach(opt => {
-    const k = opt.dataset.opt.split('|')[1];
-    if (k === a.answer) opt.classList.add('correct');
-    else if (k === mine) opt.classList.add('wrong');
-  });
-  q.querySelectorAll('.key[data-key]').forEach(b => {
-    const k = b.dataset.key.split('|')[1];
-    if (k === a.answer) b.classList.add('correct');
-    else if (k === mine) b.classList.add('wrong');
-  });
-  q.classList.add(mine === a.answer ? 'isok' : 'isbad');
+  const inp = q.querySelector('input[data-txt]');
+  let ok;
+  if (inp){                              // خانة نصّ (Formular)
+    ok = fillMatch(mine, a.answer);
+    inp.classList.add(ok ? 'correct' : 'wrong');
+    inp.readOnly = true;
+    if (!ok) q.insertAdjacentHTML('beforeend',
+      `<span class="fsol">${esc(t('fSolution'))}: ${esc(String(a.answer).split('|')[0])}</span>`);
+  } else {
+    ok = mine === a.answer;
+    q.querySelectorAll('.opt').forEach(opt => {
+      const k = opt.dataset.opt.split('|')[1];
+      if (k === a.answer) opt.classList.add('correct');
+      else if (k === mine) opt.classList.add('wrong');
+    });
+    q.querySelectorAll('.key[data-key]').forEach(b => {
+      const k = b.dataset.key.split('|')[1];
+      if (k === a.answer) b.classList.add('correct');
+      else if (k === mine) b.classList.add('wrong');
+    });
+  }
+  q.classList.add(ok ? 'isok' : 'isbad');
   if (a.explanation && !q.querySelector('.why'))
     q.insertAdjacentHTML('beforeend', `<div class="why">${esc(a.explanation)}</div>`);
 }
@@ -1261,6 +1287,9 @@ function renderPartBody(sec){
   const items = sec.items || [];
   const itemsHTML = () => items.map(it => renderItem(sec, it)).join('');
 
+  // Goethe/telc, Schreiben Teil 1: نموذج (Formular) يعبّيه الطالب
+  if (sec.format === 'formular') return renderFormular(sec);
+
   // brief / هورتكست بالامتحان / بلا نصوص: ما في تداخل — متل قبل تماماً
   if (sec.brief || (sec.audio && S.view === 'exam')
       || !sec.passages || !sec.passages.length)
@@ -1293,6 +1322,54 @@ function renderPartBody(sec){
   });
   flush(items.length);                            // نصوص بالآخر (لو في)
   return out;
+}
+
+/* ★ Schreiben Teil 1 — نموذج تسجيل (Formular) مثل الفحص الحقيقي.
+   التخطيط بـsec.form.rows: كل صف إمّا قيمة مُعطاة (val) أو خانة فاضية
+   (blank:N) يعبّيها الطالب. الخانة بتوصل لسؤال id=N: لو إلو خيارات =
+   صندوق اختيار، وإلا = خانة نصّ. الحلول بتضل بالسيرفر (reveal_answers)،
+   والتلوين أخضر/أحمر بيصير بـpraxisColor بعد ما يضغط «Lösung». */
+function renderFormular(sec){
+  const form = sec.form || {};
+  const byId = {};
+  (sec.items || []).forEach(it => { byId[String(it.id)] = it; });
+
+  const scenario = (sec.passages && sec.passages.length)
+    ? sec.passages.map(p => (p.paragraphs || []).map(x =>
+        `<p${x.b ? ' class="strong"' : ''}>${esc(x.t)}</p>`).join('')).join('')
+    : '';
+
+  const blankHTML = it => {
+    if (!it) return '<span class="fval"></span>';
+    const id = esc(it.id);
+    if (it.options && it.options.length){
+      const chosen = S.answers[it.id];
+      return `<span class="q fchoice" id="q_${id}"><span class="opts inline">${
+        it.options.map(o => `<label class="opt${o.key === chosen ? ' sel' : ''}"
+          data-opt="${id}|${esc(o.key)}">
+          <input type="radio" name="q_${id}" value="${esc(o.key)}"${o.key === chosen ? ' checked' : ''}>
+          <span class="grow">${esc(o.text)}</span></label>`).join('')}</span></span>`;
+    }
+    const draft = S.answers[it.id] || '';
+    return `<span class="q ffill" id="q_${id}"><input type="text" class="finput"
+      data-txt="${id}" lang="de" dir="auto" autocomplete="off"
+      value="${esc(draft)}" placeholder="…"></span>`;
+  };
+
+  const rows = (form.rows || []).map(r => {
+    const num  = r.blank ? `<span class="fnum">(${esc(r.blank)})</span>` : '';
+    const val  = r.val != null ? `<span class="fval given">${esc(r.val)}</span>` : '';
+    const fill = r.blank ? blankHTML(byId[String(r.blank)]) : '';
+    return `<div class="frow"><span class="flabel">${esc(r.label || '')}</span>
+      <span class="fcell">${val}${fill}${num}</span></div>`;
+  }).join('');
+
+  return `${scenario ? `<div class="formscenario">${scenario}</div>` : ''}
+    <div class="formcard">
+      <div class="formhd">${form.title ? `<div class="formtitle">${esc(form.title)}</div>` : ''}
+        ${form.subtitle ? `<div class="formsub">${esc(form.subtitle)}</div>` : ''}</div>
+      <div class="formrows">${rows}</div>
+    </div>`;
 }
 
 function renderPassages(sec){

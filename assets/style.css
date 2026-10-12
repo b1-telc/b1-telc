@@ -151,6 +151,47 @@ h3{font-size:1em; margin:0 0 4px}
 .schild p{margin:0 0 8px; line-height:1.6}
 .schild p:last-child{margin-bottom:0}
 .schild p.h{font-weight:800; font-size:1.12em; letter-spacing:.3px; margin-bottom:10px}
+
+/* ---------- Formular: Schreiben Teil 1 (Anmeldung ausfüllen) ----------
+   نموذج تسجيل مثل الفحص: عنوان متوسّط، صفوف «اسم الحقل : القيمة».
+   القيم المعطاة برمادي خفيف، والخانات الفاضية حقول إدخال مع رقمها. */
+.formscenario{
+  background:var(--brand-soft); border-radius:var(--radius);
+  padding:14px 16px; margin:0 0 16px; line-height:1.7;
+}
+.formscenario p{margin:0 0 8px}
+.formscenario p:last-child{margin:0}
+.formcard{
+  border:1.5px solid var(--ink); border-radius:6px; background:var(--card);
+  padding:16px 16px 18px; margin:0 0 4px; overflow:hidden;
+}
+.formhd{text-align:center; border-bottom:2px solid var(--ink); padding-bottom:8px; margin-bottom:14px}
+.formtitle{font-weight:800; font-size:1.15em; letter-spacing:.2px}
+.formsub{font-weight:700; color:var(--muted)}
+.frow{
+  display:grid; grid-template-columns:minmax(104px,34%) 1fr;
+  gap:6px 10px; align-items:center; padding:6px 0;
+  border-bottom:1px dashed var(--line);
+}
+.frow:last-child{border-bottom:0}
+.flabel{color:var(--muted); font-weight:600; font-size:.95em}
+.fcell{display:flex; flex-wrap:wrap; align-items:center; gap:6px 8px; min-width:0}
+.fval{flex:0 1 auto; min-width:0; padding:4px 8px; border-radius:4px}
+.fval.given{background:var(--line); color:var(--ink); font-weight:600}
+.fnum{color:var(--muted); font-size:.85em; white-space:nowrap; margin-inline-start:auto}
+.frow .q.ffill{flex:1 1 120px; min-width:96px; margin:0}
+.frow .q.fchoice{flex:1 1 100%; margin:0}
+.finput{
+  width:100%; box-sizing:border-box; padding:7px 10px;
+  border:1.5px solid var(--brand); border-radius:6px;
+  background:var(--card); color:var(--ink); font:inherit; font-size:.95em;
+}
+.finput:focus{outline:2px solid var(--brand); outline-offset:1px}
+.finput.correct{border-color:var(--ok); background:var(--ok-soft); color:var(--ok); font-weight:700}
+.finput.wrong{border-color:var(--bad); background:var(--bad-soft); color:var(--bad); text-decoration:line-through}
+.fsol{display:block; margin-top:4px; color:var(--ok); font-weight:700; font-size:.9em}
+.fchoice .opts.inline{margin:0; flex-wrap:wrap}
+.fchoice .opt{padding:5px 10px}
 .bank{
   background:var(--card); border:1px dashed var(--line); border-radius:var(--radius);
   padding:14px 16px; margin-bottom:16px;

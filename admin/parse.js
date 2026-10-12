@@ -28,7 +28,7 @@ const Markup = (() => {
   };
 
   /* الصيغ يلي التطبيق بيعرف يعرضها. غيرها بينستورد بس ما بينرسم. */
-  const FORMATS = ['matching','mc','wordbank','truefalse','writing'];
+  const FORMATS = ['matching','mc','wordbank','truefalse','writing','formular'];
 
   /* سطر بينهي وضع النص المتعدّد الأسطر */
   const BOUNDARY_LABELS = new Set(['aufgaben','auswahl','text','extra']);
@@ -340,8 +340,11 @@ const Markup = (() => {
            برّا لوحة التحذيرات. */
         if (/<[^<>]{0,80}>/.test(String(it.answer))) return;
         if (!local.size){
-          // ★ ولا خيار ولا بنك: الطالب ما عنده شي يضغطه، والشاشة بتنهار
-          if (s.format !== 'writing' && s.format !== 'truefalse')
+          // ★ ولا خيار ولا بنك: الطالب ما عنده شي يضغطه، والشاشة بتنهار.
+          //   formular: خانة نصّية يعبّيها الطالب، فحلّها نصّ حرّ بلا خيارات —
+          //   هاد طبيعي مثل writing، مو خطأ.
+          if (s.format !== 'writing' && s.format !== 'truefalse'
+              && s.format !== 'formular')
             warn.push(`Aufgabe ${it.id} in Teil ${s.id} hat eine Lösung `
                     + `„${it.answer}“, aber keine Auswahlmöglichkeiten`);
           return;
@@ -395,7 +398,7 @@ const Markup = (() => {
      العكس: كائن ← نص. مفيد لتعديل امتحان موجود، ولإثبات إن
      الصيغة بتوسّع المحتوى الحقيقي (اختبار round-trip).
      ============================================================ */
-  const EXTRA_KEYS = ['brief','hints','criteria','grades','factor'];
+  const EXTRA_KEYS = ['brief','hints','criteria','grades','factor','form'];
 
   function serialize(test){
     const L = [];
