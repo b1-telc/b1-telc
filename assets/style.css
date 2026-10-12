@@ -137,6 +137,20 @@ h3{font-size:1em; margin:0 0 4px}
 .passage p:last-child{margin-bottom:0}
 .passage p.strong{font-weight:700}          /* Überschrift im Originaltext */
 .passage .body{white-space:pre-wrap; line-height:1.85}
+
+/* ---------- Schild: Lesen Teil 3 (Hinweisschilder / Aushänge) ----------
+   كل سؤال = لافتة/إعلان صغير داخل إطار مثل الفحص الحقيقي. العنوان فوق
+   الإطار (الموقف)، والمتن متوسّط جوّا إطار مزدوج، وأوّل سطر fett. */
+.schildwrap{margin:0 0 16px}
+.schildcap{font-weight:600; color:var(--muted); margin:0 0 8px; font-size:.95em}
+.schild{
+  border:2px solid var(--ink); border-radius:4px;
+  background:var(--card); box-shadow:0 0 0 4px var(--card),0 0 0 5px var(--line);
+  padding:18px 20px; max-width:430px; text-align:center;
+}
+.schild p{margin:0 0 8px; line-height:1.6}
+.schild p:last-child{margin-bottom:0}
+.schild p.h{font-weight:800; font-size:1.12em; letter-spacing:.3px; margin-bottom:10px}
 .bank{
   background:var(--card); border:1px dashed var(--line); border-radius:var(--radius);
   padding:14px 16px; margin-bottom:16px;

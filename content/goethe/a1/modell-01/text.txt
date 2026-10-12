@@ -13,6 +13,12 @@ Minuten: 0
 Punkte: 45
 Teile: lv2-01, lv2-02, lv2-03, lv2-04, lv2-05, lv2-06, lv2-07, lv2-08, lv2-09, lv2-10, lv2-11, lv2-12
 
+## Block: lv3
+Titel: Lesen · Teil 3
+Minuten: 0
+Punkte: 55
+Teile: lv3-01, lv3-02, lv3-03, lv3-04, lv3-05, lv3-06, lv3-07, lv3-08, lv3-09, lv3-10, lv3-11
+
 ## Block: s1
 Titel: Schreiben · Teil 1 (Formular)
 Minuten: 10
@@ -783,6 +789,551 @@ Lösung: b
 A) www.kids.de — Bei uns gibt es alles, was Ihrem Kind gefällt: | Sportartikel, Spiele und vieles mehr.
 B) www.kinderwelt.de — **Modische Kleidung für die Kleinen.** | Viele Sonderangebote.
 Lösung: a
+
+### Teil: lv3-01
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 1
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die Texte und die Aufgaben. Kreuzen Sie an: Richtig oder Falsch.
+Stil: schild
+Text:
+@ Vor einem Blumenladen
+**Neu! Neu! Neu! Neu! Neu!**
+Liebe Kunden!
+Ab sofort haben wir auch sonntags von 9–12 Uhr für Sie geöffnet!
+Aufgaben:
+[1] Am Sonntagvormittag bekommen Sie hier Blumen.
+Lösung: richtig
+Text:
+@ Im Restaurant
+Liebe Gäste,
+im nächsten Monat kocht bei uns ein Koch aus Kalkutta indische Spezialitäten.
+Wir freuen uns auf Ihren Besuch.
+Aufgaben:
+[2] Jeden Montag bietet das Restaurant indisches Essen an.
+Lösung: falsch
+Text:
+@ Bei der Straßenbahn
+**Linie 8**
+Ab 1.5. nur bis Hauptbahnhof.
+Zur Weiterfahrt nach Huchting Linie 1 oder Bus Nr. 53.
+Aufgaben:
+[3] Es ist der 2. Mai, 21 Uhr. Sie können jetzt nicht zum Hauptbahnhof fahren.
+Lösung: falsch
+Text:
+@ An einer Haustür
+Sehr geehrte Interessenten,
+es gibt leider keine Besichtigungen mehr.
+Die 3-Zimmer-Wohnung im 3. Stock ist schon vermietet.
+Aufgaben:
+[4] Sie können die Wohnung nicht besichtigen.
+Lösung: richtig
+Text:
+@ Im Bahnhof
+**Sehr geehrte Fahrgäste!**
+Ab 22 Uhr sind unsere Schalter geschlossen.
+Fahrkarten bekommen Sie dann an unseren Automaten.
+Aufgaben:
+[5] Ab 22 Uhr können Sie keine Fahrkarten mehr kaufen.
+Lösung: falsch
+
+### Teil: lv3-02
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 2
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die Texte und die Aufgaben. Kreuzen Sie an: Richtig oder Falsch.
+Stil: schild
+Text:
+@ In der Sprachschule
+In der 10-Uhr-Pause bekommen Sie an der Rezeption ein Frühstückspaket:
+Belegte Brötchen und Getränke für 2 Euro.
+Aufgaben:
+[1] In der Sprachschule können Sie etwas zu essen kaufen.
+Lösung: richtig
+Text:
+@ An der Post
+**Öffnungszeiten:**
+montags – freitags
+8.00 – 12.00 und 13.00 – 18.00
+samstags 8.00 – 12.00
+Aufgaben:
+[2] Es ist Samstagnachmittag. Sie können auf der Post Briefmarken kaufen.
+Lösung: falsch
+Text:
+@ Am Bahnhof
+Auf dem gesamten Bahnhof ist das Rauchen verboten.
+Aufgaben:
+[3] Sie können hier Zigaretten rauchen.
+Lösung: falsch
+Text:
+@ Eingang Restaurant
+**Heute im Bavaria:**
+Bayerischer Abend
+Brezeln, Weißwürste, Sauerkraut
+Volksmusik, ab 20 Uhr Tanz
+Aufgaben:
+[4] Heute Abend können Sie in diesem Restaurant tanzen.
+Lösung: richtig
+Text:
+@ An der Haltestelle
+**In der Neujahrsnacht**
+Busverkehr bis 23.00 Uhr
+und
+von 1.00 Uhr bis 5.00 Uhr alle 30 Minuten
+Aufgaben:
+[5] Von 23 Uhr bis 1 Uhr fährt kein Bus.
+Lösung: richtig
+
+### Teil: lv3-03
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 3
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die Texte und die Aufgaben. Kreuzen Sie an: Richtig oder Falsch.
+Stil: schild
+Text:
+@ Am Fahrkartenautomaten
+**Bayern-Ticket:**
+Ein Tag. Fünf Personen. 29 Euro.
+Montag und Freitag ab 9 Uhr,
+am Wochenende von 6 bis 24 Uhr.
+Aufgaben:
+[1] Am Samstag können Sie und Ihre Freunde mit dem Ticket für 29 Euro fahren.
+Lösung: richtig
+Text:
+@ Im Hotelzimmer
+Liebe Gäste,
+ab 21 Uhr ist die Haustür geschlossen.
+Bitte nehmen Sie Ihren Zimmerschlüssel mit, er ist auch der Hausschlüssel!
+Aufgaben:
+[2] Nach 22 Uhr kommen Sie nicht mehr ins Hotel.
+Lösung: falsch
+Text:
+@ Eingang Restaurant
+Wir haben für Sie täglich
+von 11.30 bis 15.00 Uhr und
+von 18.00 bis 22.00 Uhr geöffnet,
+auch am Wochenende und an Feiertagen.
+Aufgaben:
+[3] Am Sonntagmittag können Sie in diesem Restaurant essen.
+Lösung: richtig
+Text:
+@ Im Kultur-Verein
+Ab sofort:
+Jeden Samstag um 20 Uhr Filmabend!
+Am 3.5.: „Im Juli“ von Fatih Akın.
+Eintritt 2 Euro.
+Aufgaben:
+[4] Man kann diesen Samstagabend einen Film sehen.
+Lösung: richtig
+Text:
+@ Im Bahnhof
+**Kartenverkauf an Schalter 1 bis 3.**
+**Informationen an Schalter 4.**
+Aufgaben:
+[5] Fahrkarten können Sie an allen Schaltern bekommen.
+Lösung: falsch
+
+### Teil: lv3-04
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 4
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die Texte und die Aufgaben. Kreuzen Sie an: Richtig oder Falsch.
+Stil: schild
+Text:
+@ An der Arztpraxis
+**Dr. Matthias M. Markensen**
+Arzt für Hals-, Nasen-, Ohrenkrankheiten
+Sprechstunde
+Mo – Do 9.00 – 13.00 Uhr
+Fr 14.00 – 18.00 Uhr
+Aufgaben:
+[1] Am Mittwochnachmittag ist Dr. Markensen nicht in der Praxis.
+Lösung: richtig
+Text:
+@ An der Tür der Schule
+**Liebe Eltern!**
+Am Freitag haben wir Elternabend.
+Wir möchten, dass alle Eltern an diesem Abend mit den Lehrern sprechen.
+Bitte nicht vergessen: Freitag, 20.00 Uhr.
+Aufgaben:
+[2] Am Freitag treffen sich die Schüler mit den Lehrern.
+Lösung: falsch
+Text:
+@ In der Schule
+**Liebe Schülerinnen und Schüler!**
+Für das Schulfest am Wochenende ist ein Verkaufsmarkt geplant.
+Jeder kann einen Stand einrichten und seine alten Sachen verkaufen:
+Bücher, Musik-CDs, Instrumente, Kleider …
+Interessierte melden sich bitte im Sekretariat!
+Aufgaben:
+[3] Am Wochenende gibt es ein Musik-Festival.
+Lösung: falsch
+Text:
+@ An der U-Bahn
+Die Linie 3 fährt in dieser Woche nur bis Holzdorf.
+Reisende nach Klammroth und Ulzenen können die Anschlussbusse benutzen.
+Aufgaben:
+[4] Man kann mit dem Bus nach Klammroth fahren.
+Lösung: richtig
+Text:
+@ Am Restaurant
+**Liebe Gäste!**
+Heute haben wir etwas ganz Besonderes für Sie:
+Ein Argentinischer Abend mit Musik und Super-Steaks.
+Um 22.30 Uhr: Argentinischer Tango mit Kita und Manuel!
+Aufgaben:
+[5] Heute Abend gibt es Fisch.
+Lösung: falsch
+
+### Teil: lv3-05
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 5
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Anweisung: Lesen Sie die Texte und die Aufgaben. Kreuzen Sie an: Richtig oder Falsch.
+Stil: schild
+Text:
+@ Im Restaurant
+Essen und Trinken im Garten
+wochentags bis 22 Uhr,
+freitags und samstags bis 23 Uhr.
+Das Restaurant schließt um 24 Uhr.
+Aufgaben:
+[1] Am Mittwochabend können Sie bis 23 Uhr im Garten sitzen.
+Lösung: falsch
+Text:
+@ Auf der Straße
+**Parken verboten**
+Aufgaben:
+[2] Sie dürfen hier nicht parken.
+Lösung: richtig
+Text:
+@ An einer Haltestelle
+Die Straßenbahnen fahren heute nur zur Kaiserstraße.
+Zur Weiterfahrt zum Hauptbahnhof nehmen Sie bitte den Bus Linie 103.
+Aufgaben:
+[3] Heute fahren die Straßenbahnen und Busse nur bis zum Hauptbahnhof.
+Lösung: falsch
+Text:
+@ Im Fenster eines Kaufhauses
+**SONDERAKTION – 50 % weniger zahlen!**
+Ab morgen kostet alles nur die Hälfte.
+Aufgaben:
+[4] Ab morgen können Sie billiger einkaufen.
+Lösung: richtig
+
+### Teil: lv3-06
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 6
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die Texte und die Aufgaben. Kreuzen Sie an: Richtig oder Falsch.
+Stil: schild
+Text:
+@ In der Schule
+**Schulfest am nächsten Samstag.**
+Alle Schülerinnen, Schüler und Eltern sind eingeladen.
+Kaffee und Kuchen gibt es in der Cafeteria.
+Abends Disco.
+Aufgaben:
+[1] In der Schule können Sie am Samstag tanzen.
+Lösung: richtig
+Text:
+@ Am Busbahnhof
+**Ab Januar günstige Busreisen**
+in ganz Deutschland.
+Informationen am Busbahnhof, Schalter 12.
+Aufgaben:
+[2] Im Januar gibt es Busfahrten nach Deutschland.
+Lösung: falsch
+Text:
+@ Vor dem Ticketshop
+**Das Konzert der Toten Hosen in der Stadthalle ist ausverkauft.**
+Aufgaben:
+[3] Es gibt keine Karten mehr.
+Lösung: richtig
+Text:
+@ Im Internet
+**Hessenticket** der Deutschen Bahn
+Bis zu 5 Personen können an einem Tag durch ganz Hessen mit Bus oder Bahn fahren.
+Für nur 31,- Euro.
+Aufgaben:
+[4] Das Hessenticket gibt es nur für Gruppen ab 5 Personen.
+Lösung: falsch
+Text:
+@ Beim Arzt
+**In der Praxis sind Handys verboten**
+Aufgaben:
+[5] Sie dürfen mit dem Handy nicht telefonieren.
+Lösung: richtig
+
+### Teil: lv3-07
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 7
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die Texte und die Aufgaben. Kreuzen Sie an: Richtig oder Falsch.
+Stil: schild
+Text:
+@ In der Sprachschule
+**Griechischlehrer/in gesucht.**
+Die Volkshochschule sucht ab sofort KursleiterInnen
+für Griechischkurse auf allen Stufen.
+Aufgaben:
+[1] Hier gibt es Sprachkurse für Griechen.
+Lösung: falsch
+Text:
+@ An der Post
+**Räder abstellen verboten**
+Aufgaben:
+[2] Sie dürfen hier keine Räder abstellen.
+Lösung: richtig
+Text:
+@ Beim Zahnarzt
+**Dr. Kern**
+Sprechstunde
+Mo – Di, Do – Fr 9 – 12 Uhr, 14 – 18 Uhr
+Mi 9 – 12 Uhr
+Aufgaben:
+[3] Am Vormittag ist die Praxis immer geöffnet.
+Lösung: richtig
+Text:
+@ Im Kaufhaus
+**Weihnachten** steht vor der Tür.
+Haben Sie schon alle Geschenke?
+An den vier Sonntagen vor Weihnachten haben wir für Sie geöffnet.
+Aufgaben:
+[4] Am Sonntag vor Weihnachten können Sie einkaufen.
+Lösung: richtig
+Text:
+@ An einer Videothek
+**Videothek SATURN**
+Neueröffnung am 1. Juni
+In zwei Wochen können Sie in der Heidestraße DVDs kaufen und ausleihen.
+Aufgaben:
+[5] Sie können ab sofort in der Heidestraße DVDs bekommen.
+Lösung: falsch
+
+### Teil: lv3-08
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 8
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die Texte und die Aufgaben. Kreuzen Sie an: Richtig oder Falsch.
+Stil: schild
+Text:
+@ An einer Bäckerei
+**Bäckerei Krause**
+Wir sind umgezogen.
+Sie finden uns jetzt in der Bahnhofstraße 10.
+Aufgaben:
+[1] In der Bahnhofstraße 10 kann man Brot kaufen.
+Lösung: richtig
+Text:
+@ An einer Bank
+**Volksbank**
+Öffnungszeiten:
+Mo – Fr 9 – 18 Uhr
+Sa 9 – 12 Uhr
+Aufgaben:
+[2] Sie können am Samstagnachmittag auf der Bank Geld überweisen.
+Lösung: falsch
+Text:
+@ An einer Haltestelle
+Wegen Bauarbeiten ist die Haltestelle verlegt:
+200 Meter rechts, an der Ecke Münchner Straße / Kaiserstraße.
+Aufgaben:
+[3] Es gibt eine neue Haltestelle.
+Lösung: richtig
+Text:
+@ Am Eingang eines Restaurants
+**Restaurant Zur Eiche**
+Wegen Urlaub bis zum 1. September geschlossen.
+Aufgaben:
+[4] Im September ist das Restaurant geschlossen.
+Lösung: falsch
+Text:
+@ Im Hotel
+Frühstück gibt es täglich von 7 – 10 Uhr,
+sonntags von 8 – 10 Uhr
+im Frühstückssaal im ersten Stock.
+Aufgaben:
+[5] Man kann jeden Tag um 7 Uhr frühstücken.
+Lösung: falsch
+
+### Teil: lv3-09
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 9
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie die Texte und die Aufgaben. Kreuzen Sie an: Richtig oder Falsch.
+Stil: schild
+Text:
+@ Am Eingang des Hallenbads
+An den **Osterfeiertagen** ist unser Schwimmbad
+nur von 9.00 bis 12.00 Uhr für Sie geöffnet.
+Aufgaben:
+[1] An Ostern können Sie vormittags nicht schwimmen gehen.
+Lösung: falsch
+Text:
+@ Im Flughafen
+Wir bitten alle Reisenden:
+**Geben Sie alle Ihre Fleisch- und Wurstwaren bitte beim Zoll ab.**
+Aufgaben:
+[2] Sie dürfen die Wurst in Ihrer Tasche behalten.
+Lösung: falsch
+Text:
+@ In der Volkshochschule
+**VHS-Info: Betriebsversammlung**
+Unsere Kasse ist heute erst ab 14.00 Uhr geöffnet.
+Aufgaben:
+[3] Um 15.00 Uhr können Sie Ihren Kurs bezahlen.
+Lösung: richtig
+Text:
+@ An Ihrem Hauseingang
+Am Montag, dem 14. September, zwischen 10.00 und 12.00 Uhr
+möchten wir die Wasseruhr ablesen.
+Ihre Hausverwaltung.
+Aufgaben:
+[4] Am Montagnachmittag können Sie Ihr Bad nicht benutzen.
+Lösung: falsch
+Text:
+@ Am Eingang der Sparkasse
+**Haupteingang zur Zeit geschlossen.**
+Bitte benutzen Sie den linken Seiteneingang.
+Aufgaben:
+[5] Sie müssen leider zu einer anderen Sparkasse gehen.
+Lösung: falsch
+
+### Teil: lv3-10
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Anweisung: Lesen Sie die Texte und die Aufgaben. Kreuzen Sie an: Richtig oder Falsch.
+Stil: schild
+Text:
+@ Supermarkt – am Fenster
+**NATURANA-SUPERMARKT**
+Öffnungszeiten ab dem 2. Januar
+täglich von 9.00 – 22.00 Uhr
+samstags: 9.00 – 20.00 Uhr
+Aufgaben:
+[1] Am Freitagabend können Sie einkaufen.
+Lösung: richtig
+Text:
+@ Information im Getränkemarkt
+Ab sofort: Günstige Getränkepreise.
+Säfte und Mineralwasser, Bier und Wein.
+Aufgaben:
+[2] Schon heute kann man billig einkaufen.
+Lösung: richtig
+Text:
+@ An einer Bäckerei
+Jeden Sonntagmorgen von 8 – 12 Uhr frische Brötchen.
+Außerdem: Kaffee, Cappuccino, Espresso zum Mitnehmen.
+Zu günstigen Preisen.
+Aufgaben:
+[3] In der Bäckerei kann man Kaffee trinken.
+Lösung: falsch
+Text:
+@ In der Kantine / im Firmenrestaurant
+**Neue Öffnungszeiten**
+Mo – Do 10 – 15 Uhr und 17 – 20 Uhr.
+Fr 10 – 15 Uhr.
+Aufgaben:
+[4] Sie können am Freitagabend Essen bekommen.
+Lösung: falsch
+
+### Teil: lv3-11
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 11
+Minuten: 0
+Punkte: 1
+Maximum: 7
+Anweisung: Lesen Sie die Texte und die Aufgaben. Kreuzen Sie an: Richtig oder Falsch.
+Stil: schild
+Text:
+@ An der Volkshochschule
+Die Volkshochschule zieht um.
+Unterricht erst wieder am 1.4.
+Aufgaben:
+[1] Der Unterricht ist heute in einem anderen Haus.
+Lösung: falsch
+Text:
+@ Im Büro
+**Ab sofort ist das Rauchen in allen Büroräumen verboten.**
+Aufgaben:
+[2] Sie dürfen ab heute im Büro nicht mehr rauchen.
+Lösung: richtig
+Text:
+@ An einer Wohnungstür
+Die Wohnung ist leider schon vermietet.
+Montag, 2. Januar
+Hans Krause, Vermieter
+Aufgaben:
+[3] Sie können die Wohnung am Montag besichtigen.
+Lösung: falsch
+Text:
+@ An der Haustür
+Liebe Mieter,
+die Firma Knorr macht am Dienstag Reparaturarbeiten im Haus.
+Die Firma muss an diesem Tag in alle Wohnungen.
+Sind Sie am Dienstag nicht zu Hause? Geben Sie dann bitte Ihren Schlüssel beim Nachbarn oder bei der Hausverwaltung ab.
+Vielen Dank.
+Aufgaben:
+[4] Sie müssen am Dienstag zu Hause sein.
+Lösung: falsch
+Text:
+@ An der Tür der Arztpraxis
+**Dr. med. Weier**
+Arzt für Allgemeinmedizin
+Sprechstunden
+Montag bis Freitag 8 – 11 Uhr und 15 – 18 Uhr
+Mittwoch 8 – 12 Uhr
+auch nach Vereinbarung
+Aufgaben:
+[5] Sie können am Freitagnachmittag zum Arzt gehen.
+Lösung: richtig
+Text:
+@ Im Bürgerbüro
+Ziehen Sie eine Nummer und nehmen Sie bitte Platz.
+Sie werden dann zu Ihrem Schalter aufgerufen.
+Aufgaben:
+[6] Man kann sofort zu einem Mitarbeiter im Bürgerbüro gehen.
+Lösung: falsch
+Text:
+@ An einer Bäckerei
+**WIR ZIEHEN UM!**
+Die Bäckerei KOHLHAMMER finden Sie ab nächster Woche in der Taunusstraße 12.
+Aufgaben:
+[7] Schon heute können Sie in der Taunusstraße Brötchen kaufen.
+Lösung: falsch
 
 ### Teil: s1
 Format: writing

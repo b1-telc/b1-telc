@@ -45,7 +45,7 @@ const Markup = (() => {
     format: 'format', titel: 'title', gruppe: 'group', minuten: 'minutes',
     punkte: 'pointsPerItem', maximum: 'maxPoints', anweisung: 'instruction',
     hinweis: 'note', auswahltitel: 'bankTitle', bild: 'bankImage',
-    hoertext: 'audio', wiedergaben: 'audioPlays'
+    hoertext: 'audio', wiedergaben: 'audioPlays', stil: 'stil'
   };
 
   /* ============================================================
@@ -69,9 +69,15 @@ const Markup = (() => {
       }
       if (mode === 'text' && buf.length){
         const paragraphs = [];
+        let cap = null;
         buf.forEach(l => {
           const t = l.trim();
           if (!t) return;
+          /* ★ سطر يبلّش بـ«@ » = عنوان الموقف فوق اللافتة (Goethe/telc
+             Lesen Teil 3: «Im Restaurant»، «Am Bahnhof» …). بينعرض كـcap
+             فوق الإطار، مو جوّاه. أوّل واحد بس. */
+          const mc = t.match(/^@\s+(.+)$/);
+          if (mc){ if (cap == null) cap = mc[1].trim(); return; }
           const b = /^\*\*.*\*\*$/.test(t);
           paragraphs.push({ t: b ? t.replace(/^\*\*|\*\*$/g, '').trim() : t, b });
         });
@@ -79,7 +85,11 @@ const Markup = (() => {
            النصّ والأسئلة متل المصدر (نص ← سؤال ١،٢ ← نص ← سؤال ٣…)
            بدل ما كل النصوص تطلع فوق وكل الأسئلة تحت. القيمة = عدد
            الأسئلة يلي قبله. القديم (بلا before) بينعرض كله فوق متل قبل. */
-        if (paragraphs.length) passages.push({ paragraphs, before: sec.items.length });
+        if (paragraphs.length){
+          const p = { paragraphs, before: sec.items.length };
+          if (cap) p.cap = cap;
+          passages.push(p);
+        }
       }
       buf = [];
     };
@@ -416,6 +426,7 @@ const Markup = (() => {
       if (s.bankImage)             L.push(`Bild: ${s.bankImage}`);
       if (s.audio)                 L.push(`Hörtext: ${s.audio}`);
       if (s.audioPlays != null)    L.push(`Wiedergaben: ${s.audioPlays}`);
+      if (s.stil)                  L.push(`Stil: ${s.stil}`);
 
       const extra = {};
       EXTRA_KEYS.forEach(k => { if (s[k] !== undefined) extra[k] = s[k]; });
@@ -430,6 +441,7 @@ const Markup = (() => {
       let pi = 0, opened = false;
       const pushText = () => {
         L.push('Text:');
+        if (ps[pi].cap) L.push(`@ ${ps[pi].cap}`);   // عنوان الموقف فوق اللافتة
         (ps[pi].paragraphs || []).forEach(x => L.push(x.b ? `**${x.t}**` : x.t));
         pi++; opened = false;              // بعد كل نص لازم Aufgaben: جديدة
       };
