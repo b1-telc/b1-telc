@@ -91,6 +91,7 @@ const I18N = (() => {
       revealing: 'Lädt …',
       revealed: 'Antworten angezeigt ✓',
       revealFailed: 'Antworten konnten nicht geladen werden.',
+      fSolution: 'Lösung',
       praxisReset: 'Antworten zurücksetzen',
       praxisResetAsk: 'Alle Antworten in diesem Teil löschen und neu üben?',
       praxisResetDone: 'Zurückgesetzt — Sie können neu üben.',
