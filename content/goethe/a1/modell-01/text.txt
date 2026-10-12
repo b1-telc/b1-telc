@@ -11,7 +11,7 @@ Teile: lv1-01, lv1-02, lv1-03, lv1-04, lv1-05, lv1-06, lv1-07, lv1-08, lv1-09, l
 Titel: Lesen · Teil 2
 Minuten: 0
 Punkte: 45
-Teile: lv2-01, lv2-02, lv2-03, lv2-04, lv2-05, lv2-06, lv2-07, lv2-08, lv2-09, lv2-10, lv2-11
+Teile: lv2-01, lv2-02, lv2-03, lv2-04, lv2-05, lv2-06, lv2-07, lv2-08, lv2-09, lv2-10, lv2-11, lv2-12
 
 ## Block: s1
 Titel: Schreiben · Teil 1 (Formular)
@@ -692,8 +692,8 @@ Gruppe: Lesen
 Titel: Übung 10
 Minuten: 0
 Punkte: 1
-Maximum: 4
-Anweisung: Lesen Sie die Texte und die Aufgaben. Welche Internet-Adresse ist richtig? Kreuzen Sie an: a oder b.
+Maximum: 8
+Anweisung: Lesen Sie die Texte und die Aufgaben 1 bis 8. Welche Internet-Adresse ist richtig? Kreuzen Sie an: a oder b.
 Aufgaben:
 [1] Sie sind in Berlin und möchten heute Abend einen Film sehen. Wo finden Sie Informationen?
 A) www.berlinonline.de — berlinonline +++ berlinonline | • Kurfürstendamm | • Unter den Linden | • Alexanderplatz
@@ -711,6 +711,22 @@ Lösung: b
 A) Abfahrt Rostock — 10.22 · E 7133 | Berlin an 13.56 | Hält nicht in Oranienburg
 B) Abfahrt Rostock — 15.04 · D 245 | Berlin an 18.42
 Lösung: b
+[5] Sie sind in München und möchten in einem eleganten Restaurant essen. Wo finden Sie Informationen?
+A) www.gutessen.de — **Rezepte / Einkauf-Tipps** | • italienische Küche | • französische Küche
+B) www.gourmet.com — Besonders gut essen in München | Klicken Sie hier!
+Lösung: b
+[6] Sie möchten für den Urlaub ein Apartment am Meer mieten. Wo können Sie das?
+A) www.nordsee.de — • Küste | • Wattenmeer | • Schiffe | • Ferienwohnungen | • Inseln
+B) www.seenplatte.de — • geografische Karte | • Verkehrsverbindungen | • Schifffahrtspläne | • Hotels | • Pensionen
+Lösung: a
+[7] Sie suchen Informationen über den Starnberger See nicht weit von München. Wo finden Sie die?
+A) www.muencheninfo.de — • die Stadt | • die Sehenswürdigkeiten | • die Seen | Klicken Sie hier!
+B) www.seeleid.com — **Ferienwohnungen** | • Fotos | • Preise | • Adressen
+Lösung: a
+[8] Sie sind in Berlin und möchten die Stadt besichtigen. Wo finden Sie Informationen?
+A) www.citytours.com — • Stadtplan | • Stadtrundfahrt per Schiff | • Historische Führungen | • Stadtrundfahrt mit Bus
+B) www.infoberlin.com — • Hotels | • Pensionen | • Bed and Breakfast | • Jugendherbergen
+Lösung: a
 
 ### Teil: lv2-11
 Format: mc
@@ -718,24 +734,54 @@ Gruppe: Lesen
 Titel: Übung 11
 Minuten: 0
 Punkte: 1
-Maximum: 4
-Anweisung: Lesen Sie die Texte und die Aufgaben. Welche Internet-Adresse ist richtig? Kreuzen Sie an: a oder b.
+Maximum: 5
+Anweisung: Lesen Sie die Texte und die Aufgaben. Welche Anzeige passt? Kreuzen Sie an: a oder b.
 Aufgaben:
-[1] Sie sind in München und möchten in einem eleganten Restaurant essen. Wo finden Sie Informationen?
-A) www.gutessen.de — **Rezepte / Einkauf-Tipps** | • italienische Küche | • französische Küche
-B) www.gourmet.com — Besonders gut essen in München | Klicken Sie hier!
+[1] Freunde geben Ihnen ihre alte Küche. Sie können die Küche aber nicht holen, denn Sie haben kein Auto.
+A) Tel. 089 / 10 87 45 — **Transport · Umzüge · Küchenmontage** | Freundliche Fahrer, große Lkws. | Nur wohnen bleiben ist günstiger.
+B) Tel. 089 / 437 86 50 — **Küchenladen Schleudermann** | Küchen aller Art – von teuer bis günstig. | Wir bringen Ihre Traum-Küche direkt nach Hause.
+Lösung: a
+[2] Sie suchen einen Kindergarten für Ihre kleine Tochter, sie ist 4 Jahre alt.
+A) Tel. 030 / 90 14 37 — **Kindergarten Waldspiel** | für unsere Kleinsten (2 + 3 Jahre alt) | neu ab 1. Februar: 10 Ganztagsplätze
+B) Tel. 030 / 33 37 85 — **Petras Kindergarten** | hat noch zwei Plätze frei. | Großer Garten mit Spielplatz, kleine Gruppen.
 Lösung: b
-[2] Sie möchten für den Urlaub ein Apartment am Meer mieten. Wo können Sie das?
-A) www.nordsee.de — • Küste | • Wattenmeer | • Schiffe | • Ferienwohnungen | • Inseln
-B) www.seenplatte.de — • geografische Karte | • Verkehrsverbindungen | • Schifffahrtspläne | • Hotels | • Pensionen
+[3] Sie sind in Frankfurt und möchten am Nachmittag in Heidelberg sein. Sie möchten mit dem Zug fahren.
+A) www.reiseauskunft-bahn.de — Frankfurt ab 15.00 → Heidelberg an 15.55 | Dauer 0:55 · Gleis 13
+B) www.reiseauskunft-bahn.de — Frankfurt ab 20.00 → Heidelberg an 21.30 | Dauer 1:30 · Gleis 19
 Lösung: a
-[3] Sie suchen Informationen über den Starnberger See nicht weit von München. Wo finden Sie die?
-A) www.muencheninfo.de — • die Stadt | • die Sehenswürdigkeiten | • die Seen | Klicken Sie hier!
-B) www.seeleid.com — **Ferienwohnungen** | • Fotos | • Preise | • Adressen
+[4] Sie suchen Informationen über Berlin. Wo finden Sie das?
+A) www.outdoor-berlin.de — Alles für Ihren Campingurlaub. | Zelte, Schlafsäcke, Rucksäcke, Fahrräder
+B) www.ihr-reiseplaner.de — Reiseführer und Karten von allen | deutschen Städten. | Günstige Hotelangebote.
+Lösung: b
+[5] Ihr Drucker ist kaputt. Sie brauchen Hilfe.
+A) www.drucker-online.de — Neue Modelle aller Marken zu günstigen Preisen. | Wir nehmen Ihren alten Drucker in Zahlung. | Bei Bestellung gibt es 500 Blatt Kopierpapier gratis.
+B) www.computerundco.de — Probleme mit Ihrem Computer? | Reparaturdienst rund um die Uhr. | Wir reparieren auch Drucker, Scanner usw.
+Lösung: b
+
+### Teil: lv2-12
+Format: mc
+Gruppe: Lesen
+Titel: Übung 12
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Anweisung: Lesen Sie die Texte und die Aufgaben. Welche Anzeige passt? Kreuzen Sie an: a oder b.
+Aufgaben:
+[1] Für Ihr Büro brauchen Sie Papier und Stifte.
+A) www.marktplatz.de — Gesucht: Kopierpapier – Angebote | bitte an 0160-2344878
+B) www.kantore.de — **Büromaterial schnell und günstig** | Alles, was Sie zum Schreiben brauchen. | Auch Büromöbel.
+Lösung: b
+[2] Sie möchten Karten für ein Konzert kaufen.
+A) www.kulturshop.de — **Exklusiver Vorverkauf** | Bestellen Sie Ihre Tickets online. | Rock – Pop – Jazz – Klassik.
+B) www.eventstotal.com — Für das Konzert der Spin Rockers | am 14. Februar gibt es leider | keine Karten mehr.
 Lösung: a
-[4] Sie sind in Berlin und möchten die Stadt besichtigen. Wo finden Sie Informationen?
-A) www.citytours.com — • Stadtplan | • Stadtrundfahrt per Schiff | • Historische Führungen | • Stadtrundfahrt mit Bus
-B) www.infoberlin.com — • Hotels | • Pensionen | • Bed and Breakfast | • Jugendherbergen
+[3] Sie suchen einen Sportverein.
+A) www.sport-blog.de — Wie soll ich Sport machen? | Sportverein: ja oder nein? | Lesen Sie pro und contra auf unserer Seite.
+B) www.sportcenter-mitte.de — Im Januar beginnt unser neues Kursprogramm. | Auch Kurse für Fitness, Pilates, Yoga | und Tanzen. Günstige Angebote
+Lösung: b
+[4] Sie möchten einen neuen Fußball für Ihren Sohn kaufen.
+A) www.kids.de — Bei uns gibt es alles, was Ihrem Kind gefällt: | Sportartikel, Spiele und vieles mehr.
+B) www.kinderwelt.de — **Modische Kleidung für die Kleinen.** | Viele Sonderangebote.
 Lösung: a
 
 ### Teil: s1
