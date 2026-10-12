@@ -1267,7 +1267,17 @@ function renderPartBody(sec){
     return renderPassages(sec) + renderBank(sec) + itemsHTML();
 
   const ps = sec.passages;
-  const passHTML = p => `<div class="passage">
+  /* ★ Goethe/telc, Lesen Teil 3: كل نص لافتة/إعلان صغير داخل إطار (Schild).
+     العنوان (الموقف: «Im Restaurant» …) بيطلع فوق الإطار كـcaption، ومتن
+     اللافتة جوّا الإطار متوسّط، وأوّل سطر fett = عنوان اللافتة. */
+  const schild = sec.stil === 'schild';
+  const passHTML = schild
+    ? p => `<div class="schildwrap">
+        ${p.cap ? `<div class="schildcap">${esc(p.cap)}</div>` : ''}
+        <div class="schild">${(p.paragraphs || []).map(x =>
+          `<p${x.b ? ' class="h"' : ''}>${esc(x.t)}</p>`).join('')}</div>
+      </div>`
+    : p => `<div class="passage">
       ${p.title ? `<h3>${esc(p.title)}</h3>` : ''}
       ${(p.paragraphs || []).map(x =>
         `<p${x.b ? ' class="strong"' : ''}>${esc(x.t)}</p>`).join('')}
