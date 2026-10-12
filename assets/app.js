@@ -1331,8 +1331,10 @@ function renderPartBody(sec){
    والتلوين أخضر/أحمر بيصير بـpraxisColor بعد ما يضغط «Lösung». */
 function renderFormular(sec){
   const form = sec.form || {};
+  // ★ الربط برقم الخانة (num = item_id تبع المحتوى: «1».. «5»)، مو بالـid.
+  //   بالتطبيق الحيّ id = UUID من القاعدة، فالربط لازم يكون على num.
   const byId = {};
-  (sec.items || []).forEach(it => { byId[String(it.id)] = it; });
+  (sec.items || []).forEach(it => { byId[String(it.num ?? it.id)] = it; });
 
   const scenario = (sec.passages && sec.passages.length)
     ? sec.passages.map(p => (p.paragraphs || []).map(x =>
