@@ -708,8 +708,8 @@ A) www.frankfurtcinema.de — • Der Mann, der aus dem Regen kam | • Jenseits
 B) www.hessenservice.com — • Zeitungsdienst | • Wetter heute und morgen | • ADAC Straßenservice | • Stadtplan Frankfurt
 Lösung: b
 [4] Sie sind in Rostock und möchten mit dem Zug am Abend in Berlin ankommen. Welchen Zug nehmen Sie?
-A) Abfahrt Rostock — 10.22 · E 7133 | Berlin an 13.56 | Hält nicht in Oranienburg
-B) Abfahrt Rostock — 15.04 · D 245 | Berlin an 18.42
+A) Fahrplan — **Abfahrt Rostock** | ab 10.22 Uhr · E 7133 | Berlin an 13.56 Uhr | Hält nicht in Dramburg
+B) Fahrplan — **Abfahrt Rostock** | ab 15.04 Uhr · D 245 | Berlin an 18.42 Uhr
 Lösung: b
 [5] Sie sind in München und möchten in einem eleganten Restaurant essen. Wo finden Sie Informationen?
 A) www.gutessen.de — **Rezepte / Einkauf-Tipps** | • italienische Küche | • französische Küche
