@@ -767,10 +767,20 @@ function normFill(s){
     .replace(/\s+/g, ' ')
     .trim();
 }
+/* كلمات وصل صغيرة بتنتجاهل بالمقارنة تا تكون أبسط: «Englisch Chinesisch»
+   بتنحسب متل «Englisch und Chinesisch». */
+const FILL_STOP = new Set(['und','oder','der','die','das','den','dem','ein','eine',
+  'einen','am','im','in','an','von','vom','zu','zum','zur','um','bis']);
+function fillTokens(s){
+  return normFill(s).split(' ').filter(w => w && !FILL_STOP.has(w)).sort().join(' ');
+}
 function fillMatch(mine, answer){
   const m = normFill(mine);
   if (!m) return false;
-  return String(answer).split('|').some(alt => normFill(alt) === m);
+  const alts = String(answer).split('|');
+  if (alts.some(alt => normFill(alt) === m)) return true;   // تطابق تام (بعد التبسيط)
+  const mt = fillTokens(mine);                              // أو نفس الكلمات المهمّة
+  return !!mt && alts.some(alt => fillTokens(alt) === mt);
 }
 
 function praxisColor(id, a){
@@ -1359,11 +1369,11 @@ function renderFormular(sec){
   };
 
   const rows = (form.rows || []).map(r => {
-    const num  = r.blank ? `<span class="fnum">(${esc(r.blank)})</span>` : '';
+    const num  = r.blank ? ` <span class="fnum">(${esc(r.blank)})</span>` : '';
     const val  = r.val != null ? `<span class="fval given">${esc(r.val)}</span>` : '';
     const fill = r.blank ? blankHTML(byId[String(r.blank)]) : '';
-    return `<div class="frow"><span class="flabel">${esc(r.label || '')}</span>
-      <span class="fcell">${val}${fill}${num}</span></div>`;
+    return `<div class="frow"><span class="flabel">${esc(r.label || '')}${num}</span>
+      <span class="fcell">${val}${fill}</span></div>`;
   }).join('');
 
   return `${scenario ? `<div class="formscenario">${scenario}</div>` : ''}

@@ -2057,7 +2057,7 @@ A) Ja
 B) Nein
 Lösung: A
 [5] Telefonnummer
-Lösung: kein Telefon|keine|noch keine|hat kein Telefon|kein Telefonanschluss
+Lösung: kein Telefon|keine|kein|noch keine|hat kein Telefon|kein Telefonanschluss
 
 ### Teil: sf1-21
 Format: formular
