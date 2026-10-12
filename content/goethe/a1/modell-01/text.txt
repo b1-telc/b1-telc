@@ -23,7 +23,7 @@ Teile: lv3-01, lv3-02, lv3-03, lv3-04, lv3-05, lv3-06, lv3-07, lv3-08, lv3-09, l
 Titel: Schreiben · Teil 1 (Formular)
 Minuten: 0
 Punkte: 90
-Teile: sf1-01, sf1-02, sf1-03, sf1-04, sf1-05, sf1-06, sf1-07, sf1-08, sf1-09, sf1-10, sf1-11, sf1-12, sf1-13, sf1-14, sf1-15, sf1-16, sf1-17, sf1-18
+Teile: sf1-01, sf1-02, sf1-03, sf1-04, sf1-05, sf1-06, sf1-07, sf1-08, sf1-09, sf1-10, sf1-11, sf1-12, sf1-13, sf1-14, sf1-15, sf1-16, sf1-17, sf1-18, sf1-19, sf1-20, sf1-21, sf1-22, sf1-23, sf1-24, sf1-25, sf1-26, sf1-27, sf1-28, sf1-29
 
 ## Block: s2
 Titel: Schreiben · Teil 2 (Brief)
@@ -1570,7 +1570,7 @@ Lösung: 5|fünf
 [2] Davon Kinder
 Lösung: 3|drei
 [3] Urlaubsort
-Lösung: Ibiza
+Lösung: Ibiza|Spanien
 [4] Zimmer
 A) Einzelzimmer
 B) Doppelzimmer
@@ -1986,6 +1986,404 @@ Lösung: 34/32
 A) Überweisung
 B) online mit Kreditkarte
 Lösung: A
+
+
+### Teil: sf1-19
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 19 — Ticket Servis
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Ticket Servis", "subtitle": "", "rows": [
+ {"label":"Name, Vorname","val":"Rafi, Ola"},
+ {"label":"Karte","val":"Gruppenkarte"},
+ {"label":"Straße, Hausnummer","val":"Gartenstraße","blank":1},
+ {"label":"PLZ / Ort","val":"60311 /","blank":2},
+ {"label":"Anzahl der Personen","blank":3},
+ {"label":"Ab Monat","blank":4},
+ {"label":"Bezahlen","blank":5}
+] } }
+Text:
+Ihre Freundin Ola aus Nairobi in Kenia, ist mit ihrer Familie neu in Frankfurt am Main. Sie hat ihren Wohnsitz in der Gartenstraße 23. Sie möchte eine Reise machen und für ihren Ehemann und ihre beiden Töchter eine Gruppenkarte ab dem 01.02.2004 kaufen. Sie möchte für die Karte Geld überweisen.
+Aufgaben:
+[1] Hausnummer
+Lösung: 23|Gartenstraße 23
+[2] Ort
+Lösung: Frankfurt|Frankfurt am Main
+[3] Anzahl der Personen
+Lösung: 4|vier|3|drei
+[4] Ab Monat
+Lösung: Februar|01.02.2004|Februar 2004
+[5] Bezahlen
+A) Bar
+B) Überweisung
+C) Kreditkarte
+Lösung: B
+
+### Teil: sf1-20
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 20 — Stadtführer Deutschland
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Stadtführer Deutschland", "subtitle": "", "rows": [
+ {"label":"Name, Vorname","val":"Yang, She"},
+ {"label":"Ab wann?","blank":1},
+ {"label":"Sprachen","blank":2},
+ {"label":"Arbeitszeiten","blank":3},
+ {"label":"Haben Sie Berufskenntnisse als Stadtführer/in?","blank":4},
+ {"label":"Telefonnummer","blank":5}
+] } }
+Text:
+Ihre Freundin She Yang aus Peking in China, möchte ab Juli am Wochenende wieder als Stadtführerin in Deutschland für chinesische Gruppen arbeiten. Sie spricht fließend Englisch und Chinesisch aber kein Deutsch. Sie hat noch kein Telefonanschluss.
+Aufgaben:
+[1] Ab wann?
+Lösung: Juli|ab Juli|im Juli
+[2] Sprachen
+Lösung: Englisch und Chinesisch|Chinesisch und Englisch
+[3] Arbeitszeiten
+A) Donnerstag und Freitag
+B) Sonntag und Mittwoch
+C) Samstag und Sonntag
+Lösung: C
+[4] Berufskenntnisse als Stadtführer/in
+A) Ja
+B) Nein
+Lösung: A
+[5] Telefonnummer
+Lösung: kein Telefon|keine|noch keine|hat kein Telefon|kein Telefonanschluss
+
+### Teil: sf1-21
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 21 — Mietvertrag
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Mietvertrag", "subtitle": "Mieter", "rows": [
+ {"label":"Name, Vorname","val":"Monsef, Ahmet"},
+ {"label":"geboren am","val":"21.12.1955"},
+ {"label":"Wohnort","blank":1},
+ {"label":"Familienstand","blank":2},
+ {"label":"Beruf","blank":3},
+ {"label":"Firma","blank":4},
+ {"label":"Miete","blank":5},
+ {"label":"Datum","val":"16.06."}
+] } }
+Text:
+Ihr Freund, Ahmet Monsef kommt aus Tehran aus dem Iran. Er ist nicht verheiratet. Seine Familie wohnt in München. Er möchte als Fahrer bei BMW in Deutschland arbeiten. Deshalb möchte er dort eine Wohnung mieten. Er kann monatlich fünfhundertfünfzig Euro Gebühren bezahlen.
+Aufgaben:
+[1] Wohnort
+Lösung: München
+[2] Familienstand
+Lösung: ledig|nicht verheiratet
+[3] Beruf
+Lösung: Fahrer
+[4] Firma
+Lösung: BMW
+[5] Miete
+A) 450 Euro
+B) 500 Euro
+C) 550 Euro
+Lösung: C
+
+### Teil: sf1-22
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 22 — Sprachschule Lingua
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Sprachschule Lingua", "subtitle": "Kursteilnehmer", "rows": [
+ {"label":"Name, Vorname","val":"Yılmaz, Ayşe"},
+ {"label":"Geburtsort","blank":1},
+ {"label":"Familienstand","blank":2},
+ {"label":"PLZ / Wohnort","val":"32431 /","blank":3},
+ {"label":"Straße und Hausnummer","val":"Rosenstraße 17"},
+ {"label":"Anfänger","blank":4},
+ {"label":"Kurs","blank":5},
+ {"label":"Datum","val":"16.06."}
+] } }
+Text:
+Ihre Freundin, Ayşe Yılmaz kommt aus Izmir aus der Türkei und hat dort schon etwas Deutsch gelernt. Sie ist jetzt mit ihrem Mann in Berlin. Sie arbeitet nicht. Sie möchte weiter Deutsch lernen. Der Kurs ist von 13 bis 17 Uhr.
+Aufgaben:
+[1] Geburtsort
+Lösung: Izmir
+[2] Familienstand
+Lösung: verheiratet
+[3] Wohnort
+Lösung: Berlin
+[4] Anfänger
+A) Ja
+B) Nein
+Lösung: B
+[5] Kurs
+A) Vormittag
+B) Nachmittag
+C) Abend
+Lösung: B
+
+### Teil: sf1-23
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 23 — Sprachkurs
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Sprachkurs", "subtitle": "Kursteilnehmer", "rows": [
+ {"label":"Name, Vorname","val":"Ramirez, Paul"},
+ {"label":"Straße, Hausnummer","val":"Rosenstraße","blank":1},
+ {"label":"Wohnort","blank":2},
+ {"label":"Monat","blank":3},
+ {"label":"Uhrzeit","blank":4},
+ {"label":"Zahlungsweise","blank":5},
+ {"label":"Datum","val":"16.06."}
+] } }
+Text:
+Ihr Freund Paul kommt aus Puebla in Mexiko und wohnt in der Rosenstraße 22 in Eltville am Rhein. Er möchte in Deutschland von 9 bis 12 Uhr ein Kurs machen. Der Kurs beginnt am 01.06.2015. Er möchte das Geld per Internet überweisen.
+Aufgaben:
+[1] Hausnummer
+Lösung: 22|Rosenstraße 22
+[2] Wohnort
+Lösung: Eltville am Rhein|Eltville
+[3] Monat
+A) Mai
+B) Juni
+C) Juli
+Lösung: B
+[4] Uhrzeit
+Lösung: von 9 bis 12 Uhr|9 bis 12 Uhr|9-12 Uhr|9 – 12 Uhr
+[5] Zahlungsweise
+A) Bar
+B) Überweisung
+C) Kreditkarte
+Lösung: B
+
+### Teil: sf1-24
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 24 — Mietvertrag
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Mietvertrag", "subtitle": "Mieter", "rows": [
+ {"label":"Name, Vorname","val":"Ramirez, Elena"},
+ {"label":"geboren am","val":"21.12.1955"},
+ {"label":"in","blank":1},
+ {"label":"Beruf","blank":2},
+ {"label":"Straße und Hausnummer","val":"Rosenstraße 17"},
+ {"label":"PLZ / Wohnort","val":"30409 /","blank":3},
+ {"label":"Wohnung","val":"2 Zimmer"},
+ {"label":"Garten","blank":4},
+ {"label":"Vermieter","val":"Wohnbau GmbH"},
+ {"label":"Miete","blank":5},
+ {"label":"Datum","val":"16.06."}
+] } }
+Text:
+Ihre Freundin, Elena Ramirez aus Lima in Peru, arbeitet als Lehrerin in Deutschland. Sie mietet eine Wohnung bei der Wohnbau GmbH in Stuttgart. Die Wohnung hat zwei Zimmer und einen Garten. Sie liegt in der Rosenstraße 17 und kostet 500 Euro im Monat.
+Aufgaben:
+[1] in (Geburtsort)
+Lösung: Lima|Lima in Peru|Peru
+[2] Beruf
+Lösung: Lehrerin
+[3] Wohnort
+Lösung: Stuttgart
+[4] Garten
+A) mit Garten
+B) ohne Garten
+Lösung: A
+[5] Miete
+Lösung: 500 Euro|500
+
+### Teil: sf1-25
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 25 — Kindergarten Uesen
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Kindergarten Uesen", "subtitle": "", "rows": [
+ {"label":"Name, Vorname","val":"Petrow, Nadja"},
+ {"label":"Geburtsort","blank":1},
+ {"label":"Beruf","blank":2},
+ {"label":"PLZ / Stadt","blank":3},
+ {"label":"Straße und Hausnummer","val":"Rosenstraße 17"},
+ {"label":"Beginn","blank":4},
+ {"label":"Zeit","blank":5},
+ {"label":"Datum","val":"16.06."}
+] } }
+Text:
+Ihre Freundin, Nadja Petrow aus Moskau wohnt in 91207 Lauf. Sie ist eine Sportlehrerin von Beruf und hat einen Sohn. Ihr Sohn Alex ist 3 Jahre alt. Alex muss von 10 bis 12 Uhr den Kindergarten besuchen. Der Kindergarten beginnt ab Dezember.
+Aufgaben:
+[1] Geburtsort
+Lösung: Moskau
+[2] Beruf
+Lösung: Sportlehrerin
+[3] PLZ / Stadt
+Lösung: 91207 Lauf|91207|Lauf
+[4] Beginn
+Lösung: Dezember|ab Dezember|im Dezember
+[5] Zeit
+A) Vormittag
+B) Mittag
+C) Abend
+Lösung: A
+
+### Teil: sf1-26
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 26 — TUI Reisen GmbH
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "TUI Reisen GmbH", "subtitle": "Person", "rows": [
+ {"label":"Name, Vorname","val":"Müller, Tom"},
+ {"label":"Partnerin","blank":1},
+ {"label":"Alter der Kinder","blank":2},
+ {"label":"Termin","blank":3},
+ {"label":"Straße und Hausnummer","val":"Rosenstraße 17"},
+ {"label":"Ausflugsort","blank":4},
+ {"label":"Urlaubsort","blank":5},
+ {"label":"Gebühren","val":"350 Euro"},
+ {"label":"Datum","val":"16.06."}
+] } }
+Text:
+Ihr Freund Tom, möchte mit seiner Julie und seinem Sohn Chris (8 Jahre alt), am 30.08 ein Ausflug in Stuttgart machen. Von dort wollen Sie zum Urlaub nach Heidelberg fahren.
+Aufgaben:
+[1] Partnerin
+Lösung: Julie
+[2] Alter der Kinder
+Lösung: 8|8 Jahre|acht
+[3] Termin
+Lösung: 30.08|30. August|30.08.
+[4] Ausflugsort
+Lösung: Stuttgart
+[5] Urlaubsort
+Lösung: Heidelberg
+
+### Teil: sf1-27
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 27 — Stadtführer Deutschland
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Stadtführer Deutschland", "subtitle": "Person", "rows": [
+ {"label":"Name, Vorname","val":"Shelang"},
+ {"label":"Wohnort","blank":1},
+ {"label":"Ab Wann","blank":2},
+ {"label":"Bis Wann","blank":3},
+ {"label":"Tag","blank":4},
+ {"label":"Bezahlen","blank":5}
+] } }
+Text:
+Ihre Freundin Shelang wohnt in Hamburg. Sie möchte ab August bis Juli am Wochenende einen Kurs machen. Die Kursgebühren möchte sie über Internet überweisen.
+Aufgaben:
+[1] Wohnort
+Lösung: Hamburg
+[2] Ab Wann
+Lösung: August|ab August|im August
+[3] Bis Wann
+Lösung: Juli|bis Juli|im Juli
+[4] Tag
+A) Donnerstag und Freitag
+B) Sonntag und Mittwoch
+C) Samstag und Sonntag
+Lösung: C
+[5] Bezahlen
+Lösung: Überweisung|über Internet|per Internet überweisen|überweisen
+
+### Teil: sf1-28
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 28 — Deutsche Bahn AG
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Deutsche Bahn AG", "subtitle": "Person", "rows": [
+ {"label":"Name","val":"Ateş"},
+ {"label":"Vorname","val":"Tülay"},
+ {"label":"Anzahl der Personen","blank":1},
+ {"label":"Davon Kinder","blank":2},
+ {"label":"Straße und Hausnummer","val":"Rosenstraße 17"},
+ {"label":"PLZ / Ort","val":"10125 /","blank":3},
+ {"label":"Von Berlin nach","blank":4},
+ {"label":"Sitzplatz fürs Kind","blank":5},
+ {"label":"Gebühren","val":"350 Euro"},
+ {"label":"Datum","val":"16.06."}
+] } }
+Text:
+Ihre Freundin, Tülay Ateş ist in Berlin und möchte mit ihrer Tochter Melissa nach Bielefeld fahren. Melissa ist 8 Jahre alt. Sie möchte auch einen Sitzplatz im Zug haben.
+Aufgaben:
+[1] Anzahl der Personen
+Lösung: 2|zwei
+[2] Davon Kinder
+Lösung: 1|eins|ein
+[3] Ort
+Lösung: Berlin
+[4] Von Berlin nach
+Lösung: Bielefeld
+[5] Sitzplatz fürs Kind
+A) Ja
+B) Nein
+Lösung: A
+
+### Teil: sf1-29
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 29 — Kaufvertrag
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Anweisung: Lesen Sie den Text und ergänzen Sie die fünf fehlenden Informationen (1–5) im Formular.
+Extra:
+{ "form": { "title": "Kaufvertrag", "subtitle": "Käufer", "rows": [
+ {"label":"Absender","val":"Hammad, Ali"},
+ {"label":"Adresse","val":"Brienner Straße 21"},
+ {"label":"PLZ / Wohnort","val":"54678 /","blank":1},
+ {"label":"Empfänger","blank":2},
+ {"label":"Name","blank":3},
+ {"label":"Stadt","blank":4},
+ {"label":"Land","blank":5},
+ {"label":"Datum","val":"16.06."}
+] } }
+Text:
+Ihr Freund, Ali Hammad wohnt in München. Seine Freundin Agnes Kostmann hat Geburtstag und er möchte ihr ein Geschenk geben. Sie hat ihren Wohnsitz in Salzburg in Österreich.
+Aufgaben:
+[1] Wohnort
+Lösung: München
+[2] Empfänger
+A) Frau
+B) Mann
+Lösung: A
+[3] Name
+Lösung: Agnes Kostmann|Kostmann, Agnes|Agnes
+[4] Stadt
+Lösung: Salzburg
+[5] Land
+Lösung: Österreich
 
 
 ### Teil: s2
