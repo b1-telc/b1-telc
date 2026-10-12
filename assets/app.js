@@ -1380,7 +1380,7 @@ function renderItem(sec, it){
     const chosen = S.answers[it.id];
     const gone = S.dropped[it.id] || [];
     const anz = isPraxis() && !tf;        // Goethe Teil 2: Anzeigen zeichnen
-    body = `<div class="opts ${tf ? 'inline' : ''}">${
+    body = `<div class="opts${tf ? ' inline' : ''}${anz ? ' cards' : ''}">${
       opts.map(o => {
         const ad = anz ? adParts(o.text) : null;
         const inner = ad
