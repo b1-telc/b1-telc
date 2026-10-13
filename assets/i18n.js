@@ -100,6 +100,7 @@ const I18N = (() => {
       w2Empty: 'Bitte schreiben Sie etwas oder laden Sie ein Foto hoch.',
       w2Score: 'KI-Korrektur',
       w2Read: 'Gelesener Text',
+      aiErrBusy: 'Das KI-Modell ist gerade ausgelastet. Bitte in ein paar Sekunden noch einmal auf „Korrigieren" tippen.',
       praxisReset: 'Antworten zurücksetzen',
       praxisResetAsk: 'Alle Antworten in diesem Teil löschen und neu üben?',
       praxisResetDone: 'Zurückgesetzt — Sie können neu üben.',
