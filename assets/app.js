@@ -671,7 +671,7 @@ function praxisSave(){
 function praxisSetHTML(sec){
   const ids = (sec.items || []).map(it => it.id);
   const gradable = sec.format !== 'writing' && ids.length;
-  return `<section class="part praxisset" id="part-${esc(sec.id)}">
+  return `<section class="part praxisset${sec.format === 'writing' ? ' w2set' : ''}" id="part-${esc(sec.id)}">
     ${sec.title ? `<h2 class="setnum">${esc(sec.title)}</h2>` : ''}
     ${sec.instruction ? `<div class="instr">${esc(sec.instruction)}</div>` : ''}
     ${renderPartBody(sec)}
@@ -756,7 +756,13 @@ function bindPraxisWriting(secs){
     };
 
     const save = scope.querySelector('[data-w2save]');
-    if (save) save.onclick = () => { praxisSave(); toast(t('w2Saved')); };
+    if (save) save.onclick = () => {
+      praxisSave();
+      toast(t('w2Saved'));
+      const was = save.textContent;
+      save.classList.add('saved'); save.textContent = t('w2Saved');
+      setTimeout(() => { save.classList.remove('saved'); save.textContent = was; }, 1300);
+    };
 
     const file = scope.querySelector('[data-w2photo]');
     if (file) file.onchange = () => {

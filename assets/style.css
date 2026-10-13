@@ -193,23 +193,62 @@ h3{font-size:1em; margin:0 0 4px}
 .fchoice .opts.inline{margin:0; flex-wrap:wrap; gap:6px}
 .fchoice .opt{padding:5px 10px}
 
-/* ---------- Schreiben Teil 2 (Übung): speichern + Musterlösung ---------- */
-.w2{margin-top:12px}
-.w2tools{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
-.w2tools .btn{flex:0 1 auto}
-.w2photo{cursor:pointer; margin:0}
+/* ---------- Schreiben Teil 2 (Übung) — „Wow"-Design ---------- */
 .btn.sm{padding:4px 12px; font-size:.85em}
-.w2shot .shot{margin:12px 0 0; display:flex; flex-direction:column; align-items:flex-start; gap:8px}
+
+/* Aufgabe als eleganter Prompt mit Akzentleiste + Feder-Icon */
+.w2set .instr{
+  position:relative; margin:0 0 14px; padding:16px 18px 16px 54px;
+  background:linear-gradient(135deg, var(--brand-soft), transparent 70%), var(--card);
+  border:1px solid var(--line); border-inline-start:4px solid var(--brand);
+  border-radius:16px; line-height:1.75; box-shadow:var(--shadow);
+}
+.w2set .instr::before{
+  content:"✍️"; position:absolute; inset-inline-start:16px; top:15px; font-size:1.5em;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.2));
+}
+.w2set textarea{border-radius:14px}
+
+.w2{margin-top:14px}
+.w2tools{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+.w2tools .btn{
+  flex:0 1 auto; border-radius:12px; font-weight:700;
+  transition:transform .14s ease, box-shadow .14s ease, filter .14s ease, background .2s ease;
+}
+.w2tools .btn:hover:not(:disabled){transform:translateY(-2px); box-shadow:0 8px 20px rgba(16,24,40,.18)}
+.w2tools .btn:active{transform:translateY(0)}
+.w2tools .btn:not(.ghost):not(.grey){
+  background:linear-gradient(135deg, var(--brand), var(--brand-dark)); border-color:transparent;
+}
+.w2tools .btn.saved{background:linear-gradient(135deg, var(--ok), #0e7a53); border-color:transparent}
+.w2photo{cursor:pointer; margin:0}
+
+/* gespeichertes Foto wie ein aufgeklebtes Polaroid */
+.w2shot .shot{margin:16px 0 0; display:flex; flex-direction:column; align-items:center; gap:10px}
 .w2shot .shot img{
-  max-width:100%; max-height:420px; border-radius:var(--radius);
-  border:1px solid var(--line);
+  max-width:88%; max-height:420px; padding:10px 10px 30px; background:#fff;
+  border:none; border-radius:4px; transform:rotate(-1.6deg);
+  box-shadow:0 14px 34px rgba(0,0,0,.28), 0 2px 6px rgba(0,0,0,.2);
 }
+
+/* Musterlösung wie ein Brief auf Papier — mit sanfter Einblendung */
 .muster{
-  margin-top:12px; background:var(--ok-soft); border:1px solid var(--ok);
-  border-radius:var(--radius); padding:14px 16px;
+  position:relative; margin-top:16px; padding:20px 22px 18px;
+  background:linear-gradient(180deg, var(--ok-soft), var(--card) 60%);
+  border:1px solid var(--ok); border-inline-start:5px solid var(--ok);
+  border-radius:16px; box-shadow:0 10px 30px rgba(16,24,40,.12);
+  animation:musterIn .34s cubic-bezier(.2,.7,.3,1);
 }
-.muster h3{color:var(--ok); margin:0 0 8px}
-.muster .body{white-space:pre-wrap; line-height:1.8}
+@keyframes musterIn{from{opacity:0; transform:translateY(-8px)} to{opacity:1; transform:none}}
+.muster h3{
+  display:inline-flex; align-items:center; gap:8px; margin:0 0 10px;
+  color:var(--ok); letter-spacing:.3px;
+}
+.muster h3::before{content:"📄"; font-size:1.1em}
+.muster .body{
+  white-space:pre-wrap; line-height:1.95;
+  font-family:Georgia,"Times New Roman",serif; font-size:1.04em; color:var(--ink);
+}
 .bank{
   background:var(--card); border:1px dashed var(--line); border-radius:var(--radius);
   padding:14px 16px; margin-bottom:16px;
