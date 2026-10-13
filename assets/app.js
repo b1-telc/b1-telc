@@ -681,31 +681,67 @@ function praxisSetHTML(sec){
   </section>`;
 }
 
-/* ★ Goethe, Schreiben Teil 2: أدوات التدريب — تصحيح (كتابة أو صورة) +
-   زرّ Musterlösung. التصحيح بمسار غوته المنفصل (correct-goethe). */
+/* ★ Goethe, Schreiben Teil 2: التدريب — بلا تصحيح آلي. الطالب بيكتب
+   حلّه (أو بيرفع صورة حلّه على ورقة) وبيحفظه ليرجع إله، وبيشوف نموذج
+   الحلّ (Musterlösung). كله محلّي (localStorage)؛ التصحيح ممكن لاحقاً. */
+function w2Load(){ return load('b1.w2', {}); }
+function w2Get(id){ return (w2Load()[S.level] || {})[id] || ''; }
+function w2Set(id, data){
+  const all = w2Load();
+  (all[S.level] ||= {})[id] = data;
+  try { save('b1.w2', all); return true; } catch { return false; }
+}
+function w2Del(id){
+  const all = w2Load();
+  if (all[S.level]) delete all[S.level][id];
+  try { save('b1.w2', all); } catch { /* ignore */ }
+}
+function w2ShotHTML(id, data){
+  return `<figure class="shot"><img src="${data}" alt="Lösung">
+    <button class="btn ghost sm" data-w2del="${esc(id)}">${esc(t('w2Remove'))}</button></figure>`;
+}
+
 function praxisWritingHTML(sec){
   const id = esc(sec.id);
   const hasMuster = !!sec.muster;
+  const shot = w2Get(sec.id);
   return `<div class="w2">
     <div class="w2tools">
+      <button class="btn" data-w2save="${id}">${esc(t('w2Save'))}</button>
       <label class="btn grey w2photo">${esc(t('w2Photo'))}
         <input type="file" accept="image/*" hidden data-w2photo="${id}"></label>
-      <button class="btn" data-w2go="${id}">${esc(t('w2Correct'))}</button>
       ${hasMuster ? `<button class="btn ghost" data-w2muster="${id}">${esc(t('w2Muster'))}</button>` : ''}
     </div>
-    <div class="w2name" id="w2name-${id}"></div>
-    <div class="w2fb" id="w2fb-${id}"></div>
+    <div class="w2shot" id="w2shot-${id}">${shot ? w2ShotHTML(id, shot) : ''}</div>
     ${hasMuster ? `<div class="muster" id="w2muster-${id}" hidden>
       <h3>${esc(t('w2MusterTitle'))}</h3><div class="body">${esc(sec.muster)}</div></div>` : ''}
   </div>`;
 }
 
-const AI_ERR = { ai_quota: 'aiErrDaily', ai_busy: 'aiErrBusy', bad_model: 'aiErrSetup',
-  not_configured: 'aiErrSetup', no_session: 'aiErrSetup', refused: 'aiErrRefused',
-  empty_text: 'aiErrEmpty', no_rubric: 'aiErrOther', network: 'aiErrNetwork' };
+/* صورة الهاتف كبيرة — منصغّرها لقياس معقول قبل ما نخزّنها بـlocalStorage */
+function w2ReadPhoto(file, cb){
+  const rd = new FileReader();
+  rd.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      const MAX = 1000;
+      let w = img.width, h = img.height;
+      const s = Math.min(1, MAX / Math.max(w, h));
+      w = Math.round(w * s); h = Math.round(h * s);
+      try {
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        cb(c.toDataURL('image/jpeg', 0.6));
+      } catch { cb(String(rd.result)); }
+    };
+    img.onerror = () => cb(String(rd.result));
+    img.src = String(rd.result);
+  };
+  rd.readAsDataURL(file);
+}
 
 function bindPraxisWriting(secs){
-  const photos = {};                       // sec.id → { data, mime }
   secs.filter(s => s.format === 'writing').forEach(sec => {
     const id = sec.id;
     const scope = document.getElementById('part-' + id);
@@ -719,71 +755,37 @@ function bindPraxisWriting(secs){
       mBtn.textContent = box.hidden ? t('w2Muster') : t('w2MusterHide');
     };
 
+    const save = scope.querySelector('[data-w2save]');
+    if (save) save.onclick = () => { praxisSave(); toast(t('w2Saved')); };
+
     const file = scope.querySelector('[data-w2photo]');
     if (file) file.onchange = () => {
       const f = file.files && file.files[0];
-      const nm = document.getElementById('w2name-' + id);
-      if (!f){ delete photos[id]; if (nm) nm.textContent = ''; return; }
-      const rd = new FileReader();
-      rd.onload = () => {
-        photos[id] = { data: String(rd.result).split(',')[1] || '', mime: f.type || 'image/jpeg' };
-        if (nm) nm.textContent = '📷 ' + f.name;
-      };
-      rd.readAsDataURL(f);
+      if (!f) return;
+      w2ReadPhoto(f, data => {
+        const box = document.getElementById('w2shot-' + id);
+        if (w2Set(id, data)){
+          if (box) box.innerHTML = w2ShotHTML(id, data);
+          bindW2Del(scope, id);
+          toast(t('w2Saved'));
+        } else {
+          toast(t('w2TooBig'));
+        }
+      });
+      file.value = '';
     };
 
-    const go = scope.querySelector('[data-w2go]');
-    if (go) go.onclick = async () => {
-      const it = sec.items[0] || {};
-      const text = (S.answers[it.id] || '').trim();
-      const photo = photos[id];
-      if (!photo && !text) return void toast(t('w2Empty'));
-      const out = document.getElementById('w2fb-' + id);
-      if (out) out.innerHTML = `<p class="sub">${esc(t('revealing'))}</p>`;
-      go.disabled = true;
-      let res;
-      try {
-        res = await API.correctGoethe({
-          exam: 'Goethe-Zertifikat A1',
-          instruction: sec.instruction || '',
-          leitpunkte: it.points || [],
-          min_words: it.minWords || 0,
-          criteria: sec.criteria || [],
-          ...(photo ? { image: photo } : { text }),
-        });
-      } catch { res = null; }
-      go.disabled = false;
-      if (!res || !res.ok){
-        if (out) out.innerHTML = `<p class="sub">${esc(t(AI_ERR[res && res.error] || 'aiErrOther'))}</p>`;
-        return;
-      }
-      showGoetheFb(out, res);
-    };
+    bindW2Del(scope, id);
   });
 }
 
-function showGoetheFb(out, fb){
-  if (!out) return;
-  out.innerHTML = `
-    ${fb.points != null ? scoreCard(fb.points, fb.max_points,
-        Math.round(fb.points / fb.max_points * 100), t('w2Score')) : ''}
-    ${fb.read_text ? `<details class="w2read"><summary class="sub">${esc(t('w2Read'))}</summary>
-       <div class="passage" style="margin:8px 0 0"><div class="body">${esc(fb.read_text)}</div></div></details>` : ''}
-    ${(fb.grades || []).map(g => `<div class="crit">
-      <h3>${esc(g.criterion)} <span class="pill">${esc(String(g.points))} P.</span></h3>
-      <p class="sub" style="margin:0">${esc(g.why)}</p></div>`).join('')}
-    ${fb.summary ? `<div class="why" style="margin:12px 0">${esc(fb.summary)}</div>` : ''}
-    ${(fb.errors || []).length ? `<h3 style="margin:14px 0 6px">${esc(t('errorDetail'))}</h3>
-      ${fb.errors.map(e => `<div class="q isbad">
-        <div class="qhead"><span class="qnum">${esc(e.type)}</span></div>
-        <div class="fb bad">
-          <div class="fbrow"><span class="lbl">Ihr Text</span><span class="val">${esc(e.original)}</span></div>
-          <div class="fbrow"><span class="lbl">${esc(t('better'))}</span><span class="val">${esc(e.correction)}</span></div>
-          ${e.why ? `<div class="why">${esc(e.why)}</div>` : ''}
-        </div></div>`).join('')}` : ''}
-    ${fb.corrected ? `<details style="margin-top:12px">
-       <summary class="sub">${esc(t('aiView'))}</summary>
-       <div class="passage" style="margin:8px 0 0"><div class="body">${esc(fb.corrected)}</div></div></details>` : ''}`;
+function bindW2Del(scope, id){
+  const del = scope.querySelector('[data-w2del]');
+  if (del) del.onclick = () => {
+    w2Del(id);
+    const box = document.getElementById('w2shot-' + id);
+    if (box) box.innerHTML = '';
+  };
 }
 
 /* Teil (Block) → alle Übungen, ohne Zeit/Punkte, mit Zurücksetzen. */

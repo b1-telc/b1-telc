@@ -2404,13 +2404,6 @@ Extra:
  ],
  "muster": "Sehr geehrter Herr Maier,\n\nam Dienstag bekomme ich einen neuen Kühlschrank, aber ich muss arbeiten. Deshalb schreibe ich Ihnen und bitte Sie um Hilfe. Der Kühlschrank wird um 8 Uhr geliefert. Können Sie bitte zu Hause sein? Meinen Schlüssel lege ich in Ihren Briefkasten.\n\nVielen Dank im Voraus.\nMit freundlichen Grüßen\nIhre Nachbarin"
 }
-Text:
-**Schreibaufgabe**
-Sie bekommen am Dienstag einen neuen Kühlschrank. Sie müssen arbeiten. Schreiben Sie an Ihren Nachbarn Herrn Maier und bitten Sie um Hilfe.
-Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter):
-• Warum schreiben Sie?
-• Uhrzeit?
-• Schlüssel?
 Aufgaben:
 [21] Schreiben Sie eine E-Mail oder einen kurzen Brief an Herrn Maier:
 Mindestwoerter: 30
@@ -2436,13 +2429,6 @@ Extra:
  ],
  "muster": "Sehr geehrte Damen und Herren,\n\nich habe Ihre Anzeige in der Zeitung gelesen und suche eine Arbeit als Verkäuferin. Deshalb schreibe ich Ihnen. Ich heiße Sara Ahmad, bin 25 Jahre alt und spreche Arabisch und ein bisschen Deutsch. Wann sind die Arbeitszeiten im Supermarkt?\n\nÜber eine Antwort freue ich mich sehr.\nMit freundlichen Grüßen\nSara Ahmad"
 }
-Text:
-**Schreibaufgabe**
-Sie suchen eine Arbeit als Verkäufer/Verkäuferin und lesen in der Zeitung eine Anzeige. Antworten Sie an den Supermarkt „cent".
-Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter):
-• Warum schreiben Sie?
-• Informationen über sich?
-• Arbeitszeit?
 Aufgaben:
 [21] Schreiben Sie eine E-Mail oder einen kurzen Brief an den Supermarkt:
 Mindestwoerter: 30
@@ -2468,13 +2454,6 @@ Extra:
  ],
  "muster": "Liebe Nina,\n\nwie geht es dir? Leider kann ich mich am Samstag nicht mit dir treffen, weil ich arbeiten muss. Können wir uns am Sonntag um 18 Uhr treffen? Ich bringe einen Kuchen mit. Was möchtest du mitbringen?\n\nBis bald und liebe Grüße\nDeine Freundin"
 }
-Text:
-**Schreibaufgabe**
-Ihre Freundin Nina möchte sich am Samstag mit Ihnen treffen, aber Sie können nicht. Schreiben Sie an Nina.
-Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter):
-• Warum schreiben Sie?
-• Treffen, wann?
-• Mitbringen?
 Aufgaben:
 [21] Schreiben Sie eine Nachricht an Nina:
 Mindestwoerter: 30
@@ -2500,13 +2479,6 @@ Extra:
  ],
  "muster": "Sehr geehrter Herr Mawat,\n\nich habe Ihre Anzeige im Internet gelesen und suche eine neue Wohnung, weil ich umziehen möchte. Wann kann ich die Wohnung besichtigen? Könnten Sie mir bitte auch die Adresse der Wohnung schicken?\n\nVielen Dank für Ihre Antwort.\nMit freundlichen Grüßen\nIhr(e) ..."
 }
-Text:
-**Schreibaufgabe**
-Sie möchten umziehen und suchen eine neue Wohnung. Sie haben eine Anzeige gelesen. Schreiben Sie an den Vermieter Herrn Mawat.
-Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter):
-• Warum schreiben Sie?
-• Wohnung sehen, wann?
-• Adresse?
 Aufgaben:
 [21] Schreiben Sie eine E-Mail an Herrn Mawat:
 Mindestwoerter: 30
@@ -2532,13 +2504,6 @@ Extra:
  ],
  "muster": "Liebe Linda, lieber Martin,\n\nich habe bald Geburtstag und möchte am Freitag eine Party machen. Deshalb schreibe ich euch: Ich möchte euch gern einladen! Die Party beginnt um 19 Uhr bei mir zu Hause. Wir hören zusammen klassische Musik. Habt ihr Lust?\n\nIch freue mich auf euch.\nLiebe Grüße\nEuer Freund"
 }
-Text:
-**Schreibaufgabe**
-Sie haben bald Geburtstag und möchten am Freitag feiern. Sie möchten Ihre Freunde Linda und Martin aus dem Sprachkurs einladen. Schreiben Sie an Linda und Martin.
-Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter):
-• Warum schreiben Sie?
-• Uhrzeit?
-• Musik?
 Aufgaben:
 [21] Schreiben Sie eine Einladung an Linda und Martin:
 Mindestwoerter: 30
@@ -2564,13 +2529,6 @@ Extra:
  ],
  "muster": "Liebe Frau Schmitz,\n\nunser Deutschkurs ist zu Ende und wir machen eine Party. Deshalb schreibe ich Ihnen: Wir möchten Sie gern einladen! Die Party findet am Samstag um 17 Uhr in der Schule statt. Könnten Sie bitte Getränke und eine Kamera mitbringen?\n\nWir freuen uns auf Sie.\nMit freundlichen Grüßen\nIhre Kursteilnehmer"
 }
-Text:
-**Schreibaufgabe**
-Der Deutschkurs ist zu Ende. Sie machen eine Party und laden Ihre Lehrerin Frau Schmitz ein. Schreiben Sie an Frau Schmitz.
-Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter):
-• Warum schreiben Sie?
-• Party, wann?
-• Mitbringen?
 Aufgaben:
 [21] Schreiben Sie eine Einladung an Frau Schmitz:
 Mindestwoerter: 30
