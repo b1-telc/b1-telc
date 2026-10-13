@@ -816,6 +816,7 @@ function screenPractice(blockId){
     praxisBindReveal(secs);
     bindPraxisWriting(secs);
     bindSprechen(secs);
+    bindSprechkarten(secs);
     praxisSyncButtons();
     document.getElementById('praxisReset').onclick = () =>
       ask(t('praxisResetAsk'), () => praxisReset(secs), t('praxisReset'));
@@ -1433,6 +1434,9 @@ function renderPartBody(sec){
   // Goethe, Sprechen Teil 1: التعريف بالنفس — بطاقات قلب + سؤال عشوائي
   if (sec.format === 'vorstellen') return renderVorstellen(sec);
 
+  // Goethe, Sprechen Teil 2: كروت موضوع/كلمة — تسحب كرت وتكوّن سؤال
+  if (sec.format === 'sprechkarten') return renderSprechkarten(sec);
+
   // brief / هورتكست بالامتحان / بلا نصوص: ما في تداخل — متل قبل تماماً
   if (sec.brief || (sec.audio && S.view === 'exam')
       || !sec.passages || !sec.passages.length)
@@ -1543,6 +1547,99 @@ function renderVorstellen(sec){
       </div>
     </div>` : ''}
   </div>`;
+}
+
+/* ★ Goethe, Sprechen Teil 2 — كروت (Thema + Stichwort)، مادة مرجعية بلا تصحيح.
+   الطالب يسحب كرت فيه موضوع وكلمة مفتاح، يكوّن منها سؤال، والشريك يجاوب.
+   بعدها يقدر يشوف سؤال وجواب نموذجي. في فلتر حسب الموضوع. */
+function renderSprechkarten(sec){
+  const id = esc(sec.id);
+  const karten = sec.karten || [];
+  const themes = [];
+  karten.forEach(k => { if (k.thema && !themes.includes(k.thema)) themes.push(k.thema); });
+  const chips = themes.length > 1
+    ? `<div class="spthemes" role="group" aria-label="${esc(t('spThema'))}">
+        <button class="spchip on" type="button" data-sptheme="*">${esc(t('spKartenAll'))}</button>
+        ${themes.map(th => `<button class="spchip" type="button" data-sptheme="${esc(th)}">${esc(th)}</button>`).join('')}
+      </div>`
+    : '';
+  const hint = themes.length > 1 ? 'spKartenHint' : 'spBittenHint';
+  return `<div class="sprechen sp2" id="spk-${id}">
+    ${sec.note ? `<div class="instr">${esc(sec.note)}</div>` : ''}
+    <p class="sub">${esc(t(hint))}</p>
+    ${chips}
+    <div class="spcard empty">
+      <div class="spcardthema"><span class="spthemalbl">${esc(t('spThema'))}</span><span class="spthemaval"></span></div>
+      <div class="spcardwort">${esc(t('spTapCard'))}</div>
+    </div>
+    <div class="spreveal">
+      <p class="spqline" hidden><span class="splbl">❓</span><span class="spqtext2"></span></p>
+      <p class="spaline" hidden><span class="splbl">💬</span><span class="spatext"></span></p>
+    </div>
+    <div class="sptools">
+      <button class="btn" type="button" data-spdraw="${id}">🎴 ${esc(t('spDraw'))}</button>
+      <button class="btn ghost" type="button" data-spq="${id}" hidden>${esc(t('spShowQ'))}</button>
+      <button class="btn ghost" type="button" data-spa="${id}" hidden>${esc(t('spShowA'))}</button>
+    </div>
+  </div>`;
+}
+
+function bindSprechkarten(secs){
+  secs.filter(s => s.format === 'sprechkarten').forEach(sec => {
+    const scope = document.getElementById('part-' + sec.id);
+    if (!scope) return;
+    const karten = sec.karten || [];
+    if (!karten.length) return;
+
+    const box    = scope.querySelector('#spk-' + sec.id);
+    const card   = box.querySelector('.spcard');
+    const themaV = box.querySelector('.spthemaval');
+    const wortEl = box.querySelector('.spcardwort');
+    const themaBox = box.querySelector('.spcardthema');
+    const qLine  = box.querySelector('.spqline');
+    const aLine  = box.querySelector('.spaline');
+    const qTxt   = box.querySelector('.spqtext2');
+    const aTxt   = box.querySelector('.spatext');
+    const dBtn   = box.querySelector('[data-spdraw]');
+    const qBtn   = box.querySelector('[data-spq]');
+    const aBtn   = box.querySelector('[data-spa]');
+    let filter = '*', last = -1;
+
+    box.querySelectorAll('[data-sptheme]').forEach(chip => chip.onclick = () => {
+      filter = chip.dataset.sptheme;
+      box.querySelectorAll('[data-sptheme]').forEach(c => c.classList.toggle('on', c === chip));
+    });
+
+    dBtn.onclick = () => {
+      const pool = karten
+        .map((k, i) => i)
+        .filter(i => filter === '*' || karten[i].thema === filter);
+      if (!pool.length) return;
+      let pick = pool[Math.floor(Math.random() * pool.length)];
+      if (pool.length > 1 && pick === last)
+        pick = pool[(pool.indexOf(pick) + 1) % pool.length];
+      last = pick;
+      const k = karten[pick];
+      card.classList.remove('empty');
+      themaV.textContent = k.thema || '';
+      if (themaBox) themaBox.hidden = !k.thema;
+      wortEl.textContent = k.wort || '';
+      qTxt.textContent = k.frage || '';
+      aTxt.textContent = k.antwort || '';
+      qLine.hidden = true;
+      aLine.hidden = true;
+      qBtn.hidden = !k.frage;   qBtn.textContent = t('spShowQ');
+      aBtn.hidden = !k.antwort; aBtn.textContent = t('spShowA');
+    };
+    qBtn.onclick = () => {
+      qLine.hidden = !qLine.hidden;
+      qBtn.textContent = t(qLine.hidden ? 'spShowQ' : 'spHideQ');
+    };
+    aBtn.onclick = () => {
+      aLine.hidden = !aLine.hidden;
+      aBtn.textContent = t(aLine.hidden ? 'spShowA' : 'spHideA');
+    };
+  });
 }
 
 function bindSprechen(secs){
