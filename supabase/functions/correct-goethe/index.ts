@@ -155,23 +155,38 @@ Deno.serve(async (req) => {
   const parts: unknown[] = [{ text: prompt }];
   if (img) parts.push({ inline_data: { mime_type: img.mime || "image/jpeg", data: img.data } });
 
-  try {
-    const r = await fetch(`${BASE}/models/${MODEL}:generateContent?key=${KEY}`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: SYSTEM }] },
-        contents: [{ role: "user", parts }],
-        generationConfig: {
-          responseMimeType: "application/json",
-          responseSchema: SCHEMA,
-          temperature: 0.2,
-          maxOutputTokens: 8192,
-        },
-      }),
-    });
+  const reqBody = JSON.stringify({
+    systemInstruction: { parts: [{ text: SYSTEM }] },
+    contents: [{ role: "user", parts }],
+    generationConfig: {
+      responseMimeType: "application/json",
+      responseSchema: SCHEMA,
+      temperature: 0.2,
+      maxOutputTokens: 8192,
+    },
+  });
 
-    const body = await r.json().catch(() => null);
+  /* ★ «الموديل مزحوم» (high demand / overloaded) عطل مؤقت من Google —
+     منعيد المحاولة تلقائياً بتأخير بسيط قبل ما نستسلم. */
+  const isBusy = (status: number, msg: string) =>
+    status === 503 || status === 500 || /overload|high demand|try again|unavailable/i.test(msg);
+
+  try {
+    let r: Response;
+    let body: { error?: { message?: string }; candidates?: unknown[];
+                promptFeedback?: { blockReason?: string };
+                usageMetadata?: Record<string, number>; modelVersion?: string } | null = null;
+    for (let attempt = 0; ; attempt++) {
+      r = await fetch(`${BASE}/models/${MODEL}:generateContent?key=${KEY}`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: reqBody,
+      });
+      body = await r.json().catch(() => null);
+      if (r.ok || attempt >= 2) break;
+      if (!isBusy(r.status, body?.error?.message ?? "")) break;
+      await new Promise((res) => setTimeout(res, 900 * (attempt + 1)));   // 0.9s، 1.8s
+    }
 
     if (!r.ok) {
       if (r.status === 429) return json({ ok: false, error: "ai_quota" }, 503);
@@ -180,6 +195,8 @@ Deno.serve(async (req) => {
         return json({ ok: false, error: "bad_model",
                       detail: `GEMINI_MODEL=${MODEL} — verfügbar: ${have}` }, 502);
       }
+      if (isBusy(r.status, body?.error?.message ?? ""))
+        return json({ ok: false, error: "ai_busy" }, 503);
       throw new Error(body?.error?.message ?? `gemini ${r.status}`);
     }
 

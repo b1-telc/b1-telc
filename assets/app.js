@@ -700,9 +700,9 @@ function praxisWritingHTML(sec){
   </div>`;
 }
 
-const AI_ERR = { ai_quota: 'aiErrDaily', bad_model: 'aiErrSetup', not_configured: 'aiErrSetup',
-  no_session: 'aiErrSetup', refused: 'aiErrRefused', empty_text: 'aiErrEmpty',
-  no_rubric: 'aiErrOther', network: 'aiErrNetwork' };
+const AI_ERR = { ai_quota: 'aiErrDaily', ai_busy: 'aiErrBusy', bad_model: 'aiErrSetup',
+  not_configured: 'aiErrSetup', no_session: 'aiErrSetup', refused: 'aiErrRefused',
+  empty_text: 'aiErrEmpty', no_rubric: 'aiErrOther', network: 'aiErrNetwork' };
 
 function bindPraxisWriting(secs){
   const photos = {};                       // sec.id → { data, mime }
