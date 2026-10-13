@@ -208,6 +208,13 @@ h3{font-size:1em; margin:0 0 4px}
   filter:drop-shadow(0 2px 4px rgba(0,0,0,.2));
 }
 .w2set textarea{border-radius:14px}
+.w2set .wlabel{
+  display:inline-flex; align-items:center; gap:6px; margin-top:10px;
+  padding:5px 13px; border-radius:999px; background:var(--brand-soft);
+  color:var(--brand-dark); font-size:.9em; font-weight:700;
+}
+.w2set .wlabel.low{background:var(--warn-soft); color:var(--warn)}
+.w2set .wlabel .sub{font-weight:500; margin:0}
 
 .w2{margin-top:14px}
 .w2tools{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
