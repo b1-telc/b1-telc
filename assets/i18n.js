@@ -99,6 +99,8 @@ const I18N = (() => {
       w2TooBig: 'Das Foto ist zu groß zum Speichern. Bitte ein kleineres wählen.',
       w2Muster: '📄 Musterlösung anzeigen',
       w2MusterHide: '📄 Musterlösung ausblenden',
+      wordsLabel: 'Wörter',
+      minWords: 'mind. {min}',
       w2MusterTitle: 'Musterlösung',
       praxisReset: 'Antworten zurücksetzen',
       praxisResetAsk: 'Alle Antworten in diesem Teil löschen und neu üben?',

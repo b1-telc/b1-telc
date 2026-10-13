@@ -1275,6 +1275,20 @@ const CLOSE = /(viele|liebe|herzliche|beste|freundliche)\s+gr(ü|ue)(ß|ss)e|mit
 
 const wordCount = s => String(s || '').trim().split(/\s+/).filter(Boolean).length;
 
+/* ★ Goethe Teil 2: بدل قائمة التحقّق الكاملة — بس عدّاد كلمات كـlabel. */
+function wordLabelHTML(it, text){
+  const n = wordCount(text);
+  const min = (it && it.minWords) || 0;
+  const low = min && n < min;
+  return `<div class="wlabel${low ? ' low' : ''}">${n} ${esc(t('wordsLabel'))}${
+    low ? ` <span class="sub">(${esc(t('minWords', { min }))})</span>` : ''}</div>`;
+}
+
+/* قائمة التحقّق (امتحان) أو عدّاد الكلمات (تمرين غوته) */
+function writingAside(it, text){
+  return isPraxis() ? wordLabelHTML(it, text) : checksHTML(it, text);
+}
+
 function checksHTML(it, text){
   const n    = wordCount(text);
   // ★ نفس الغلط يلي كان بشاشة النتيجة: `|| 100` كان بيطالب طالب A1
@@ -1576,7 +1590,7 @@ function renderItem(sec, it){
     return `<div class="q" id="q_${esc(it.id)}">
       <textarea data-txt="${esc(it.id)}" lang="de" spellcheck="true"
         placeholder="${esc(t('writePlaceholder'))}">${esc(draft)}</textarea>
-      <div id="chk_${esc(it.id)}">${checksHTML(it, draft)}</div>
+      <div id="chk_${esc(it.id)}">${writingAside(it, draft)}</div>
     </div>`;
   }
   if (sec.format === 'mc' || sec.format === 'truefalse'){
@@ -1705,7 +1719,7 @@ function redrawChecks(sec, id){
   const box = document.getElementById('chk_' + id);
   const it  = sec.items.find(x => x.id === id);
   if (!box || !it) return;
-  box.innerHTML = checksHTML(it, S.answers[id] || '');
+  box.innerHTML = writingAside(it, S.answers[id] || '');
   box.querySelectorAll('[data-pt]').forEach(cb => {
     cb.onchange = () => {
       const [iid, i] = cb.dataset.pt.split('|');
