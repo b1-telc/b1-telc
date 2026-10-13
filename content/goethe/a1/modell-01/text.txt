@@ -28,8 +28,8 @@ Teile: sf1-01, sf1-02, sf1-03, sf1-04, sf1-05, sf1-06, sf1-07, sf1-08, sf1-09, s
 ## Block: s2
 Titel: Schreiben · Teil 2 (Brief)
 Minuten: 0
-Punkte: 60
-Teile: sf2-01, sf2-02, sf2-03, sf2-04, sf2-05, sf2-06
+Punkte: 280
+Teile: sf2-01, sf2-02, sf2-03, sf2-04, sf2-05, sf2-06, sf2-07, sf2-08, sf2-09, sf2-10, sf2-11, sf2-12, sf2-13, sf2-14, sf2-15, sf2-16, sf2-17, sf2-18, sf2-19, sf2-20, sf2-21, sf2-22, sf2-23, sf2-24, sf2-25, sf2-26, sf2-27, sf2-28
 
 
 ### Teil: lv1-01
@@ -2535,3 +2535,2313 @@ Mindestwoerter: 30
 Punkt: Warum schreiben Sie?
 Punkt: Party, wann?
 Punkt: Mitbringen?
+
+### Teil: sf2-07
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 7 — Deutschkurs absagen
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie besuchen einen Deutschkurs und können nächsten Montag nicht zum Deutschkurs kommen. Schreiben Sie an Ihre Lehrerin Frau Schmidt. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Hausaufgaben?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Wieder da, wann?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Sehr geehrte Frau Schmidt,\n\nich schreibe Ihnen, weil ich nächsten Montag nicht zum Deutschkurs kommen kann. Ich bin leider sehr krank. Können Sie mir bitte die Hausaufgaben schicken? Ab nächstem Dienstag bin ich wieder da.\n\nMit freundlichen Grüßen\nIhre Kursteilnehmerin"
+}
+Aufgaben:
+[21] Schreiben Sie eine E-Mail an Frau Schmidt:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Hausaufgaben?
+Punkt: Wieder da, wann?
+
+### Teil: sf2-08
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 8 — Restaurant „Laura“
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie laden am Samstag 30 Personen zur Party ein und möchten im Restaurant essen. Schreiben Sie an das Restaurant „Laura“. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Welches Essen?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Preis?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Sehr geehrte Damen und Herren,\n\nam Samstag mache ich eine Party mit 30 Personen und möchte bei Ihnen im Restaurant essen. Deshalb schreibe ich Ihnen. Wir möchten gern Kebap und Salat essen. Wie viel kostet das Essen pro Person? Sind die Getränke inklusive?\n\nMit freundlichen Grüßen\nAmani Kanaan"
+}
+Aufgaben:
+[21] Schreiben Sie eine E-Mail an das Restaurant:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Welches Essen?
+Punkt: Preis?
+
+### Teil: sf2-09
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 9 — Gästehaus Meier
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie fahren am nächsten Donnerstag nach Leipzig und brauchen ein Zimmer für eine Nacht. Schreiben Sie an das „Gästehaus Meier“. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Preis?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Ankunftszeit?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Sehr geehrte Damen und Herren,\n\nam nächsten Donnerstag fahre ich nach Leipzig und brauche ein Zimmer für eine Nacht. Deshalb schreibe ich Ihnen. Wie viel kostet ein Einzelzimmer pro Nacht? Meine Ankunft ist um 16 Uhr.\n\nMit freundlichen Grüßen\nAmani Kanaan"
+}
+Aufgaben:
+[21] Schreiben Sie eine E-Mail an das Gästehaus:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Preis?
+Punkt: Ankunftszeit?
+
+### Teil: sf2-10
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 10 — Schrank kaufen
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie suchen einen Schrank und lesen eine Anzeige im Internet. Schreiben Sie an den Verkäufer Herrn Teppert. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Preis?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Abholen?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Sehr geehrter Herr Teppert,\n\nich habe Ihre Anzeige im Internet gelesen und möchte einen Schrank kaufen. Deshalb schreibe ich Ihnen. Wie viel kostet der Schrank? Wann kann ich den Schrank abholen?\n\nVielen Dank für Ihre Antwort.\nMit freundlichen Grüßen\nAmani Kanaan"
+}
+Aufgaben:
+[21] Schreiben Sie eine E-Mail an Herrn Teppert:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Preis?
+Punkt: Abholen?
+
+### Teil: sf2-11
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 11 — Mit Anna essen
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie haben Ihre Freundin Anna lange nicht gesehen und möchten mit ihr essen. Schreiben Sie an Anna. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Essen, wo?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Treffen, wann?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Liebe Anna,\n\nwie geht es dir? Wir haben uns lange nicht gesehen und ich möchte mit dir essen. Können wir uns am Freitag um 11 Uhr am Bahnhof treffen? Danach essen wir in einem Restaurant in der Nähe Pizza. Hast du Lust?\n\nLiebe Grüße\nAmani"
+}
+Aufgaben:
+[21] Schreiben Sie eine Nachricht an Anna:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Essen, wo?
+Punkt: Treffen, wann?
+
+### Teil: sf2-12
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 12 — Sofa kaufen
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie suchen ein Sofa und lesen in der Zeitung eine Anzeige. Antworten Sie an den Verkäufer. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Preis?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Abholen?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Sehr geehrte Damen und Herren,\n\nich habe Ihre Anzeige in der Zeitung gelesen und suche ein Sofa. Deshalb schreibe ich Ihnen. Wie viel kostet das Sofa? Wann kann ich das Sofa abholen?\n\nMit freundlichen Grüßen\nAmani Kanaan"
+}
+Aufgaben:
+[21] Schreiben Sie eine E-Mail an den Verkäufer:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Preis?
+Punkt: Abholen?
+
+### Teil: sf2-13
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 13 — Kochkurs
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie möchten bei der Kochschule Schmidt einen Kochkurs besuchen. Schreiben Sie an die „Kochschule Schmidt“. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Uhrzeit?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Preis?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Sehr geehrte Damen und Herren,\n\nich möchte bei Ihnen einen Kochkurs machen, deshalb schreibe ich Ihnen. Wann findet der Kurs statt und wie sind die Kurszeiten? Wie viel kostet der Kochkurs?\n\nMit freundlichen Grüßen\nAmani Kanaan"
+}
+Aufgaben:
+[21] Schreiben Sie eine E-Mail an die Kochschule:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Uhrzeit?
+Punkt: Preis?
+
+### Teil: sf2-14
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 14 — Gratulieren
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Ihre Freundin Jasmin hat ein Baby bekommen. Sie möchten ihr gratulieren und sie zu Hause besuchen. Schreiben Sie an Jasmin. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Besuchen, wann?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Geschenk?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Liebe Jasmin,\n\nwie geht es dir? Zur Geburt deines Babys möchte ich dir herzlich gratulieren. Darf ich am Sonntagnachmittag vorbeikommen und dich besuchen? Ich möchte ein Geschenk für das Baby kaufen – was magst du?\n\nLiebe Grüße\nAmani"
+}
+Aufgaben:
+[21] Schreiben Sie eine Nachricht an Jasmin:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Besuchen, wann?
+Punkt: Geschenk?
+
+### Teil: sf2-15
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 15 — Einladung zur Hochzeit
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Ihr Freund Roland hat Sie zu seiner Hochzeit nach Bonn eingeladen. Schreiben Sie eine E-Mail an ihn. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Danke für die Einladung.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Ihre Ankunft mit dem Zug: 17. Mai, 15:26 Uhr.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Bitte: ein Zimmer für drei Nächte bestellen.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Lieber Roland,\n\nvielen Dank für die Einladung zu deiner Hochzeit! Ich freue mich sehr. Ich komme am 17. Mai um 15:26 Uhr mit dem Zug in Bonn an. Kannst du mir bitte ein Hotelzimmer für drei Nächte reservieren?\n\nLiebe Grüße\nAmani"
+}
+Aufgaben:
+[21] Schreiben Sie eine E-Mail an Roland:
+Mindestwoerter: 30
+Punkt: Danke für die Einladung.
+Punkt: Ihre Ankunft mit dem Zug: 17. Mai, 15:26 Uhr.
+Punkt: Bitte: ein Zimmer für drei Nächte bestellen.
+
+### Teil: sf2-16
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 16 — Besuch, nicht zu Hause
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Ihre Freundin Lina möchte Sie besuchen, aber Sie sind nicht zu Hause. Schreiben Sie an Lina. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Entschuldigen Sie sich.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Sie muss die Linie 18 nehmen.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Ihr Mann ist auch zu Hause.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Liebe Lina,\n\nwie geht es dir? Ich möchte mich bei dir entschuldigen, weil ich nicht zu Hause bin. Du kannst mich gern besuchen. Nimm bitte die Linie 18, wir wohnen ganz in der Nähe. Mein Mann ist zu Hause und wartet auf dich.\n\nLiebe Grüße\nAmani"
+}
+Aufgaben:
+[21] Schreiben Sie eine Nachricht an Lina:
+Mindestwoerter: 30
+Punkt: Entschuldigen Sie sich.
+Punkt: Sie muss die Linie 18 nehmen.
+Punkt: Ihr Mann ist auch zu Hause.
+
+### Teil: sf2-17
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 17 — Familienfest
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie möchten am 15. August ein Familienfest mit hundert Personen feiern und brauchen einen großen Raum. Schreiben Sie an das Hotel „Kaiser Wilhelm“. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Essen, Preis?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Raum frei?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Sehr geehrte Damen und Herren,\n\nam 15. August möchte ich ein Familienfest mit hundert Personen feiern und brauche einen großen Raum. Deshalb schreibe ich Ihnen. Wie viel kostet das Essen pro Person? Haben Sie an diesem Tag einen großen Raum frei?\n\nMit freundlichen Grüßen\nAmani Kanaan"
+}
+Aufgaben:
+[21] Schreiben Sie eine E-Mail an das Hotel:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Essen, Preis?
+Punkt: Raum frei?
+
+### Teil: sf2-18
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 18 — Umzug, Hilfe
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie ziehen in die Berliner Straße 11 und brauchen Hilfe von Ihrem Freund. Schreiben Sie an Ihren Freund. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Treffen, wann?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Das Auto?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Lieber Johannes,\n\nwie geht es dir? Ich möchte in die Berliner Straße 11 umziehen und brauche deine Hilfe. Kannst du mir am nächsten Sonntag von 11 bis 15 Uhr helfen? Und kannst du bitte auch dein Auto mitbringen?\n\nLiebe Grüße\nAmani"
+}
+Aufgaben:
+[21] Schreiben Sie eine Nachricht an Ihren Freund:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Treffen, wann?
+Punkt: Das Auto?
+
+### Teil: sf2-19
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 19 — Auto kaufen
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie suchen ein Auto und lesen im Internet eine Anzeige. Schreiben Sie an den Verkäufer. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Wie viele Personen?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Wann sehen?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Sehr geehrte Damen und Herren,\n\nich habe Ihre Anzeige im Internet gelesen und möchte das Auto kaufen. Deshalb schreibe ich Ihnen. Für wie viele Personen ist das Auto? Wann kann ich das Auto sehen?\n\nMit freundlichen Grüßen\nAmani Kanaan"
+}
+Aufgaben:
+[21] Schreiben Sie eine E-Mail an den Verkäufer:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Wie viele Personen?
+Punkt: Wann sehen?
+
+### Teil: sf2-20
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 20 — Geburtstag feiern
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie möchten Ihren Geburtstag feiern und Ihre Freunde Susanna und Paul einladen. Schreiben Sie an Susanna und Paul. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Tag und Uhrzeit?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Kommen, wie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Liebe Susanna, lieber Paul,\n\nwie geht es euch? Ich habe bald Geburtstag und möchte eine Party machen. Ich möchte euch gern einladen! Die Party findet am Sonntag um 19 Uhr im Restaurant statt. Könnt ihr mit dem Taxi kommen?\n\nLiebe Grüße\nAmani"
+}
+Aufgaben:
+[21] Schreiben Sie eine Einladung an Susanna und Paul:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Tag und Uhrzeit?
+Punkt: Kommen, wie?
+
+### Teil: sf2-21
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 21 — Geburtstag im Büro
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Ihr neuer Kollege Herr Jensch hat Sie am Dienstag um 15 Uhr zu seiner Geburtstagsfeier im Büro eingeladen. Schreiben Sie an Herrn Jensch. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Später kommen?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Helfen?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Lieber Herr Jensch,\n\nvielen Dank für Ihre Einladung! Leider komme ich etwas später: Am Dienstag um 14 Uhr muss ich zum Arzt gehen. Um 15:30 Uhr kann ich zu Ihrer Feier ins Büro kommen. Kann ich Ihnen helfen? Ich bringe gern einen Kuchen mit.\n\nLiebe Grüße\nAmani"
+}
+Aufgaben:
+[21] Schreiben Sie eine E-Mail an Herrn Jensch:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Später kommen?
+Punkt: Helfen?
+
+### Teil: sf2-22
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 22 — Computerkurs
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie möchten einen Computerkurs bei der Firma „Profil“ machen. Schreiben Sie an die Firma „Profil“. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Preis?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Uhrzeit?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Sehr geehrte Damen und Herren,\n\nich möchte bei Ihnen einen Computerkurs machen, deshalb schreibe ich Ihnen. Wie viel kostet der Kurs? Wann findet der Kurs statt?\n\nMit freundlichen Grüßen\nAmani Kanaan"
+}
+Aufgaben:
+[21] Schreiben Sie eine E-Mail an die Firma:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Preis?
+Punkt: Uhrzeit?
+
+### Teil: sf2-23
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 23 — Fahrradausflug
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie möchten mit Ihrem Freund Peter am Sonntag einen Ausflug mit dem Fahrrad machen. Schreiben Sie an Peter. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Wohin fahren?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Wo treffen?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Lieber Peter,\n\nwie geht es dir? Ich möchte am Sonntag gern einen Ausflug mit dem Fahrrad machen. Wir können mit dem Fahrrad zum Strand fahren. Treffen wir uns am Sonntag bei mir zu Hause?\n\nLiebe Grüße\nAmani"
+}
+Aufgaben:
+[21] Schreiben Sie eine Nachricht an Peter:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Wohin fahren?
+Punkt: Wo treffen?
+
+### Teil: sf2-24
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 24 — Urlaub in München
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie möchten im Sommer in München Urlaub machen. Schreiben Sie an die Touristeninformation. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Günstiges Hotel?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Sehenswürdigkeiten?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Sehr geehrte Damen und Herren,\n\nich möchte im Sommer in München Urlaub machen, deshalb schreibe ich Ihnen. Können Sie mir Informationen über ein günstiges Hotel schicken? Was sind die Sehenswürdigkeiten in München?\n\nMit freundlichen Grüßen\nAmani Kanaan"
+}
+Aufgaben:
+[21] Schreiben Sie eine E-Mail an die Touristeninformation:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Günstiges Hotel?
+Punkt: Sehenswürdigkeiten?
+
+### Teil: sf2-25
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 25 — Termin absagen
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie sind krank und können nicht nach Frankfurt zu einem Termin mit Herrn Bauer kommen. Schreiben Sie an Herrn Bauer. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Entschuldigung.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Vorschlag: neuer Termin?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Sehr geehrter Herr Bauer,\n\nich hoffe, es geht Ihnen gut. Ich möchte mich entschuldigen: Leider kann ich nicht nach Frankfurt zu unserem Termin kommen, weil ich krank bin. Können wir uns am Samstag um 13 Uhr treffen?\n\nMit freundlichen Grüßen\nAmani Kanaan"
+}
+Aufgaben:
+[21] Schreiben Sie eine E-Mail an Herrn Bauer:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Entschuldigung.
+Punkt: Vorschlag: neuer Termin?
+
+### Teil: sf2-26
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 26 — Hotel Leonardo
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie möchten mit Ihrer Familie im Hotel Leonardo übernachten. Schreiben Sie an das Hotel. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Wie viele Leute kommen?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Essen?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Sehr geehrte Damen und Herren,\n\nam Wochenende möchte ich mit meiner Familie in Ihrem Hotel übernachten, deshalb schreibe ich Ihnen. Ich komme mit fünf Personen. Was kann man in Ihrem Hotel essen? Gibt es arabisches Essen?\n\nMit freundlichen Grüßen\nAmani Kanaan"
+}
+Aufgaben:
+[21] Schreiben Sie eine E-Mail an das Hotel:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Wie viele Leute kommen?
+Punkt: Essen?
+
+### Teil: sf2-27
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 27 — Dresden besuchen
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie möchten im August Dresden besuchen. Schreiben Sie an die Touristeninformation. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Warum schreiben Sie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Kulturprogramm (Film, Museen)?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Hoteladressen?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Sehr geehrte Damen und Herren,\n\nich möchte im August nach Dresden fahren. Deshalb möchte ich mich informieren, ob es in Dresden ein Kulturprogramm (Filme, Museen) gibt. Können Sie mir bitte auch Hoteladressen schicken?\n\nVielen Dank und freundliche Grüße\nAmani Kanaan"
+}
+Aufgaben:
+[21] Schreiben Sie eine E-Mail an die Touristeninformation:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Kulturprogramm (Film, Museen)?
+Punkt: Hoteladressen?
+
+### Teil: sf2-28
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 28 — E-Mail an Jan
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Ihr Freund Jan hat Ihnen geschrieben: „Hallo, viele Grüße aus Sindelfingen! Ich bin in den Ferien bei meiner Oma, und ich finde es total langweilig. Hier kann man so wenig machen, und ich kenne auch niemanden. Was machst du denn so in den Ferien? Und wie geht es deiner Familie? Bitte schreib mir bald! Jan.“ Antworten Sie Jan. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {
+   "title": "Inhaltspunkt 1",
+   "hint": "Reagieren Sie auf Jans Nachricht.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 2",
+   "hint": "Was machen Sie in den Ferien?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Inhaltspunkt 3",
+   "hint": "Wie geht es Ihrer Familie?",
+   "levels": [
+    {
+     "key": "A",
+     "label": "vollständig und verständlich bearbeitet",
+     "points": 3
+    },
+    {
+     "key": "B",
+     "label": "nur teilweise oder mit sinnstörenden Fehlern",
+     "points": 1.5
+    },
+    {
+     "key": "C",
+     "label": "nicht bearbeitet oder unverständlich",
+     "points": 0
+    }
+   ]
+  },
+  {
+   "title": "Kommunikative Gestaltung",
+   "hint": "Passende Anrede und Gruß, passender Stil.",
+   "levels": [
+    {
+     "key": "A",
+     "label": "Anrede und Gruß passend",
+     "points": 1
+    },
+    {
+     "key": "B",
+     "label": "Anrede oder Gruß fehlt / nur teilweise",
+     "points": 0.5
+    },
+    {
+     "key": "C",
+     "label": "keine passende Anrede und kein Gruß",
+     "points": 0
+    }
+   ]
+  }
+ ],
+ "muster": "Lieber Jan,\n\nvielen Dank für deine E-Mail! Schade, dass es dir langweilig ist. In den Ferien bleibe ich zu Hause und treffe oft meine Freunde. Manchmal gehen wir schwimmen. Meiner Familie geht es gut. Komm uns doch bald besuchen!\n\nLiebe Grüße\nAmani"
+}
+Aufgaben:
+[21] Schreiben Sie eine Antwort an Jan:
+Mindestwoerter: 30
+Punkt: Reagieren Sie auf Jans Nachricht.
+Punkt: Was machen Sie in den Ferien?
+Punkt: Wie geht es Ihrer Familie?
