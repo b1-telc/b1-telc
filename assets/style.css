@@ -193,15 +193,17 @@ h3{font-size:1em; margin:0 0 4px}
 .fchoice .opts.inline{margin:0; flex-wrap:wrap; gap:6px}
 .fchoice .opt{padding:5px 10px}
 
-/* ---------- Schreiben Teil 2 (Übung): Korrektur + Musterlösung ---------- */
+/* ---------- Schreiben Teil 2 (Übung): speichern + Musterlösung ---------- */
 .w2{margin-top:12px}
 .w2tools{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
 .w2tools .btn{flex:0 1 auto}
 .w2photo{cursor:pointer; margin:0}
-.w2name{color:var(--muted); font-size:.9em; margin:6px 0 0; min-height:1em}
-.w2fb{margin-top:12px}
-.w2fb .crit{border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin:8px 0}
-.w2fb .crit h3{margin:0 0 4px; font-size:1em}
+.btn.sm{padding:4px 12px; font-size:.85em}
+.w2shot .shot{margin:12px 0 0; display:flex; flex-direction:column; align-items:flex-start; gap:8px}
+.w2shot .shot img{
+  max-width:100%; max-height:420px; border-radius:var(--radius);
+  border:1px solid var(--line);
+}
 .muster{
   margin-top:12px; background:var(--ok-soft); border:1px solid var(--ok);
   border-radius:var(--radius); padding:14px 16px;
