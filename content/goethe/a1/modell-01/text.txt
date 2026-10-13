@@ -31,6 +31,12 @@ Minuten: 0
 Punkte: 280
 Teile: sf2-01, sf2-02, sf2-03, sf2-04, sf2-05, sf2-06, sf2-07, sf2-08, sf2-09, sf2-10, sf2-11, sf2-12, sf2-13, sf2-14, sf2-15, sf2-16, sf2-17, sf2-18, sf2-19, sf2-20, sf2-21, sf2-22, sf2-23, sf2-24, sf2-25, sf2-26, sf2-27, sf2-28
 
+## Block: sp1
+Titel: Sprechen · Teil 1 (Sich vorstellen)
+Minuten: 0
+Punkte: 0
+Teile: sp1-01
+
 
 ### Teil: lv1-01
 Format: truefalse
@@ -4845,3 +4851,113 @@ Mindestwoerter: 30
 Punkt: Reagieren Sie auf Jans Nachricht.
 Punkt: Was machen Sie in den Ferien?
 Punkt: Wie geht es Ihrer Familie?
+
+### Teil: sp1-01
+Format: vorstellen
+Gruppe: Sprechen
+Titel: Sich vorstellen
+Minuten: 0
+Hinweis: Im Sprechen Teil 1 stellen Sie sich vor. Sprechen Sie über die Stichwörter. Danach stellt die Prüferin oder der Prüfer Ihnen ein bis zwei Fragen.
+Extra:
+{
+ "cards": [
+  {
+   "q": "Name?",
+   "a": "Ich heiße … / Mein Name ist …"
+  },
+  {
+   "q": "Alter?",
+   "a": "Ich bin … Jahre alt."
+  },
+  {
+   "q": "Land?",
+   "a": "Ich komme aus …"
+  },
+  {
+   "q": "Wohnort?",
+   "a": "Ich wohne in …"
+  },
+  {
+   "q": "Sprachen?",
+   "a": "Ich spreche … und ein bisschen Deutsch."
+  },
+  {
+   "q": "Beruf?",
+   "a": "Ich bin … von Beruf. / Ich arbeite als …"
+  },
+  {
+   "q": "Schule?",
+   "a": "Ich besuche einen Deutschkurs. / Ich gehe in die Schule."
+  },
+  {
+   "q": "Hobby?",
+   "a": "Mein Hobby ist … / In meiner Freizeit … ich gern."
+  }
+ ],
+ "fragen": [
+  {
+   "q": "Buchstabieren Sie bitte Ihren Namen.",
+   "a": "Zum Beispiel: A – M – A – N – I."
+  },
+  {
+   "q": "Wie ist Ihre Telefonnummer?",
+   "a": "Meine Nummer ist null – eins – sieben – drei – …"
+  },
+  {
+   "q": "Wie ist Ihre Adresse?",
+   "a": "Ich wohne in der Berliner Straße 12."
+  },
+  {
+   "q": "Woher kommen Sie?",
+   "a": "Ich komme aus Syrien."
+  },
+  {
+   "q": "Wie alt sind Sie?",
+   "a": "Ich bin 25 Jahre alt."
+  },
+  {
+   "q": "Was sind Sie von Beruf?",
+   "a": "Ich bin Verkäuferin. / Ich bin Student."
+  },
+  {
+   "q": "Welche Sprachen sprechen Sie?",
+   "a": "Ich spreche Arabisch und ein bisschen Deutsch."
+  },
+  {
+   "q": "Wie lange lernen Sie schon Deutsch?",
+   "a": "Ich lerne seit sechs Monaten Deutsch."
+  },
+  {
+   "q": "Wo lernen Sie Deutsch?",
+   "a": "Ich lerne Deutsch in der Sprachschule."
+  },
+  {
+   "q": "Haben Sie Geschwister?",
+   "a": "Ja, ich habe einen Bruder und eine Schwester. / Nein, ich bin Einzelkind."
+  },
+  {
+   "q": "Sind Sie verheiratet?",
+   "a": "Ja, ich bin verheiratet. / Nein, ich bin ledig."
+  },
+  {
+   "q": "Haben Sie Kinder?",
+   "a": "Ja, ich habe zwei Kinder. / Nein, ich habe keine Kinder."
+  },
+  {
+   "q": "Was machen Sie in Ihrer Freizeit?",
+   "a": "In meiner Freizeit lese ich und treffe meine Freunde."
+  },
+  {
+   "q": "Was ist Ihr Hobby?",
+   "a": "Mein Hobby ist Kochen. / Ich spiele gern Fußball."
+  },
+  {
+   "q": "Wie kommen Sie zum Kurs?",
+   "a": "Ich komme mit dem Bus. / Ich komme zu Fuß."
+  },
+  {
+   "q": "Was ist Ihr Lieblingsessen?",
+   "a": "Mein Lieblingsessen ist Kebap."
+  }
+ ]
+}

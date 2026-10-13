@@ -815,6 +815,7 @@ function screenPractice(blockId){
     secs.forEach(bindInputs);
     praxisBindReveal(secs);
     bindPraxisWriting(secs);
+    bindSprechen(secs);
     praxisSyncButtons();
     document.getElementById('praxisReset').onclick = () =>
       ask(t('praxisResetAsk'), () => praxisReset(secs), t('praxisReset'));
@@ -1429,6 +1430,9 @@ function renderPartBody(sec){
   // Goethe/telc, Schreiben Teil 1: نموذج (Formular) يعبّيه الطالب
   if (sec.format === 'formular') return renderFormular(sec);
 
+  // Goethe, Sprechen Teil 1: التعريف بالنفس — بطاقات قلب + سؤال عشوائي
+  if (sec.format === 'vorstellen') return renderVorstellen(sec);
+
   // brief / هورتكست بالامتحان / بلا نصوص: ما في تداخل — متل قبل تماماً
   if (sec.brief || (sec.audio && S.view === 'exam')
       || !sec.passages || !sec.passages.length)
@@ -1511,6 +1515,68 @@ function renderFormular(sec){
         ${form.subtitle ? `<div class="formsub">${esc(form.subtitle)}</div>` : ''}</div>
       <div class="formrows">${rows}</div>
     </div>`;
+}
+
+/* ★ Goethe, Sprechen Teil 1 — Sich vorstellen (مادة مرجعية، بلا تصحيح).
+   بطاقات بتنقلب لتبيّن جملة نموذجية لكل كلمة مفتاح، + «نرد» بيرمي سؤال
+   عشوائي من أسئلة الفاحص مع إمكانية إظهار جواب نموذجي. */
+function renderVorstellen(sec){
+  const id = esc(sec.id);
+  const cards = sec.cards || [];
+  const flips = cards.map((c, i) => `<button class="flip" type="button" data-flip="${i}">
+      <span class="flipin">
+        <span class="fface ffront">${esc(c.q)}</span>
+        <span class="fface fback">${esc(c.a)}</span>
+      </span></button>`).join('');
+  const hasQ = (sec.fragen || []).length;
+  return `<div class="sprechen">
+    ${sec.note ? `<div class="instr">${esc(sec.note)}</div>` : ''}
+    <p class="sub">${esc(t('spCardsHint'))}</p>
+    <div class="flipgrid">${flips}</div>
+    ${hasQ ? `<div class="spquiz" id="spq-${id}">
+      <h3>🎲 ${esc(t('spQuizTitle'))}</h3>
+      <div class="qcard"><p class="spqtext">${esc(t('spTapDice'))}</p>
+        <p class="spqans" hidden></p></div>
+      <div class="sptools">
+        <button class="btn" type="button" data-spnew="${id}">🎲 ${esc(t('spNewQ'))}</button>
+        <button class="btn ghost" type="button" data-spans="${id}" hidden>${esc(t('spShowA'))}</button>
+      </div>
+    </div>` : ''}
+  </div>`;
+}
+
+function bindSprechen(secs){
+  secs.filter(s => s.format === 'vorstellen').forEach(sec => {
+    const scope = document.getElementById('part-' + sec.id);
+    if (!scope) return;
+
+    scope.querySelectorAll('[data-flip]').forEach(btn =>
+      btn.onclick = () => btn.classList.toggle('flipped'));
+
+    const fragen = sec.fragen || [];
+    if (!fragen.length) return;
+    const box  = scope.querySelector('#spq-' + sec.id);
+    const qEl  = box.querySelector('.spqtext');
+    const aEl  = box.querySelector('.spqans');
+    const nBtn = box.querySelector('[data-spnew]');
+    const aBtn = box.querySelector('[data-spans]');
+    let last = -1;
+
+    nBtn.onclick = () => {
+      let i = Math.floor(Math.random() * fragen.length);
+      if (fragen.length > 1 && i === last) i = (i + 1) % fragen.length;
+      last = i;
+      qEl.textContent = fragen[i].q;
+      aEl.textContent = fragen[i].a || '';
+      aEl.hidden = true;
+      aBtn.hidden = !fragen[i].a;
+      aBtn.textContent = t('spShowA');
+    };
+    aBtn.onclick = () => {
+      aEl.hidden = !aEl.hidden;
+      aBtn.textContent = t(aEl.hidden ? 'spShowA' : 'spHideA');
+    };
+  });
 }
 
 function renderPassages(sec){

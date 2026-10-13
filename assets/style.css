@@ -256,6 +256,37 @@ h3{font-size:1em; margin:0 0 4px}
   white-space:pre-wrap; line-height:1.95;
   font-family:Georgia,"Times New Roman",serif; font-size:1.04em; color:var(--ink);
 }
+
+/* ---------- Sprechen Teil 1: Sich vorstellen ---------- */
+.sprechen{margin-top:4px}
+.flipgrid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:14px 0}
+@media(max-width:380px){.flipgrid{grid-template-columns:1fr}}
+.flip{border:0; background:none; padding:0; cursor:pointer; min-height:96px;
+  font:inherit; perspective:900px}
+.flipin{position:relative; display:block; width:100%; min-height:96px;
+  transition:transform .5s cubic-bezier(.2,.7,.3,1); transform-style:preserve-3d}
+.flip.flipped .flipin{transform:rotateY(180deg)}
+.flip:hover .flipin{box-shadow:none}
+.fface{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  text-align:center; padding:14px; border-radius:16px; -webkit-backface-visibility:hidden;
+  backface-visibility:hidden; box-shadow:var(--shadow)}
+.ffront{background:linear-gradient(135deg, var(--brand-soft), var(--card));
+  border:1px solid var(--line); color:var(--brand-dark);
+  font-family:Georgia,"Times New Roman",serif; font-size:1.5em; font-weight:700}
+.fback{background:linear-gradient(135deg, var(--ok-soft), var(--card));
+  border:1px solid var(--ok); color:var(--ink);
+  transform:rotateY(180deg); font-size:.98em; line-height:1.55}
+.spquiz{margin-top:18px; padding:16px; border-radius:16px; background:var(--card);
+  border:1px solid var(--line); box-shadow:var(--shadow)}
+.spquiz h3{margin:0 0 10px}
+.qcard{background:var(--brand-soft); border-radius:12px; padding:14px 16px;
+  margin-bottom:12px; min-height:48px}
+.spqtext{margin:0; font-weight:700; font-size:1.08em; color:var(--ink)}
+.spqans{margin:8px 0 0; color:var(--ok); font-weight:600}
+.sptools{display:flex; flex-wrap:wrap; gap:10px}
+.sptools .btn{border-radius:12px; font-weight:700; transition:transform .14s, box-shadow .14s}
+.sptools .btn:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(16,24,40,.18)}
+.sptools .btn:not(.ghost){background:linear-gradient(135deg, var(--brand), var(--brand-dark)); border-color:transparent}
 .bank{
   background:var(--card); border:1px dashed var(--line); border-radius:var(--radius);
   padding:14px 16px; margin-bottom:16px;
