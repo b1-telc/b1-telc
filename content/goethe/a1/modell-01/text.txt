@@ -4900,6 +4900,10 @@ Extra:
    "a": "Zum Beispiel: A – M – A – N – I."
   },
   {
+   "q": "Buchstabieren Sie bitte Ihren Familiennamen.",
+   "a": "Mein Familienname ist … – ich buchstabiere: …"
+  },
+  {
    "q": "Wie ist Ihre Telefonnummer?",
    "a": "Meine Nummer ist null – eins – sieben – drei – …"
   },
@@ -4908,20 +4912,8 @@ Extra:
    "a": "Ich wohne in der Berliner Straße 12."
   },
   {
-   "q": "Woher kommen Sie?",
-   "a": "Ich komme aus Syrien."
-  },
-  {
-   "q": "Wie alt sind Sie?",
-   "a": "Ich bin 25 Jahre alt."
-  },
-  {
-   "q": "Was sind Sie von Beruf?",
-   "a": "Ich bin Verkäuferin. / Ich bin Student."
-  },
-  {
-   "q": "Welche Sprachen sprechen Sie?",
-   "a": "Ich spreche Arabisch und ein bisschen Deutsch."
+   "q": "Wie ist Ihre Postleitzahl?",
+   "a": "Meine Postleitzahl ist eins – null – null – eins – fünf."
   },
   {
    "q": "Wie lange lernen Sie schon Deutsch?",
@@ -4932,8 +4924,20 @@ Extra:
    "a": "Ich lerne Deutsch in der Sprachschule."
   },
   {
+   "q": "Warum lernen Sie Deutsch?",
+   "a": "Ich lerne Deutsch für meine Arbeit und für mein Leben hier."
+  },
+  {
+   "q": "Wie kommen Sie zum Kurs?",
+   "a": "Ich komme mit dem Bus. / Ich komme zu Fuß."
+  },
+  {
    "q": "Haben Sie Geschwister?",
    "a": "Ja, ich habe einen Bruder und eine Schwester. / Nein, ich bin Einzelkind."
+  },
+  {
+   "q": "Wie viele Personen sind in Ihrer Familie?",
+   "a": "Wir sind vier Personen: meine Eltern, mein Bruder und ich."
   },
   {
    "q": "Sind Sie verheiratet?",
@@ -4944,20 +4948,80 @@ Extra:
    "a": "Ja, ich habe zwei Kinder. / Nein, ich habe keine Kinder."
   },
   {
+   "q": "Haben Sie ein Haustier?",
+   "a": "Ja, ich habe eine Katze. / Nein, ich habe kein Haustier."
+  },
+  {
    "q": "Was machen Sie in Ihrer Freizeit?",
    "a": "In meiner Freizeit lese ich und treffe meine Freunde."
   },
   {
-   "q": "Was ist Ihr Hobby?",
-   "a": "Mein Hobby ist Kochen. / Ich spiele gern Fußball."
-  },
-  {
-   "q": "Wie kommen Sie zum Kurs?",
-   "a": "Ich komme mit dem Bus. / Ich komme zu Fuß."
+   "q": "Treiben Sie Sport?",
+   "a": "Ja, ich spiele Fußball. / Ich gehe gern schwimmen."
   },
   {
    "q": "Was ist Ihr Lieblingsessen?",
    "a": "Mein Lieblingsessen ist Kebap."
+  },
+  {
+   "q": "Was trinken Sie gern?",
+   "a": "Ich trinke gern Tee und Wasser."
+  },
+  {
+   "q": "Was ist Ihre Lieblingsfarbe?",
+   "a": "Meine Lieblingsfarbe ist Blau."
+  },
+  {
+   "q": "Welche Jahreszeit mögen Sie am liebsten?",
+   "a": "Ich mag den Sommer, weil es warm ist."
+  },
+  {
+   "q": "Wie ist das Wetter heute?",
+   "a": "Heute ist es sonnig und warm. / Es regnet."
+  },
+  {
+   "q": "Welcher Tag ist heute?",
+   "a": "Heute ist Montag."
+  },
+  {
+   "q": "Wie spät ist es jetzt?",
+   "a": "Es ist zehn Uhr."
+  },
+  {
+   "q": "Wann stehen Sie morgens auf?",
+   "a": "Ich stehe um sieben Uhr auf."
+  },
+  {
+   "q": "Was machen Sie am Abend?",
+   "a": "Am Abend koche ich und sehe fern."
+  },
+  {
+   "q": "Was haben Sie gestern gemacht?",
+   "a": "Gestern habe ich gearbeitet und Deutsch gelernt."
+  },
+  {
+   "q": "Was möchten Sie am Wochenende machen?",
+   "a": "Am Wochenende möchte ich meine Familie besuchen."
+  },
+  {
+   "q": "Welche Verkehrsmittel benutzen Sie?",
+   "a": "Ich fahre mit dem Bus und mit der U-Bahn."
+  },
+  {
+   "q": "Gehen Sie gern einkaufen?",
+   "a": "Ja, ich kaufe gern im Supermarkt ein."
+  },
+  {
+   "q": "Wann haben Sie Geburtstag?",
+   "a": "Ich habe am zwölften Mai Geburtstag."
+  },
+  {
+   "q": "Mögen Sie Deutschland?",
+   "a": "Ja, ich mag Deutschland. Die Menschen sind freundlich."
+  },
+  {
+   "q": "Wohin möchten Sie gern reisen?",
+   "a": "Ich möchte gern nach Berlin reisen."
   }
  ]
 }
