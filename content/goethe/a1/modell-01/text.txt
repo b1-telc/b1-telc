@@ -27,9 +27,9 @@ Teile: sf1-01, sf1-02, sf1-03, sf1-04, sf1-05, sf1-06, sf1-07, sf1-08, sf1-09, s
 
 ## Block: s2
 Titel: Schreiben · Teil 2 (Brief)
-Minuten: 10
-Punkte: 10
-Teile: s2
+Minuten: 0
+Punkte: 60
+Teile: sf2-01, sf2-02, sf2-03, sf2-04, sf2-05, sf2-06
 
 
 ### Teil: lv1-01
@@ -2386,17 +2386,27 @@ Lösung: Salzburg
 Lösung: Österreich
 
 
-### Teil: s2
+### Teil: sf2-01
 Format: writing
-Titel: Schreiben, Teil 2
 Gruppe: Schreiben
-Minuten: 10
+Titel: Übung 1 — Kühlschrank
+Minuten: 0
 Punkte: 10
 Maximum: 10
-Anweisung: Schreiben Sie an Ihren Nachbarn, Herrn Maier, und bitten Sie um Hilfe. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Anweisung: Sie bekommen am Dienstag einen neuen Kühlschrank. Sie müssen arbeiten. Schreiben Sie an Ihren Nachbarn Herrn Maier und bitten Sie um Hilfe. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {"title":"Inhaltspunkt 1","hint":"Warum schreiben Sie?","levels":[{"key":"A","label":"vollständig und verständlich bearbeitet","points":3},{"key":"B","label":"nur teilweise oder mit sinnstörenden Fehlern","points":1.5},{"key":"C","label":"nicht bearbeitet oder unverständlich","points":0}]},
+  {"title":"Inhaltspunkt 2","hint":"Uhrzeit?","levels":[{"key":"A","label":"vollständig und verständlich bearbeitet","points":3},{"key":"B","label":"nur teilweise oder mit sinnstörenden Fehlern","points":1.5},{"key":"C","label":"nicht bearbeitet oder unverständlich","points":0}]},
+  {"title":"Inhaltspunkt 3","hint":"Schlüssel?","levels":[{"key":"A","label":"vollständig und verständlich bearbeitet","points":3},{"key":"B","label":"nur teilweise oder mit sinnstörenden Fehlern","points":1.5},{"key":"C","label":"nicht bearbeitet oder unverständlich","points":0}]},
+  {"title":"Kommunikative Gestaltung","hint":"Passende Anrede und Gruß, passender Stil.","levels":[{"key":"A","label":"Anrede und Gruß passend","points":1},{"key":"B","label":"Anrede oder Gruß fehlt / nur teilweise","points":0.5},{"key":"C","label":"keine passende Anrede und kein Gruß","points":0}]}
+ ],
+ "muster": "Sehr geehrter Herr Maier,\n\nam Dienstag bekomme ich einen neuen Kühlschrank, aber ich muss arbeiten. Deshalb schreibe ich Ihnen und bitte Sie um Hilfe. Der Kühlschrank wird um 8 Uhr geliefert. Können Sie bitte zu Hause sein? Meinen Schlüssel lege ich in Ihren Briefkasten.\n\nVielen Dank im Voraus.\nMit freundlichen Grüßen\nIhre Nachbarin"
+}
 Text:
 **Schreibaufgabe**
-Sie bekommen am Dienstag einen neuen Kühlschrank. Sie müssen arbeiten. Schreiben Sie an Ihren Nachbarn, Herrn Maier, und bitten Sie um Hilfe.
+Sie bekommen am Dienstag einen neuen Kühlschrank. Sie müssen arbeiten. Schreiben Sie an Ihren Nachbarn Herrn Maier und bitten Sie um Hilfe.
 Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter):
 • Warum schreiben Sie?
 • Uhrzeit?
@@ -2407,3 +2417,163 @@ Mindestwoerter: 30
 Punkt: Warum schreiben Sie?
 Punkt: Uhrzeit?
 Punkt: Schlüssel?
+
+### Teil: sf2-02
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 2 — Arbeit als Verkäufer/in
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie suchen eine Arbeit als Verkäufer/Verkäuferin und lesen in der Zeitung eine Anzeige. Antworten Sie an den Supermarkt „cent". Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {"title":"Inhaltspunkt 1","hint":"Warum schreiben Sie?","levels":[{"key":"A","label":"vollständig und verständlich bearbeitet","points":3},{"key":"B","label":"nur teilweise oder mit sinnstörenden Fehlern","points":1.5},{"key":"C","label":"nicht bearbeitet oder unverständlich","points":0}]},
+  {"title":"Inhaltspunkt 2","hint":"Informationen über sich?","levels":[{"key":"A","label":"vollständig und verständlich bearbeitet","points":3},{"key":"B","label":"nur teilweise oder mit sinnstörenden Fehlern","points":1.5},{"key":"C","label":"nicht bearbeitet oder unverständlich","points":0}]},
+  {"title":"Inhaltspunkt 3","hint":"Arbeitszeit?","levels":[{"key":"A","label":"vollständig und verständlich bearbeitet","points":3},{"key":"B","label":"nur teilweise oder mit sinnstörenden Fehlern","points":1.5},{"key":"C","label":"nicht bearbeitet oder unverständlich","points":0}]},
+  {"title":"Kommunikative Gestaltung","hint":"Passende Anrede und Gruß, passender Stil.","levels":[{"key":"A","label":"Anrede und Gruß passend","points":1},{"key":"B","label":"Anrede oder Gruß fehlt / nur teilweise","points":0.5},{"key":"C","label":"keine passende Anrede und kein Gruß","points":0}]}
+ ],
+ "muster": "Sehr geehrte Damen und Herren,\n\nich habe Ihre Anzeige in der Zeitung gelesen und suche eine Arbeit als Verkäuferin. Deshalb schreibe ich Ihnen. Ich heiße Sara Ahmad, bin 25 Jahre alt und spreche Arabisch und ein bisschen Deutsch. Wann sind die Arbeitszeiten im Supermarkt?\n\nÜber eine Antwort freue ich mich sehr.\nMit freundlichen Grüßen\nSara Ahmad"
+}
+Text:
+**Schreibaufgabe**
+Sie suchen eine Arbeit als Verkäufer/Verkäuferin und lesen in der Zeitung eine Anzeige. Antworten Sie an den Supermarkt „cent".
+Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter):
+• Warum schreiben Sie?
+• Informationen über sich?
+• Arbeitszeit?
+Aufgaben:
+[21] Schreiben Sie eine E-Mail oder einen kurzen Brief an den Supermarkt:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Informationen über sich?
+Punkt: Arbeitszeit?
+
+### Teil: sf2-03
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 3 — Treffen absagen
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Ihre Freundin Nina möchte sich am Samstag mit Ihnen treffen, aber Sie können nicht. Schreiben Sie an Nina. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {"title":"Inhaltspunkt 1","hint":"Warum schreiben Sie?","levels":[{"key":"A","label":"vollständig und verständlich bearbeitet","points":3},{"key":"B","label":"nur teilweise oder mit sinnstörenden Fehlern","points":1.5},{"key":"C","label":"nicht bearbeitet oder unverständlich","points":0}]},
+  {"title":"Inhaltspunkt 2","hint":"Treffen – wann?","levels":[{"key":"A","label":"vollständig und verständlich bearbeitet","points":3},{"key":"B","label":"nur teilweise oder mit sinnstörenden Fehlern","points":1.5},{"key":"C","label":"nicht bearbeitet oder unverständlich","points":0}]},
+  {"title":"Inhaltspunkt 3","hint":"Mitbringen?","levels":[{"key":"A","label":"vollständig und verständlich bearbeitet","points":3},{"key":"B","label":"nur teilweise oder mit sinnstörenden Fehlern","points":1.5},{"key":"C","label":"nicht bearbeitet oder unverständlich","points":0}]},
+  {"title":"Kommunikative Gestaltung","hint":"Passende Anrede und Gruß, passender (persönlicher) Stil.","levels":[{"key":"A","label":"Anrede und Gruß passend","points":1},{"key":"B","label":"Anrede oder Gruß fehlt / nur teilweise","points":0.5},{"key":"C","label":"keine passende Anrede und kein Gruß","points":0}]}
+ ],
+ "muster": "Liebe Nina,\n\nwie geht es dir? Leider kann ich mich am Samstag nicht mit dir treffen, weil ich arbeiten muss. Können wir uns am Sonntag um 18 Uhr treffen? Ich bringe einen Kuchen mit. Was möchtest du mitbringen?\n\nBis bald und liebe Grüße\nDeine Freundin"
+}
+Text:
+**Schreibaufgabe**
+Ihre Freundin Nina möchte sich am Samstag mit Ihnen treffen, aber Sie können nicht. Schreiben Sie an Nina.
+Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter):
+• Warum schreiben Sie?
+• Treffen, wann?
+• Mitbringen?
+Aufgaben:
+[21] Schreiben Sie eine Nachricht an Nina:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Treffen, wann?
+Punkt: Mitbringen?
+
+### Teil: sf2-04
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 4 — Neue Wohnung
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie möchten umziehen und suchen eine neue Wohnung. Sie haben eine Anzeige gelesen. Schreiben Sie an den Vermieter Herrn Mawat. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {"title":"Inhaltspunkt 1","hint":"Warum schreiben Sie?","levels":[{"key":"A","label":"vollständig und verständlich bearbeitet","points":3},{"key":"B","label":"nur teilweise oder mit sinnstörenden Fehlern","points":1.5},{"key":"C","label":"nicht bearbeitet oder unverständlich","points":0}]},
+  {"title":"Inhaltspunkt 2","hint":"Wohnung sehen – wann?","levels":[{"key":"A","label":"vollständig und verständlich bearbeitet","points":3},{"key":"B","label":"nur teilweise oder mit sinnstörenden Fehlern","points":1.5},{"key":"C","label":"nicht bearbeitet oder unverständlich","points":0}]},
+  {"title":"Inhaltspunkt 3","hint":"Adresse?","levels":[{"key":"A","label":"vollständig und verständlich bearbeitet","points":3},{"key":"B","label":"nur teilweise oder mit sinnstörenden Fehlern","points":1.5},{"key":"C","label":"nicht bearbeitet oder unverständlich","points":0}]},
+  {"title":"Kommunikative Gestaltung","hint":"Passende Anrede und Gruß, passender Stil.","levels":[{"key":"A","label":"Anrede und Gruß passend","points":1},{"key":"B","label":"Anrede oder Gruß fehlt / nur teilweise","points":0.5},{"key":"C","label":"keine passende Anrede und kein Gruß","points":0}]}
+ ],
+ "muster": "Sehr geehrter Herr Mawat,\n\nich habe Ihre Anzeige im Internet gelesen und suche eine neue Wohnung, weil ich umziehen möchte. Wann kann ich die Wohnung besichtigen? Könnten Sie mir bitte auch die Adresse der Wohnung schicken?\n\nVielen Dank für Ihre Antwort.\nMit freundlichen Grüßen\nIhr(e) ..."
+}
+Text:
+**Schreibaufgabe**
+Sie möchten umziehen und suchen eine neue Wohnung. Sie haben eine Anzeige gelesen. Schreiben Sie an den Vermieter Herrn Mawat.
+Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter):
+• Warum schreiben Sie?
+• Wohnung sehen, wann?
+• Adresse?
+Aufgaben:
+[21] Schreiben Sie eine E-Mail an Herrn Mawat:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Wohnung sehen, wann?
+Punkt: Adresse?
+
+### Teil: sf2-05
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 5 — Geburtstag
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie haben bald Geburtstag und möchten am Freitag feiern. Sie möchten Ihre Freunde Linda und Martin aus dem Sprachkurs einladen. Schreiben Sie an Linda und Martin. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {"title":"Inhaltspunkt 1","hint":"Warum schreiben Sie?","levels":[{"key":"A","label":"vollständig und verständlich bearbeitet","points":3},{"key":"B","label":"nur teilweise oder mit sinnstörenden Fehlern","points":1.5},{"key":"C","label":"nicht bearbeitet oder unverständlich","points":0}]},
+  {"title":"Inhaltspunkt 2","hint":"Uhrzeit?","levels":[{"key":"A","label":"vollständig und verständlich bearbeitet","points":3},{"key":"B","label":"nur teilweise oder mit sinnstörenden Fehlern","points":1.5},{"key":"C","label":"nicht bearbeitet oder unverständlich","points":0}]},
+  {"title":"Inhaltspunkt 3","hint":"Musik?","levels":[{"key":"A","label":"vollständig und verständlich bearbeitet","points":3},{"key":"B","label":"nur teilweise oder mit sinnstörenden Fehlern","points":1.5},{"key":"C","label":"nicht bearbeitet oder unverständlich","points":0}]},
+  {"title":"Kommunikative Gestaltung","hint":"Passende Anrede und Gruß, passender (persönlicher) Stil.","levels":[{"key":"A","label":"Anrede und Gruß passend","points":1},{"key":"B","label":"Anrede oder Gruß fehlt / nur teilweise","points":0.5},{"key":"C","label":"keine passende Anrede und kein Gruß","points":0}]}
+ ],
+ "muster": "Liebe Linda, lieber Martin,\n\nich habe bald Geburtstag und möchte am Freitag eine Party machen. Deshalb schreibe ich euch: Ich möchte euch gern einladen! Die Party beginnt um 19 Uhr bei mir zu Hause. Wir hören zusammen klassische Musik. Habt ihr Lust?\n\nIch freue mich auf euch.\nLiebe Grüße\nEuer Freund"
+}
+Text:
+**Schreibaufgabe**
+Sie haben bald Geburtstag und möchten am Freitag feiern. Sie möchten Ihre Freunde Linda und Martin aus dem Sprachkurs einladen. Schreiben Sie an Linda und Martin.
+Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter):
+• Warum schreiben Sie?
+• Uhrzeit?
+• Musik?
+Aufgaben:
+[21] Schreiben Sie eine Einladung an Linda und Martin:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Uhrzeit?
+Punkt: Musik?
+
+### Teil: sf2-06
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 6 — Abschiedsparty
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Der Deutschkurs ist zu Ende. Sie machen eine Party und laden Ihre Lehrerin Frau Schmitz ein. Schreiben Sie an Frau Schmitz. Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter).
+Extra:
+{
+ "criteria": [
+  {"title":"Inhaltspunkt 1","hint":"Warum schreiben Sie?","levels":[{"key":"A","label":"vollständig und verständlich bearbeitet","points":3},{"key":"B","label":"nur teilweise oder mit sinnstörenden Fehlern","points":1.5},{"key":"C","label":"nicht bearbeitet oder unverständlich","points":0}]},
+  {"title":"Inhaltspunkt 2","hint":"Party – wann?","levels":[{"key":"A","label":"vollständig und verständlich bearbeitet","points":3},{"key":"B","label":"nur teilweise oder mit sinnstörenden Fehlern","points":1.5},{"key":"C","label":"nicht bearbeitet oder unverständlich","points":0}]},
+  {"title":"Inhaltspunkt 3","hint":"Mitbringen?","levels":[{"key":"A","label":"vollständig und verständlich bearbeitet","points":3},{"key":"B","label":"nur teilweise oder mit sinnstörenden Fehlern","points":1.5},{"key":"C","label":"nicht bearbeitet oder unverständlich","points":0}]},
+  {"title":"Kommunikative Gestaltung","hint":"Passende Anrede und Gruß, passender Stil.","levels":[{"key":"A","label":"Anrede und Gruß passend","points":1},{"key":"B","label":"Anrede oder Gruß fehlt / nur teilweise","points":0.5},{"key":"C","label":"keine passende Anrede und kein Gruß","points":0}]}
+ ],
+ "muster": "Liebe Frau Schmitz,\n\nunser Deutschkurs ist zu Ende und wir machen eine Party. Deshalb schreibe ich Ihnen: Wir möchten Sie gern einladen! Die Party findet am Samstag um 17 Uhr in der Schule statt. Könnten Sie bitte Getränke und eine Kamera mitbringen?\n\nWir freuen uns auf Sie.\nMit freundlichen Grüßen\nIhre Kursteilnehmer"
+}
+Text:
+**Schreibaufgabe**
+Der Deutschkurs ist zu Ende. Sie machen eine Party und laden Ihre Lehrerin Frau Schmitz ein. Schreiben Sie an Frau Schmitz.
+Schreiben Sie zu jedem Punkt ein bis zwei Sätze (ca. 30 Wörter):
+• Warum schreiben Sie?
+• Party, wann?
+• Mitbringen?
+Aufgaben:
+[21] Schreiben Sie eine Einladung an Frau Schmitz:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Party, wann?
+Punkt: Mitbringen?

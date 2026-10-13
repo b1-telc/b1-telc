@@ -280,6 +280,20 @@ const API = (() => {
     return r.json().catch(() => ({ ok: false, error: 'bad_response' }));
   }
 
+  /* ★ تصحيح Goethe Teil 2 (منفصل عن correct-writing): بياخد المهمّة
+     والمعايير والنصّ أو صورة الحلّ، بيرجّع تقييم للعرض بلا تسجيل. */
+  async function correctGoethe(payload){
+    await ensureSession();
+    if (!session) throw new Error('no_session');
+    const r = await fetch(`${BASE}/functions/v1/correct-goethe`, {
+      method: 'POST',
+      headers: { apikey: KEY, authorization: `Bearer ${session.access_token}`,
+                 'content-type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    return r.json().catch(() => ({ ok: false, error: 'bad_response' }));
+  }
+
   /* تصحيح سابق لنفس المحاولة — تا ما ندفع مرتين على نفس النص */
   async function writingFeedback(attemptId){
     const rows = await rest(
@@ -334,7 +348,7 @@ const API = (() => {
            redeem, waitlist, subscription, levels, myLevels, index, catalog, test, resources, imageUrl, audioUrl,
            submitAttempt, submitDrill, reveal, mistakes, reviewSummary, attempts,
            reportProblem,
-           correctWriting, writingFeedback,
+           correctWriting, writingFeedback, correctGoethe,
            signOut: () => storeSession(null),
            hasSession: () => !!session };
 })();
