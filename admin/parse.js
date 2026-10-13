@@ -28,7 +28,7 @@ const Markup = (() => {
   };
 
   /* الصيغ يلي التطبيق بيعرف يعرضها. غيرها بينستورد بس ما بينرسم. */
-  const FORMATS = ['matching','mc','wordbank','truefalse','writing','formular'];
+  const FORMATS = ['matching','mc','wordbank','truefalse','writing','formular','vorstellen'];
 
   /* سطر بينهي وضع النص المتعدّد الأسطر */
   const BOUNDARY_LABELS = new Set(['aufgaben','auswahl','text','extra']);
@@ -113,7 +113,9 @@ const Markup = (() => {
       if (!sec) return;
       if (passages.length){ sec.passages = passages; passages = []; }
       if (sec.bank && !sec.bank.length) delete sec.bank;
-      if (!sec.items.length) warn.push(`Teil ${sec.id} hat keine Aufgaben`);
+      // ★ vorstellen (Sprechen Teil 1) هو مادة مرجعية بلا أسئلة — طبيعي
+      if (!sec.items.length && sec.format !== 'vorstellen')
+        warn.push(`Teil ${sec.id} hat keine Aufgaben`);
       // ohne Format weiß weder die Datenbank noch die App, was das ist
       if (!sec.format)
         warn.push(`Teil ${sec.id} hat kein Format (matching, mc, wordbank, truefalse, writing)`);
@@ -398,7 +400,7 @@ const Markup = (() => {
      العكس: كائن ← نص. مفيد لتعديل امتحان موجود، ولإثبات إن
      الصيغة بتوسّع المحتوى الحقيقي (اختبار round-trip).
      ============================================================ */
-  const EXTRA_KEYS = ['brief','hints','criteria','grades','factor','form','muster'];
+  const EXTRA_KEYS = ['brief','hints','criteria','grades','factor','form','muster','cards','fragen'];
 
   function serialize(test){
     const L = [];

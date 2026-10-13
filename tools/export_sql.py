@@ -20,7 +20,7 @@ from pathlib import Path
 CONFIG_KEYS = ('bank', 'bankTitle', 'bankImage', 'passages', 'note', 'brief',
                'hints', 'criteria', 'grades', 'factor', 'maxPoints',
                'availablePoints', 'missing', 'pointsPerItem',
-               'audio', 'audioPlays', 'stil', 'form', 'muster')
+               'audio', 'audioPlays', 'stil', 'form', 'muster', 'cards', 'fragen')
 
 
 def q(v):
