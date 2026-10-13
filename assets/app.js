@@ -675,9 +675,115 @@ function praxisSetHTML(sec){
     ${sec.title ? `<h2 class="setnum">${esc(sec.title)}</h2>` : ''}
     ${sec.instruction ? `<div class="instr">${esc(sec.instruction)}</div>` : ''}
     ${renderPartBody(sec)}
+    ${sec.format === 'writing' ? praxisWritingHTML(sec) : ''}
     ${gradable ? `<button class="btn ghost reveal" data-reveal="${esc(sec.id)}"
       data-ids="${esc(ids.join(','))}" disabled>${esc(t('reveal'))}</button>` : ''}
   </section>`;
+}
+
+/* ★ Goethe, Schreiben Teil 2: أدوات التدريب — تصحيح (كتابة أو صورة) +
+   زرّ Musterlösung. التصحيح بمسار غوته المنفصل (correct-goethe). */
+function praxisWritingHTML(sec){
+  const id = esc(sec.id);
+  const hasMuster = !!sec.muster;
+  return `<div class="w2">
+    <div class="w2tools">
+      <label class="btn grey w2photo">${esc(t('w2Photo'))}
+        <input type="file" accept="image/*" hidden data-w2photo="${id}"></label>
+      <button class="btn" data-w2go="${id}">${esc(t('w2Correct'))}</button>
+      ${hasMuster ? `<button class="btn ghost" data-w2muster="${id}">${esc(t('w2Muster'))}</button>` : ''}
+    </div>
+    <div class="w2name" id="w2name-${id}"></div>
+    <div class="w2fb" id="w2fb-${id}"></div>
+    ${hasMuster ? `<div class="muster" id="w2muster-${id}" hidden>
+      <h3>${esc(t('w2MusterTitle'))}</h3><div class="body">${esc(sec.muster)}</div></div>` : ''}
+  </div>`;
+}
+
+const AI_ERR = { ai_quota: 'aiErrDaily', bad_model: 'aiErrSetup', not_configured: 'aiErrSetup',
+  no_session: 'aiErrSetup', refused: 'aiErrRefused', empty_text: 'aiErrEmpty',
+  no_rubric: 'aiErrOther', network: 'aiErrNetwork' };
+
+function bindPraxisWriting(secs){
+  const photos = {};                       // sec.id → { data, mime }
+  secs.filter(s => s.format === 'writing').forEach(sec => {
+    const id = sec.id;
+    const scope = document.getElementById('part-' + id);
+    if (!scope) return;
+
+    const mBtn = scope.querySelector('[data-w2muster]');
+    if (mBtn) mBtn.onclick = () => {
+      const box = document.getElementById('w2muster-' + id);
+      if (!box) return;
+      box.hidden = !box.hidden;
+      mBtn.textContent = box.hidden ? t('w2Muster') : t('w2MusterHide');
+    };
+
+    const file = scope.querySelector('[data-w2photo]');
+    if (file) file.onchange = () => {
+      const f = file.files && file.files[0];
+      const nm = document.getElementById('w2name-' + id);
+      if (!f){ delete photos[id]; if (nm) nm.textContent = ''; return; }
+      const rd = new FileReader();
+      rd.onload = () => {
+        photos[id] = { data: String(rd.result).split(',')[1] || '', mime: f.type || 'image/jpeg' };
+        if (nm) nm.textContent = '📷 ' + f.name;
+      };
+      rd.readAsDataURL(f);
+    };
+
+    const go = scope.querySelector('[data-w2go]');
+    if (go) go.onclick = async () => {
+      const it = sec.items[0] || {};
+      const text = (S.answers[it.id] || '').trim();
+      const photo = photos[id];
+      if (!photo && !text) return void toast(t('w2Empty'));
+      const out = document.getElementById('w2fb-' + id);
+      if (out) out.innerHTML = `<p class="sub">${esc(t('revealing'))}</p>`;
+      go.disabled = true;
+      let res;
+      try {
+        res = await API.correctGoethe({
+          exam: 'Goethe-Zertifikat A1',
+          instruction: sec.instruction || '',
+          leitpunkte: it.points || [],
+          min_words: it.minWords || 0,
+          criteria: sec.criteria || [],
+          ...(photo ? { image: photo } : { text }),
+        });
+      } catch { res = null; }
+      go.disabled = false;
+      if (!res || !res.ok){
+        if (out) out.innerHTML = `<p class="sub">${esc(t(AI_ERR[res && res.error] || 'aiErrOther'))}</p>`;
+        return;
+      }
+      showGoetheFb(out, res);
+    };
+  });
+}
+
+function showGoetheFb(out, fb){
+  if (!out) return;
+  out.innerHTML = `
+    ${fb.points != null ? scoreCard(fb.points, fb.max_points,
+        Math.round(fb.points / fb.max_points * 100), t('w2Score')) : ''}
+    ${fb.read_text ? `<details class="w2read"><summary class="sub">${esc(t('w2Read'))}</summary>
+       <div class="passage" style="margin:8px 0 0"><div class="body">${esc(fb.read_text)}</div></div></details>` : ''}
+    ${(fb.grades || []).map(g => `<div class="crit">
+      <h3>${esc(g.criterion)} <span class="pill">${esc(String(g.points))} P.</span></h3>
+      <p class="sub" style="margin:0">${esc(g.why)}</p></div>`).join('')}
+    ${fb.summary ? `<div class="why" style="margin:12px 0">${esc(fb.summary)}</div>` : ''}
+    ${(fb.errors || []).length ? `<h3 style="margin:14px 0 6px">${esc(t('errorDetail'))}</h3>
+      ${fb.errors.map(e => `<div class="q isbad">
+        <div class="qhead"><span class="qnum">${esc(e.type)}</span></div>
+        <div class="fb bad">
+          <div class="fbrow"><span class="lbl">Ihr Text</span><span class="val">${esc(e.original)}</span></div>
+          <div class="fbrow"><span class="lbl">${esc(t('better'))}</span><span class="val">${esc(e.correction)}</span></div>
+          ${e.why ? `<div class="why">${esc(e.why)}</div>` : ''}
+        </div></div>`).join('')}` : ''}
+    ${fb.corrected ? `<details style="margin-top:12px">
+       <summary class="sub">${esc(t('aiView'))}</summary>
+       <div class="passage" style="margin:8px 0 0"><div class="body">${esc(fb.corrected)}</div></div></details>` : ''}`;
 }
 
 /* Teil (Block) → alle Übungen, ohne Zeit/Punkte, mit Zurücksetzen. */
@@ -700,6 +806,7 @@ function screenPractice(blockId){
       <button class="btn ghost reset" id="praxisReset">${esc(t('praxisReset'))}</button>`;
     secs.forEach(bindInputs);
     praxisBindReveal(secs);
+    bindPraxisWriting(secs);
     praxisSyncButtons();
     document.getElementById('praxisReset').onclick = () =>
       ask(t('praxisResetAsk'), () => praxisReset(secs), t('praxisReset'));

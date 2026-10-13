@@ -398,7 +398,7 @@ const Markup = (() => {
      العكس: كائن ← نص. مفيد لتعديل امتحان موجود، ولإثبات إن
      الصيغة بتوسّع المحتوى الحقيقي (اختبار round-trip).
      ============================================================ */
-  const EXTRA_KEYS = ['brief','hints','criteria','grades','factor','form'];
+  const EXTRA_KEYS = ['brief','hints','criteria','grades','factor','form','muster'];
 
   function serialize(test){
     const L = [];
