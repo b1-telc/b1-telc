@@ -49,6 +49,162 @@ Minuten: 0
 Punkte: 0
 Teile: sp3-01
 
+## Block: h73
+Titel: Test 73
+Minuten: 0
+Punkte: 0
+Teile: h73-t1, h73-t2, h73-t3
+
+## Block: h74
+Titel: Test 74
+Minuten: 0
+Punkte: 0
+Teile: h74-t1, h74-t2, h74-t3
+
+## Block: h75
+Titel: Test 75
+Minuten: 0
+Punkte: 0
+Teile: h75-t1, h75-t2, h75-t3
+
+## Block: h76
+Titel: Test 76
+Minuten: 0
+Punkte: 0
+Teile: h76-t1, h76-t2, h76-t3
+
+## Block: h77
+Titel: Test 77
+Minuten: 0
+Punkte: 0
+Teile: h77-t1, h77-t2, h77-t3
+
+## Block: h78
+Titel: Test 78
+Minuten: 0
+Punkte: 0
+Teile: h78-t1, h78-t2, h78-t3
+
+## Block: h79
+Titel: Test 79
+Minuten: 0
+Punkte: 0
+Teile: h79-t1, h79-t2, h79-t3
+
+## Block: h80
+Titel: Test 80
+Minuten: 0
+Punkte: 0
+Teile: h80-t1, h80-t2, h80-t3
+
+## Block: h81
+Titel: Test 81
+Minuten: 0
+Punkte: 0
+Teile: h81-t1, h81-t2, h81-t3
+
+## Block: h82
+Titel: Test 82
+Minuten: 0
+Punkte: 0
+Teile: h82-t1, h82-t2, h82-t3
+
+## Block: h83
+Titel: Test 83
+Minuten: 0
+Punkte: 0
+Teile: h83-t1, h83-t2, h83-t3
+
+## Block: h84
+Titel: Test 84
+Minuten: 0
+Punkte: 0
+Teile: h84-t1, h84-t2, h84-t3
+
+## Block: h85
+Titel: Test 85
+Minuten: 0
+Punkte: 0
+Teile: h85-t1, h85-t2, h85-t3
+
+## Block: h86
+Titel: Test 86
+Minuten: 0
+Punkte: 0
+Teile: h86-t1, h86-t2, h86-t3
+
+## Block: h87
+Titel: Test 87
+Minuten: 0
+Punkte: 0
+Teile: h87-t1, h87-t2, h87-t3
+
+## Block: h88
+Titel: Test 88
+Minuten: 0
+Punkte: 0
+Teile: h88-t1, h88-t2, h88-t3
+
+## Block: h89
+Titel: Test 89
+Minuten: 0
+Punkte: 0
+Teile: h89-t1, h89-t2, h89-t3
+
+## Block: h91
+Titel: Test 91
+Minuten: 0
+Punkte: 0
+Teile: h91-t1, h91-t2, h91-t3
+
+## Block: h92
+Titel: Test 92
+Minuten: 0
+Punkte: 0
+Teile: h92-t1, h92-t2, h92-t3
+
+## Block: h93
+Titel: Test 93
+Minuten: 0
+Punkte: 0
+Teile: h93-t1, h93-t2, h93-t3
+
+## Block: h94
+Titel: Test 94
+Minuten: 0
+Punkte: 0
+Teile: h94-t1, h94-t2, h94-t3
+
+## Block: h96
+Titel: Test 96
+Minuten: 0
+Punkte: 0
+Teile: h96-t1, h96-t2, h96-t3
+
+## Block: h97
+Titel: Test 97
+Minuten: 0
+Punkte: 0
+Teile: h97-t1, h97-t2, h97-t3
+
+## Block: h99
+Titel: Test 99
+Minuten: 0
+Punkte: 0
+Teile: h99-t1, h99-t2, h99-t3
+
+## Block: h101
+Titel: Test 101
+Minuten: 0
+Punkte: 0
+Teile: h101-t1, h101-t2, h101-t3
+
+## Block: h102
+Titel: Test 102
+Minuten: 0
+Punkte: 0
+Teile: h102-t1, h102-t2, h102-t3
+
 
 ### Teil: lv1-01
 Format: truefalse
@@ -5435,3 +5591,2187 @@ Extra:
   {"wort": "Fußball spielen verboten", "frage": "Bitte nicht Fußball spielen, es ist verboten!", "antwort": "Tut mir leid, ich wusste es nicht."}
  ]
 }
+
+### Teil: h73-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-73-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Wann läuft der Film am Samstag?
+A) Um 20.30 Uhr
+B) Um 20.00 Uhr
+C) Um 19.00 Uhr
+[2] Was bestellt die Frau?
+A) Tomatensuppe
+B) Ein Käsebrot
+C) Hähnchen mit Reis
+[3] Wie kommt Phil ins Kino?
+A) Mit dem Bus
+B) Mit dem Auto
+C) Zu Fuß
+[4] Was gibt es im 2. Stock?
+A) Die Brille
+B) Die Schuhe
+C) Die Kleidung
+[5] Was machen die Eltern?
+A) Schlafen
+B) ins Café gehen
+C) Einkaufen
+[6] Was kauft die Frau?
+A) Äpfel und Bananen
+B) Äpfel und Birnen
+C) Äpfel, Birnen und Bananen
+
+### Teil: h73-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-73-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Der ICE nach Hamburg fährt heute von Gleis drei ab.
+[8] Die Wagen der zweiten Klasse halten in den Abschnitten B bis D.
+[9] In diesem Zug müssen Sie einsteigen.
+[10] Die S-Bahn nach Lüneburg fährt um 16 Uhr 32.
+
+### Teil: h73-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-73-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wie ist die neue Telefonnummer?
+A) 87 34 65
+B) 78 43 65
+C) 78 34 56
+[12] Warum ruft Frau Böhnisch beim Frisör an?
+A) für morgen einen Termin vereinbaren.
+B) ihren Termin absagen.
+C) den Termin auf Dienstag verschieben.
+[13] Wann möchte Klaus seine Freundin treffen?
+A) Um 19.30 Uhr
+B) Um 20.00 Uhr
+C) Um 20.30 Uhr
+[14] Wann arbeitet Frau Sandri am Donnerstag und am Freitag?
+A) Am Vormittag
+B) Am Nachmittag
+C) Am Vormittag und Nachmittag
+[15] Wann ist die Praxis geöffnet?
+A) Von Montag bis Mittwoch
+B) Von Montag bis Donnerstag
+C) Von Montag bis Freitag
+
+### Teil: h74-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-74-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Wann kommt Herr Hübner?
+A) 10.30 Uhr
+B) 11.30 Uhr
+C) 11.15 Uhr
+[2] Welche Zimmernummer hat Frau Dr. Kunz?
+A) 244
+B) 224
+C) 242
+[3] Wie kommt der Mann zur Oper?
+A) Geradeaus, nach links
+B) Geradeaus, nach rechts
+C) Geradeaus
+[4] Wo war Herr Düllmann im Urlaub?
+A) in den Bergen
+B) am Meer
+C) auf der Insel Sylt
+[5] Welche Krankheit hat Herr Kaminski?
+A) Kopfschmerzen
+B) Bauchschmerzen
+C) Halsschmerzen
+[6] Was wollen die Frau und der Mann Nina schenken?
+A) ein Kleid
+B) einen Mantel
+C) einen Pullover
+
+### Teil: h74-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-74-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Auf der linken Seite ist die Humboldt-Universität.
+[8] Die Erdbeeren kosten 1,99 €.
+[9] Im Herbst soll man Vitamin C nehmen.
+[10] Die Vorwahl von Japan ist 0088.
+
+### Teil: h74-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-74-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wohin fährt der Mann?
+A) nach Hause
+B) ins Büro
+C) nach Köln
+[12] Wann kann man Dr. Mocker am Dienstag erreichen?
+A) von 11 bis 19 Uhr
+B) von 8 bis 13 Uhr
+C) von 8 bis 12 Uhr
+[13] An welchem Tag will die Frau einen Termin haben?
+A) Am Samstag.
+B) Am Donnerstag.
+C) Am Dienstag.
+[14] Wie war das Wetter im Norden?
+A) Bewölkt.
+B) Sonnig.
+C) Heiß.
+[15] Wie viel kosten die T-Shirts?
+A) 29,95 Euro.
+B) 9,95 Euro.
+C) 19,95 Euro.
+
+### Teil: h75-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-75-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Wann gehen sie ins Kino?
+A) am Freitag
+B) am Samstag
+C) am Sonntag
+[2] In welchem Raum lernt der Mann?
+A) 160
+B) 116
+C) 161
+[3] Was nehmen sie?
+A) Die U-Bahn
+B) Den Bus
+C) Das Auto
+[4] Was kauft die Frau?
+A) Fleisch
+B) Obst
+C) Getränke
+[5] Wann hat Herr Carlos Zeit?
+A) 18.00 Uhr
+B) 19.00 Uhr
+C) 19.30 Uhr
+[6] Welche Bluse gefällt dem Mädchen?
+A) 39,90 €
+B) 19,00 €
+C) 14,00 €
+
+### Teil: h75-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-75-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Im ersten Stock können Sie heute Kaffee trinken.
+[8] Reisende nach Baden-Baden sollen mit einem anderen Zug fahren.
+[9] Das Kind kann seine Eltern nicht finden.
+[10] Der Zug kommt gleich in Mannheim Hauptbahnhof an.
+
+### Teil: h75-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-75-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wann ist Manfred nach Berlin gezogen?
+A) Vor 18
+B) Mit 81
+C) Mit 18
+[12] Was hat Narobi zum Frühstück gegessen?
+A) Eier und Kaffee
+B) Eier ohne Kaffee
+C) Nur Eier keine Kaffee
+[13] Wie fährt die Lisa?
+A) Die U-Bahn
+B) Der Bus
+C) Das Auto
+[14] Wohnt Mario allein in Berlin?
+A) Ja, er wohnt allein.
+B) Nein, er wohnt mit seiner Freundin.
+C) Nein, er wohnt mit seinem Kollegen.
+[15] Wann arbeitet Mario?
+A) Am Montag
+B) Am Morgen
+C) Am abends
+
+### Teil: h76-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-76-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Wo ist das Frühstückszimmer?
+A) rechts vom Aufzug
+B) links vom Eingang
+C) links von der Treppe
+[2] Wohin möchte die Frau fahren?
+A) zum Flughafen
+B) zum Messeplatz
+C) zum Ostbahnhof
+[3] Wer kommt nicht zur Geburtstagsparty?
+A) Eltern
+B) Freunde
+C) Kinder
+[4] Wo fährt der Eurocity nach Wien ab?
+A) Gleis 4
+B) Gleis 5
+C) Gleis 9
+[5] Welches Getränk hat der Gast bestellt?
+A) Mineralwasser
+B) Mineralwasser und Bier
+C) Bier
+[6] Was ist in ihrer Tasche?
+A) Ausweis
+B) Geld
+C) Lebensmittel
+
+### Teil: h76-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-76-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Angelika, Julia und ihre Tochter gehen heute Abend ins Kino.
+[8] Heute gibt es kein Fußballspiel.
+[9] Im Zugrestaurant kann man jetzt frühstücken.
+[10] Der Zug muss warten.
+
+### Teil: h76-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-76-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wann kommt Thomas Zug am Bahnhof an?
+A) Um 9:00 Uhr
+B) Um 11:13 Uhr
+C) Um 11:30 Uhr
+[12] Welche Telefonnummer soll man wählen?
+A) 9-7-9-7-0-9
+B) 9-7-9-7-9-0
+C) 7-9-7-9-0-9
+[13] Wann können Sie nicht zum Arzt gehen?
+A) Am Montag
+B) Von Montag bis Freitag
+C) Am Freitag
+[14] Wo ist Carlo jetzt?
+A) Zu Hause
+B) Am Bahnhof
+C) Im Zoo
+[15] Wann kann Frau Schlüter nach London fliegen?
+A) morgen
+B) Am Dienstag
+C) Am Morgen
+
+### Teil: h77-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-77-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Wie kommt die Frau nach Berlin?
+A) Mit dem Flugzeug
+B) Mit dem Zug
+C) Mit dem Auto
+[2] Welche Zimmer hat der Mann?
+A) 523
+B) 532
+C) 5
+[3] Wie viel kosten die Passbilder in Farbe?
+A) 10 €
+B) 12 €
+C) 17 €
+[4] Was kauft die Frau?
+A) Reisebuch
+B) Kochbuch
+C) Schulbuch
+[5] Wie viel Uhr ist es?
+A) 13.30 Uhr
+B) 14.30 Uhr
+C) 15.30 Uhr
+[6] Was buchstabiert man den Namen?
+A) Böhme
+B) Behme
+C) Bohme
+
+### Teil: h77-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-77-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Fisch ist heute nicht teuer.
+[8] Der Zug fährt nicht weiter.
+[9] Das Geschäft schließt heute um 19 Uhr.
+[10] Der Fahrer soll schnell zur Straßenbahn kommen.
+
+### Teil: h77-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-77-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wohin möchte Klaus gehen?
+A) Ins Restaurant.
+B) Ins Schwimmbad.
+C) Ins Kino.
+[12] Wann kommt Jasmin an?
+A) 7:30 Uhr
+B) 8:30 Uhr
+C) 8:20 Uhr
+[13] Wann können Sie am Mittwoch nicht mit dem Arzt sprechen?
+A) Um 8 Uhr
+B) Um 11 Uhr
+C) Um 16 Uhr
+[14] Wie ist die neue Telefonnummer?
+A) 580 89 42
+B) 580 98 42
+C) 580 98 24
+[15] Wann hat das Restaurant wieder auf?
+A) Am 4. August
+B) Am 20. August
+C) Am 21. August
+
+### Teil: h78-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-78-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Was möchte der Mann verkaufen?
+A) Handy
+B) Computer
+C) Drucker
+[2] Wo macht sie ihre Ausbildung?
+A) Restaurant
+B) Hotel
+C) Bäckerei
+[3] Wie viele Tage pro Woche macht Ina Sport?
+A) 1 Tag
+B) 3 Tage
+C) 7 Tage
+[4] Wo wohnt der Mann?
+A) In der Wielandstraße
+B) An der Ecke
+C) In der Ifflandstraße
+[5] Wann geht die Frau ins Museum?
+A) Am Dienstagnachmittag
+B) Am Mittwochnachmittag
+C) Am Freitagnachmittag
+[6] Wie fährt die Frau nach Koblenz?
+A) mit dem Zug
+B) mit dem Bus
+C) mit dem Schiff
+
+### Teil: h78-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-78-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Die Fahrgäste haben 30 Minuten Zeit.
+[8] Die Fahrgäste sollen rechts aussteigen.
+[9] Heute ist Kinderkleidung billig.
+[10] Die Mutter soll ihren Sohn abholen.
+
+### Teil: h78-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-78-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wo treffen sich die Mädchen?
+A) im Geschäft
+B) in der Hauptstraße
+C) am Kiosk
+[12] Wann kann der Mann das Auto abholen?
+A) heute Abend
+B) Morgen Vormittag
+C) Morgen Nachmittag
+[13] Wie ist die Adresse?
+A) Tirolastraße 278
+B) Thälmannplatz 207
+C) Tirolastraße 207
+[14] Wann fährt der Zug ab?
+A) Um 12.30 Uhr
+B) Um 21.45 Uhr
+C) Um 8.30 Uhr
+[15] Wie ist die Telefonnummer?
+A) 5-5-8-9-1
+B) 4-5-5-8-1
+C) 4-5-5-8-9-1
+
+### Teil: h79-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-79-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Was hat der Junge noch nicht gepackt?
+A) Rucksack
+B) Koffer
+C) Tasche
+[2] Was bekommt Miriam zum Geburtstag?
+A) Paket
+B) Brief
+C) Geburtstagskarte
+[3] Was macht der Mann?
+A) Wäsche waschen
+B) kochen
+C) Blumen gießen
+[4] Was leiht der Junge dem Mädchen?
+A) Buntstifte
+B) blaues Papier
+C) Schere
+[5] Wie fährt der Junge morgen zur Schule?
+A) mit dem Auto
+B) mit der U-Bahn
+C) mit dem Bus
+[6] Was holt der Junge?
+A) Messer
+B) Gabel
+C) Löffel
+
+### Teil: h79-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-79-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Das Schwimmbad schließt jeden Tag um 20 Uhr.
+[8] Im ersten Stock kann man gut essen.
+[9] Der Zug nach München fährt heute später.
+[10] Herrenschuhe kann man im 3. Stock kaufen.
+
+### Teil: h79-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-79-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wann will Anna die CDs abholen?
+A) Am Wochenende.
+B) Heute vor 20 Uhr.
+C) Heute nach 20 Uhr.
+[12] An welchem Tag kommt der Mann wieder zur Arbeit?
+A) Morgen.
+B) Am nächsten Freitag.
+C) Am nächsten Montag.
+[13] Wohin möchte Jan fahren?
+A) In die Schweiz.
+B) Nach Österreich.
+C) Ans Meer.
+[14] Wo ist das Konzert?
+A) Auf dem Marktplatz.
+B) In der Stadthalle.
+C) In der Volkshochschule.
+[15] Was will Anja am Samstag machen?
+A) In die Disco gehen.
+B) Fernsehen.
+C) Kochen.
+
+### Teil: h80-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-80-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Wie heißt der dritte Mann?
+A) Bauer
+B) Sommer
+C) Winter
+[2] Wie viel Jahre spielt der Mann schon Lotto?
+A) ein paar Jahre
+B) 15 Jahre
+C) 20 Jahre
+[3] Was hat der Mann bestellt?
+A) Käsebrot, Wein
+B) Käsebrot, Bier
+C) Schinkenbrot, Wein
+[4] Wie viel kostet dieses Sofa?
+A) 49,00 €
+B) 400,00 €
+C) 449,00 €
+[5] Wie viele Tickets hat er gekauft?
+A) 1
+B) 3
+C) 4
+[6] Wie kommt man zum Stadthotel?
+A) Geradeaus
+B) Geradeaus, Rechts
+C) Geradeaus, Links
+
+### Teil: h80-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-80-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Bayern 3. Schlagzeilen um 7:30 Uhr: Vermittlungsmission im Ukraine.
+[8] Sie hat jeden Tag von 2:15 bis 3:30 Uhr Deutschunterricht.
+[9] Der ICE 997 aus Hannover, planmäßige Ankunft 11:16 Uhr auf Gleis 8, hat v [...]
+[10] Wir treffen uns so um 6:45 Uhr, dann haben wir etwas Zeit und können vor [...]
+
+### Teil: h80-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-80-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wie ist die Telefonnummer des Hotels?
+A) 020 123 78735
+B) 020 123 77835
+C) 020 123 78355
+[12] Was soll die Frau noch einkaufen?
+A) Tomatensoße, Nudeln
+B) Tomaten, Kartoffeln
+C) Tomatensoße, Nudelsalat
+[13] Wann soll Paul Karla vom Bahnhof abholen?
+A) Um 19:30 Uhr
+B) Um 18:30 Uhr
+C) Um 19:00 Uhr
+[14] Wann macht Susana das Frühstück?
+A) am Sonntag
+B) am Freitag
+C) am Samstag
+[15] Wie viel kostet die Fernseherreparatur?
+A) 105 €
+B) 150 €
+C) 15 €
+
+### Teil: h81-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-81-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Woher kommt Lola Campos?
+A) Aus Paris
+B) Aus Peru
+C) Aus Irak
+[2] Was kostet heute die Butter?
+A) 0,99 €
+B) 1,99 €
+C) 2,00 €
+[3] Wann bekommt Herr Becker einen neuen Termin?
+A) 10.10.2024
+B) 20.10.2024
+C) 22.10.2024
+[4] Wie lange dauert die Fahrt zum Olympiastadion?
+A) 5 Minuten
+B) 20 Minuten
+C) 11 Minuten
+[5] Wo kann man den Führerschein umtauschen?
+A) im Bürgerbüro
+B) bei der Führerscheinstelle
+C) beim Straßenverkehrsamt
+[6] Mit wem telefoniert die Dame?
+A) Herr Müller
+B) Pablo
+C) Sekretärin
+
+### Teil: h81-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-81-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Heute ist die Milch günstiger.
+[8] Der Zug nach Aachen fährt pünktlich ab.
+[9] Das Geschäft schließt um 20.00 Uhr.
+[10] Heute um 18.52 Uhr fährt kein Zug nach Innsbruck.
+
+### Teil: h81-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-81-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wann kann der Mann seinen Freund nicht besuchen?
+A) heute
+B) morgen
+C) morgen oder übermorgen
+[12] Wo treffen sie sich?
+A) auf dem Spielplatz
+B) im Park
+C) zu Hause
+[13] Was möchte Antonia machen?
+A) Konzert besuchen
+B) Die Stadt besichtigen
+C) CD kaufen
+[14] Was macht der Mann heute?
+A) seine Freunde treffen
+B) ins Kino gehen
+C) zu Hause lernen
+[15] Wann treffen sie sich?
+A) um 13.30 Uhr
+B) um 14.00 Uhr
+C) um 14.30 Uhr
+
+### Teil: h82-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-82-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Woher kommt das Auto?
+A) Aus Düsseldorf
+B) Aus Hamburg
+C) Aus Stuttgart
+[2] Wohin gehen Lena und Christian?
+A) zum Arzt
+B) an den Strand
+C) nach Hause
+[3] Wie spät ist es?
+A) um 9:05 Uhr
+B) um 8:15 Uhr
+C) um 8:55 Uhr
+[4] Welchen Familienstand hat Frau Fatima?
+A) Ledig
+B) Verheiratet
+C) Verlobt
+[5] Was kauft der Mann?
+A) ein Brötchen
+B) einen Kuchen
+C) ein Brot
+[6] Was sucht die Frau?
+A) Bahnhof
+B) Restaurant
+C) Hotel
+
+### Teil: h82-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-82-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Die U5 ist pünktlich.
+[8] Das Schwimmbad öffnet morgen um 8 Uhr.
+[9] Der Zug nach Stuttgart fährt um 13:44 ab.
+[10] Heute gibt es besonders günstige Angebote.
+
+### Teil: h82-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-82-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wie lange bleiben Birgits Eltern bei Birgit?
+A) von Freitag bis Montag
+B) von Freitagabend bis Sonntagmorgen
+C) Freitag, Samstag und Sonntag
+[12] Wann ist Frau Keller im Büro?
+A) Morgen Vormittag
+B) Morgen Nachmittag
+C) Heute um 12:00 Uhr
+[13] Wann kommt Tim ins Büro von Kathrin?
+A) in einer Stunde
+B) in 30 Minuten
+C) in 15 Minuten
+[14] Was funktioniert nicht?
+A) Der Drucker
+B) Der Computer
+C) Der Beamer
+[15] Wann kann Anneke ihren Terminkalender abholen?
+A) Heute Abend
+B) Heute Nachmittag
+C) Morgen Vormittag
+
+### Teil: h83-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-83-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Wann fährt der Zug nach München ab?
+A) um 4:30 Uhr
+B) um 14:30 Uhr
+C) um 16:30 Uhr
+[2] Was hat Rosa am Sonntag gemacht?
+A) Sie ist schwimmen gegangen.
+B) Sie hat für die Prüfung gelernt.
+C) Sie war im Kino.
+[3] Wann fährt der nächste Zug nach Wuppertal?
+A) um 10:08 Uhr
+B) um 10:18 Uhr
+C) um 10:48 Uhr
+[4] Wie kommt Herr Jäger zur Arbeit?
+A) mit dem Fahrrad
+B) mit dem Auto
+C) mit dem Zug
+[5] Was ist kaputt?
+A) die Rolltreppe
+B) der Aufzug
+C) die Treppe
+[6] Was machen die Kinder?
+A) spielen
+B) lernen
+C) fernsehen
+
+### Teil: h83-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-83-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Die Fahrgäste sollen am nächsten Bahnhof aussteigen.
+[8] Die Fluggäste nach Rom sollen zu Ausgang B18 kommen.
+[9] Die Urlauber machen 60 Minuten Pause.
+[10] Der Vater von Mario soll zur Information kommen.
+
+### Teil: h83-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-83-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wann soll Frau Krause anrufen?
+A) nach 13:00 Uhr
+B) nach 18:00 Uhr
+C) nach 19:00 Uhr
+[12] Was möchte Nina heute Abend machen?
+A) zu Hause bleiben
+B) ins Kino gehen
+C) spazieren gehen
+[13] Was sollte Sarah heute mitbringen?
+A) ein Wörterbuch
+B) ein Kursbuch
+C) eine CD
+[14] Wo treffen sie sich um 11 Uhr?
+A) im Café
+B) im Konzert
+C) in der Disco
+[15] Wann hat Herr Heinze einen Termin?
+A) vor 12:00 Uhr
+B) um 13:00 Uhr
+C) um 18:00 Uhr
+
+### Teil: h84-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-84-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Wo gibt es Kleidung für Kinder?
+A) im 1. Stock.
+B) im 2. Stock.
+C) im 4. Stock.
+[2] Was bestellt die Dame?
+A) Hähnchen.
+B) Fisch.
+C) Salat.
+[3] Wie lange hat das Museum am Mittwoch geöffnet?
+A) Bis 15 Uhr.
+B) Bis 18 Uhr.
+C) Bis 22 Uhr.
+[4] Welchen Sport empfiehlt der Arzt?
+A) Fahrrad fahren.
+B) Fußball.
+C) Laufen.
+[5] Wo macht Familie Bauer Urlaub?
+A) Am Meer.
+B) Bei Verwandten.
+C) Zu Hause.
+[6] Wie lange dauert der Flug nach München?
+A) 30 Minuten.
+B) 45 Minuten.
+C) 50 Minuten.
+
+### Teil: h84-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-84-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Die Fahrgäste sollen im Zug bleiben.
+[8] Fluggäste nach Rom sollen zu Ausgang A7 kommen.
+[9] Die Urlauber sollen um vier Uhr am Bus sein.
+[10] Der Vater von Mario soll sofort zur Information gehen.
+
+### Teil: h84-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-84-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wann soll Frau Krause anrufen?
+A) Vor 13 Uhr.
+B) Zwischen 13 und 18 Uhr.
+C) Zwischen 18 und 19 Uhr.
+[12] Was möchte Nina heute Abend machen?
+A) Einen Film sehen.
+B) Lernen.
+C) Zu Hause bleiben.
+[13] Was soll Sarah mitbringen?
+A) Ein Deutschbuch.
+B) Ein Wörterbuch.
+C) Eine CD.
+[14] Wo wollen sich die Frauen mit Sabine treffen?
+A) Beim Konzert.
+B) Im Café.
+C) In der Disco.
+[15] Wann will Herr Heinze Frau Solms treffen?
+A) Um 12 Uhr.
+B) Um 13 Uhr.
+C) Um 18 Uhr.
+
+### Teil: h85-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-85-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Wie ist die Adresse von Anne?
+A) Königstraße 71
+B) Bahnweg 17
+C) Schillerstraße 7
+[2] Was bestellt die Frau zum trinken?
+A) Bier
+B) Mineralwasser
+C) Wein
+[3] Wohin geht Theo am Samstag?
+A) ins Kino
+B) zur Kostümparty
+C) zur Geburtstagsparty
+[4] Wie spät ist jetzt?
+A) um 6:00 Uhr
+B) um 6:10 Uhr
+C) um 6:30 Uhr
+[5] Wohin möchte die Frau gehen?
+A) ins Fitnesszentrum
+B) zum Tennisplatz
+C) ins Schwimmbad
+[6] Wo war Laura im Sommer?
+A) am Meer
+B) in den Bergen
+C) auf einer Fahrradtour
+
+### Teil: h85-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-85-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Frau Fauser bekommt am Dienstag einen Termin.
+[8] Die Fahrgäste sollen nicht in den nächsten Zug einsteigen.
+[9] Herr Gimenez soll zur Information kommen.
+[10] Im Zugrestaurant kann man heute nur etwas trinken.
+
+### Teil: h85-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-85-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Was kann Martin heute essen?
+A) Fisch
+B) Pizza und Salat
+C) Tomatensalat
+[12] Was ist das Wetter in Portugal?
+A) warm und sonnig
+B) kalt
+C) viel Regen
+[13] Was möchte Kevin essen?
+A) Pizza Salami und Salat
+B) Pizza Salami und Tiramisu
+C) Vanilleeis und Tiramisu
+[14] Wohin macht Dilara morgen einen Ausflug?
+A) in den Zoo
+B) in den Park
+C) an einen See
+[15] Frau Grimms Büro ist im Zimmer...
+A) Nummer 150
+B) Nummer 15
+C) Nummer 105
+
+### Teil: h86-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-86-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Was soll die Tochter putzen?
+A) Die Brille
+B) Die Zähne
+C) Die Schuhe
+[2] Um wie viel Uhr wollen die Freundinnen zusammen lernen?
+A) Um 14:15 Uhr
+B) Um 14:00 Uhr
+C) Um 14:30 Uhr
+[3] Wo war der Kollege?
+A) Im Urlaub zu Hause
+B) Auf einer Geschäftsreise
+C) Im Urlaub an einer Lagune
+[4] Von welchem Arzt kommt die Frau gerade?
+A) Vom Zahnarzt
+B) Vom Hals-Nasen-Ohren-Arzt
+C) Vom Augenarzt
+[5] Ab wann ist die Wohnung frei?
+A) Ab dem ersten Februar
+B) Ab dem 15. Dezember
+C) Ab dem ersten Januar
+[6] Wo ist die Apotheke?
+A) Unter der Brücke
+B) Nach der Brücke rechts
+C) Links neben der Brücke
+
+### Teil: h86-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-86-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Reisende in Richtung Flughafen sollen den Zug auf Gleis 23 nehmen.
+[8] Nach 21 Uhr dürfen keine Besucher mehr im Museum sein.
+[9] Die Eltern sollen ihre Kinder nach zwei Stunden abholen.
+[10] Der Fahrer sofort zur Schwimmbadkasse kommen.
+
+### Teil: h86-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-86-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Was soll sie mit dem Computer im Büro machen?
+A) zumachen.
+B) anschalten.
+C) ausschalten.
+[12] Wo werden sie sich treffen?
+A) Vor dem Café.
+B) Im Café.
+C) Neben dem Café.
+[13] Wann können Sie in die Praxis kommen?
+A) Am 17.8. vormittags.
+B) Am 15. August.
+C) Um 19 Uhr.
+[14] Was soll Herr Müller tun?
+A) ein Buch bezahlen.
+B) ein Buch abholen.
+C) ein Buch zurückbringen.
+[15] Warum kommt sie nicht zur Schule?
+A) sie möchte heute mal frei haben.
+B) Sie arbeitet heute vormittags.
+C) Sie hat einen Termin.
+
+### Teil: h87-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-87-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Woher kommt sie?
+A) Deutschland
+B) Niederlande
+C) Russland
+[2] Wie ist Ihr Vorname?
+A) Calrela
+B) Candela
+C) Caldena
+[3] Wo ist das Restaurant "Bella Italia"?
+A) geradeaus, links
+B) geradeaus, rechts
+C) immer geradeaus
+[4] Wie reisen sie?
+A) mit dem Zug
+B) mit dem Flugzeug
+C) mit dem Bus
+[5] Wie viel muss der Kunde bezahlen?
+A) 10,00 €
+B) 4,03 €
+C) 16,02 €
+[6] Was möchte der Mann verkaufen?
+A) Handy
+B) Computer
+C) Drucker
+
+### Teil: h87-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-87-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Die Leute sollen aussteigen.
+[8] Herr Filiz soll zum Ausgang D23 kommen.
+[9] Frau Wagner soll ihr Ticket am Schalter 3 abholen.
+[10] Herr Brunner soll sein Gepäck abholen.
+
+### Teil: h87-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-87-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wann will Anna die CDs abholen?
+A) Am Wochenende.
+B) Heute vor 20 Uhr.
+C) Heute nach 20 Uhr.
+[12] An welchem Tag kommt der Mann wieder zur Arbeit?
+A) Morgen.
+B) Am nächsten Freitag.
+C) Am nächsten Montag.
+[13] Wohin möchte Jan fahren?
+A) In die Schweiz.
+B) Nach Österreich.
+C) Ans Meer.
+[14] Wo ist das Konzert?
+A) Auf dem Marktplatz.
+B) In der Stadthalle.
+C) In der Volkshochschule.
+[15] Was will Anja am Sonntag machen?
+A) In die Disco gehen.
+B) Fernsehen.
+C) Kochen.
+
+### Teil: h88-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-88-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Was möchte der Mann trinken?
+A) Limonade
+B) Rotwein
+C) Wasser
+[2] Was möchte die Frau kaufen?
+A) Zitrone
+B) Banane
+C) Zitrone und Banane
+[3] Wo ist die Post?
+A) geradeaus, links
+B) geradeaus, rechts
+C) immer geradeaus
+[4] Wann gehen sie heute ins Schwimmbad?
+A) 7:45 Uhr
+B) 2:00 Uhr
+C) 22:00 Uhr
+[5] In welchem Raum ist der Sprachkurs?
+A) 340
+B) 304
+C) 314
+[6] Was kosten Milch und Apfelsaft?
+A) 0,95 €
+B) 1,20 €
+C) 2,15 €
+
+### Teil: h88-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-88-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Heute schließt das Restaurant um 17 Uhr.
+[8] Der ICE von Stuttgart nach München kommt pünktlich an.
+[9] Heute gibt es auf einige Produkte 10% Rabatt.
+[10] Frau Müller holt ihre Tochter an der Information ab.
+
+### Teil: h88-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-88-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wie ist die Telefonnummer?
+A) 85 67 38 40
+B) 85 76 83 14
+C) 85 67 38 14
+[12] Wo werden sie sich heute treffen?
+A) im Theater
+B) im Café
+C) im Bahnhof
+[13] Welches Verkehrsmittel wird Lukas nutzen?
+A) mit dem Auto
+B) mit der U-Bahn
+C) mit dem Fahrrad
+[14] Wie lange wird Cem noch warten?
+A) 5 Minuten
+B) 15 Minuten
+C) 20 Minuten
+[15] Wann werden sie sich treffen?
+A) am Freitag
+B) am Samstag
+C) am Sonntag
+
+### Teil: h89-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-89-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Wie kommt der Mann zur Arbeit?
+A) mit dem Auto
+B) mit dem Fahrrad
+C) mit dem Bus
+[2] Was hat die Frau vergessen?
+A) Mietvertrag
+B) Möbel
+C) Unterschrift
+[3] Was ist kaputt?
+A) Das Fenster
+B) Der Aufzug
+C) Die Heizung
+[4] Welche Zimmernummer hat Herr Schneider?
+A) Zimmer 2
+B) Zimmer 245
+C) Zimmer 254
+[5] Was ist neu?
+A) Das Sofa
+B) Der Schrank
+C) Das Bett
+[6] Was möchte die Frau essen?
+A) Fleisch
+B) Salat
+C) Suppe
+
+### Teil: h89-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-89-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Die Straßenbahn kann nicht weiterfahren.
+[8] Das Möbelhaus hat am Montag Geburtstag.
+[9] Die Leute sollen alle Fenster und Türen zumachen.
+[10] Der Zug nach Dresden fährt vom Gleis 3 ab.
+
+### Teil: h89-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-89-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wann soll Barbara Greta anrufen?
+A) Montagmorgen
+B) Heute Abend
+C) Morgen
+[12] Wo möchten die Freunde heute Abend essen?
+A) Im Restaurant am Bahnhof
+B) Im italienischen Restaurant
+C) Im Restaurant "Zwiebel"
+[13] Wann kann Frau Schmitz kommen?
+A) Morgen
+B) Mittwoch Vormittag
+C) Mittwoch Nachmittag
+[14] Was soll man auf den Anrufbeantworter sagen?
+A) Die Adresse
+B) Die E-Mailadresse
+C) Die Telefonnummer
+[15] Herr Müller kommt später. Was ist kaputt?
+A) Das Auto
+B) Das Fahrrad
+C) Die Straßenbahn
+
+### Teil: h91-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-91-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Woher kommt Frau Heuer?
+A) aus Deutschland
+B) aus der Schweiz
+C) aus Österreich
+[2] Wann ist der Elternabend?
+A) am Montag
+B) am Dienstag
+C) am Donnerstag
+[3] Was kostet die Jacke?
+A) 14,00 €
+B) 45,00 €
+C) 49,00 €
+[4] Wann kann der Mann die Wohnung ansehen?
+A) kurz vor eins
+B) kurz nach eins
+C) um 1:00 Uhr
+[5] Wo findet man das Salz?
+A) neben der Kasse
+B) neben dem Eingang
+C) neben dem Gemüse
+[6] Wo gibt es die Waschmaschine?
+A) in der Walstraße
+B) in der Wahlstraße
+C) in der Bahlstraße
+
+### Teil: h91-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-91-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Herr Esser soll zur Information gehen.
+[8] Die Fahrgäste sollen sitzen bleiben.
+[9] Die Kundin soll an die Kasse zurückgehen.
+[10] Der Fluggast soll seine Tasche schließen.
+
+### Teil: h91-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-91-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Was soll Ludwig machen?
+A) Die Tür aufmachen.
+B) Das Fenster schließen.
+C) Das Fenster öffnen.
+[12] Wo warten sie?
+A) Am Grillplatz.
+B) Im U-Bahnhof.
+C) Im Westpark.
+[13] Warum kommt Vanessa nicht?
+A) Sie ist in der Schule.
+B) Sie ist krank.
+C) Sie mag ihre Lehrerin nicht.
+[14] Wie lange soll Frau Serf arbeiten?
+A) Bis fünf Uhr.
+B) Bis acht Uhr.
+C) Bis zwei Uhr.
+[15] Wann ist die Praxis zu?
+A) Am Montag.
+B) Am Freitag.
+C) Am Mittwoch.
+
+### Teil: h92-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-92-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Wie viel Geld hat der Kunde zurückbekommen?
+A) 10,00 Euro
+B) 4,03 Euro
+C) 16,02 Euro
+[2] Wie ist ihr Vorname?
+A) Caldena
+B) Candela
+C) Calrela
+[3] Was bestellt das Mädchen?
+A) Tee
+B) Croissant
+C) Tee und Croissant
+[4] Wo ist der Bahnhof?
+A) geradeaus, rechts
+B) immer geradeaus
+C) geradeaus, links
+[5] Welche Fremdsprache möchte Ilona noch lernen?
+A) Spanisch
+B) Französisch
+C) Chinesisch
+[6] Wann kommt Tante Anna zu Besuch?
+A) Sonntag
+B) Donnerstag
+C) Freitag
+
+### Teil: h92-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-92-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Der ICE 567 nach Hamburg fährt heute von Gleis 2 ab.
+[8] Die Wagen der ersten Klasse halten in den Abschnitten B bis D.
+[9] In diesem Zug müssen Sie einsteigen.
+[10] Die S-Bahn nach Lüneburg fährt um 16 Uhr 36.
+
+### Teil: h92-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-92-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wann ist die Feier?
+A) am Freitag um 16 Uhr.
+B) am Samstag um 12 Uhr.
+C) am Sonntag um 16 Uhr.
+[12] Was hat Anton nicht mehr?
+A) Sein Handy.
+B) Die Telefonnummer.
+C) Seine Videokamera.
+[13] Seline schreibt einen Test in...
+A) Englisch.
+B) Chemie.
+C) Musik.
+[14] Was kann Martin heute essen?
+A) Fisch.
+B) Pizza und Salat.
+C) Tomatensalat.
+[15] Wie lange darf Lucia jeden Tag an den Computer?
+A) 15 Minuten.
+B) 30 Minuten.
+C) 45 Minuten.
+
+### Teil: h93-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-93-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Wie ist die Hausnummer?
+A) 21
+B) 23
+C) 32
+[2] Wie kommt der Mann zur Fischfutter AG?
+A) Mit der U-Bahn.
+B) Mit dem Taxi.
+C) Mit dem Bus.
+[3] Was möchte die Frau trinken?
+A) Tee
+B) Kaffee
+C) Milch
+[4] Wie viele Kinder hat der Mann?
+A) Ein Kind.
+B) Zwei Kinder.
+C) Drei Kinder.
+[5] Wie lang ist die Pause?
+A) 15 Minuten.
+B) 30 Minuten.
+C) 45 Minuten.
+[6] Was hat der Mann dabei?
+A) Eine Tasche.
+B) Einen Koffer.
+C) Eine Tasche und einen Koffer.
+
+### Teil: h93-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-93-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Die Leute sollen in ihren Häusern bleiben.
+[8] Der Zug nach Westerland ist pünktlich.
+[9] An der Schnellkasse kann man bar bezahlen.
+[10] Die Fluggäste nach Stockholm sollen zum Schalter B19 kommen.
+
+### Teil: h93-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-93-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wann möchte Iva zum Musikunterricht kommen?
+A) Am Dienstag.
+B) Am Mittwoch.
+C) Am Freitag.
+[12] Wie kann man mit Herrn Schmitz sprechen?
+A) Im Büro anrufen.
+B) Zu Elektro Schmitz gehen.
+C) Auf dem Handy anrufen.
+[13] Wann läuft der Film „Im Wald"?
+A) Jeden Tag.
+B) Nur am Mittwoch.
+C) Ab Donnerstag.
+[14] Wann kann man mit jemandem vom Tennis-Verein sprechen?
+A) Im Juli.
+B) Im August.
+C) Im ganzen Sommer.
+[15] Wozu lädt Martin Anna ein?
+A) Zum Geburtstag.
+B) Zum Straßenfest.
+C) Zur Hochzeit.
+
+### Teil: h94-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-94-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Wo machte sie ihre Ausbildung?
+A) im Hotel.
+B) in der Bäckerei.
+C) im Restaurant.
+[2] Was will der Mann verkaufen?
+A) das Handy.
+B) der Computer.
+C) der Drucker.
+[3] Welche Krankheit hat er?
+A) Bauchschmerzen.
+B) Kopfschmerzen.
+C) Halsschmerzen.
+[4] Wie kommt der Mann zur Sprachschule?
+A) mit dem Auto.
+B) mit dem Fahrrad.
+C) mit dem Bus.
+[5] Was kauft der Mann ein?
+A) Eier.
+B) Brötchen.
+C) Wurst.
+[6] Was ist kaputt?
+A) das Fenster.
+B) der Aufzug.
+C) die Heizung.
+
+### Teil: h94-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-94-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Der ICE nach Hamburg fährt heute von Gleis 2 ab.
+[8] Die Wagen der zweiten Klasse halten in den Abschnitten B bis D.
+[9] In diesem Zug müssen Sie nicht einsteigen.
+[10] Die S-Bahn nach Lüneburg fährt um 16 Uhr 36.
+
+### Teil: h94-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-94-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wann kann Frau Kaiser kommen?
+A) Um 14:00 Uhr.
+B) Um 14:30 Uhr.
+C) Um 15:00 Uhr.
+[12] Was sagt der Mann über das Auto?
+A) Es ist fertig.
+B) Es ist neu.
+C) Es ist kaputt.
+[13] Wobei braucht Toni Hilfe?
+A) Beim Umzug.
+B) Beim Autofahren.
+C) Beim Pizzabacken.
+[14] Wo genau treffen sich die Freunde?
+A) im Computerraum.
+B) am Eingang.
+C) zu Hause.
+[15] Wie viel kostet die Fahrkarte nach Köln?
+A) 45 Euro.
+B) 46 Euro.
+C) 64 Euro.
+
+### Teil: h96-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-96-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Was hat der Mann vergessen?
+A) den Schlüssel
+B) sein Geld
+C) das Handy
+[2] Wann kommt der Zug an?
+A) um 14:15 Uhr
+B) um 14:50 Uhr
+C) um 15:15 Uhr
+[3] Was essen die beiden heute zu Mittag?
+A) Fisch mit Reis
+B) Hähnchen mit Pommes
+C) Nudeln mit Tomatensoße
+[4] Welche Hausnummer sucht die Frau?
+A) Hausnummer 13
+B) Hausnummer 30
+C) Hausnummer 33
+[5] Wo genau ist die Bank?
+A) direkt am Bahnhof
+B) in der Goethestraße
+C) neben der Post
+[6] Welches Bild kauft der Mann?
+A) das kleine Bild
+B) das große Bild
+C) das bunte Bild
+
+### Teil: h96-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-96-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Der Supermarkt hat auch am Sonntag geöffnet.
+[8] Die U-Bahn Linie 2 fährt heute leider nicht.
+[9] Herr Meier soll bitte sofort an die Kasse kommen.
+[10] Das frische Brot kostet heute weniger.
+
+### Teil: h96-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-96-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Um wie viel Uhr ist der Termin bei der Bank?
+A) um 09:30 Uhr
+B) um 10:00 Uhr
+C) um 10:30 Uhr
+[12] Was soll Maria zur Party mitbringen?
+A) Kaffee
+B) einen Kuchen
+C) Orangensaft
+[13] Wo wartet der Mann auf seine Frau?
+A) im Auto
+B) im Café
+C) an der Bushaltestelle
+[14] Wie lange ist der Arzt im Urlaub?
+A) eine Woche
+B) zwei Wochen
+C) drei Wochen
+[15] Welche Zimmernummer hat Frau Hoffmann?
+A) Zimmer 312
+B) Zimmer 321
+C) Zimmer 231
+
+### Teil: h97-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-97-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Um wie viel Uhr fährt der Bus ab?
+A) Um 2:30 Uhr
+B) Um 3:30 Uhr
+C) Um 3:40 Uhr
+[2] Welche Zimmernummer möchte der Mann?
+A) Zimmer 121
+B) Zimmer 212
+C) Zimmer 122
+[3] Was soll das Mädchen zur Party mitbringen?
+A) Essen
+B) Getränke
+C) CDs
+[4] Mit wem telefoniert der Mann gerade?
+A) mit seiner Mutter
+B) mit seiner Tante
+C) mit seiner Freundin
+[5] Wohin möchte die Frau gehen?
+A) ins Schwimmbad
+B) zum Bahnhof
+C) zur Sprachschule
+[6] Wann beginnt der Deutschkurs?
+A) im Juli
+B) im August
+C) im September
+
+### Teil: h97-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-97-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Heute fahren keine U-Bahnen zum Südbahnhof.
+[8] Kaffee ist heute billig.
+[9] Der Bus kommt um 17.30 Uhr in Friedberg an.
+[10] Im Zugrestaurant gibt es heute keinen Kuchen.
+
+### Teil: h97-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-97-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wann hat das Reisebüro wieder geöffnet?
+A) am 15. April.
+B) am 30. April.
+C) am 2. Mai.
+[12] Wo treffen sich die Freundinnen?
+A) vor dem Kino.
+B) in der Disco.
+C) vor der Schule.
+[13] Wie ist die Nummer der Volkshochschule?
+A) 069 212 65 64
+B) 069 212 56 46
+C) 069 212 56 64
+[14] Wie kommt die Frau zur Schule?
+A) mit dem Bus
+B) mit dem Fahrrad
+C) zu Fuß
+[15] Was soll die Frau mitbringen?
+A) ein Formular
+B) ihren Ausweis
+C) einen Computer
+
+### Teil: h99-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-99-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Was möchte die Frau trinken?
+A) Kaffee
+B) Tee
+C) Wasser
+[2] Was kauft der Mann im Supermarkt?
+A) Äpfel
+B) Brot
+C) Milch
+[3] Um wie viel Uhr beginnt der Film?
+A) 19:30 Uhr
+B) 20:00 Uhr
+C) 20:15 Uhr
+[4] Wo ist die Post?
+A) Neben dem Bahnhof
+B) Gegenüber der Apotheke
+C) Hinter dem Supermarkt
+[5] Wie ist das Wetter morgen?
+A) Sonnig
+B) Regnerisch
+C) Bewölkt
+[6] Welche Farbe hat das neue Auto?
+A) Blau
+B) Rot
+C) Schwarz
+
+### Teil: h99-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-99-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Der Zug nach Berlin hat 20 Minuten Verspätung.
+[8] Die Passagiere nach München sollen zu Gate 14 gehen.
+[9] Der Supermarkt schließt heute schon um 18 Uhr.
+[10] Herr Müller soll zur Information im Erdgeschoss kommen.
+
+### Teil: h99-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-99-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wann hat Frau Schmidt den Termin beim Arzt?
+A) Am Montag
+B) Am Mittwoch
+C) Am Freitag
+[12] Wo findet der Sprachkurs statt?
+A) Raum 204
+B) Raum 214
+C) Raum 240
+[13] Was soll der Anrufer mitbringen?
+A) Seinen Ausweis
+B) Ein Foto
+C) Das Zeugnis
+[14] Wie lange bleibt das Restaurant geschlossen?
+A) Eine Woche
+B) Zwei Wochen
+C) Einen Monat
+[15] Wohin fahren sie am Wochenende?
+A) In die Berge
+B) Ans Meer
+C) Zu den Großeltern
+
+### Teil: h101-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-101-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Was hat der Mann gegessen?
+A) Pizza
+B) Salami und Bratwurst
+C) ein Käsesandwich
+[2] Wo steht das Bild?
+A) neben dem Drucker
+B) über dem Tisch
+C) neben dem Computer
+[3] Was ist kaputt?
+A) Die Heizung
+B) Die Lampe
+C) Die Kaffeemaschine
+[4] Was hat Rufus?
+A) Zahnweh
+B) Fieber
+C) einen gebrochenen Arm
+[5] Wie kommt der Mann zum Bahnhof?
+A) immer geradeaus
+B) geradeaus, dann nach links
+C) geradeaus, dann nach rechts
+[6] Was möchten die Leute bestellen?
+A) die Getränkekarte
+B) zwei Mineralwasser
+C) die Speisekarte
+
+### Teil: h101-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-101-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Das Schnitzel mit Pommes frites und Salat kostet 7,90 Euro.
+[8] Der Zug fährt nach München.
+[9] Die S-Bahnen fahren heute nicht.
+[10] Für Informationen zu Verspätungen muss man die "2" wählen.
+
+### Teil: h101-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-101-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wohin fährt der Mann?
+A) nach Köln
+B) ins Büro
+C) nach Hause
+[12] Wann hat die Praxis am Dienstag geöffnet?
+A) von 11 bis 19 Uhr
+B) von 8 bis 13 Uhr
+C) von 8 bis 12 Uhr
+[13] Wann möchte die Frau in die Praxis kommen?
+A) Am Dienstag
+B) Am Donnerstag
+C) Am Freitag
+[14] Wie war das Wetter im Norden?
+A) sonnig und heiß
+B) bewölkt
+C) regnerisch
+[15] Wie viel kosten die T-Shirts?
+A) 9,95 Euro
+B) 29,95 Euro
+C) 19,95 Euro
+
+### Teil: h102-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-102-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Was braucht das Mädchen?
+A) Saft
+B) Salami
+C) Tomaten
+[2] Was muss Kilian kaufen?
+A) eine Fernsehzeitschrift
+B) eine Kamera
+C) eine Batterie
+[3] Was trägt Tina auf der Party?
+A) eine Jeans
+B) einen Rock
+C) ein Kleid
+[4] Was kauft der Mann?
+A) Bananen
+B) Gurken
+C) Käse
+[5] Wie viel kosten heute die Jeanshosen?
+A) 17,00 Euro
+B) 70,00 Euro
+C) 25,00 Euro
+[6] Welchen Sport macht Silke am liebsten?
+A) Fußball
+B) Joggen
+C) Tanzen
+
+### Teil: h102-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-102-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Der Bus Nr. 11 fährt nach Frankfurt-City.
+[8] Die Sporttasche kostet 34,99 Euro.
+[9] Der Bus Nr. 21 fährt jeden Tag bis 5 Uhr morgens.
+[10] Ein Kilogramm Birnen kostet 1,79 Euro.
+
+### Teil: h102-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-102-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wann kann Frau Huber vielleicht wieder arbeiten?
+A) Heute Nachmittag
+B) Morgen Vormittag
+C) Morgen Nachmittag
+[12] Wo genau warten David und Lea?
+A) An der Uni
+B) Im Hotel
+C) In der Bar
+[13] Was funktioniert bei Sebastian nicht?
+A) Der Drucker
+B) Das E-Mail-Programm
+C) Die Internetverbindung
+[14] Wann können Sie in die Praxis kommen?
+A) Am Dienstagabend um 18.00 Uhr
+B) Am Donnerstagmorgen um 7.00 Uhr
+C) Am Montagvormittag um 9.00 Uhr
+[15] Wann kann man die Praxis wieder besuchen?
+A) Am 3. August
+B) Am 23. August
+C) Am 24. August
