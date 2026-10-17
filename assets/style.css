@@ -708,13 +708,30 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
 .tile.drill.done{opacity:.75;cursor:default}
 .tile.drill.done .n{background:var(--ok,#177a4c);color:#fff}
 
-/* ---- Hörtext ---- */
-.audio{background:var(--card,#fff);border:1px solid var(--line,#e2e7f0);
-  border-radius:12px;padding:14px;margin:0 0 16px;
-  display:flex;flex-wrap:wrap;align-items:center;gap:10px}
-.audio .btn{flex:0 0 auto}
-.audio .sub{margin:0}
-.audiobar{flex:1 1 100%;height:6px;border-radius:99px;
-  background:var(--line,#e2e7f0);overflow:hidden}
-.audiobar i{display:block;height:100%;width:0;background:var(--brand,#2f6bed);
+/* ---- Hörtext (edler Player) ---- */
+.audio{position:relative; border:1px solid var(--line,#e2e7f0);
+  border-radius:18px; padding:18px 18px 16px; margin:0 0 18px;
+  background:
+    radial-gradient(120% 140% at 0% 0%, var(--brand-soft) 0%, transparent 55%),
+    linear-gradient(160deg, var(--card), var(--card));
+  box-shadow:0 10px 26px rgba(16,24,40,.10);
+  display:flex; flex-wrap:wrap; align-items:center; gap:12px 14px}
+.audio::before{content:"🎧"; flex:0 0 auto;
+  width:44px; height:44px; display:flex; align-items:center; justify-content:center;
+  font-size:1.35em; border-radius:50%;
+  background:linear-gradient(135deg, var(--brand), var(--brand-dark)); color:#fff;
+  box-shadow:0 6px 16px rgba(47,107,237,.35)}
+.audio .btn[data-play]{flex:0 0 auto; border-radius:999px; font-weight:700;
+  padding:11px 20px; border-color:transparent; color:#fff;
+  background:linear-gradient(135deg, var(--brand), var(--brand-dark));
+  box-shadow:0 6px 16px rgba(47,107,237,.30);
+  transition:transform .14s, box-shadow .14s, opacity .14s}
+.audio .btn[data-play]:not(:disabled):hover{transform:translateY(-2px);
+  box-shadow:0 10px 22px rgba(47,107,237,.38)}
+.audio .btn[data-play]:disabled{opacity:.6}
+.audio .sub{margin:0; margin-inline-start:auto; font-weight:600; color:var(--muted)}
+.audiobar{flex:1 1 100%; height:8px; border-radius:99px;
+  background:var(--line,#e2e7f0); overflow:hidden; margin-top:2px}
+.audiobar i{display:block; height:100%; width:0; border-radius:99px;
+  background:linear-gradient(90deg, var(--brand), var(--brand-dark));
   transition:width .2s linear}
