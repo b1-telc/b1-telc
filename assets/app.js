@@ -3,6 +3,7 @@
 
 const app    = document.getElementById('app');
 const elBack = document.getElementById('btnBack');
+const elReset= document.getElementById('btnReset');
 const elTimer= document.getElementById('timer');
 const elTime = document.getElementById('timerText');
 const elToast= document.getElementById('toast');
@@ -100,7 +101,9 @@ function go(view, fn){
   // وسائط (نتيجة، جولة…)، فإعادة بنائها من اسم الشاشة بيضيّعهن.
   S.render = fn;
   elBack.hidden = (view === 'home');
-  elBack.textContent = t('back');
+  elBack.setAttribute('aria-label', t('back'));   // ‹ Symbol bleibt, Label übersetzt
+  elReset.hidden = (view !== 'praxis');            // Zurücksetzen nur in der Übung
+  elReset.setAttribute('aria-label', t('praxisReset'));
   window.scrollTo(0, 0);
   fn();
 }
@@ -214,6 +217,13 @@ elBack.onclick = () => {
   } else {
     screenHome();
   }
+};
+
+// ★ Zurücksetzen-Symbol im Header: setzt den aktuellen Übungsteil zurück
+//   (mit Bestätigung). Sichtbar nur in der Übung (view === 'praxis').
+elReset.onclick = () => {
+  if (S.view !== 'praxis' || !S.praxisSecs) return;
+  ask(t('praxisResetAsk'), () => praxisReset(S.praxisSecs), t('praxisReset'));
 };
 
 /* ============ Start ============ */
@@ -802,6 +812,7 @@ function screenPractice(blockId){
   const secs = b.parts.map(id => m.sections.find(s => s.id === id)).filter(Boolean);
   stopTimer();
   S.praxisBlock = blockId;
+  S.praxisSecs = secs;              // für das Zurücksetzen-Symbol im Header
   const saved = (load('b1.praxis', {})[S.level] || {})[blockId] || {};
   S.answers = { ...saved };
   S.dropped = {}; S.checks = {};
@@ -810,16 +821,13 @@ function screenPractice(blockId){
     app.innerHTML = `
       <h1>${esc(b.title)}</h1>
       <p class="sub">${esc(t('praxisHint'))}</p>
-      ${secs.map(praxisSetHTML).join('')}
-      <button class="btn ghost reset" id="praxisReset">${esc(t('praxisReset'))}</button>`;
+      ${secs.map(praxisSetHTML).join('')}`;
     secs.forEach(bindInputs);
     praxisBindReveal(secs);
     bindPraxisWriting(secs);
     bindSprechen(secs);
     bindSprechkarten(secs);
     praxisSyncButtons();
-    document.getElementById('praxisReset').onclick = () =>
-      ask(t('praxisResetAsk'), () => praxisReset(secs), t('praxisReset'));
   });
 }
 
