@@ -187,11 +187,11 @@ async function loadCatalog(id){
 elBack.onclick = () => {
   if (S.view === 'exam'){
     ask(t('leaveAsk'),
-        () => { stopTimer(); S.run && S.run.drill ? screenHome() : screenModell(S.modell); },
+        () => { stopTimer(); (S.run && (S.run.drill || S.run.sim)) ? screenHome() : screenModell(S.modell); },
         t('leave'));
   } else if (S.view === 'result' || S.view === 'intro'){
     stopTimer();
-    if (S.run && S.run.drill) screenHome(); else screenModell(S.modell);
+    if (S.run && (S.run.drill || S.run.sim)) screenHome(); else screenModell(S.modell);
   } else if (S.view === 'resource'){
     screenResources();
   } else if (S.view === 'praxis'){
@@ -532,8 +532,16 @@ function screenHome(){
           <div class="meta">${review.mastered ? `${plural(review.mastered, 'nSits')}` : esc(t('allRepeated'))}${
             review.next_due ? ` · ${esc(t('nextOn', { date: new Date(review.next_due).toLocaleDateString('de-DE') }))}` : ''}</div></span>
       </div>` : '')}
+      ${(skills && skills.length) ? `<button class="tile simtile" id="simstart">
+        <span class="n">📝</span>
+        <span class="grow"><span style="font-weight:600">${esc(t('simStart'))}</span>
+          <div class="meta">${esc(t('simDesc'))}</div></span>
+        <span class="chev">›</span>
+      </button>` : ''}
       ${cards}`;
 
+    const simb = document.getElementById('simstart');
+    if (simb) simb.onclick = () => startSim();
     app.querySelectorAll('.tile[data-id]').forEach(b =>
       b.onclick = () => openModell(b.dataset.id));
     app.querySelectorAll('.tile[data-skill]').forEach(b =>
@@ -2198,6 +2206,160 @@ function scoreCard(points, max, pct, extra){
       ${esc(t('passFrom', { p: fmtP(max * 0.6) }))}${
         extra ? ' · ' + esc(extra) : ''}</div>
   </div>`;
+}
+
+/* ═══════════ Goethe-Prüfungssimulation ═══════════
+   Ein zufälliger Modelltest aus dem Übungspool: Hören + Lesen + Schreiben,
+   drei getrennt getaktete Phasen. Am Ende eine Auswertung — Hören und Lesen
+   werden automatisch bewertet (submit_drill, Schlüssel bleibt am Server),
+   Schreiben wird mit Musterlösung gezeigt, aber nicht benotet. */
+const SIM_PLAN = [
+  { key: 'Hören',     icon: '🎧', blocks: ['ht1', 'ht2', 'ht3'], min: 20 },
+  { key: 'Lesen',     icon: '📖', blocks: ['lv1', 'lv2', 'lv3'], min: 25 },
+  { key: 'Schreiben', icon: '✍️', blocks: ['s1', 's2'],          min: 20 },
+];
+const pickRand = a => a[Math.floor(Math.random() * a.length)];
+
+function buildSim(m){
+  const sec = id => m.sections.find(s => s.id === id);
+  const fromBlock = bid => {
+    const b = (m.blocks || []).find(x => x.id === bid);
+    return (b && b.parts.length) ? sec(pickRand(b.parts)) : null;
+  };
+  return SIM_PLAN
+    .map(ph => ({ key: ph.key, icon: ph.icon, min: ph.min,
+                  secs: ph.blocks.map(fromBlock).filter(Boolean) }))
+    .filter(ph => ph.secs.length);
+}
+
+function startSim(){
+  const m = S.modell;
+  if (!m) return toast(t('loadFailed'));
+  const phases = buildSim(m);
+  if (!phases.length) return toast(t('loadFailed'));
+  S.answers = {}; S.dropped = {}; S.checks = {}; S.plays = {};
+  S.sim = { phases, idx: 0 };
+  simPhase(0);
+}
+
+function simPhase(i){
+  const sim = S.sim; if (!sim) return;
+  const ph = sim.phases[i]; sim.idx = i;
+  const last = i === sim.phases.length - 1;
+  S.run = { id: 'sim', sim: true, parts: ph.secs, title: ph.key, minutes: ph.min };
+  go('exam', () => {
+    const body = ph.secs.map(p => `
+      <section class="part" id="part-${esc(p.id)}">
+        <h2 class="parthead">${esc(p.title)}</h2>
+        ${instrBlock(p.instruction || p.note)}
+        ${renderPartBody(p)}
+      </section>`).join('');
+    app.innerHTML = `
+      <div class="simhead">
+        <span class="simstep">${esc(ph.icon)} ${esc(ph.key)}</span>
+        <span class="simof">${esc(t('simStepOf', { n: i + 1, total: sim.phases.length }))}</span>
+      </div>${body}
+      <div class="bottombar"><div class="progbar"><i id="progfill"></i></div><div class="inner">
+        <span class="progress" id="prog"></span>
+        <button class="btn grow" id="simnext">${esc(last ? t('simFinish') : t('simNext'))}</button>
+      </div></div>`;
+    ph.secs.forEach(bindInputs);
+    updateProgress();
+    document.getElementById('simnext').onclick = () => {
+      const msg = last ? t('simFinishAsk') : t('simNextAsk', { next: sim.phases[i + 1].key });
+      ask(msg, () => simAdvance(i), last ? t('simFinish') : t('simNext'));
+    };
+    startTimer(ph.min * 60, () => { toast(t('timeUp')); simAdvance(i); });
+  });
+}
+
+function simAdvance(i){
+  stopTimer();
+  const sim = S.sim; if (!sim) return;
+  if (i < sim.phases.length - 1){ window.scrollTo(0, 0); simPhase(i + 1); }
+  else simFinish();
+}
+
+async function simFinish(){
+  stopTimer();
+  app.innerHTML = `<div class="empty">${esc(t('aiWorking'))}</div>`;
+  let res;
+  try { res = await API.submitDrill(S.answers); } catch { res = null; }
+  if (!res || !res.ok){ app.innerHTML = `<div class="empty">${esc(t('aiFailed'))}</div>`; return; }
+  const allSecs = S.sim.phases.flatMap(ph => ph.secs);
+  applyResults({ parts: allSecs }, res.results);   // schreibt die Lösung auf die Items
+  const byId = {}; (res.results || []).forEach(r => { if (r.id) byId[r.id] = r; });
+  refreshMistakes();
+  simResult(byId);
+}
+
+function simResult(byId){
+  const sim = S.sim;
+  const graded = r => r && typeof r.correct === 'boolean';
+  const stats = sim.phases.map(ph => {
+    let right = 0, total = 0;
+    ph.secs.forEach(p => (p.items || []).forEach(it => {
+      const r = byId[it.id]; if (graded(r)){ total++; if (r.correct) right++; }
+    }));
+    return { key: ph.key, icon: ph.icon, right, total, secs: ph.secs };
+  });
+  const scored = stats.filter(s => s.total);           // Hören, Lesen
+  const right = scored.reduce((a, s) => a + s.right, 0);
+  const total = scored.reduce((a, s) => a + s.total, 0);
+  const pct = total ? Math.round(right / total * 100) : 0;
+
+  const skillLines = scored.map(s =>
+    `<div class="partscore"><span class="grow">${esc(s.icon)} ${esc(s.key)}</span>
+       <span class="pill ${s.right / s.total >= 0.6 ? 'ok' : 'bad'}">${s.right}/${s.total}</span></div>`).join('');
+
+  const review = scored.map(s => s.secs.map(p => {
+    const cards = (p.items || []).map(it => {
+      const r = byId[it.id]; if (!graded(r)) return '';
+      const mine = S.answers[it.id], good = r.correct;
+      return `<div class="q ${good ? 'isok' : 'isbad'}">
+        <div class="qhead"><span class="qnum">${esc(it.num || '')}</span>
+          <span class="qtext grow">${esc(it.text)}</span></div>
+        <div class="fb ${good ? 'ok' : 'bad'}">
+          ${good ? `<b>✔ ${esc(t('correct'))}</b>` : `<b>${esc(t('wrong'))}</b>
+            <div class="fbrow"><span class="lbl">${esc(t('yourAnswer'))}</span><span class="val">${esc(answerLabel(p, it, mine))}</span></div>
+            <div class="fbrow"><span class="lbl">${esc(t('solution'))}</span><span class="val">${esc(answerLabel(p, it, it.answer))}</span></div>`}
+        </div></div>`;
+    }).join('');
+    return `<h3 class="simrevhead">${esc(p.title)}</h3>${cards}`;
+  }).join('')).join('');
+
+  const wPhase = sim.phases.find(ph => ph.key === 'Schreiben');
+  const wBlock = wPhase ? wPhase.secs.filter(p => p.format === 'writing').map(p => {
+    const txt = (p.items && p.items[0]) ? (S.answers[p.items[0].id] || '').trim() : '';
+    const mid = 'simmu-' + esc(p.id);
+    return `<div class="card w2set" style="margin-top:14px">
+      <div class="instr">${esc(p.title)}</div>
+      ${txt ? `<div class="yourtext"><div class="lbl">${esc(t('yourText'))}</div><p>${esc(txt)}</p></div>`
+            : `<p class="sub">${esc(t('noText'))}</p>`}
+      ${p.muster ? `<button class="btn ghost" data-mu="${mid}">${esc(t('w2Muster'))}</button>
+        <div class="muster" id="${mid}" hidden><h3>${esc(t('w2MusterTitle'))}</h3>
+          <div class="body">${esc(p.muster)}</div></div>` : ''}
+    </div>`;
+  }).join('') : '';
+
+  go('result', () => {
+    app.innerHTML =
+      scoreCard(right, total, pct, t('simRightOf', { right, total })) +
+      (skillLines ? `<div class="card" style="margin-top:14px">${skillLines}</div>` : '') +
+      `<h2 style="margin:18px 0 10px">${esc(t('simReview'))}</h2>${review}` +
+      (wBlock ? `<h2 style="margin:18px 0 10px">✍️ Schreiben</h2>${wBlock}` : '') +
+      `<div class="bottombar"><div class="inner">
+        <button class="btn ghost grow" id="simagain">${esc(t('simAgain'))}</button>
+        <button class="btn grow" id="simback">${esc(t('overview'))}</button>
+      </div></div>`;
+    app.querySelectorAll('[data-mu]').forEach(b => b.onclick = () => {
+      const box = document.getElementById(b.dataset.mu);
+      box.hidden = !box.hidden;
+      b.textContent = box.hidden ? t('w2Muster') : t('w2MusterHide');
+    });
+    document.getElementById('simagain').onclick = () => startSim();
+    document.getElementById('simback').onclick  = () => screenHome();
+  });
 }
 
 function screenResult(run, points, max, pct, right, total){

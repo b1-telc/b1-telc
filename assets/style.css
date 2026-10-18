@@ -754,3 +754,17 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
 .audiobar i{display:block; height:100%; width:0; border-radius:99px;
   background:linear-gradient(90deg, var(--brand), var(--brand-dark));
   transition:width .2s linear}
+
+/* ★ Prüfungssimulation (Goethe) */
+.simtile .n{background:linear-gradient(135deg, var(--brand), var(--brand-dark)); color:#fff}
+.simtile{border-color:var(--brand)}
+.simhead{position:sticky; top:59px; z-index:20; display:flex; align-items:center; gap:10px;
+  background:linear-gradient(135deg, var(--brand), var(--brand-dark)); color:#fff;
+  border-radius:12px; padding:10px 16px; margin:0 0 14px; box-shadow:var(--shadow)}
+.simstep{font-weight:700; font-size:1.05em}
+.simof{margin-inline-start:auto; opacity:.85; font-size:.9em; font-weight:600}
+.simrevhead{margin:18px 0 8px; font-size:1em; color:var(--brand-dark)}
+.yourtext{background:var(--card); border:1px solid var(--line); border-radius:10px;
+  padding:12px 14px; margin:10px 0}
+.yourtext .lbl{font-size:.8em; color:var(--muted); font-weight:700; margin-bottom:4px}
+.yourtext p{margin:0; white-space:pre-wrap; line-height:1.6}
