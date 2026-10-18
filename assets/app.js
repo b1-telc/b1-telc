@@ -1405,11 +1405,15 @@ function renderAudio(sec){
        «كمّل» بتعطي تشغيلتين جداد كل مرّة، والحدّ يلي المفروض يشبه
        الامتحان الحقيقي بيصير بلا معنى.
        وبعد التسليم الحدّ بينشال: الامتحان خلص، والمراجعة مو امتحان. */
-    // ★ بوضع الامتحان: حدّ تشغيلات، بلا إيقاف، كل تشغيلة من الأول (متل الفحص).
-    //   بوضع التمرين (Goethe): مشغّل عادي — تشغيل/إيقاف، بلا حدّ، وتقدر تسحب.
-    // In der Prüfungssimulation wird NICHT begrenzt: die Aufnahmen spielen
-    // jeden Text ohnehin zweimal, ein künstliches 2×-Limit wäre doppelt.
-    const limited = S.view === 'exam' && !(S.run && S.run.sim);
+    // ★ بوضع التمرين (Goethe): مشغّل عادي — تشغيل/إيقاف، بلا حدّ، وتقدر تسحب.
+    //   بوضع الامتحان والمحاكاة: متل الفحص الحقيقي — ما تقدر تسحب ولا توقف،
+    //   وكل تشغيلة من الأول. الفرق: الفحص الحقيقي بيحدّ التشغيلات،
+    //   والمحاكاة لأ (التسجيل بيعيد كل نص مرّتين بالأصل، فحدّ ٢× بيصير مكرّر).
+    // Freier Player nur im Übungsmodus. In Prüfung UND Simulation: kein
+    // Zurückspulen, keine Pause. Unterschied: die echte Prüfung begrenzt die
+    // Wiedergaben (mit Zähler), die Simulation nicht (ohne Zähler).
+    const isSim = !!(S.run && S.run.sim);
+    const freePlayer = S.view !== 'exam';
 
     el.innerHTML = `
       <button class="btn" data-play></button>
@@ -1427,7 +1431,7 @@ function renderAudio(sec){
       if (audio.duration) bar.style.width = (audio.currentTime / audio.duration * 100) + '%';
     });
 
-    if (!limited){
+    if (freePlayer){
       // ── Übungsmodus: freier Player ──
       const fmt = s => { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); };
       const paint = () => {
@@ -1449,21 +1453,25 @@ function renderAudio(sec){
       return;
     }
 
-    // ── Prüfungsmodus: begrenzte Wiedergaben ──
+    // ── Prüfungs-/Simulationsmodus: kein Zurückspulen, keine Pause ──
     let used = S.plays[sec.id] || 0;
-    const left = () => Math.max(0, plays - used);
+    // Simulation: nie „aufgebraucht" (unbegrenzt), echte Prüfung: plays − used.
+    const left = () => isSim ? 1 : Math.max(0, plays - used);
     const paint = (running) => {
       const n = left();
       btn.disabled = running || n <= 0;
       btn.textContent = running ? t('audioRunning')
                       : n <= 0 ? t('audioDone')
                       : used === 0 ? t('audioPlay') : t('audioAgain');
-      info.textContent = n > 0 ? plural(n, 'audioLeft') : t('audioNone');
+      // In der Simulation kein Zähler — die Aufnahme läuft wie in der Prüfung.
+      info.textContent = isSim ? '' : (n > 0 ? plural(n, 'audioLeft') : t('audioNone'));
     };
     paint(false);
     audio.addEventListener('ended', () => { bar.style.width = '100%'; paint(false); });
 
-    const spend = (n) => { used += n; S.plays[sec.id] = used; saveSession(S.run); };
+    // In der Simulation wird der Verbrauch nicht gespeichert (unbegrenzt),
+    // `used` dient dort nur der Beschriftung (Abspielen → Nochmal).
+    const spend = (n) => { used += n; if (!isSim){ S.plays[sec.id] = used; saveSession(S.run); } };
 
     btn.onclick = () => {
       if (left() <= 0) return;
@@ -2279,9 +2287,11 @@ function simPhase(i){
 }
 
 // ★ Pause: Uhr anhalten, Overlay zeigen, mit der Restzeit fortsetzen.
+//   Auch den Hörtext anhalten — in der Pause darf keine Aufnahme weiterlaufen.
 function simPause(i){
   const leftNow = S.left;
   stopTimer();
+  stopAudio();
   const ov = document.createElement('div');
   ov.className = 'modalback';
   ov.innerHTML = `<div class="modal" role="dialog" aria-modal="true">
@@ -2350,7 +2360,7 @@ function simResult(byId){
             <span class="qtext grow">${esc(it.text)}</span></div>
           <div class="fb ${good ? 'ok' : 'bad'}">
             ${good ? `<b>✔ ${esc(t('correct'))}</b>`
-                   : `<b>✘ ${esc(t('wrong'))}</b>
+                   : `<b>✘ ${esc(t('wrongShort'))}</b>
                <div class="fbrow"><span class="lbl">${esc(t('yourAnswer'))}</span><span class="val">${esc(answerLabel(p, it, mine))}</span></div>`}
             <div class="fbrow"><span class="lbl">${esc(t('solution'))}</span><span class="val">${esc(answerLabel(p, it, it.answer))}</span></div>
             ${it.explain ? `<div class="why">${esc(it.explain)}</div>` : ''}
