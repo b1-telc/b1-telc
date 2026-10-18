@@ -771,10 +771,14 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
 
 /* ★ Sim: Inhalt über der fixen Leiste freihalten (letzte Zeile sichtbar) */
 #app:has(.bottombar){padding-bottom:104px}
-/* ★ Sim: Weiter-Knopf zentriert und schlicht statt über die ganze Breite */
-.simbar{justify-content:center; gap:10px}
-.simbar .progress{margin-inline-end:auto}
-.simbar .simgo{flex:0 0 auto; min-width:200px; font-weight:700}
+#app:has(.simbar){padding-bottom:148px}
+/* ★ Sim: Fortschritt oben, darunter eine zentrierte Knopfreihe
+   (Zurück · Pause · Weiter) — bricht auf dem Handy sauber um. */
+.simbar{flex-direction:column; gap:8px}
+.simbar .progress{text-align:center}
+.simacts{display:flex; gap:10px; align-items:center;
+  justify-content:center; flex-wrap:wrap; width:100%}
+.simacts .simgo{flex:0 0 auto; min-width:180px; font-weight:700}
 /* ★ Sim-Auswertung: jede Fertigkeit abgetrennt */
 .simrevskill{margin:16px 0; border-top:1px solid var(--line); padding-top:10px}
 .simrevtop{display:flex; align-items:center; gap:8px; font-weight:700; font-size:1.08em; color:var(--ink); margin:4px 0 8px}

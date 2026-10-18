@@ -96,6 +96,12 @@ function stopAudio(){
   for (const a of LIVE) { try { a.pause(); a.src = ''; } catch {} }
   LIVE.clear();
 }
+/* ★ وقفة لطيفة: بتسكّت الصوت بس بتضلّ ماسكة المصدر، فبعد «متابعة»
+   بترجع تشتغل. `stopAudio` بتفرّغ `src` نهائياً (للتنقّل بين الشاشات)،
+   فما بتنفع لوقفة الامتحان المؤقّتة. */
+function pauseAudio(){
+  for (const a of LIVE) { try { a.pause(); } catch {} }
+}
 
 function go(view, fn){
   stopAudio();
@@ -1468,6 +1474,9 @@ function renderAudio(sec){
     };
     paint(false);
     audio.addEventListener('ended', () => { bar.style.width = '100%'; paint(false); });
+    // Wird die Aufnahme angehalten (Prüfung pausiert), den Knopf wieder
+    // freigeben, damit er nach „Fortsetzen" erneut gestartet werden kann.
+    audio.addEventListener('pause', () => { if (!audio.ended) paint(false); });
 
     // In der Simulation wird der Verbrauch nicht gespeichert (unbegrenzt),
     // `used` dient dort nur der Beschriftung (Abspielen → Nochmal).
@@ -2256,6 +2265,9 @@ function simPhase(i){
   const sim = S.sim; if (!sim) return;
   const ph = sim.phases[i]; sim.idx = i;
   const last = i === sim.phases.length - 1;
+  // Zurück nur, solange die vorige Phase noch Restzeit hat (abgelaufene
+  // Phasen bleiben zu — wie in der echten Prüfung).
+  const canBack = i > 0 && (sim.phases[i - 1].left == null || sim.phases[i - 1].left > 0);
   S.run = { id: 'sim', sim: true, parts: ph.secs, title: ph.key, minutes: ph.min };
   go('exam', () => {
     const body = ph.secs.map(p => `
@@ -2272,8 +2284,11 @@ function simPhase(i){
       <div class="bottombar"><div class="progbar"><i id="progfill"></i></div>
         <div class="inner simbar">
           <span class="progress" id="prog"></span>
-          <button class="btn ghost" id="simpause">⏸ ${esc(t('pause'))}</button>
-          <button class="btn simgo" id="simnext">${esc(last ? t('simFinish') : t('simNext'))}</button>
+          <div class="simacts">
+            ${canBack ? `<button class="btn ghost" id="simprev">${esc(t('simPrev'))}</button>` : ''}
+            <button class="btn ghost" id="simpause">⏸ ${esc(t('pause'))}</button>
+            <button class="btn simgo" id="simnext">${esc(last ? t('simFinish') : t('simNext'))}</button>
+          </div>
         </div></div>`;
     ph.secs.forEach(bindInputs);
     updateProgress();
@@ -2282,16 +2297,22 @@ function simPhase(i){
       ask(msg, () => simAdvance(i), last ? t('simFinish') : t('simNext'));
     };
     document.getElementById('simpause').onclick = () => simPause(i);
-    startTimer(ph.min * 60, () => { toast(t('timeUp')); simAdvance(i); });
+    const prev = document.getElementById('simprev');
+    if (prev) prev.onclick = () => simBack(i);
+    // ★ كل مرحلة بتحتفظ بوقتها: لمّا ترجع لمرحلة سابقة بتكمّل من وقتها
+    //   يلي باقي، مو من الأول — فالرجوع للتعديل ما بيعطي وقت زيادة.
+    startTimer(ph.left != null ? ph.left : ph.min * 60,
+               () => { toast(t('timeUp')); simAdvance(i); });
   });
 }
 
 // ★ Pause: Uhr anhalten, Overlay zeigen, mit der Restzeit fortsetzen.
-//   Auch den Hörtext anhalten — in der Pause darf keine Aufnahme weiterlaufen.
+//   Auch den Hörtext anhalten (pauseAudio, nicht stopAudio) — in der Pause
+//   darf keine Aufnahme weiterlaufen, aber nach „Fortsetzen" wieder abspielbar.
 function simPause(i){
   const leftNow = S.left;
   stopTimer();
-  stopAudio();
+  pauseAudio();
   const ov = document.createElement('div');
   ov.className = 'modalback';
   ov.innerHTML = `<div class="modal" role="dialog" aria-modal="true">
@@ -2305,10 +2326,23 @@ function simPause(i){
 }
 
 function simAdvance(i){
-  stopTimer();
   const sim = S.sim; if (!sim) return;
+  sim.phases[i].left = S.left;            // Restzeit dieser Phase merken
+  stopTimer();
   if (i < sim.phases.length - 1){ window.scrollTo(0, 0); simPhase(i + 1); }
   else simFinish();
+}
+
+// ★ Zurück zur vorherigen Phase, um Antworten zu bearbeiten. Antworten
+//   bleiben erhalten (S.answers wird nie zwischendurch geleert), und jede
+//   Phase läuft mit ihrer eigenen Restzeit weiter.
+function simBack(i){
+  const sim = S.sim; if (!sim || i <= 0) return;
+  sim.phases[i].left = S.left;
+  stopTimer();
+  pauseAudio();
+  window.scrollTo(0, 0);
+  simPhase(i - 1);
 }
 
 async function simFinish(){
@@ -2393,8 +2427,8 @@ function simResult(byId){
       `<h2 style="margin:18px 0 10px">${esc(t('simReview'))}</h2>${review}` +
       (wBlock ? `<h2 style="margin:18px 0 10px">✍️ Schreiben</h2>${wBlock}` : '') +
       `<div class="bottombar"><div class="inner">
-        <button class="btn ghost grow" id="simagain">${esc(t('simAgain'))}</button>
-        <button class="btn grow" id="simback">${esc(t('overview'))}</button>
+        <button class="btn ghost" id="simagain">${esc(t('simAgain'))}</button>
+        <button class="btn" id="simback">${esc(t('overview'))}</button>
       </div></div>`;
     app.querySelectorAll('[data-mu]').forEach(b => b.onclick = () => {
       const box = document.getElementById(b.dataset.mu);
