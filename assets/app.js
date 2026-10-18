@@ -4,6 +4,9 @@
 const app    = document.getElementById('app');
 const elBack = document.getElementById('btnBack');
 const elReset= document.getElementById('btnReset');
+const elHome = document.getElementById('btnHome');
+const elSettings = document.getElementById('btnSettings');
+const elSetmenu  = document.getElementById('setmenu');
 const elTimer= document.getElementById('timer');
 const elTime = document.getElementById('timerText');
 const elToast= document.getElementById('toast');
@@ -171,24 +174,6 @@ function setbarHTML(){
   </div>`;
 }
 
-/* بعد أي تبديل منعيد رسم الرئيسية: العلم المعلّم بيتغيّر، والاتجاه
-   بينقلب مع العربي، وحجم الخط بيبان فوراً على نفس الصفحة. */
-function wireSetbar(){
-  app.querySelectorAll('[data-lang]').forEach(b => b.onclick = () => {
-    I18N.setLang(b.dataset.lang); screenHome();
-  });
-  app.querySelectorAll('[data-theme]').forEach(b => b.onclick = () => {
-    save('b1.theme', b.dataset.theme); applyLook(); screenHome();
-  });
-  app.querySelectorAll('[data-size]').forEach(b => b.onclick = () => {
-    let sz = load('b1.size', 1);
-    if (!SIZES.includes(sz)) sz = 1;
-    const k = Math.min(SIZES.length - 1,
-                Math.max(0, SIZES.indexOf(sz) + (b.dataset.size === '+' ? 1 : -1)));
-    save('b1.size', SIZES[k]); applyLook(); screenHome();
-  });
-}
-
 applyLook();
 I18N.apply();
 
@@ -225,6 +210,38 @@ elReset.onclick = () => {
   if (S.view !== 'praxis' || !S.praxisSecs) return;
   ask(t('praxisResetAsk'), () => praxisReset(S.praxisSecs), t('praxisReset'));
 };
+
+// ★ Name im Header = zurück zur Startseite (jederzeit).
+elHome.onclick = () => screenHome();
+
+// ★ Einstellungen (Sprache/Thema/Schrift) über ein Header-Menü — überall
+//   erreichbar, ohne zur Startseite zu müssen.
+function renderSetmenu(){
+  elSetmenu.innerHTML = setbarHTML();
+  elSetmenu.querySelectorAll('[data-lang]').forEach(b => b.onclick = () => {
+    I18N.setLang(b.dataset.lang); renderSetmenu();
+    elBack.setAttribute('aria-label', t('back'));
+    S.render && S.render();                       // aktuelle Seite neu zeichnen
+  });
+  elSetmenu.querySelectorAll('[data-theme]').forEach(b => b.onclick = () => {
+    save('b1.theme', b.dataset.theme); applyLook(); renderSetmenu();   // CSS-Variable, kein Neuaufbau nötig
+  });
+  elSetmenu.querySelectorAll('[data-size]').forEach(b => b.onclick = () => {
+    let sz = load('b1.size', 1); if (!SIZES.includes(sz)) sz = 1;
+    const k = Math.min(SIZES.length - 1,
+                Math.max(0, SIZES.indexOf(sz) + (b.dataset.size === '+' ? 1 : -1)));
+    save('b1.size', SIZES[k]); applyLook(); renderSetmenu();
+  });
+}
+const closeSetmenu = () => { elSetmenu.hidden = true; elSettings.classList.remove('on'); };
+elSettings.onclick = e => {
+  e.stopPropagation();
+  if (elSetmenu.hidden){ renderSetmenu(); elSetmenu.hidden = false; elSettings.classList.add('on'); }
+  else closeSetmenu();
+};
+document.addEventListener('click', e => {
+  if (!elSetmenu.hidden && !elSetmenu.contains(e.target) && e.target !== elSettings) closeSetmenu();
+});
 
 /* ============ Start ============ */
 /* Die Inhalte liegen jetzt auf dem Server und sind an ein Abonnement
@@ -277,7 +294,6 @@ function screenWait(pos, total){
   go('wait', () => {
     elBack.hidden = true;
     app.innerHTML = `
-      ${setbarHTML()}
       <h1>${esc(t('waitTitle'))}</h1>
       <div class="card queue">
         <div class="qnum">${esc(String(pos ?? '—'))}</div>
@@ -287,7 +303,6 @@ function screenWait(pos, total){
       <p class="sub">${esc(t('waitHint'))}</p>
       <button class="btn wide" id="wchk">${esc(t('waitCheck'))}</button>`;
 
-    wireSetbar();
     const b = document.getElementById('wchk');
     b.onclick = async () => {
       b.disabled = true; b.textContent = t('codeChecking');
@@ -488,7 +503,6 @@ function screenHome(){
       : '';
 
     app.innerHTML = `
-      ${setbarHTML()}
       <h1>${esc(t('welcome'))}</h1>
       ${abo}
       <p class="sub">${isPraxis() ? esc(t('praxisHome'))
@@ -520,7 +534,6 @@ function screenHome(){
       </div>` : '')}
       ${cards}`;
 
-    wireSetbar();
     app.querySelectorAll('.tile[data-id]').forEach(b =>
       b.onclick = () => openModell(b.dataset.id));
     app.querySelectorAll('.tile[data-skill]').forEach(b =>
