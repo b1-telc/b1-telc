@@ -637,6 +637,10 @@ const I18N = (() => {
   const KEY = 'b1.lang';
   let lang = 'de';
 
+  /* ★ Übersetzungen der Aufgaben-Anweisungen (Goethe A1) nach de→{ar,uk}.
+     Nur eine Lernhilfe; der deutsche Text bleibt immer sichtbar. */
+  const INSTR_TR = /*__INSTR_TR__*/ {};
+
   /* لغة المتصفّح إذا منعرفها، وإلا ألماني. الاختيار اليدوي بيغلب. */
   function detect(){
     try {
@@ -691,7 +695,9 @@ const I18N = (() => {
   }
 
   lang = detect();
-  return { LANGS, t, plural, setLang, get lang(){ return lang; }, apply,
+  const trInstr = txt => { const e = INSTR_TR[txt]; return e ? (e[lang] || null) : null; };
+
+  return { LANGS, t, plural, setLang, get lang(){ return lang; }, apply, trInstr,
            has: k => !!(DICT[lang] && DICT[lang][k]) };
 })();
 

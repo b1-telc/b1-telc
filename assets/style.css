@@ -117,11 +117,22 @@ h3{font-size:1em; margin:0 0 4px}
 .tile .chev{color:var(--muted); font-size:20px}
 
 /* ---------- exam ---------- */
+/* ★ Der deutsche Inhalt bleibt immer LTR — auch bei arabischer Oberfläche
+   (Prüfungsatmosphäre). Transiente UI (Dialog, Toast) liegt außerhalb von
+   #app und folgt der Sprachrichtung. */
+#app{direction:ltr}
 .instr{
   background:var(--brand-soft); border-radius:12px; padding:14px 16px; margin-bottom:16px;
   font-size:.95em;
 }
 .instr .de{margin-top:8px; color:var(--muted); font-size:.88em}
+/* ★ Übersetzung der Anweisung (ar/uk) direkt unter dem deutschen Text. */
+.instr:has(+ .instr-tr){margin-bottom:8px}
+.instr-tr{
+  background:var(--card); border:1px solid var(--line);
+  border-inline-start:3px solid var(--brand); border-radius:10px;
+  padding:12px 14px; margin-bottom:16px; font-size:.95em; line-height:1.6; color:var(--ink);
+}
 .passage{
   background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
   padding:16px; margin-bottom:14px; box-shadow:var(--shadow);
