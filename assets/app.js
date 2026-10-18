@@ -1438,6 +1438,11 @@ function renderAudio(sec){
     const audio = new Audio(url);
     audio.preload = 'auto';
     LIVE.add(audio);
+    // ★ صوت واحد بس بينشتغل: أول ما يبلّش أي تسجيل، نوقّف الباقيين — تا ما
+    //   يشتغلوا كذا صوت سوا ويصير ضجّة (بالتمرين وبالامتحان سوا).
+    audio.addEventListener('play', () => {
+      for (const a of LIVE) if (a !== audio) { try { a.pause(); } catch {} }
+    });
     const btn  = el.querySelector('[data-play]');
     const info = el.querySelector('[data-left]');
     const barWrap = el.querySelector('.audiobar');
