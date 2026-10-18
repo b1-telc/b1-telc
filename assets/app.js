@@ -98,9 +98,19 @@ function stopAudio(){
 }
 /* ★ وقفة لطيفة: بتسكّت الصوت بس بتضلّ ماسكة المصدر، فبعد «متابعة»
    بترجع تشتغل. `stopAudio` بتفرّغ `src` نهائياً (للتنقّل بين الشاشات)،
-   فما بتنفع لوقفة الامتحان المؤقّتة. */
+   فما بتنفع لوقفة الامتحان المؤقّتة.
+   منسجّل مين كان شغّال وقت الوقفة، تا «متابعة» يكمّل من نفس المحلّ
+   (مو من الأول) أوتوماتيكياً. */
+let HELD = [];
 function pauseAudio(){
-  for (const a of LIVE) { try { a.pause(); } catch {} }
+  HELD = [];
+  for (const a of LIVE) {
+    try { if (!a.paused && !a.ended){ HELD.push(a); a.pause(); } } catch {}
+  }
+}
+function resumeAudio(){
+  const held = HELD; HELD = [];
+  for (const a of held) { try { a.play().catch(() => {}); } catch {} }
 }
 
 function go(view, fn){
@@ -1474,8 +1484,9 @@ function renderAudio(sec){
     };
     paint(false);
     audio.addEventListener('ended', () => { bar.style.width = '100%'; paint(false); });
-    // Wird die Aufnahme angehalten (Prüfung pausiert), den Knopf wieder
-    // freigeben, damit er nach „Fortsetzen" erneut gestartet werden kann.
+    // Läuft die Aufnahme (auch beim automatischen Fortsetzen nach einer
+    // Pause), den Knopf als „läuft" sperren; beim Anhalten wieder freigeben.
+    audio.addEventListener('play',  () => paint(true));
     audio.addEventListener('pause', () => { if (!audio.ended) paint(false); });
 
     // In der Simulation wird der Verbrauch nicht gespeichert (unbegrenzt),
@@ -2308,7 +2319,8 @@ function simPhase(i){
 
 // ★ Pause: Uhr anhalten, Overlay zeigen, mit der Restzeit fortsetzen.
 //   Auch den Hörtext anhalten (pauseAudio, nicht stopAudio) — in der Pause
-//   darf keine Aufnahme weiterlaufen, aber nach „Fortsetzen" wieder abspielbar.
+//   darf keine Aufnahme weiterlaufen. „Fortsetzen" spielt genau da weiter,
+//   wo angehalten wurde (resumeAudio), nicht von vorn.
 function simPause(i){
   const leftNow = S.left;
   stopTimer();
@@ -2322,6 +2334,7 @@ function simPause(i){
   ov.querySelector('[data-resume]').onclick = () => {
     ov.remove();
     startTimer(leftNow, () => { toast(t('timeUp')); simAdvance(i); });
+    resumeAudio();   // الصوت بيكمّل من محلّ الوقفة
   };
 }
 
