@@ -5623,7 +5623,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-73-t1.mp3
+Hörtext: a1hoeren/test-73-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -5665,7 +5665,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-73-t2.mp3
+Hörtext: a1hoeren/test-73-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -5685,7 +5685,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-73-t3.mp3
+Hörtext: a1hoeren/test-73-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -5722,7 +5722,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-74-t1.mp3
+Hörtext: a1hoeren/test-74-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -5764,7 +5764,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-74-t2.mp3
+Hörtext: a1hoeren/test-74-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -5784,7 +5784,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-74-t3.mp3
+Hörtext: a1hoeren/test-74-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -5821,7 +5821,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-75-t1.mp3
+Hörtext: a1hoeren/test-75-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -5863,7 +5863,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-75-t2.mp3
+Hörtext: a1hoeren/test-75-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -5883,7 +5883,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-75-t3.mp3
+Hörtext: a1hoeren/test-75-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -5920,7 +5920,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-76-t1.mp3
+Hörtext: a1hoeren/test-76-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -5962,7 +5962,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-76-t2.mp3
+Hörtext: a1hoeren/test-76-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -5982,7 +5982,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-76-t3.mp3
+Hörtext: a1hoeren/test-76-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6019,7 +6019,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-77-t1.mp3
+Hörtext: a1hoeren/test-77-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6061,7 +6061,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-77-t2.mp3
+Hörtext: a1hoeren/test-77-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -6081,7 +6081,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-77-t3.mp3
+Hörtext: a1hoeren/test-77-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6118,7 +6118,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-78-t1.mp3
+Hörtext: a1hoeren/test-78-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6160,7 +6160,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-78-t2.mp3
+Hörtext: a1hoeren/test-78-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -6180,7 +6180,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-78-t3.mp3
+Hörtext: a1hoeren/test-78-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6217,7 +6217,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-79-t1.mp3
+Hörtext: a1hoeren/test-79-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6259,7 +6259,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-79-t2.mp3
+Hörtext: a1hoeren/test-79-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -6279,7 +6279,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-79-t3.mp3
+Hörtext: a1hoeren/test-79-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6316,7 +6316,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-80-t1.mp3
+Hörtext: a1hoeren/test-80-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6358,7 +6358,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-80-t2.mp3
+Hörtext: a1hoeren/test-80-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -6378,7 +6378,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-80-t3.mp3
+Hörtext: a1hoeren/test-80-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6415,7 +6415,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-81-t1.mp3
+Hörtext: a1hoeren/test-81-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6457,7 +6457,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-81-t2.mp3
+Hörtext: a1hoeren/test-81-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -6477,7 +6477,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-81-t3.mp3
+Hörtext: a1hoeren/test-81-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6514,7 +6514,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-82-t1.mp3
+Hörtext: a1hoeren/test-82-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6556,7 +6556,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-82-t2.mp3
+Hörtext: a1hoeren/test-82-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -6576,7 +6576,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-82-t3.mp3
+Hörtext: a1hoeren/test-82-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6613,7 +6613,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-83-t1.mp3
+Hörtext: a1hoeren/test-83-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6655,7 +6655,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-83-t2.mp3
+Hörtext: a1hoeren/test-83-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -6675,7 +6675,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-83-t3.mp3
+Hörtext: a1hoeren/test-83-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6712,7 +6712,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-84-t1.mp3
+Hörtext: a1hoeren/test-84-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6754,7 +6754,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-84-t2.mp3
+Hörtext: a1hoeren/test-84-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -6774,7 +6774,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-84-t3.mp3
+Hörtext: a1hoeren/test-84-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6811,7 +6811,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-85-t1.mp3
+Hörtext: a1hoeren/test-85-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6853,7 +6853,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-85-t2.mp3
+Hörtext: a1hoeren/test-85-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -6873,7 +6873,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-85-t3.mp3
+Hörtext: a1hoeren/test-85-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6910,7 +6910,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-86-t1.mp3
+Hörtext: a1hoeren/test-86-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -6952,7 +6952,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-86-t2.mp3
+Hörtext: a1hoeren/test-86-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -6972,7 +6972,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-86-t3.mp3
+Hörtext: a1hoeren/test-86-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7009,7 +7009,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-87-t1.mp3
+Hörtext: a1hoeren/test-87-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7051,7 +7051,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-87-t2.mp3
+Hörtext: a1hoeren/test-87-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -7071,7 +7071,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-87-t3.mp3
+Hörtext: a1hoeren/test-87-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7108,7 +7108,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-88-t1.mp3
+Hörtext: a1hoeren/test-88-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7150,7 +7150,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-88-t2.mp3
+Hörtext: a1hoeren/test-88-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -7170,7 +7170,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-88-t3.mp3
+Hörtext: a1hoeren/test-88-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7207,7 +7207,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-89-t1.mp3
+Hörtext: a1hoeren/test-89-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7249,7 +7249,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-89-t2.mp3
+Hörtext: a1hoeren/test-89-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -7269,7 +7269,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-89-t3.mp3
+Hörtext: a1hoeren/test-89-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7306,7 +7306,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-90-t1.mp3
+Hörtext: a1hoeren/test-90-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7348,7 +7348,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-90-t2.mp3
+Hörtext: a1hoeren/test-90-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -7368,7 +7368,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-90-t3.mp3
+Hörtext: a1hoeren/test-90-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7405,7 +7405,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-91-t1.mp3
+Hörtext: a1hoeren/test-91-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7447,7 +7447,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-91-t2.mp3
+Hörtext: a1hoeren/test-91-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -7467,7 +7467,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-91-t3.mp3
+Hörtext: a1hoeren/test-91-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7504,7 +7504,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-92-t1.mp3
+Hörtext: a1hoeren/test-92-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7546,7 +7546,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-92-t2.mp3
+Hörtext: a1hoeren/test-92-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -7566,7 +7566,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-92-t3.mp3
+Hörtext: a1hoeren/test-92-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7603,7 +7603,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-93-t1.mp3
+Hörtext: a1hoeren/test-93-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7645,7 +7645,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-93-t2.mp3
+Hörtext: a1hoeren/test-93-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -7665,7 +7665,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-93-t3.mp3
+Hörtext: a1hoeren/test-93-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7702,7 +7702,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-94-t1.mp3
+Hörtext: a1hoeren/test-94-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7744,7 +7744,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-94-t2.mp3
+Hörtext: a1hoeren/test-94-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -7764,7 +7764,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-94-t3.mp3
+Hörtext: a1hoeren/test-94-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7801,7 +7801,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-95-t1.mp3
+Hörtext: a1hoeren/test-95-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7843,7 +7843,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-95-t2.mp3
+Hörtext: a1hoeren/test-95-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -7863,7 +7863,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-95-t3.mp3
+Hörtext: a1hoeren/test-95-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7900,7 +7900,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-96-t1.mp3
+Hörtext: a1hoeren/test-96-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7942,7 +7942,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-96-t2.mp3
+Hörtext: a1hoeren/test-96-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -7962,7 +7962,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-96-t3.mp3
+Hörtext: a1hoeren/test-96-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -7999,7 +7999,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-97-t1.mp3
+Hörtext: a1hoeren/test-97-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -8041,7 +8041,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-97-t2.mp3
+Hörtext: a1hoeren/test-97-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -8061,7 +8061,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-97-t3.mp3
+Hörtext: a1hoeren/test-97-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -8098,7 +8098,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-98-t1.mp3
+Hörtext: a1hoeren/test-98-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -8140,7 +8140,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-98-t2.mp3
+Hörtext: a1hoeren/test-98-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -8160,7 +8160,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-98-t3.mp3
+Hörtext: a1hoeren/test-98-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -8197,7 +8197,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-99-t1.mp3
+Hörtext: a1hoeren/test-99-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -8239,7 +8239,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-99-t2.mp3
+Hörtext: a1hoeren/test-99-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -8259,7 +8259,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-99-t3.mp3
+Hörtext: a1hoeren/test-99-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -8296,7 +8296,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-100-t1.mp3
+Hörtext: a1hoeren/test-100-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -8338,7 +8338,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-100-t2.mp3
+Hörtext: a1hoeren/test-100-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -8358,7 +8358,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-100-t3.mp3
+Hörtext: a1hoeren/test-100-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -8395,7 +8395,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-101-t1.mp3
+Hörtext: a1hoeren/test-101-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -8437,7 +8437,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-101-t2.mp3
+Hörtext: a1hoeren/test-101-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -8457,7 +8457,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-101-t3.mp3
+Hörtext: a1hoeren/test-101-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -8494,7 +8494,7 @@ Titel: Teil 1 · Fragen 1–6
 Minuten: 0
 Punkte: 1
 Maximum: 6
-Hörtext: hoeren/test-102-t1.mp3
+Hörtext: a1hoeren/test-102-t1.mp3
 Wiedergaben: 2
 Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
@@ -8536,7 +8536,7 @@ Titel: Teil 2 · Fragen 7–10
 Minuten: 0
 Punkte: 1
 Maximum: 4
-Hörtext: hoeren/test-102-t2.mp3
+Hörtext: a1hoeren/test-102-t2.mp3
 Wiedergaben: 1
 Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
 Aufgaben:
@@ -8556,7 +8556,7 @@ Titel: Teil 3 · Fragen 11–15
 Minuten: 0
 Punkte: 1
 Maximum: 5
-Hörtext: hoeren/test-102-t3.mp3
+Hörtext: a1hoeren/test-102-t3.mp3
 Wiedergaben: 2
 Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
 Aufgaben:
