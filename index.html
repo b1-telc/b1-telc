@@ -12,17 +12,20 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="icon" href="assets/icons/icon-192.png">
-<link rel="stylesheet" href="assets/style.css?v=25">
+<link rel="stylesheet" href="assets/style.css?v=26">
 </head>
 <body>
 
 <header class="topbar">
-  <!-- ★ زرّ الرجوع صار رمز بالشريط العلوي (يسار)، وزرّ التصفير رمز (يمين)
-       بيبيّن بس بصفحة التمرين. الاسم بالنص. -->
-  <button id="btnBack" class="hbtn" hidden aria-label="Zurück">‹</button>
-  <div class="brand">Deutsche <span>Pass</span></div>
+  <!-- ★ Alles im Header: ← Zurück, klickbarer Name (zur Startseite),
+       ↺ Zurücksetzen (nur Übung), ⚙ Einstellungen (Sprache/Thema/Schrift)
+       jederzeit über ein Menü — ohne zur Startseite zurück zu müssen. -->
+  <button id="btnBack" class="hbtn" hidden aria-label="Zurück">←</button>
+  <button id="btnHome" class="brand" aria-label="Startseite">Deutsche <span>Pass</span></button>
   <div id="timer" class="timer" hidden><span id="timerText">00:00</span></div>
   <button id="btnReset" class="hbtn" hidden aria-label="Zurücksetzen">↺</button>
+  <button id="btnSettings" class="hbtn" aria-label="Einstellungen">⚙</button>
+  <div id="setmenu" class="setmenu" hidden></div>
 </header>
 
 <main id="app"></main>
@@ -31,10 +34,10 @@
 
 <!-- ★ ?v=… بيكسر الكاش القديم: الرابط بيتغيّر فالمتصفّح مجبور يجيب
      نسخة جديدة. نرفّع الرقم لما يعلق الطلاب على نسخة قديمة. -->
-<script src="assets/i18n.js?v=25"></script>
+<script src="assets/i18n.js?v=26"></script>
 <script src="assets/config.js"></script>
-<script src="assets/api.js?v=25"></script>
-<script src="assets/app.js?v=25"></script>
+<script src="assets/api.js?v=26"></script>
+<script src="assets/app.js?v=26"></script>
 <script>
   if ('serviceWorker' in navigator) {
     addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
