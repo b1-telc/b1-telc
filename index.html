@@ -3,42 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>telc B1 Training</title>
+<title>Deutsche Pass</title>
 <meta name="theme-color" content="#2f6bed">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="telc B1">
+<meta name="apple-mobile-web-app-title" content="Deutsche Pass">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="icon" href="assets/icons/icon-192.png">
-<link rel="stylesheet" href="assets/style.css?v=23">
+<link rel="stylesheet" href="assets/style.css?v=24">
 </head>
 <body>
 
 <header class="topbar">
-  <div class="brand">telc <span>B1</span></div>
+  <!-- ★ زرّ الرجوع صار رمز بالشريط العلوي (يسار)، وزرّ التصفير رمز (يمين)
+       بيبيّن بس بصفحة التمرين. الاسم بالنص. -->
+  <button id="btnBack" class="hbtn" hidden aria-label="Zurück">‹</button>
+  <div class="brand">Deutsche <span>Pass</span></div>
   <div id="timer" class="timer" hidden><span id="timerText">00:00</span></div>
-  <!-- الإعدادات (لغة، مظهر، حجم خط) بترويسة الصفحة الرئيسية، مو هون:
-       زرّ ⚙ بيتطلّب ضغطتين وخروج من الصفحة، ومين ما بيقرا الألماني
-       ما بيعرف إنه إعدادات أصلاً. -->
+  <button id="btnReset" class="hbtn" hidden aria-label="Zurücksetzen">↺</button>
 </header>
 
 <main id="app"></main>
-
-<!-- ★ زرّ الرجوع تحت، عريض. بالشريط العلوي كان صغير وبيزاحم الاسم
-     والساعة، والمستخدم ما كان يلاقيه. تحت هو آخر شي بالصفحة، بعرضها
-     كلها — ومكانه نفس مكان «سلّم» و«ابدأ»، فالإصبع أصلاً هناك. -->
-<div class="backbar"><button id="btnBack" class="icon-btn" hidden></button></div>
 
 <div id="toast" class="toast" hidden></div>
 
 <!-- ★ ?v=… بيكسر الكاش القديم: الرابط بيتغيّر فالمتصفّح مجبور يجيب
      نسخة جديدة. نرفّع الرقم لما يعلق الطلاب على نسخة قديمة. -->
-<script src="assets/i18n.js?v=23"></script>
+<script src="assets/i18n.js?v=24"></script>
 <script src="assets/config.js"></script>
-<script src="assets/api.js?v=23"></script>
-<script src="assets/app.js?v=23"></script>
+<script src="assets/api.js?v=24"></script>
+<script src="assets/app.js?v=24"></script>
 <script>
   if ('serviceWorker' in navigator) {
     addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
