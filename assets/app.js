@@ -1407,7 +1407,9 @@ function renderAudio(sec){
        وبعد التسليم الحدّ بينشال: الامتحان خلص، والمراجعة مو امتحان. */
     // ★ بوضع الامتحان: حدّ تشغيلات، بلا إيقاف، كل تشغيلة من الأول (متل الفحص).
     //   بوضع التمرين (Goethe): مشغّل عادي — تشغيل/إيقاف، بلا حدّ، وتقدر تسحب.
-    const limited = S.view === 'exam';
+    // In der Prüfungssimulation wird NICHT begrenzt: die Aufnahmen spielen
+    // jeden Text ohnehin zweimal, ein künstliches 2×-Limit wäre doppelt.
+    const limited = S.view === 'exam' && !(S.run && S.run.sim);
 
     el.innerHTML = `
       <button class="btn" data-play></button>
@@ -2259,18 +2261,37 @@ function simPhase(i){
         <span class="simstep">${esc(ph.icon)} ${esc(ph.key)}</span>
         <span class="simof">${esc(t('simStepOf', { n: i + 1, total: sim.phases.length }))}</span>
       </div>${body}
-      <div class="bottombar"><div class="progbar"><i id="progfill"></i></div><div class="inner">
-        <span class="progress" id="prog"></span>
-        <button class="btn grow" id="simnext">${esc(last ? t('simFinish') : t('simNext'))}</button>
-      </div></div>`;
+      <div class="bottombar"><div class="progbar"><i id="progfill"></i></div>
+        <div class="inner simbar">
+          <span class="progress" id="prog"></span>
+          <button class="btn ghost" id="simpause">⏸ ${esc(t('pause'))}</button>
+          <button class="btn simgo" id="simnext">${esc(last ? t('simFinish') : t('simNext'))}</button>
+        </div></div>`;
     ph.secs.forEach(bindInputs);
     updateProgress();
     document.getElementById('simnext').onclick = () => {
       const msg = last ? t('simFinishAsk') : t('simNextAsk', { next: sim.phases[i + 1].key });
       ask(msg, () => simAdvance(i), last ? t('simFinish') : t('simNext'));
     };
+    document.getElementById('simpause').onclick = () => simPause(i);
     startTimer(ph.min * 60, () => { toast(t('timeUp')); simAdvance(i); });
   });
+}
+
+// ★ Pause: Uhr anhalten, Overlay zeigen, mit der Restzeit fortsetzen.
+function simPause(i){
+  const leftNow = S.left;
+  stopTimer();
+  const ov = document.createElement('div');
+  ov.className = 'modalback';
+  ov.innerHTML = `<div class="modal" role="dialog" aria-modal="true">
+    <p><b style="font-size:1.3em">⏸</b><br>${esc(t('simPaused'))}</p>
+    <div class="modalbtns"><button class="btn" data-resume>${esc(t('simResume'))}</button></div></div>`;
+  document.body.appendChild(ov);
+  ov.querySelector('[data-resume]').onclick = () => {
+    ov.remove();
+    startTimer(leftNow, () => { toast(t('timeUp')); simAdvance(i); });
+  };
 }
 
 function simAdvance(i){
@@ -2283,27 +2304,34 @@ function simAdvance(i){
 async function simFinish(){
   stopTimer();
   app.innerHTML = `<div class="empty">${esc(t('aiWorking'))}</div>`;
-  let res;
-  try { res = await API.submitDrill(S.answers); } catch { res = null; }
-  if (!res || !res.ok){ app.innerHTML = `<div class="empty">${esc(t('aiFailed'))}</div>`; return; }
   const allSecs = S.sim.phases.flatMap(ph => ph.secs);
-  applyResults({ parts: allSecs }, res.results);   // schreibt die Lösung auf die Items
-  const byId = {}; (res.results || []).forEach(r => { if (r.id) byId[r.id] = r; });
-  refreshMistakes();
-  simResult(byId);
+  const ids = allSecs.flatMap(p => (p.items || []).map(it => it.id));
+  // ★ Lösungen zum Vergleich holen (reveal_answers wie in der Übung) — der
+  //   Schlüssel kommt erst nach der Abgabe und bleibt am Server geschützt.
+  let res;
+  try { res = await API.reveal(ids); } catch { res = null; }
+  if (!res || !res.ok){ app.innerHTML = `<div class="empty">${esc(t('aiFailed'))}</div>`; return; }
+  const by = {};
+  (res.answers || []).forEach(a => { if (a.id) by[a.id] = a; });
+  allSecs.forEach(p => (p.items || []).forEach(it => {
+    const a = by[it.id];
+    if (a){ it.answer = a.answer; if (a.explanation) it.explain = a.explanation; }
+  }));
+  simResult(by);
 }
 
 function simResult(byId){
   const sim = S.sim;
-  const graded = r => r && typeof r.correct === 'boolean';
+  const graded = it => !!byId[it.id];                       // Lösung vorhanden = bewertbar
+  const isRight = it => S.answers[it.id] === byId[it.id].answer;
   const stats = sim.phases.map(ph => {
     let right = 0, total = 0;
     ph.secs.forEach(p => (p.items || []).forEach(it => {
-      const r = byId[it.id]; if (graded(r)){ total++; if (r.correct) right++; }
+      if (graded(it)){ total++; if (isRight(it)) right++; }
     }));
     return { key: ph.key, icon: ph.icon, right, total, secs: ph.secs };
   });
-  const scored = stats.filter(s => s.total);           // Hören, Lesen
+  const scored = stats.filter(s => s.total);               // Hören, Lesen, Schreiben-Teil-1
   const right = scored.reduce((a, s) => a + s.right, 0);
   const total = scored.reduce((a, s) => a + s.total, 0);
   const pct = total ? Math.round(right / total * 100) : 0;
@@ -2312,21 +2340,27 @@ function simResult(byId){
     `<div class="partscore"><span class="grow">${esc(s.icon)} ${esc(s.key)}</span>
        <span class="pill ${s.right / s.total >= 0.6 ? 'ok' : 'bad'}">${s.right}/${s.total}</span></div>`).join('');
 
-  const review = scored.map(s => s.secs.map(p => {
-    const cards = (p.items || []).map(it => {
-      const r = byId[it.id]; if (!graded(r)) return '';
-      const mine = S.answers[it.id], good = r.correct;
-      return `<div class="q ${good ? 'isok' : 'isbad'}">
-        <div class="qhead"><span class="qnum">${esc(it.num || '')}</span>
-          <span class="qtext grow">${esc(it.text)}</span></div>
-        <div class="fb ${good ? 'ok' : 'bad'}">
-          ${good ? `<b>✔ ${esc(t('correct'))}</b>` : `<b>${esc(t('wrong'))}</b>
-            <div class="fbrow"><span class="lbl">${esc(t('yourAnswer'))}</span><span class="val">${esc(answerLabel(p, it, mine))}</span></div>
-            <div class="fbrow"><span class="lbl">${esc(t('solution'))}</span><span class="val">${esc(answerLabel(p, it, it.answer))}</span></div>`}
-        </div></div>`;
+  // Auswertung: jede Fertigkeit und jeder Teil getrennt, mit allen Lösungen.
+  const review = scored.map(s => {
+    const secBlocks = s.secs.map(p => {
+      const cards = (p.items || []).filter(graded).map(it => {
+        const mine = S.answers[it.id], good = isRight(it);
+        return `<div class="q ${good ? 'isok' : 'isbad'}">
+          <div class="qhead"><span class="qnum">${esc(it.num || '')}</span>
+            <span class="qtext grow">${esc(it.text)}</span></div>
+          <div class="fb ${good ? 'ok' : 'bad'}">
+            ${good ? `<b>✔ ${esc(t('correct'))}</b>`
+                   : `<b>✘ ${esc(t('wrong'))}</b>
+               <div class="fbrow"><span class="lbl">${esc(t('yourAnswer'))}</span><span class="val">${esc(answerLabel(p, it, mine))}</span></div>`}
+            <div class="fbrow"><span class="lbl">${esc(t('solution'))}</span><span class="val">${esc(answerLabel(p, it, it.answer))}</span></div>
+            ${it.explain ? `<div class="why">${esc(it.explain)}</div>` : ''}
+          </div></div>`;
+      }).join('');
+      return cards ? `<h3 class="simrevhead">${esc(p.title)}</h3>${cards}` : '';
     }).join('');
-    return `<h3 class="simrevhead">${esc(p.title)}</h3>${cards}`;
-  }).join('')).join('');
+    return `<div class="simrevskill"><div class="simrevtop">${esc(s.icon)} ${esc(s.key)}
+      <span class="pill ${s.right / s.total >= 0.6 ? 'ok' : 'bad'}">${s.right}/${s.total}</span></div>${secBlocks}</div>`;
+  }).join('');
 
   const wPhase = sim.phases.find(ph => ph.key === 'Schreiben');
   const wBlock = wPhase ? wPhase.secs.filter(p => p.format === 'writing').map(p => {

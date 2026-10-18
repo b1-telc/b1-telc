@@ -768,3 +768,14 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
   padding:12px 14px; margin:10px 0}
 .yourtext .lbl{font-size:.8em; color:var(--muted); font-weight:700; margin-bottom:4px}
 .yourtext p{margin:0; white-space:pre-wrap; line-height:1.6}
+
+/* ★ Sim: Inhalt über der fixen Leiste freihalten (letzte Zeile sichtbar) */
+#app:has(.bottombar){padding-bottom:104px}
+/* ★ Sim: Weiter-Knopf zentriert und schlicht statt über die ganze Breite */
+.simbar{justify-content:center; gap:10px}
+.simbar .progress{margin-inline-end:auto}
+.simbar .simgo{flex:0 0 auto; min-width:200px; font-weight:700}
+/* ★ Sim-Auswertung: jede Fertigkeit abgetrennt */
+.simrevskill{margin:16px 0; border-top:1px solid var(--line); padding-top:10px}
+.simrevtop{display:flex; align-items:center; gap:8px; font-weight:700; font-size:1.08em; color:var(--ink); margin:4px 0 8px}
+.simrevtop .pill{margin-inline-start:auto}
