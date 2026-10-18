@@ -613,6 +613,20 @@ const isPraxis = () => /^goethe/.test(S.level || '');
 const skillIcon = s => /hör/i.test(s) ? '🎧'
   : /schreib/i.test(s) ? '✍️' : /sprech/i.test(s) ? '🗣️' : '📖';
 
+/* ★ Aufgaben-Anweisung (Goethe-Übung): deutscher Text bleibt LTR; bei
+   arabischer/ukrainischer Oberfläche kommt eine Übersetzung darunter —
+   nur als Hilfe, der deutsche Originaltext bleibt immer stehen. */
+function instrBlock(txt){
+  if (!txt) return '';
+  let h = `<div class="instr" dir="ltr">${esc(txt)}</div>`;
+  const lang = I18N.lang;
+  if (isPraxis() && (lang === 'ar' || lang === 'uk') && I18N.trInstr){
+    const tr = I18N.trInstr(txt);
+    if (tr) h += `<div class="instr-tr" lang="${lang}" dir="${lang === 'ar' ? 'rtl' : 'ltr'}">${esc(tr)}</div>`;
+  }
+  return h;
+}
+
 /* Der (einzige) Goethe-Test, voll geladen und gecacht. */
 async function praxisTest(){
   const first = S.index && S.index.modelle && S.index.modelle[0];
@@ -683,7 +697,7 @@ function praxisSetHTML(sec){
   const gradable = sec.format !== 'writing' && ids.length;
   return `<section class="part praxisset${sec.format === 'writing' ? ' w2set' : ''}" id="part-${esc(sec.id)}">
     ${sec.title ? `<h2 class="setnum">${esc(sec.title)}</h2>` : ''}
-    ${sec.instruction ? `<div class="instr">${esc(sec.instruction)}</div>` : ''}
+    ${instrBlock(sec.instruction)}
     ${renderPartBody(sec)}
     ${sec.format === 'writing' ? praxisWritingHTML(sec) : ''}
     ${gradable ? `<button class="btn ghost reveal" data-reveal="${esc(sec.id)}"
@@ -1565,7 +1579,7 @@ function renderVorstellen(sec){
       </span></button>`).join('');
   const hasQ = (sec.fragen || []).length;
   return `<div class="sprechen">
-    ${sec.note ? `<div class="instr">${esc(sec.note)}</div>` : ''}
+    ${instrBlock(sec.note)}
     <p class="sub">${esc(t('spCardsHint'))}</p>
     <div class="flipgrid">${flips}</div>
     ${hasQ ? `<div class="spquiz" id="spq-${id}">
@@ -1596,7 +1610,7 @@ function renderSprechkarten(sec){
     : '';
   const hint = themes.length > 1 ? 'spKartenHint' : 'spBittenHint';
   return `<div class="sprechen sp2" id="spk-${id}">
-    ${sec.note ? `<div class="instr">${esc(sec.note)}</div>` : ''}
+    ${instrBlock(sec.note)}
     <p class="sub">${esc(t(hint))}</p>
     ${chips}
     <div class="spcard empty">
