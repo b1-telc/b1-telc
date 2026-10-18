@@ -151,6 +151,12 @@ Minuten: 0
 Punkte: 0
 Teile: h89-t1, h89-t2, h89-t3
 
+## Block: h90
+Titel: Test 90
+Minuten: 0
+Punkte: 0
+Teile: h90-t1, h90-t2, h90-t3
+
 ## Block: h91
 Titel: Test 91
 Minuten: 0
@@ -187,11 +193,23 @@ Minuten: 0
 Punkte: 0
 Teile: h97-t1, h97-t2, h97-t3
 
+## Block: h98
+Titel: Test 98
+Minuten: 0
+Punkte: 0
+Teile: h98-t1, h98-t2, h98-t3
+
 ## Block: h99
 Titel: Test 99
 Minuten: 0
 Punkte: 0
 Teile: h99-t1, h99-t2, h99-t3
+
+## Block: h100
+Titel: Test 100
+Minuten: 0
+Punkte: 0
+Teile: h100-t1, h100-t2, h100-t3
 
 ## Block: h101
 Titel: Test 101
@@ -7020,6 +7038,90 @@ A) Das Auto
 B) Das Fahrrad
 C) Die Straßenbahn
 
+### Teil: h90-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-90-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Wo ist sein Handy?
+A) auf dem Schreibtisch
+B) auf dem Bett
+C) auf dem Boden
+[2] Wohin wollen sie gehen?
+A) ins Museum
+B) ins Schiff
+C) ins Rathaus
+[3] Was bestellt die Frau zum Trinken?
+A) Bier
+B) Mineralwasser
+C) Wein
+[4] Was bekommt die Mutter zum Geburtstag?
+A) Ring
+B) Blumen
+C) Geldbörse
+[5] Wie wird das Wetter morgen?
+A) regnerisch
+B) bewölkt
+C) sonnig
+[6] Was ziehen die Mädchen auf der Party an?
+A) Jeans
+B) Kleid
+C) Rock
+
+### Teil: h90-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-90-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Die Fahrgäste nach Bonn müssen umsteigen.
+[8] Frau Köhler soll in die Halle A kommen.
+[9] Sie können noch 15 Minuten einkaufen.
+[10] Der Zug nach Heidelberg fährt von Gleis 19.
+
+### Teil: h90-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-90-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wann kann Herr Lohmann einen Termin haben?
+A) am Dienstag um 14 Uhr
+B) am Mittwoch um 10 Uhr
+C) heute um 18 Uhr
+[12] Was ist kaputt?
+A) Der Computer
+B) Der Drucker
+C) Das Handy
+[13] Wie viel kostet die Reparatur?
+A) 75,50 €
+B) 57,50 €
+C) 18,30 €
+[14] Wo treffen sich die Freunde?
+A) vor der Apotheke
+B) vor dem Bahnhof
+C) am Flughafen
+[15] Was soll Ricardo machen?
+A) nach Post und Blumen sehen
+B) den Schlüssel holen
+C) auf einen Anruf warten
+
 ### Teil: h91-t1
 Format: mc
 Gruppe: Hören
@@ -7524,6 +7626,90 @@ A) ein Formular
 B) ihren Ausweis
 C) einen Computer
 
+### Teil: h98-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-98-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Was bestellt der Mann zum Frühstück?
+A) ein Croissant
+B) Obstsalat
+C) Das Müsli
+[2] Welche Farbe wählt der Kunde?
+A) Beige
+B) Blau
+C) Grau
+[3] Welches Monument hat Sarah in Rom besichtigt?
+A) Den Pisa Turm
+B) Das Kolosseum
+C) Den Eiffelturm
+[4] Was soll die dritte Gruppe vorbereiten?
+A) Spiele
+B) Musik
+C) Snacks und Getränke
+[5] Wann reist der Gast an?
+A) am 10. März
+B) am 12. März
+C) am 13. März
+[6] Wohin fliegt LH 245?
+A) nach Hamburg
+B) nach München
+C) nach Berlin
+
+### Teil: h98-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-98-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Der Zug hält in Ingelheim.
+[8] Der Einstufungstest findet am Dienstag um 9 Uhr statt.
+[9] Die Rücksendungen kosten oft extra.
+[10] Das Problem liegt beim Wetter.
+
+### Teil: h98-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-98-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Was ist fertig?
+A) Blumenstrauß
+B) Besuch
+C) Geburtstag
+[12] Wie fährt die Gruppe?
+A) mit dem Bus
+B) zu Fuß
+C) mit dem Zug
+[13] An welchen Tagen findet der Deutschkurs statt?
+A) Dienstag und Donnerstag
+B) Freitag und Sonntag
+C) Montag und Mittwoch
+[14] Bis wann ist Zimmerservice am Wochenende verfügbar?
+A) Bis 22 Uhr
+B) Bis Mitternacht
+C) Bis 20 Uhr
+[15] Wann und wo treffen sich Lisa und Max?
+A) Dienstag um 9 Uhr im Büro von Max
+B) Mittwoch um 11 Uhr in Lisas Büro
+C) Mittwoch um 9 Uhr in Zimmer 104
+
 ### Teil: h99-t1
 Format: mc
 Gruppe: Hören
@@ -7607,6 +7793,90 @@ C) Einen Monat
 A) In die Berge
 B) Ans Meer
 C) Zu den Großeltern
+
+### Teil: h100-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-100-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Wo ist Emmas Mutter gerade?
+A) In der Arbeit
+B) In Berlin
+C) Zu Hause
+[2] Was isst das Mädchen?
+A) Brot
+B) Käsebrot
+C) Apfel
+[3] Wie kommt der Junge zum Kino?
+A) Mit dem Bus
+B) Mit dem Fahrrad
+C) Mit der Straßenbahn
+[4] Was möchte Lothar kaufen?
+A) Tennisschuhe
+B) Tennisschläger
+C) Tennisbälle
+[5] Was ist kaputt?
+A) Das Fenster
+B) Der Aufzug
+C) Die Heizung
+[6] Wann kommt Tante Anna zu Besuch?
+A) Sonntag
+B) Donnerstag
+C) Freitag
+
+### Teil: h100-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-100-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Das Schwimmbad schließt jeden Tag um 20 Uhr.
+[8] Im ersten Stock kann man gut essen.
+[9] Der Zug nach München fährt heute später.
+[10] Herrenschuhe kann man im 3. Stock kaufen.
+
+### Teil: h100-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-100-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Wo regnet es?
+A) In München
+B) In Dresden
+C) In Frankfurt
+[12] Wann arbeitet Frau Sandri am Donnerstag und am Freitag?
+A) Am Vormittag
+B) Am Nachmittag
+C) Am Vormittag und am Nachmittag
+[13] Wie viel Grad sind es in Sachsen?
+A) 8 bis 11 Grad
+B) 8 bis 12 Grad
+C) 6 bis 12 Grad
+[14] Warum ruft Karin ihre Mutter an?
+A) Der Kindergarten ist morgen nur bis 12 Uhr geöffnet.
+B) Sie möchte ihre Tochter Hanna am Nachmittag zur Mutter bringen.
+C) Sie möchte den Nachmittag frei haben.
+[15] Wann möchte Klaus seine Freundin treffen?
+A) um 19.30 Uhr
+B) um 20.00 Uhr
+C) um 20.30 Uhr
 
 ### Teil: h101-t1
 Format: mc
