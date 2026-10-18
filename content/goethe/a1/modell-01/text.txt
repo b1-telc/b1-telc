@@ -181,6 +181,12 @@ Minuten: 0
 Punkte: 0
 Teile: h94-t1, h94-t2, h94-t3
 
+## Block: h95
+Titel: Test 95
+Minuten: 0
+Punkte: 0
+Teile: h95-t1, h95-t2, h95-t3
+
 ## Block: h96
 Titel: Test 96
 Minuten: 0
@@ -7457,6 +7463,90 @@ C) zu Hause.
 A) 45 Euro.
 B) 46 Euro.
 C) 64 Euro.
+
+### Teil: h95-t1
+Format: mc
+Gruppe: Hören
+Titel: Teil 1 · Fragen 1–6
+Minuten: 0
+Punkte: 1
+Maximum: 6
+Hörtext: hoeren/test-95-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören sechs kurze Texte. Sie hören jeden Text zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[1] Wann ist Camilla zum ersten Mal nach Deutschland gekommen?
+A) vor zwei Wochen.
+B) vor zwei Monaten.
+C) vor zwei Jahren.
+[2] Was braucht der Mann?
+A) Diplom-Kauffrau
+B) Verkäuferin
+C) Sekretärin
+[3] Wo kann die Frau die Fahrkarten kaufen?
+A) am Schalter.
+B) am Kiosk.
+C) am Automaten.
+[4] Was möchte der Mann lernen?
+A) Deutsch.
+B) Führerschein.
+C) Koch.
+[5] Wo wohnt ihr Sohn?
+A) im Erdgeschoss.
+B) im ersten Stock.
+C) im zweiten Stock.
+[6] Was möchte das Mädchen später sein?
+A) Krankenschwester.
+B) Automechanikerin.
+C) Hausfrau.
+
+### Teil: h95-t2
+Format: truefalse
+Gruppe: Hören
+Titel: Teil 2 · Fragen 7–10
+Minuten: 0
+Punkte: 1
+Maximum: 4
+Hörtext: hoeren/test-95-t2.mp3
+Wiedergaben: 1
+Anweisung: Sie hören vier kurze Texte. Sie hören jeden Text einmal. Wählen Sie: Richtig oder Falsch.
+Aufgaben:
+[7] Kinderschuhe kann man im ersten Stock kaufen.
+[8] Heute gibt es ein besonderes Angebot.
+[9] Die Schüler können später zum Bus kommen.
+[10] Die Fahrgäste werden pünktlich abfahren.
+
+### Teil: h95-t3
+Format: mc
+Gruppe: Hören
+Titel: Teil 3 · Fragen 11–15
+Minuten: 0
+Punkte: 1
+Maximum: 5
+Hörtext: hoeren/test-95-t3.mp3
+Wiedergaben: 2
+Anweisung: Sie hören fünf kurze Gespräche. Sie hören jedes Gespräch zweimal. Wählen Sie bei jeder Aufgabe: a, b oder c.
+Aufgaben:
+[11] Um wie viel Uhr schließt das Reisebüro?
+A) halb 4
+B) halb 9
+C) halb 5
+[12] Wann gibt es hier einen Tisch für 6 Personen?
+A) Freitagabend
+B) Samstagabend
+C) Sonntagabend
+[13] Am welchem Tag ist das Fußballspiel?
+A) am Freitag
+B) am Samstag
+C) am Sonntag
+[14] Was hat Susanne vergessen zu kaufen?
+A) Brot und Wein
+B) Brot und Orange
+C) Wein und Orange
+[15] Wohin kann Steffi morgen nicht gehen?
+A) in den Laden
+B) ins Kino
+C) in den Laden und ins Kino
 
 ### Teil: h96-t1
 Format: mc
