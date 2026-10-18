@@ -2499,8 +2499,8 @@ function screenResult(run, points, max, pct, right, total){
       </div>` : '') +
       `<h2 style="margin:18px 0 10px">${esc(t('correction'))}</h2>${perPart}
       <div class="bottombar"><div class="inner">
-        <button class="btn ghost grow" id="again">${esc(t('again'))}</button>
-        <button class="btn grow" id="back">${esc(t('overview'))}</button>
+        <button class="btn ghost" id="again">${esc(t('again'))}</button>
+        <button class="btn" id="back">${esc(t('overview'))}</button>
       </div></div>`;
 
     // نفس الشاشة، بس على قسم الكتابة — ومعرّف الجولة بيضل هو معرّف
@@ -2570,9 +2570,9 @@ function screenWriting(run, saved){
         <p class="sub" style="margin:0">${esc(t('preparing'))}</p>
       </div>
       <div class="bottombar"><div class="inner">${run.sub
-        ? `<button class="btn grow" id="back">${esc(t('back'))}</button>`
-        : `<button class="btn ghost grow" id="again">${esc(t('again'))}</button>
-           <button class="btn grow" id="back">${esc(t('overview'))}</button>`}
+        ? `<button class="btn" id="back">${esc(t('back'))}</button>`
+        : `<button class="btn ghost" id="again">${esc(t('again'))}</button>
+           <button class="btn" id="back">${esc(t('overview'))}</button>`}
       </div></div>`;
 
     app.querySelectorAll('[data-crit]').forEach(lb => {
