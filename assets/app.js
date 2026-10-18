@@ -1362,9 +1362,9 @@ function renderAudio(sec){
        «كمّل» بتعطي تشغيلتين جداد كل مرّة، والحدّ يلي المفروض يشبه
        الامتحان الحقيقي بيصير بلا معنى.
        وبعد التسليم الحدّ بينشال: الامتحان خلص، والمراجعة مو امتحان. */
+    // ★ بوضع الامتحان: حدّ تشغيلات، بلا إيقاف، كل تشغيلة من الأول (متل الفحص).
+    //   بوضع التمرين (Goethe): مشغّل عادي — تشغيل/إيقاف، بلا حدّ، وتقدر تسحب.
     const limited = S.view === 'exam';
-    let used = limited ? (S.plays[sec.id] || 0) : 0;
-    const left = () => Math.max(0, plays - used);
 
     el.innerHTML = `
       <button class="btn" data-play></button>
@@ -1375,8 +1375,38 @@ function renderAudio(sec){
     LIVE.add(audio);
     const btn  = el.querySelector('[data-play]');
     const info = el.querySelector('[data-left]');
-    const bar  = el.querySelector('.audiobar i');
+    const barWrap = el.querySelector('.audiobar');
+    const bar  = barWrap.querySelector('i');
 
+    audio.addEventListener('timeupdate', () => {
+      if (audio.duration) bar.style.width = (audio.currentTime / audio.duration * 100) + '%';
+    });
+
+    if (!limited){
+      // ── Übungsmodus: freier Player ──
+      const fmt = s => { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); };
+      const paint = () => {
+        btn.textContent = audio.paused
+          ? (audio.currentTime > 0 && !audio.ended ? t('audioResume') : t('audioPlay'))
+          : t('audioPause');
+        info.textContent = audio.duration ? `${fmt(audio.currentTime)} / ${fmt(audio.duration)}` : '';
+      };
+      btn.onclick = () => { if (audio.paused) audio.play().catch(() => {}); else audio.pause(); };
+      ['play','pause','timeupdate','loadedmetadata','ended'].forEach(ev => audio.addEventListener(ev, paint));
+      audio.addEventListener('ended', () => { bar.style.width = '100%'; });
+      barWrap.style.cursor = 'pointer';
+      barWrap.onclick = e => {
+        if (!audio.duration) return;
+        const r = barWrap.getBoundingClientRect();
+        audio.currentTime = Math.min(audio.duration, Math.max(0, (e.clientX - r.left) / r.width * audio.duration));
+      };
+      paint();
+      return;
+    }
+
+    // ── Prüfungsmodus: begrenzte Wiedergaben ──
+    let used = S.plays[sec.id] || 0;
+    const left = () => Math.max(0, plays - used);
     const paint = (running) => {
       const n = left();
       btn.disabled = running || n <= 0;
@@ -1386,16 +1416,9 @@ function renderAudio(sec){
       info.textContent = n > 0 ? plural(n, 'audioLeft') : t('audioNone');
     };
     paint(false);
-
-    audio.addEventListener('timeupdate', () => {
-      if (audio.duration) bar.style.width = (audio.currentTime / audio.duration * 100) + '%';
-    });
     audio.addEventListener('ended', () => { bar.style.width = '100%'; paint(false); });
 
-    const spend = (n) => {
-      used += n;
-      if (limited){ S.plays[sec.id] = used; saveSession(S.run); }
-    };
+    const spend = (n) => { used += n; S.plays[sec.id] = used; saveSession(S.run); };
 
     btn.onclick = () => {
       if (left() <= 0) return;
