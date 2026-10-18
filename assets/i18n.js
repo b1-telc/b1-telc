@@ -162,6 +162,8 @@ const I18N = (() => {
       audioFailed: 'Der Hörtext konnte nicht geladen werden.',
       audioLeft: { one: 'noch {n}× abspielbar', other: 'noch {n}× abspielbar' },
       audioNone: 'keine Wiedergabe mehr',
+      audioPause: '⏸ Pause',
+      audioResume: '▶ Weiter',
       transcript: 'Hörtext',
 
       imgLoading: 'Anzeigen werden geladen …',
@@ -347,6 +349,8 @@ const I18N = (() => {
                    two: 'باقي تشغيلين', few: 'باقي {n} تشغيلات',
                    many: 'باقي {n} تشغيل', other: 'باقي {n} تشغيل' },
       audioNone: 'ما بقي تشغيل',
+      audioPause: '⏸ إيقاف مؤقت',
+      audioResume: '▶ متابعة',
       transcript: 'نص التسجيل',
 
       imgLoading: 'جاري تحميل الإعلانات …',
@@ -541,6 +545,8 @@ const I18N = (() => {
       audioLeft: { one: 'ще {n} відтворення', few: 'ще {n} відтворення',
                    many: 'ще {n} відтворень', other: 'ще {n} відтворення' },
       audioNone: 'відтворень не залишилось',
+      audioPause: '⏸ Пауза',
+      audioResume: '▶ Далі',
       transcript: 'Текст аудіо',
 
       imgLoading: 'Оголошення завантажуються …',
