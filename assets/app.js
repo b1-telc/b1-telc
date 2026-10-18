@@ -529,8 +529,8 @@ function screenHome(){
       : (review.total ? `<div class="tile drill done">
         <span class="n">✓</span>
         <span class="grow"><span style="font-weight:600">${esc(t('nothingDue'))}</span>
-          <div class="meta">${review.mastered ? `${plural(review.mastered, 'nSits')}` : 'Alles wiederholt'}${
-            review.next_due ? ` · weiter am ${new Date(review.next_due).toLocaleDateString('de-DE')}` : ''}</div></span>
+          <div class="meta">${review.mastered ? `${plural(review.mastered, 'nSits')}` : esc(t('allRepeated'))}${
+            review.next_due ? ` · ${esc(t('nextOn', { date: new Date(review.next_due).toLocaleDateString('de-DE') }))}` : ''}</div></span>
       </div>` : '')}
       ${cards}`;
 
@@ -999,8 +999,8 @@ function screenModell(m){
         <span class="pill">${b.minutes} Min.</span>
         ${done ? `<span class="pill ${r.pct >= 60 ? 'ok' : 'bad'}">${fmtP(r.points)}/${fmtP(r.max)}</span>` : ''}
       </span>`;
-      const sub = [b.hint, plural(n, 'nTask'), `${fmtP(b.maxPoints)} Punkte`,
-                   b.missing ? `${plural(b.missing, 'nMissing')} in der Vorlage` : '']
+      const sub = [b.hint, plural(n, 'nTask'), `${fmtP(b.maxPoints)} ${t('pointsWord')}`,
+                   b.missing ? `${plural(b.missing, 'nMissing')} ${t('inTemplate')}` : '']
         .filter(Boolean).join(' · ');
       return `<div class="blockcard">
         <button class="tile" data-block="${esc(b.id)}">
@@ -1009,9 +1009,9 @@ function screenModell(m){
           ${badge}
         </button>
         ${saved ? `<div class="lastrun">
-          <span>Letzte Prüfung${r.date ? ' · ' + esc(r.date) : ''}<br>
-            ${done ? `${fmtP(r.points)}/${fmtP(r.max)} Punkte · ${r.pct} %`
-                   : 'noch nicht bewertet'}</span>
+          <span>${esc(t('lastExam'))}${r.date ? ' · ' + esc(r.date) : ''}<br>
+            ${done ? `${fmtP(r.points)}/${fmtP(r.max)} ${esc(t('pointsWord'))} · ${r.pct} %`
+                   : esc(t('notRated'))}</span>
           <button class="btn ghost sm" data-review="${esc(b.id)}">${esc(t('view'))}</button>
           <button class="btn grey sm" data-clear="${esc(b.id)}">${esc(t('remove'))}</button>
         </div>` : ''}
@@ -1033,10 +1033,10 @@ function screenModell(m){
     app.querySelectorAll('[data-review]').forEach(b =>
       b.onclick = () => reviewRun(m, b.dataset.review));
     app.querySelectorAll('[data-clear]').forEach(b =>
-      b.onclick = () => ask('Letzte Prüfung löschen?', () => {
+      b.onclick = () => ask(t('delLast'), () => {
         clearResult(m.id, b.dataset.clear);
         screenModell(m);
-      }, 'Löschen'));
+      }, t('del')));
     document.getElementById('report').onclick = () => openReport(m);
   });
 }
@@ -1445,7 +1445,7 @@ function renderAudio(sec){
     const paint = (running) => {
       const n = left();
       btn.disabled = running || n <= 0;
-      btn.textContent = running ? '⏸ Läuft …'
+      btn.textContent = running ? t('audioRunning')
                       : n <= 0 ? t('audioDone')
                       : used === 0 ? t('audioPlay') : t('audioAgain');
       info.textContent = n > 0 ? plural(n, 'audioLeft') : t('audioNone');
@@ -1466,7 +1466,7 @@ function renderAudio(sec){
       audio.play().catch(() => {
         spend(-1);                       // ما اشتغل فعلاً — ما بتنحسب
         paint(false);
-        info.textContent = 'Wiedergabe nicht möglich';
+        info.textContent = t('audioFail');
       });
     };
   }).catch(() => {});
@@ -1756,7 +1756,7 @@ function renderBank(sec){
     API.imageUrl(sec.bankImage).then(url => {
       const el = document.getElementById(slot);
       if (!el) return;
-      if (!url) return void (el.textContent = 'Die Anzeigen konnten nicht geladen werden.');
+      if (!url) return void (el.textContent = t('adsFailed'));
       el.innerHTML = `<a href="${esc(url)}" target="_blank" rel="noopener">
         <img src="${esc(url)}" alt="Anzeigen" class="bankimg"></a>`;
     }).catch(() => {});
@@ -2032,7 +2032,7 @@ async function drillRun(){
   }
   if (!parts.length) return null;
   const n = parts.reduce((a, p) => a + p.items.length, 0);
-  return { id: 'drill', title: 'Fehler wiederholen', drill: true, parts,
+  return { id: 'drill', title: t('drillTitle'), drill: true, parts,
            minutes: 0, maxPoints: n, availablePoints: n, missing: 0 };
 }
 
@@ -2040,11 +2040,11 @@ async function drillRun(){
 
 /* Notenstufen laut telc: 90 / 80 / 70 / 60 % der Höchstpunktzahl. */
 function noteOf(pct){
-  if (pct >= 90) return 'sehr gut';
-  if (pct >= 80) return 'gut';
-  if (pct >= 70) return 'befriedigend';
-  if (pct >= 60) return 'ausreichend';
-  return 'nicht bestanden';
+  if (pct >= 90) return t('gradeVeryGood');
+  if (pct >= 80) return t('gradeGood');
+  if (pct >= 70) return t('gradeSatis');
+  if (pct >= 60) return t('gradeSuffic');
+  return t('gradeFail');
 }
 
 function saveResult(run, points, max, extra = {}){
@@ -2129,7 +2129,7 @@ async function grade(run){
   // Der Server rechnet über die vorhandenen; hier wird auf die offizielle
   // Höchstpunktzahl hochgerechnet, damit alle Tests vergleichbar bleiben.
   if (run.drill && res.mastered)
-    toast(`${plural(res.mastered, 'nSits')} jetzt ✓`, 3500);
+    toast(`${plural(res.mastered, 'nSits')} ${t('nowDone')}`, 3500);
   const points = run.drill
     ? res.right
     : Math.round(res.points / (res.max_points || 1) * run.maxPoints * 10) / 10;
@@ -2175,7 +2175,7 @@ function finish(run, auto){
 
 /* Antwort lesbar machen: "B — Bildband: Babys im Garten" */
 function answerLabel(sec, it, k){
-  if (!k) return 'keine Antwort';
+  if (!k) return t('noAnswer');
   if (sec.format === 'truefalse') return k === 'r' ? 'Richtig' : 'Falsch';
   // صح-خطأ جوّا قسم mc: «Richtig» أوضح من «r — Richtig»
   if ((k === 'r' || k === 'f') && (it.options || []).length === 2
@@ -2395,11 +2395,11 @@ function renderAiBox(box, run, attemptId, text){
     .catch(() => {});
 
   btn.onclick = async () => {
-    btn.disabled = true; btn.textContent = 'Wird korrigiert … (bis zu 1 Minute)';
+    btn.disabled = true; btn.textContent = t('correcting');
     let r;
     try { r = await API.correctWriting(attemptId); }
     catch { r = { ok: false, error: 'network' }; }
-    btn.disabled = false; btn.textContent = 'Korrektur anfordern';
+    btn.disabled = false; btn.textContent = t('requestCorrection');
     if (r && r.ok) return showAi(out, btn, r);
     out.innerHTML = `<p class="sub" style="color:var(--bad)">${esc(t({
       quota_exceeded: 'aiErrQuota',
