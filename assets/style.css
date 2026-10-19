@@ -379,14 +379,11 @@ h3{font-size:1em; margin:0 0 4px}
 .opt.sel{border-color:var(--brand); background:var(--brand-soft)}
 .opt .k{font-weight:700; color:var(--brand-dark); flex:none}
 /* ★ تصحيح بسيط: بلا خلفيات مملوءة. الصحيح = إطار أخضر + ✓،
-   اختيارك الغلط = إطار أحمر + ✗. سطر الحكم فوق بيقول صح/خطأ. */
+   اختيارك الغلط = إطار أحمر + ✗. والحالة بتبيّن بالشريط الجانبي الملوّن. */
 .opt.correct{border-color:var(--ok)}
 .opt.wrong{border-color:var(--bad)}
 .opt.correct::after{content:"✓"; margin-inline-start:auto; font-weight:800; color:var(--ok)}
 .opt.wrong::after{content:"✗"; margin-inline-start:auto; font-weight:800; color:var(--bad)}
-.qverdict{margin:8px 0 10px; font-weight:800; font-size:1em}
-.qverdict.ok{color:var(--ok)}
-.qverdict.bad{color:var(--bad)}
 
 /* Üben nach Abschnitt: Antworten anzeigen (grün/rot) */
 .pgroup{margin-bottom:8px}
@@ -477,7 +474,9 @@ textarea{min-height:230px; line-height:1.8; direction:ltr; text-align:left}
 .fb.ok{background:var(--ok-soft); color:var(--ok)}
 .fb.bad{background:var(--bad-soft); color:var(--bad)}
 .fb .why{color:var(--ink); margin-top:6px; opacity:.85}
-/* ★ بلا شريط جانبي ملوّن: سطر الحكم (✔/✘) صار يكفي، تا ما تكتر الألوان. */
+/* ★ شريط جانبي ملوّن بيبيّن حالة السؤال: أخضر = صح، أحمر = غلط. */
+.q.isok{border-inline-start:4px solid var(--ok)}
+.q.isbad{border-inline-start:4px solid var(--bad)}
 
 /* ---------- score ---------- */
 .score{text-align:center; padding:26px 16px}
