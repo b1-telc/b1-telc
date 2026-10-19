@@ -380,6 +380,13 @@ h3{font-size:1em; margin:0 0 4px}
 .opt .k{font-weight:700; color:var(--brand-dark); flex:none}
 .opt.correct{border-color:var(--ok); background:var(--ok-soft)}
 .opt.wrong{border-color:var(--bad); background:var(--bad-soft)}
+/* ★ علامة واضحة بآخر الخيار: ✓ للصحيح، ✗ لاختيارك الغلط. */
+.opt.correct::after{content:"✓"; margin-inline-start:auto; font-weight:800; color:var(--ok)}
+.opt.wrong::after{content:"✗"; margin-inline-start:auto; font-weight:800; color:var(--bad)}
+/* ★ سطر الحكم فوق السؤال: صح (أخضر) / خطأ (أحمر). */
+.qverdict{margin:8px 0 10px; font-weight:800; font-size:1em}
+.qverdict.ok{color:var(--ok)}
+.qverdict.bad{color:var(--bad)}
 
 /* Üben nach Abschnitt: Antworten anzeigen (grün/rot) */
 .pgroup{margin-bottom:8px}

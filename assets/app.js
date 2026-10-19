@@ -1189,6 +1189,14 @@ function praxisColor(id, a){
       if (k === a.answer) b.classList.add('correct');
       else if (k === mine) b.classList.add('wrong');
     });
+    // ★ سطر حكم واضح فوق السؤال: صح/خطأ بلمحة (أبسط من قراءة الألوان).
+    const head = q.querySelector('.qhead');
+    if (head && !q.querySelector('.qverdict')){
+      const badge = ok
+        ? `<div class="qverdict ok">✔ ${esc(t('correct'))}</div>`
+        : `<div class="qverdict bad">✘ ${esc(t('wrongShort'))}</div>`;
+      head.insertAdjacentHTML('afterend', badge);
+    }
   }
   q.classList.add(ok ? 'isok' : 'isbad');
   if (a.explanation && !q.querySelector('.why'))
