@@ -102,6 +102,7 @@ const I18N = (() => {
       praxisHint: 'Ohne Zeit, ohne Punkte. Ihr Stand wird gespeichert. '
                 + 'Nach jedem Text können Sie die Antworten anzeigen.',
       praxisDone: '{n} von {total} beantwortet',
+      praxisSetsDone: '{n} von {total} erledigt',
       reveal: 'Antworten anzeigen',
       revealing: 'Lädt …',
       revealed: 'Antworten angezeigt ✓',
@@ -135,6 +136,7 @@ const I18N = (() => {
       praxisResetAsk: 'Alle Antworten in diesem Teil löschen und neu üben?',
       praxisResetDone: 'Zurückgesetzt — Sie können neu üben.',
       nPart: { one: '{n} Teil', other: '{n} Teile' },
+      nUebung: { one: '{n} Übung', other: '{n} Übungen' },
 
       material: 'Lesematerial',
       materialMeta: 'Wortschatz und Hinweise · jederzeit',
@@ -453,6 +455,7 @@ const I18N = (() => {
       praxisPick: "اختر جزءًا.",
       praxisHint: "بلا وقت وبلا نقاط. يُحفظ تقدّمك. بعد كل نص يمكنك عرض الإجابات.",
       praxisDone: "{n} من {total} مُجابة",
+      praxisSetsDone: "{n} من {total} مكتمل",
       reveal: "عرض الإجابات",
       revealing: "جارٍ التحميل …",
       revealed: "تم عرض الإجابات ✓",
@@ -485,6 +488,7 @@ const I18N = (() => {
       praxisResetAsk: "حذف كل الإجابات في هذا الجزء والتدرّب من جديد؟",
       praxisResetDone: "تمت إعادة الضبط — يمكنك التدرّب من جديد.",
       nPart: {"zero":"{n} جزء","one":"جزء واحد","two":"جزءان","few":"{n} أجزاء","many":"{n} جزءًا","other":"{n} جزء"},
+      nUebung: {"zero":"ولا تمرين","one":"تمرين واحد","two":"تمرينان","few":"{n} تمارين","many":"{n} تمريناً","other":"{n} تمرين"},
       transcript: 'نص التسجيل',
 
       imgLoading: 'جاري تحميل الإعلانات …',
@@ -731,6 +735,7 @@ const I18N = (() => {
       praxisPick: "Виберіть частину.",
       praxisHint: "Без часу й без балів. Ваш прогрес зберігається. Після кожного тексту можна показати відповіді.",
       praxisDone: "Відповіли на {n} з {total}",
+      praxisSetsDone: "{n} з {total} виконано",
       reveal: "Показати відповіді",
       revealing: "Завантаження …",
       revealed: "Відповіді показано ✓",
@@ -763,6 +768,7 @@ const I18N = (() => {
       praxisResetAsk: "Видалити всі відповіді в цій частині й тренуватися заново?",
       praxisResetDone: "Скинуто — можна тренуватися заново.",
       nPart: {"one":"{n} частина","few":"{n} частини","many":"{n} частин","other":"{n} частини"},
+      nUebung: {"one":"{n} вправа","few":"{n} вправи","many":"{n} вправ","other":"{n} вправи"},
       transcript: 'Текст аудіо',
 
       imgLoading: 'Оголошення завантажуються …',
