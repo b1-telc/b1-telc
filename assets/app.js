@@ -654,6 +654,8 @@ function screenHome(){
           <b>${esc(remaining(ms))}</b>
           <span class="bis">${esc(t('until', { date: endsFmt(l.id) }))}</span>
         </span>
+        <button class="lvlrep" data-rep="${esc(l.id)}" aria-label="${esc(t('reportBtn'))}"
+          title="${esc(t('reportBtn'))}">ℹ</button>
         <button class="lvldel" data-del="${esc(l.id)}" aria-label="${esc(t('hideCard'))}"
           title="${esc(t('hideCard'))}">🗑</button>
       </div>`;
@@ -698,8 +700,13 @@ function screenHome(){
     if (cb) cb.onclick = () => resumeLast();
     app.querySelectorAll('[data-enter]').forEach(el => {
       const open = () => enterLevel(el.dataset.enter);
-      el.onclick = e => { if (!e.target.closest('[data-del]')) open(); };
+      el.onclick = e => { if (!e.target.closest('[data-del],[data-rep]')) open(); };
       el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } };
+    });
+    app.querySelectorAll('[data-rep]').forEach(b => b.onclick = e => {
+      e.stopPropagation();
+      const l = (S.levels || []).find(x => x.id === b.dataset.rep);
+      if (l) reportLevel(l);
     });
     app.querySelectorAll('[data-del]').forEach(b => b.onclick = e => {
       e.stopPropagation();
@@ -1207,7 +1214,7 @@ function screenModell(m){
         clearResult(m.id, b.dataset.clear);
         screenModell(m);
       }, t('del')));
-    document.getElementById('report').onclick = () => openReport(m);
+    document.getElementById('report').onclick = () => openReport(m.uuid, examName(m));
   });
 }
 
@@ -1232,13 +1239,29 @@ function examName(m){
   return who ? `${who} — ${m.title}` : m.title;
 }
 
-function openReport(m){
+/* ★ Problem für eine ganze Stufe melden (von der Startseiten-Karte). Die
+   Meldung wird an eine Prüfung dieser Stufe gebunden (erste aus dem Index),
+   damit im Panel die Stufe (A1/B1 …) erkennbar ist. */
+async function reportLevel(l){
+  const label = l.provider && l.stufe ? `${l.provider} · ${l.stufe}` : (l.title || l.id);
+  let uuid = null;
+  try {
+    const idx = (l.id === S.level && S.index) ? S.index : await API.index(l.id);
+    uuid = idx && idx.modelle && idx.modelle[0] && idx.modelle[0].uuid;
+  } catch { uuid = null; }
+  if (!uuid) return toast(t('loadFailed'));
+  openReport(uuid, label);
+}
+
+// uuid = Test-ID (bindet die Meldung im Panel an die richtige Prüfung/Stufe),
+// label = was dem/der Nutzer·in im Dialog angezeigt wird (z. B. „DTZ · B1").
+function openReport(uuid, label){
   const MIN = 10, MAX = 2000;
   const back = document.createElement('div');
   back.className = 'modalback';
   back.innerHTML = `<div class="modal report" role="dialog" aria-modal="true">
     <h2>${esc(t('reportTitle'))}</h2>
-    <p>${esc(t('reportIntro', { exam: examName(m) }))}</p>
+    <p>${esc(t('reportIntro', { exam: label }))}</p>
     <textarea id="rtext" maxlength="${MAX}" dir="auto"
       placeholder="${esc(t('reportPlaceholder'))}"></textarea>
     <div class="counter" id="rcount"></div>
@@ -1270,7 +1293,7 @@ function openReport(m){
     const was = send.textContent;
     send.textContent = t('reportSending');
     let r;
-    try { r = await API.reportProblem(m.uuid, ta.value.trim(), I18N.lang); }
+    try { r = await API.reportProblem(uuid, ta.value.trim(), I18N.lang); }
     catch { r = { ok: false, error: 'network' }; }
     if (r && r.ok){ close(); return toast(t('reportThanks'), 3600); }
     send.textContent = was; send.disabled = false;

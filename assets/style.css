@@ -738,12 +738,13 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
 .lvlprogtxt{display:block; margin-top:5px; font-size:12px; color:var(--muted)}
 .abo.lvlentry:hover{transform:translateY(-1px); border-color:var(--brand)}
 .abo.lvlentry:focus-visible{outline:3px solid var(--brand); outline-offset:2px}
-/* Ausblenden-Knopf auf der Kurs-Karte. */
-.lvldel{flex:0 0 auto; width:34px; height:34px; padding:0; margin-inline-start:4px;
+/* Melden-/Ausblenden-Knöpfe auf der Kurs-Karte. */
+.lvlrep, .lvldel{flex:0 0 auto; width:34px; height:34px; padding:0; margin-inline-start:4px;
   display:inline-flex; align-items:center; justify-content:center;
   background:transparent; border:1px solid transparent; border-radius:9px;
   color:var(--muted); font-size:16px; line-height:1; cursor:pointer; font-family:inherit;
   transition:background .12s, color .12s, border-color .12s}
+.lvlrep:hover{background:var(--brand-soft); color:var(--brand-dark); border-color:var(--brand)}
 .lvldel:hover{background:var(--bad-soft); color:var(--bad); border-color:var(--bad)}
 .abo .chev{color:var(--muted); font-size:20px; align-self:center; margin-inline-start:4px}
 .abo.addcard{align-items:center; gap:12px; border-style:dashed}
