@@ -786,6 +786,25 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
   background:linear-gradient(90deg, var(--brand), var(--brand-dark));
   transition:width .3s ease}
 .lvlprogtxt{display:block; margin-top:5px; font-size:12px; color:var(--muted)}
+
+/* ★ Lesezeichen-Stern: Kopfzeile der Übung (Titel + Stern) und in der
+   Lesezeichen-Liste. Leer = nur Umriss; markiert = gold gefüllt. */
+.praxisset .sethead{display:flex; align-items:center; gap:10px; margin:18px 0 6px}
+.praxisset .sethead .setnum{margin:0}
+.markbtn{flex:0 0 auto; width:38px; height:38px; padding:0;
+  display:inline-flex; align-items:center; justify-content:center;
+  background:transparent; border:1px solid var(--line); border-radius:10px;
+  color:var(--muted); cursor:pointer; font-family:inherit;
+  transition:background .12s, color .12s, border-color .12s, transform .1s}
+.markbtn svg{width:20px; height:20px; display:block; fill:none; stroke:currentColor}
+.markbtn:hover{background:var(--warn-soft); color:var(--warn); border-color:var(--warn); transform:translateY(-1px)}
+.markbtn.on{color:var(--warn); border-color:var(--warn)}
+.markbtn.on svg{fill:currentColor}
+.markbtn.listmark{margin-inline-start:6px}
+/* Sammel-Karten (Fehler / Lesezeichen) auf der Stufen-Seite. */
+.tile.collmist .n{background:var(--bad-soft); color:var(--bad)}
+.tile.collmark .n{background:var(--warn-soft); color:var(--warn)}
+
 .abo.lvlentry:hover{transform:translateY(-1px); border-color:var(--brand)}
 .abo.lvlentry:focus-visible{outline:3px solid var(--brand); outline-offset:2px}
 /* Melden-/Ausblenden-Knöpfe auf der Kurs-Karte: klar als Knöpfe erkennbar
