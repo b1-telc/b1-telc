@@ -381,7 +381,7 @@ function screenCode(msg){
       try { r = await API.redeem(code); }
       catch { r = { ok: false, error: 'network' }; }
       btn.disabled = false; btn.textContent = t('codeButton');
-      if (r && r.ok) return boot();
+      if (r && r.ok){ save('b1.hidden', []); return boot(); }   // neuer Code → alles wieder einblenden
       // مو خطأ: الكود صحيح وباقي ساري، بس ما في مطرح هلق
       if (r && r.error === 'waitlist') return screenWait(r.position, r.total);
       if (r && r.error === 'too_many_attempts'){
@@ -630,6 +630,7 @@ function screenHome(){
       return new Date(d).toLocaleDateString('de-DE',
         { day: '2-digit', month: '2-digit', year: 'numeric' });
     };
+    // ★ الكرت div (مو button) تا يقدر يحمل زرّ حذف جوّاته (زرّ جوّا زرّ غلط).
     const entry = l => {
       const ms = leftMs(l.id);
       const h  = ms == null ? null : Math.floor(ms / 3600000);
@@ -637,7 +638,8 @@ function screenHome(){
       const only = S.sub && S.sub.scope && S.sub.scope[l.id];
       const lp = progOf(l);
       const pct = (lp && lp.total) ? Math.round(lp.done / lp.total * 100) : null;
-      return `<button class="abo lvlentry${soon ? ' soon' : ''}" data-enter="${esc(l.id)}">
+      return `<div class="abo lvlentry${soon ? ' soon' : ''}" data-enter="${esc(l.id)}"
+        role="button" tabindex="0">
         <span class="grow">
           <span class="who">${esc(name(l))}</span>
           <span class="what">${only
@@ -652,8 +654,9 @@ function screenHome(){
           <b>${esc(remaining(ms))}</b>
           <span class="bis">${esc(t('until', { date: endsFmt(l.id) }))}</span>
         </span>
-        <span class="chev">›</span>
-      </button>`;
+        <button class="lvldel" data-del="${esc(l.id)}" aria-label="${esc(t('hideCard'))}"
+          title="${esc(t('hideCard'))}">🗑</button>
+      </div>`;
     };
     // Statistik-Leiste: Serie 🔥, gelöste Aufgaben, gemeisterte Items.
     const streak = streakDays();
@@ -675,13 +678,17 @@ function screenHome(){
       <span class="chev">›</span>
     </button>` : '';
 
+    // ausgeblendete Kurse (lokal versteckt) herausfiltern
+    const hidden = load('b1.hidden', []);
+    const visible = (S.levels || []).filter(l => !hidden.includes(l.id));
+
     app.innerHTML = `
       <h1>${esc(t('landingTitle'))}</h1>
       <p class="sub">${esc(t('landingSub'))}</p>
       ${stats}
       ${cont}
       <div class="abos">
-        ${(S.levels || []).map(entry).join('')}
+        ${visible.map(entry).join('')}
         <button class="abo addcard" id="addcode">
           <span class="plus">+</span>
           <span class="grow"><span class="who">${esc(t('addCode'))}</span></span>
@@ -689,8 +696,20 @@ function screenHome(){
       </div>`;
     const cb = document.getElementById('contbtn');
     if (cb) cb.onclick = () => resumeLast();
-    app.querySelectorAll('[data-enter]').forEach(b =>
-      b.onclick = () => enterLevel(b.dataset.enter));
+    app.querySelectorAll('[data-enter]').forEach(el => {
+      const open = () => enterLevel(el.dataset.enter);
+      el.onclick = e => { if (!e.target.closest('[data-del]')) open(); };
+      el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } };
+    });
+    app.querySelectorAll('[data-del]').forEach(b => b.onclick = e => {
+      e.stopPropagation();
+      ask(t('hideCardAsk'), () => {
+        const hid = load('b1.hidden', []);
+        if (!hid.includes(b.dataset.del)) hid.push(b.dataset.del);
+        save('b1.hidden', hid);
+        screenHome();
+      }, t('hideCard'));
+    });
     const addc = document.getElementById('addcode');
     if (addc) addc.onclick = () => screenCode();
   });

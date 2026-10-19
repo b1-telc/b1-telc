@@ -90,6 +90,8 @@ const I18N = (() => {
       statSolved: 'gelöst',
       statMastered: 'gemeistert',
       continueTitle: 'Weitermachen',
+      hideCard: 'Ausblenden',
+      hideCardAsk: 'Diesen Kurs von der Startseite ausblenden? Mit dem Code kannst du ihn wieder hinzufügen.',
       homeIntro: 'Wählen Sie einen Modelltest. Jeder Test hat die Prüfungsteile ' +
                  'der schriftlichen Prüfung {level} — mit der echten Prüfungszeit.',
       homeIntroPlain: 'Wählen Sie einen Modelltest. Jeder Test hat die ' +
@@ -357,6 +359,8 @@ const I18N = (() => {
       statSolved: 'محلول',
       statMastered: 'متقَن',
       continueTitle: 'تابع من وين وقفت',
+      hideCard: 'إخفاء',
+      hideCardAsk: 'إخفاء هذا الكورس من الصفحة الرئيسية؟ تقدر ترجّعه بإدخال الكود من جديد.',
       homeIntro: 'اختر نموذج امتحان. كل نموذج فيه أقسام الامتحان التحريري ' +
                  '{level} — بوقت الامتحان الحقيقي.',
       homeIntroPlain: 'اختر نموذج امتحان. كل نموذج فيه أقسام الامتحان ' +
@@ -635,6 +639,8 @@ const I18N = (() => {
       statSolved: 'виконано',
       statMastered: 'засвоєно',
       continueTitle: 'Продовжити',
+      hideCard: 'Сховати',
+      hideCardAsk: 'Сховати цей курс з головної? Його можна повернути, ввівши код.',
       homeIntro: 'Оберіть пробний тест. Кожен тест містить частини письмового ' +
                  'іспиту {level} — зі справжнім часом.',
       homeIntroPlain: 'Оберіть пробний тест. Кожен тест містить частини ' +
