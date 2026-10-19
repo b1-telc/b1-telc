@@ -718,6 +718,14 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
 .abo.soon .when b{color:var(--warn,#b7791f)}
 /* ★ Startseite: Stufen-Karten zum Öffnen (klickbar) + „+"-Karte. */
 .abo.lvlentry{transition:transform .12s, border-color .12s}
+/* Fortschrittsbalken je Kurs (erledigte Teile). */
+.lvlprog{display:block; margin-top:9px}
+.lvlprogbar{display:block; height:6px; border-radius:999px; overflow:hidden;
+  background:var(--line)}
+.lvlprogbar i{display:block; height:100%; border-radius:999px;
+  background:linear-gradient(90deg, var(--brand), var(--brand-dark));
+  transition:width .3s ease}
+.lvlprogtxt{display:block; margin-top:5px; font-size:12px; color:var(--muted)}
 .abo.lvlentry:hover{transform:translateY(-1px); border-color:var(--brand)}
 .abo .chev{color:var(--muted); font-size:20px; align-self:center; margin-inline-start:4px}
 .abo.addcard{align-items:center; gap:12px; border-style:dashed}
