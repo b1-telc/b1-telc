@@ -2227,6 +2227,9 @@ function answerLabel(sec, it, k){
     const o = sec.bank.find(x => x.key === k);
     return o ? (o.text ? `${k} — ${o.text}` : k) : '—';
   }
+  // خانة نصّ حرّ (Formular): القيمة نصّ، مو مفتاح خيار — نعرض النصّ نفسه
+  // (أوّل بديل من «Köln|Koeln»).
+  if (!(it.options && it.options.length)) return String(k).split('|')[0];
   const o = (it.options || []).find(x => x.key === k);
   return o ? `${k} — ${o.text}` : '—';
 }
@@ -2385,7 +2388,14 @@ async function simFinish(){
 function simResult(byId){
   const sim = S.sim;
   const graded = it => !!byId[it.id];                       // Lösung vorhanden = bewertbar
-  const isRight = it => S.answers[it.id] === byId[it.id].answer;
+  const isRight = it => {
+    const a = byId[it.id]; if (!a) return false;
+    // ★ خانة نصّ حرّ (Formular, Schreiben Teil 1): مطابقة مرنة متل التمرين
+    //   (تجاهل حالة الأحرف والبدائل)؛ باقي الأسئلة: مطابقة المفتاح تماماً.
+    return (it.options && it.options.length)
+      ? S.answers[it.id] === a.answer
+      : fillMatch(S.answers[it.id], a.answer);
+  };
   const stats = sim.phases.map(ph => {
     let right = 0, total = 0;
     ph.secs.forEach(p => (p.items || []).forEach(it => {
