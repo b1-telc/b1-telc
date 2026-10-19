@@ -62,6 +62,11 @@ function save(key, val){
   try { localStorage.setItem(key, JSON.stringify(val)); } catch {}
 }
 
+/* ★ أيقونات SVG للأزرار الصغيرة (مو إيموجي): بتتلوّن بـcurrentColor، فبنقدر
+   نخلّي السلة حمراء والـi داكنة على كل الأجهزة (الإيموجي أحياناً بيتجاهل اللون). */
+const ICON_INFO = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11.2v4.8"/><circle cx="12" cy="7.8" r="0.1"/></svg>`;
+const ICON_TRASH = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M18 7l-1 12.5H7L6 7M10 10.5v6M14 10.5v6"/></svg>`;
+
 /* ============ Timer ============ */
 function startTimer(seconds, onEnd){
   stopTimer();
@@ -655,9 +660,9 @@ function screenHome(){
           <span class="bis">${esc(t('until', { date: endsFmt(l.id) }))}</span>
         </span>
         <button class="lvlrep" data-rep="${esc(l.id)}" aria-label="${esc(t('reportBtn'))}"
-          title="${esc(t('reportBtn'))}">ℹ</button>
+          title="${esc(t('reportBtn'))}">${ICON_INFO}</button>
         <button class="lvldel" data-del="${esc(l.id)}" aria-label="${esc(t('hideCard'))}"
-          title="${esc(t('hideCard'))}">🗑</button>
+          title="${esc(t('hideCard'))}">${ICON_TRASH}</button>
       </div>`;
     };
     // Statistik-Leiste: Serie 🔥, gelöste Aufgaben, gemeisterte Items.
