@@ -646,11 +646,17 @@ function screenHome(){
       const lp = progOf(l);
       let bar = '';
       if (lp && lp.rag && lp.total){
+        // النسبة المئوية مكتوبة جوّا كل لون عند بدايته (أخضر/أحمر/رمادي).
         const g = Math.round(lp.green / lp.total * 100);
         const r = Math.round(lp.red / lp.total * 100);
+        const n = 100 - g - r;
+        const lbl = p => p >= 10 ? p + '%' : '';
         bar = `<span class="lvlprog">
-          <span class="ragbar"><i class="g" style="width:${g}%"></i><i class="r" style="width:${r}%"></i></span>
-          <span class="lvlprogtxt"><b class="cg">✓ ${lp.green}</b> · <b class="cr">✗ ${lp.red}</b> · <b class="cn">◌ ${lp.gray}</b></span>
+          <span class="ragbar big">
+            <i class="g" style="width:${g}%">${lbl(g)}</i>
+            <i class="r" style="width:${r}%">${lbl(r)}</i>
+            <i class="n" style="width:${n}%">${lbl(n)}</i>
+          </span>
         </span>`;
       } else if (lp && lp.total){
         const pct = Math.round(lp.done / lp.total * 100);
