@@ -86,6 +86,10 @@ const I18N = (() => {
       welcome: 'Willkommen 👋',
       landingTitle: 'Deine Kurse 👋',
       landingSub: 'Wähle einen Kurs, um loszulegen.',
+      statStreak: 'Tage-Serie',
+      statSolved: 'gelöst',
+      statMastered: 'gemeistert',
+      continueTitle: 'Weitermachen',
       homeIntro: 'Wählen Sie einen Modelltest. Jeder Test hat die Prüfungsteile ' +
                  'der schriftlichen Prüfung {level} — mit der echten Prüfungszeit.',
       homeIntroPlain: 'Wählen Sie einen Modelltest. Jeder Test hat die ' +
@@ -349,6 +353,10 @@ const I18N = (() => {
       welcome: 'أهلاً 👋',
       landingTitle: 'دوراتك 👋',
       landingSub: 'اختر دورة لتبدأ.',
+      statStreak: 'سلسلة أيام',
+      statSolved: 'محلول',
+      statMastered: 'متقَن',
+      continueTitle: 'تابع من وين وقفت',
       homeIntro: 'اختر نموذج امتحان. كل نموذج فيه أقسام الامتحان التحريري ' +
                  '{level} — بوقت الامتحان الحقيقي.',
       homeIntroPlain: 'اختر نموذج امتحان. كل نموذج فيه أقسام الامتحان ' +
@@ -623,6 +631,10 @@ const I18N = (() => {
       welcome: 'Вітаємо 👋',
       landingTitle: 'Твої курси 👋',
       landingSub: 'Обери курс, щоб почати.',
+      statStreak: 'Серія днів',
+      statSolved: 'виконано',
+      statMastered: 'засвоєно',
+      continueTitle: 'Продовжити',
       homeIntro: 'Оберіть пробний тест. Кожен тест містить частини письмового ' +
                  'іспиту {level} — зі справжнім часом.',
       homeIntroPlain: 'Оберіть пробний тест. Кожен тест містить частини ' +

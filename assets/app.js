@@ -287,6 +287,7 @@ async function boot(){
     return screenCode(w && w.waiting && w.open ? t('waitOpen') : undefined);
   }
 
+  bumpStreak();                               // Tagesserie zählen (einmal pro Tag)
   try { S.levels = await API.myLevels(S.sub); } catch { S.levels = []; }
   // die zuletzt gewählte Stufe merken, sonst die erste des Abos
   const saved = load('b1.level', null);
@@ -541,6 +542,64 @@ function cacheLevelProgress(){
   save('b1.levelprog', all);
 }
 
+/* ★ Statistik-Leiste: Serie (Streak), gelöste Aufgaben, gemeisterte Items. */
+const dayKey = d => { d = d || new Date();
+  return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`; };
+// Zählt den heutigen Tag zur Serie: gestern aktiv → +1, sonst neu bei 1.
+function bumpStreak(){
+  const s = load('b1.streak', { last: null, days: 0 });
+  const today = dayKey();
+  if (s.last === today) return;
+  const y = dayKey(new Date(Date.now() - 86400000));
+  s.days = s.last === y ? (s.days || 0) + 1 : 1;
+  s.last = today;
+  save('b1.streak', s);
+}
+// Serie nur gültig, wenn heute oder gestern aktiv — sonst abgelaufen (0).
+function streakDays(){
+  const s = load('b1.streak', { last: null, days: 0 });
+  if (!s.last) return 0;
+  const today = dayKey(), y = dayKey(new Date(Date.now() - 86400000));
+  return (s.last === today || s.last === y) ? (s.days || 0) : 0;
+}
+// Beantwortete Übungsaufgaben über alle Stufen.
+function solvedCount(){
+  let n = 0;
+  Object.values(load('b1.praxis', {})).forEach(lvl =>
+    Object.values(lvl || {}).forEach(blk =>
+      Object.values(blk || {}).forEach(v => { if (String(v ?? '').trim() !== '') n++; })));
+  return n;
+}
+const currentLevelName = () => {
+  const l = (S.levels || []).find(x => x.id === S.level);
+  return l ? (l.provider && l.stufe ? `${l.provider} · ${l.stufe}` : (l.title || l.id)) : '';
+};
+// Letzten geöffneten Teil merken, für „Weitermachen" auf der Startseite.
+function recordLast(obj){ save('b1.last', obj); }
+// Dorthin zurückspringen (Stufe bei Bedarf laden).
+async function resumeLast(){
+  const last = load('b1.last', null);
+  if (!last) return;
+  if (last.level && last.level !== S.level){
+    S.level = last.level; save('b1.level', last.level);
+    Object.keys(modellCache).forEach(k => delete modellCache[k]);
+    S.modell = null;
+    app.innerHTML = `<div class="empty">${esc(t('moment'))}</div>`;
+    try { S.index = await API.index(last.level); } catch { return void toast(t('levelFailed')); }
+    S.catalog = await loadCatalog(last.level);
+  }
+  if (last.type === 'praxis'){
+    if (!S.modell){ try { S.modell = await praxisTest(); } catch { S.modell = null; } }
+    if (!S.modell) return screenLevel();
+    S.praxisSkill = last.skill;
+    screenPractice(last.blockId);
+  } else if (last.type === 'modell'){
+    openModell(last.modellId);
+  } else {
+    screenLevel();
+  }
+}
+
 /* ★ Startseite: Begrüßung + eine Karte je Stufe (Goethe · A1, telc · B1 …)
    plus eine „+"-Karte zum Code-Einlösen. Antippen einer Karte öffnet den
    Inhalt der Stufe (screenLevel); „zurück" führt wieder hierher. */
@@ -596,9 +655,31 @@ function screenHome(){
         <span class="chev">›</span>
       </button>`;
     };
+    // Statistik-Leiste: Serie 🔥, gelöste Aufgaben, gemeisterte Items.
+    const streak = streakDays();
+    const solved = solvedCount();
+    const mastered = (review && review.mastered) || 0;
+    const stats = `<div class="stats">
+      <div class="stat"><span class="statn">🔥 ${streak}</span><span class="statl">${esc(t('statStreak'))}</span></div>
+      <div class="stat"><span class="statn">✓ ${solved}</span><span class="statl">${esc(t('statSolved'))}</span></div>
+      <div class="stat"><span class="statn">⭐ ${mastered}</span><span class="statl">${esc(t('statMastered'))}</span></div>
+    </div>`;
+
+    // „Weitermachen": letzter geöffneter Teil.
+    const last = load('b1.last', null);
+    const contMeta = last ? [last.levelName, last.skill, last.title].filter(Boolean).join(' · ') : '';
+    const cont = last ? `<button class="tile contcard" id="contbtn">
+      <span class="n">▶</span>
+      <span class="grow"><span style="font-weight:600">${esc(t('continueTitle'))}</span>
+        <div class="meta">${esc(contMeta)}</div></span>
+      <span class="chev">›</span>
+    </button>` : '';
+
     app.innerHTML = `
       <h1>${esc(t('landingTitle'))}</h1>
       <p class="sub">${esc(t('landingSub'))}</p>
+      ${stats}
+      ${cont}
       <div class="abos">
         ${(S.levels || []).map(entry).join('')}
         <button class="abo addcard" id="addcode">
@@ -606,6 +687,8 @@ function screenHome(){
           <span class="grow"><span class="who">${esc(t('addCode'))}</span></span>
         </button>
       </div>`;
+    const cb = document.getElementById('contbtn');
+    if (cb) cb.onclick = () => resumeLast();
     app.querySelectorAll('[data-enter]').forEach(b =>
       b.onclick = () => enterLevel(b.dataset.enter));
     const addc = document.getElementById('addcode');
@@ -908,6 +991,8 @@ function screenPractice(blockId){
   S.answers = { ...saved };
   S.dropped = {}; S.checks = {};
   S.run = { id: blockId, drill: true, parts: secs, title: b.title, maxPoints: 0 };
+  recordLast({ level: S.level, levelName: currentLevelName(), type: 'praxis',
+               skill: S.praxisSkill, blockId, title: b.title });
   go('praxis', () => {
     app.innerHTML = `
       <h1>${esc(b.title)}</h1>
@@ -1049,6 +1134,8 @@ async function openModell(id){
 
 function screenModell(m){
   stopTimer();
+  recordLast({ level: S.level, levelName: currentLevelName(), type: 'modell',
+               modellId: m.id, title: m.title });
   go('modell', () => {
     const prog = load('b1.progress', {})[m.id] || {};
     const part = id => m.sections.find(s => s.id === id);
