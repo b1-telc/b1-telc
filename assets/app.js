@@ -516,24 +516,27 @@ function screenLevel(){
   });
 }
 
-/* ★ Fortschritt der aktuell geladenen Stufe: erledigte Teile / Gesamt.
-   Goethe: ein Teil gilt als fertig, wenn alle seine Aufgaben beantwortet
-   sind. telc: ein Modelltest zählt, sobald ein Ergebnis vorliegt. Wird je
-   Stufe gecacht, damit die Startseite den Balken auch für nicht geladene
-   Stufen zeigen kann. */
+/* ★ Fortschritt der aktuell geladenen Stufe: erledigte Übungen / Gesamt.
+   Goethe: gezählt werden einzelne Übungen (Abschnitte); eine Übung gilt als
+   fertig, wenn alle ihre Aufgaben beantwortet sind (Schreiben/Sprechen ohne
+   Aufgaben zählen nicht mit). telc: ein Modelltest zählt, sobald ein Ergebnis
+   vorliegt. Wird je Stufe gecacht, damit die Startseite den Balken auch für
+   nicht geladene Stufen zeigen kann. */
 function levelProgress(){
   if (isPraxis() && S.modell){
     const prog = (load('b1.praxis', {})[S.level]) || {};
-    let done = 0;
+    let done = 0, total = 0;
     S.modell.blocks.forEach(b => {
-      const nItems = b.parts.reduce((a, id) => {
-        const s = S.modell.sections.find(x => x.id === id); return a + (s ? s.items.length : 0);
-      }, 0);
       const ans = prog[b.id] || {};
-      const nDone = Object.keys(ans).filter(k => String(ans[k] ?? '').trim() !== '').length;
-      if (nItems && nDone >= nItems) done++;
+      b.parts.forEach(pid => {
+        const s = S.modell.sections.find(x => x.id === pid);
+        const ids = s ? (s.items || []).map(it => it.id) : [];
+        if (!ids.length) return;         // ohne Aufgaben (Schreiben/Sprechen) nicht zählen
+        total++;
+        if (ids.every(id => String(ans[id] ?? '').trim() !== '')) done++;
+      });
     });
-    return { done, total: S.modell.blocks.length };
+    return { done, total };
   }
   const modelle = (S.index && S.index.modelle) || [];
   const prog = load('b1.progress', {});
@@ -857,13 +860,17 @@ function screenSkill(skill){
       <h1>${esc(skill)}</h1>
       <p class="sub">${esc(t('praxisPick'))}</p>
       ${blocks.map(b => {
-        const nItems = b.parts.reduce((a, id) => {
-          const s = m.sections.find(x => x.id === id); return a + (s ? s.items.length : 0);
-        }, 0);
+        // ★ عدد التمارين (أقسام) مو عدد الأسئلة؛ والتقدّم بالتمارين المكتملة.
+        const secs = b.parts.map(id => m.sections.find(x => x.id === id)).filter(Boolean);
         const ans  = prog[b.id] || {};
-        const done = Object.keys(ans).filter(k => String(ans[k] ?? '').trim() !== '').length;
-        const meta = [plural(nItems, 'nTask'),
-          done ? t('praxisDone', { n: done, total: nItems }) : ''].filter(Boolean).join(' · ');
+        const setDoneHere = s => {
+          const ids = (s.items || []).map(it => it.id);
+          return ids.length && ids.every(id => String(ans[id] ?? '').trim() !== '');
+        };
+        const nSets = secs.length;
+        const doneSets = secs.filter(setDoneHere).length;
+        const meta = [plural(nSets, 'nUebung'),
+          doneSets ? t('praxisSetsDone', { n: doneSets, total: nSets }) : ''].filter(Boolean).join(' · ');
         return `<div class="blockcard"><button class="tile" data-part="${esc(b.id)}">
           <span class="grow"><span style="font-weight:600">${esc(b.title)}</span>
             <div class="meta">${esc(meta)}</div></span>
