@@ -664,6 +664,8 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
 
 /* Kachel "Fehler wiederholen" */
 .tile.drill .n{background:var(--warn-soft); color:var(--warn); font-size:19px}
+.tile.wrongtile .n{background:var(--bad-soft); color:var(--bad); font-size:19px; font-weight:800}
+.tile.wrongtile{border-color:var(--bad)}
 
 /* ---- Zuordnung: Buchstaben-Knöpfe statt Auswahlliste ----
    Eine Liste mit 15 Einträgen verlangt antippen, lesen, scrollen, treffen.
@@ -758,6 +760,14 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
 .tile.contcard .n{background:var(--brand); color:#fff}
 /* Fortschrittsbalken je Kurs (erledigte Teile). */
 .lvlprog{display:block; margin-top:9px}
+/* ★ 3-Farben-Balken: grün richtig · rot falsch · grau (Rest) offen. */
+.ragbar{display:flex; height:7px; border-radius:999px; overflow:hidden; background:var(--line)}
+.ragbar i{display:block; height:100%}
+.ragbar i.g{background:var(--ok)}
+.ragbar i.r{background:var(--bad)}
+.lvlprogtxt .cg{color:var(--ok)}
+.lvlprogtxt .cr{color:var(--bad)}
+.lvlprogtxt .cn{color:var(--muted)}
 .lvlprogbar{display:block; height:6px; border-radius:999px; overflow:hidden;
   background:var(--line)}
 .lvlprogbar i{display:block; height:100%; border-radius:999px;
