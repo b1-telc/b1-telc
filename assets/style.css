@@ -673,6 +673,10 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
 .chip:hover:not([disabled]){border-color:var(--brand)}
 .chip.on{border-color:var(--brand); background:var(--brand-soft); color:var(--brand-dark)}
 .chip[disabled]{opacity:.35; cursor:default}
+/* ★ Sprach-Chips: gezeichnete Flagge statt Emoji (überall sichtbar). */
+.flagchip{padding:6px 8px}
+.flagimg{display:block; width:26px; height:17px; border-radius:3px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.14)}
 
 .btn.wide{width:100%; justify-content:center; min-height:54px}
 
