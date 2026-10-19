@@ -211,6 +211,14 @@ h3{font-size:1em; margin:0 0 4px}
 .finput:focus{outline:none; border-color:var(--brand); box-shadow:0 0 0 2px var(--brand-soft)}
 .finput.correct{border-color:var(--ok); color:var(--ok); font-weight:700}
 .finput.wrong{border-color:var(--bad); color:var(--bad); text-decoration:line-through}
+/* ★ موبايل: التسمية والخانة كانوا فايتين ببعض (وبتسوأ لما يكبر الخط).
+   منخلّي كل صفّ عمودي — التسمية فوق والخانة تحت بعرض كامل. */
+@media (max-width:600px){
+  .frow{grid-template-columns:1fr; gap:4px 0; padding:9px 0}
+  .flabel{font-size:.9em}
+  .fcell{width:100%}
+  .fval.given{display:inline-block}
+}
 .fsol{display:block; margin-top:4px; color:var(--ok); font-weight:700; font-size:.9em}
 .fchoice .opts.inline{margin:0; flex-wrap:wrap; gap:6px}
 .fchoice .opt{padding:5px 10px}
