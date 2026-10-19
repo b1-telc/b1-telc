@@ -10,7 +10,7 @@
    ومرة حسب اختياره الصريح — تا يشتغل بالحالتين */
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0f1520; --card:#182233; --ink:#e9eef7; --muted:#98a4bb;
+    --bg:#0f1520; --card:#182233; --ink:#f2f5fb; --muted:#aeb9ce;
     --line:#28344a; --brand:#5b8dff; --brand-dark:#7ba3ff; --brand-soft:#1c2b46;
     --ok:#43c795; --ok-soft:#122c24; --bad:#ff7d95; --bad-soft:#331a21;
     --warn:#e0b25e; --warn-soft:#31280f;
@@ -18,7 +18,7 @@
   }
 }
 :root[data-theme="dark"]{
-    --bg:#0f1520; --card:#182233; --ink:#e9eef7; --muted:#98a4bb;
+    --bg:#0f1520; --card:#182233; --ink:#f2f5fb; --muted:#aeb9ce;
     --line:#28344a; --brand:#5b8dff; --brand-dark:#7ba3ff; --brand-soft:#1c2b46;
     --ok:#43c795; --ok-soft:#122c24; --bad:#ff7d95; --bad-soft:#331a21;
     --warn:#e0b25e; --warn-soft:#31280f;
@@ -700,7 +700,7 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
    normale Kursteilnehmer sah also weder sein Produkt noch sein Ablaufdatum. */
 .abos{display:flex;flex-direction:column;gap:8px;margin:0 0 16px}
 .abo{display:flex;align-items:center;gap:12px;width:100%;text-align:start;
-  background:var(--card,#fff);border:1px solid var(--line,#e2e7f0);
+  background:var(--card,#fff);border:1px solid var(--line,#e2e7f0);color:var(--ink);
   border-radius:12px;padding:12px 14px;font:inherit;cursor:pointer}
 .abo[disabled]{cursor:default}
 .abo .grow{flex:1;min-width:0}
