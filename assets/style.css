@@ -712,6 +712,16 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
 .abo.on{border-color:var(--blue,#2f6bed)}
 .abo.soon{border-color:var(--warn,#b7791f)}
 .abo.soon .when b{color:var(--warn,#b7791f)}
+/* ★ Startseite: Stufen-Karten zum Öffnen (klickbar) + „+"-Karte. */
+.abo.lvlentry{transition:transform .12s, border-color .12s}
+.abo.lvlentry:hover{transform:translateY(-1px); border-color:var(--brand)}
+.abo .chev{color:var(--muted); font-size:20px; align-self:center; margin-inline-start:4px}
+.abo.addcard{align-items:center; gap:12px; border-style:dashed}
+.abo.addcard:hover{border-color:var(--brand)}
+.abo.addcard .plus{flex:0 0 auto; display:inline-grid; place-items:center;
+  width:34px; height:34px; border-radius:10px; background:var(--brand-soft);
+  color:var(--brand-dark); font-size:22px; font-weight:700; line-height:1}
+.abo.addcard .who{color:var(--brand)}
 
 /* ---- Gesperrter Modelltest ----
    Sichtbar, aber nicht anklickbar: der Demo-Nutzer soll sehen, dass es
