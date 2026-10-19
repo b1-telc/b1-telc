@@ -718,6 +718,16 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
 .abo.soon .when b{color:var(--warn,#b7791f)}
 /* ★ Startseite: Stufen-Karten zum Öffnen (klickbar) + „+"-Karte. */
 .abo.lvlentry{transition:transform .12s, border-color .12s}
+/* ★ Statistik-Leiste auf der Startseite: Serie, gelöst, gemeistert. */
+.stats{display:flex; gap:10px; margin:0 0 14px}
+.stat{flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
+  background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:12px 8px; text-align:center}
+.stat .statn{font-weight:700; font-size:1.15em; color:var(--ink); line-height:1.1}
+.stat .statl{font-size:12px; color:var(--muted)}
+/* „Weitermachen"-Karte: hervorgehoben über den Kurs-Karten. */
+.tile.contcard{border-color:var(--brand); background:var(--brand-soft)}
+.tile.contcard .n{background:var(--brand); color:#fff}
 /* Fortschrittsbalken je Kurs (erledigte Teile). */
 .lvlprog{display:block; margin-top:9px}
 .lvlprogbar{display:block; height:6px; border-radius:999px; overflow:hidden;
