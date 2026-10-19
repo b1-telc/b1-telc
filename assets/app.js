@@ -218,7 +218,7 @@ elBack.onclick = () => {
   } else if (S.view === 'praxis'){
     // zurück zur Teilliste der Fertigkeit
     if (S.modell && S.praxisSkill) screenSkill(S.praxisSkill); else screenLevel();
-  } else if (S.view === 'skill' || S.view === 'modell' || S.view === 'mistakes'){
+  } else if (S.view === 'skill' || S.view === 'modell'){
     // zurück zum Inhalt der Stufe (Fertigkeiten/Modelltests)
     screenLevel();
   } else if (S.view === 'level'){
@@ -465,7 +465,6 @@ function screenLevel(){
     const nLocked = list.filter(m => m.open === false).length;
 
     const nMist = review.due;
-    const nWrong = isPraxis() ? mistakeIds().length : 0;   // falsch gelöste Aufgaben
     const lvl = S.levels.find(l => l.id === S.level);
 
     /* «telc · B1». مستوى قديم بلا مؤسسة بيضل بعنوانه — ما منخترع وحدة. */
@@ -495,12 +494,6 @@ function screenLevel(){
           <div class="meta">${review.mastered ? `${plural(review.mastered, 'nSits')}` : esc(t('allRepeated'))}${
             review.next_due ? ` · ${esc(t('nextOn', { date: new Date(review.next_due).toLocaleDateString('de-DE') }))}` : ''}</div></span>
       </div>` : '')}
-      ${nWrong ? `<button class="tile wrongtile" id="wrongbtn">
-        <span class="n">✗</span>
-        <span class="grow"><span style="font-weight:600">${esc(t('mistTitle'))}</span>
-          <div class="meta">${esc(t('mistCount', { n: nWrong }))}</div></span>
-        <span class="chev">›</span>
-      </button>` : ''}
       ${cards}
       ${(skills && skills.length) ? `<button class="tile simtile" id="simstart">
         <span class="n">📝</span>
@@ -509,8 +502,6 @@ function screenLevel(){
         <span class="chev">›</span>
       </button>` : ''}`;
 
-    const wb = document.getElementById('wrongbtn');
-    if (wb) wb.onclick = () => screenMistakes();
     const simb = document.getElementById('simstart');
     if (simb) simb.onclick = () => startSim();
     app.querySelectorAll('.tile[data-id]').forEach(b =>
@@ -525,22 +516,27 @@ function screenLevel(){
   });
 }
 
-/* ★ Fortschritt der aktuell geladenen Stufe.
-   Goethe (bewertbare Aufgaben in Lesen/Hören/Schreiben Teil 1): 3 Farben —
-   grün = richtig gelöst, rot = falsch gelöst, grau = noch nicht aufgedeckt.
-   Quelle ist b1.praxstat (nach „Antworten anzeigen" gesetzt). telc: ein
-   Modelltest zählt, sobald ein Ergebnis vorliegt. Wird je Stufe gecacht,
-   damit die Startseite den Balken auch für nicht geladene Stufen zeigen kann. */
+/* ★ Fortschritt der aktuell geladenen Stufe: erledigte Übungen / Gesamt.
+   Goethe: gezählt werden einzelne Übungen (Abschnitte); eine Übung gilt als
+   fertig, wenn alle ihre Aufgaben beantwortet sind (Schreiben/Sprechen ohne
+   Aufgaben zählen nicht mit). telc: ein Modelltest zählt, sobald ein Ergebnis
+   vorliegt. Wird je Stufe gecacht, damit die Startseite den Balken auch für
+   nicht geladene Stufen zeigen kann. */
 function levelProgress(){
   if (isPraxis() && S.modell){
-    const st = (praxStat()[S.level]) || {};
-    let green = 0, red = 0, total = 0;
-    S.modell.sections.forEach(s => (s.items || []).forEach(it => {
-      total++;
-      const v = st[it.id];
-      if (v === 1) green++; else if (v === 0) red++;
-    }));
-    return { rag: true, green, red, gray: total - green - red, total };
+    const prog = (load('b1.praxis', {})[S.level]) || {};
+    let done = 0, total = 0;
+    S.modell.blocks.forEach(b => {
+      const ans = prog[b.id] || {};
+      b.parts.forEach(pid => {
+        const s = S.modell.sections.find(x => x.id === pid);
+        const ids = s ? (s.items || []).map(it => it.id) : [];
+        if (!ids.length) return;         // ohne Aufgaben (Schreiben/Sprechen) nicht zählen
+        total++;
+        if (ids.every(id => String(ans[id] ?? '').trim() !== '')) done++;
+      });
+    });
+    return { done, total };
   }
   const modelle = (S.index && S.index.modelle) || [];
   const prog = load('b1.progress', {});
@@ -649,22 +645,7 @@ function screenHome(){
       const soon = h != null && h < 24 * 7;
       const only = S.sub && S.sub.scope && S.sub.scope[l.id];
       const lp = progOf(l);
-      let bar = '';
-      if (lp && lp.rag && lp.total){
-        // 3 ألوان: أخضر صح · أحمر خطأ · رمادي غير محلول
-        const g = Math.round(lp.green / lp.total * 100);
-        const r = Math.round(lp.red / lp.total * 100);
-        bar = `<span class="lvlprog">
-          <span class="ragbar"><i class="g" style="width:${g}%"></i><i class="r" style="width:${r}%"></i></span>
-          <span class="lvlprogtxt"><b class="cg">✓ ${lp.green}</b> · <b class="cr">✗ ${lp.red}</b> · <b class="cn">◌ ${lp.gray}</b></span>
-        </span>`;
-      } else if (lp && lp.total){
-        const pct = Math.round(lp.done / lp.total * 100);
-        bar = `<span class="lvlprog">
-          <span class="lvlprogbar"><i style="width:${pct}%"></i></span>
-          <span class="lvlprogtxt">${lp.done} / ${lp.total} · ${pct} %</span>
-        </span>`;
-      }
+      const pct = (lp && lp.total) ? Math.round(lp.done / lp.total * 100) : null;
       return `<div class="abo lvlentry${soon ? ' soon' : ''}" data-enter="${esc(l.id)}"
         role="button" tabindex="0">
         <span class="grow">
@@ -672,7 +653,10 @@ function screenHome(){
           <span class="what">${only
             ? `${esc(t('demo'))} · ${esc(plural(only.length, 'nTest'))}`
             : esc(t('fullAccess'))}</span>
-          ${bar}
+          ${pct != null ? `<span class="lvlprog">
+            <span class="lvlprogbar"><i style="width:${pct}%"></i></span>
+            <span class="lvlprogtxt">${lp.done} / ${lp.total} · ${pct} %</span>
+          </span>` : ''}
         </span>
         <span class="when">
           <b>${esc(remaining(ms))}</b>
@@ -904,25 +888,6 @@ function praxisSave(){
   save('b1.praxis', all);
 }
 
-/* ★ Richtig/Falsch je Aufgabe (nach dem Aufdecken): 1 = richtig, 0 = falsch.
-   Quelle für den 3-Farben-Balken und den „Fehler wiederholen"-Bereich. */
-function praxStat(){ return load('b1.praxstat', {}); }
-function setPraxStat(itemId, ok){
-  const all = praxStat();
-  (all[S.level] ||= {})[itemId] = ok ? 1 : 0;
-  save('b1.praxstat', all);
-}
-// itemId → blockId (für das Speichern beim Wiederholen über mehrere Teile).
-function itemBlockMap(){
-  const map = {};
-  if (S.modell) S.modell.blocks.forEach(b =>
-    (b.parts || []).forEach(pid => {
-      const s = S.modell.sections.find(x => x.id === pid);
-      (s && s.items || []).forEach(it => { map[it.id] = b.id; });
-    }));
-  return map;
-}
-
 /* Eine Übung = ein Abschnitt: seine Texte und Aufgaben verschränkt
    (renderPartBody) plus ein „Antworten anzeigen"-Knopf für die ganze Übung. */
 function praxisSetHTML(sec){
@@ -1133,62 +1098,6 @@ function praxisReset(secs){
   screenPractice(S.praxisBlock);
 }
 
-/* ★ „Fehler wiederholen": alle falsch gelösten Aufgaben (praxstat === 0),
-   nach Abschnitt gruppiert, zum erneuten Lösen. Beim Aufdecken aktualisiert
-   praxisColor den Status — wird eine Aufgabe richtig, verschwindet sie beim
-   nächsten Öffnen und der 3-Farben-Balken passt sich an. */
-function mistakeIds(){
-  const st = (praxStat()[S.level]) || {};
-  return Object.keys(st).filter(id => st[id] === 0);
-}
-function mistSave(){
-  const all = load('b1.praxis', {});
-  const lvl = (all[S.level] ||= {});
-  Object.entries(S.mistMap || {}).forEach(([itemId, blockId]) => {
-    if (S.answers[itemId] === undefined) return;
-    (lvl[blockId] ||= {})[itemId] = S.answers[itemId];
-  });
-  save('b1.praxis', all);
-}
-function screenMistakes(){
-  const m = S.modell;
-  if (!m) return;
-  stopTimer();
-  const wrong = new Set(mistakeIds());
-  const groups = [];
-  m.sections.forEach(s => {
-    const items = (s.items || []).filter(it => wrong.has(it.id));
-    if (items.length) groups.push({ sec: s, items });
-  });
-  // Antworten aller Teile zusammenziehen (itemId → Antwort), damit die
-  // bisherige (falsche) Wahl sichtbar ist und bearbeitet werden kann.
-  const allAns = (load('b1.praxis', {})[S.level]) || {};
-  S.answers = {}; Object.values(allAns).forEach(blk => Object.assign(S.answers, blk));
-  S.dropped = {}; S.checks = {};
-  S.mistMap = itemBlockMap();
-  go('mistakes', () => {
-    if (!groups.length){
-      app.innerHTML = `<h1>${esc(t('mistTitle'))}</h1>
-        <div class="empty">${esc(t('mistEmpty'))}</div>`;
-      return;
-    }
-    app.innerHTML = `
-      <h1>${esc(t('mistTitle'))}</h1>
-      <p class="sub">${esc(t('mistHint'))}</p>
-      ${groups.map(g => {
-        const ids = g.items.map(it => it.id);
-        return `<section class="part praxisset" id="part-${esc(g.sec.id)}">
-          <h2 class="setnum">${esc(g.sec.title || '')}</h2>
-          ${g.items.map(it => renderItem(g.sec, it)).join('')}
-          <button class="btn ghost reveal" data-reveal="${esc(g.sec.id)}"
-            data-ids="${esc(ids.join(','))}">${esc(t('reveal'))}</button>
-        </section>`;
-      }).join('')}`;
-    groups.forEach(g => bindInputs(g.sec));
-    praxisBindReveal(groups.map(g => g.sec));
-  });
-}
-
 /* Knopf ist erst aktiv, wenn alle Aufgaben der Übung beantwortet sind. */
 function praxisSyncButtons(){
   document.querySelectorAll('[data-reveal]').forEach(btn => {
@@ -1282,7 +1191,6 @@ function praxisColor(id, a){
     });
   }
   q.classList.add(ok ? 'isok' : 'isbad');
-  setPraxStat(id, ok);                      // صح/خطأ للإحصائيات وقسم الأخطاء
   if (a.explanation && !q.querySelector('.why'))
     q.insertAdjacentHTML('beforeend', `<div class="why">${esc(a.explanation)}</div>`);
 }
@@ -2315,7 +2223,6 @@ const answered = it => {
 };
 
 function updateProgress(){
-  if (S.view === 'mistakes'){ mistSave(); return; }
   if (S.view === 'praxis'){ praxisSave(); praxisSyncButtons(); praxisSyncTab(); return; }
   saveSession(S.run);
   const items = runItems(S.run);
