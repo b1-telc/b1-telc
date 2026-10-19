@@ -138,6 +138,18 @@ const I18N = (() => {
       nPart: { one: '{n} Teil', other: '{n} Teile' },
       nUebung: { one: '{n} Übung', other: '{n} Übungen' },
 
+      /* Fehler-Sammlung & Lesezeichen (Goethe) */
+      mistCardTitle: 'Meine Fehler',
+      mistCardHint: 'Übungen mit mindestens einem Fehler. Lösen Sie sie richtig, verschwinden sie hier.',
+      mistCardEmpty: 'Keine Fehler — gut gemacht!',
+      markCardTitle: 'Lesezeichen',
+      markCardHint: 'Von Ihnen markierte Übungen. Tippen zum Öffnen.',
+      markCardEmpty: 'Noch keine Lesezeichen. Tippen Sie in einer Übung auf den Stern.',
+      bookmark: 'Lesezeichen',
+      bookmarkAdded: 'Zu Lesezeichen hinzugefügt ✓',
+      bookmarkRemoved: 'Lesezeichen entfernt',
+      bookmarkRemove: 'Lesezeichen entfernen',
+
       material: 'Lesematerial',
       materialMeta: 'Wortschatz und Hinweise · jederzeit',
       materialEmpty: 'Für diese Prüfung ist noch nichts hinterlegt.',
@@ -489,6 +501,19 @@ const I18N = (() => {
       praxisResetDone: "تمت إعادة الضبط — يمكنك التدرّب من جديد.",
       nPart: {"zero":"{n} جزء","one":"جزء واحد","two":"جزءان","few":"{n} أجزاء","many":"{n} جزءًا","other":"{n} جزء"},
       nUebung: {"zero":"ولا تمرين","one":"تمرين واحد","two":"تمرينان","few":"{n} تمارين","many":"{n} تمريناً","other":"{n} تمرين"},
+
+      /* الأخطاء والإشارات المرجعية (Goethe) */
+      mistCardTitle: 'أخطائي',
+      mistCardHint: 'التمارين التي فيها خطأ واحد على الأقل. إذا حللتها صح تختفي من هنا.',
+      mistCardEmpty: 'ما في أخطاء — أحسنت!',
+      markCardTitle: 'إشارات مرجعية',
+      markCardHint: 'التمارين التي علّمتها. اضغط لفتحها.',
+      markCardEmpty: 'لا إشارات مرجعية بعد. اضغط على النجمة داخل أي تمرين.',
+      bookmark: 'إشارة مرجعية',
+      bookmarkAdded: 'أُضيفت إلى الإشارات ✓',
+      bookmarkRemoved: 'أُزيلت الإشارة',
+      bookmarkRemove: 'إزالة الإشارة',
+
       transcript: 'نص التسجيل',
 
       imgLoading: 'جاري تحميل الإعلانات …',
@@ -769,6 +794,19 @@ const I18N = (() => {
       praxisResetDone: "Скинуто — можна тренуватися заново.",
       nPart: {"one":"{n} частина","few":"{n} частини","many":"{n} частин","other":"{n} частини"},
       nUebung: {"one":"{n} вправа","few":"{n} вправи","many":"{n} вправ","other":"{n} вправи"},
+
+      /* Помилки та закладки (Goethe) */
+      mistCardTitle: 'Мої помилки',
+      mistCardHint: 'Вправи щонайменше з однією помилкою. Розв’яжіть правильно — вони зникнуть звідси.',
+      mistCardEmpty: 'Помилок немає — чудово!',
+      markCardTitle: 'Закладки',
+      markCardHint: 'Позначені вами вправи. Торкніться, щоб відкрити.',
+      markCardEmpty: 'Поки немає закладок. Торкніться зірки у вправі.',
+      bookmark: 'Закладка',
+      bookmarkAdded: 'Додано до закладок ✓',
+      bookmarkRemoved: 'Закладку вилучено',
+      bookmarkRemove: 'Вилучити закладку',
+
       transcript: 'Текст аудіо',
 
       imgLoading: 'Оголошення завантажуються …',

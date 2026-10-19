@@ -66,6 +66,9 @@ function save(key, val){
    نخلّي السلة حمراء والـi داكنة على كل الأجهزة (الإيموجي أحياناً بيتجاهل اللون). */
 const ICON_INFO = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11.2v4.8"/><circle cx="12" cy="7.8" r="0.1"/></svg>`;
 const ICON_TRASH = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4.5h6V7M18 7l-1 12.5H7L6 7M10 10.5v6M14 10.5v6"/></svg>`;
+/* ★ نجمة الإشارة المرجعية: فاضية (stroke) عادةً، وبتنملا (fill ذهبي) لما
+   تكون الإشارة مفعّلة — التحكّم بـCSS عبر .on. */
+const ICON_STAR = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.3l2.6 5.3 5.9.86-4.25 4.15 1 5.87L12 16.9l-5.25 2.76 1-5.87L3.5 9.46l5.9-.86z"/></svg>`;
 
 /* ============ Timer ============ */
 function startTimer(seconds, onEnd){
@@ -216,8 +219,13 @@ elBack.onclick = () => {
   } else if (S.view === 'resource'){
     screenResources();
   } else if (S.view === 'praxis'){
-    // zurück zur Teilliste der Fertigkeit
-    if (S.modell && S.praxisSkill) screenSkill(S.praxisSkill); else screenLevel();
+    // aus einer Sammel-Seite geöffnet → dorthin zurück; sonst zur Teilliste
+    if (S.praxisReturn){ const k = S.praxisReturn; S.praxisReturn = null; screenCollection(k); }
+    else if (S.modell && S.praxisSkill) screenSkill(S.praxisSkill);
+    else screenLevel();
+  } else if (S.view === 'coll'){
+    // zurück zum Inhalt der Stufe
+    screenLevel();
   } else if (S.view === 'skill' || S.view === 'modell'){
     // zurück zum Inhalt der Stufe (Fertigkeiten/Modelltests)
     screenLevel();
@@ -428,6 +436,10 @@ function screenLevel(){
   refreshMistakes().then(() => {
     if (S.view === 'level' && review.due !== before) screenLevel();
   });
+  // Antworten im Hintergrund bewerten, dann die Fehler-Karte neu zeichnen.
+  if (isPraxis()) gradePending().then(changed => {
+    if (changed && S.view === 'level') screenLevel();
+  });
   go('level', () => {
     cacheLevelProgress();   // Fortschritt dieser Stufe für die Startseite sichern
     /* المقفولة بتنعرض بعنوانها وعدد أسئلتها بس — محتواها ما بينحمّل
@@ -466,6 +478,9 @@ function screenLevel(){
     const nLocked = list.filter(m => m.open === false).length;
 
     const nMist = review.due;
+    // Goethe: Übungen mit Fehlern / mit Lesezeichen (für die zwei Sammel-Karten).
+    const nWrong = (skills && skills.length) ? mistakeSecs().length : 0;
+    const nMark  = (skills && skills.length) ? markedSecs().length : 0;
     const lvl = S.levels.find(l => l.id === S.level);
 
     /* «telc · B1». مستوى قديم بلا مؤسسة بيضل بعنوانه — ما منخترع وحدة. */
@@ -501,10 +516,26 @@ function screenLevel(){
         <span class="grow"><span style="font-weight:600">${esc(t('simStart'))}</span>
           <div class="meta">${esc(t('simDesc'))}</div></span>
         <span class="chev">›</span>
+      </button>
+      <button class="tile coll collmist" id="collmist">
+        <span class="n">✗</span>
+        <span class="grow"><span style="font-weight:600">${esc(t('mistCardTitle'))}</span>
+          <div class="meta">${nWrong ? esc(plural(nWrong, 'nUebung')) : esc(t('mistCardEmpty'))}</div></span>
+        <span class="chev">›</span>
+      </button>
+      <button class="tile coll collmark" id="collmark">
+        <span class="n">★</span>
+        <span class="grow"><span style="font-weight:600">${esc(t('markCardTitle'))}</span>
+          <div class="meta">${nMark ? esc(plural(nMark, 'nUebung')) : esc(t('markCardEmpty'))}</div></span>
+        <span class="chev">›</span>
       </button>` : ''}`;
 
     const simb = document.getElementById('simstart');
     if (simb) simb.onclick = () => startSim();
+    const cmi = document.getElementById('collmist');
+    if (cmi) cmi.onclick = () => screenCollection('mist');
+    const cma = document.getElementById('collmark');
+    if (cma) cma.onclick = () => screenCollection('mark');
     app.querySelectorAll('.tile[data-id]').forEach(b =>
       b.onclick = () => openModell(b.dataset.id));
     app.querySelectorAll('.tile[data-skill]').forEach(b =>
@@ -566,6 +597,49 @@ function statsFor(ids){
   let green = 0, red = 0;
   ids.forEach(id => { const v = st[id]; if (v === 1) green++; else if (v === 0) red++; });
   return { green, red, total: ids.length };
+}
+
+/* ============ Fehler-Sammlung & Lesezeichen (Goethe) ============
+   Zwei Karten auf der Stufen-Seite: „Meine Fehler" sammelt automatisch jede
+   Übung mit ≥ 1 falscher Aufgabe (aus b1.praxstat, über gradePending gefüllt);
+   wird sie richtig gelöst, verschwindet sie wieder. „Lesezeichen" sammelt
+   Übungen, die der/die Lernende selbst mit dem Stern markiert hat. Beide
+   öffnen beim Antippen genau diese Übung. Alles lokal (localStorage). */
+// Block (Teil), zu dem ein Abschnitt (Übung) gehört.
+function blockOfSection(m, secId){
+  return (m && m.blocks || []).find(b => (b.parts || []).includes(secId));
+}
+// Lesezeichen je Stufe: { [level]: [sectionId, …] }.
+function marks(){ return (load('b1.marks', {})[S.level]) || []; }
+function isMarked(id){ return marks().includes(id); }
+function toggleMark(id){
+  const all = load('b1.marks', {});
+  const arr = all[S.level] || (all[S.level] = []);
+  const i = arr.indexOf(id);
+  if (i >= 0) arr.splice(i, 1); else arr.push(id);
+  save('b1.marks', all);
+  return i < 0;                     // true = jetzt markiert
+}
+// Übungen mit mindestens einer falschen Aufgabe.
+function mistakeSecs(){
+  const m = S.modell; if (!m) return [];
+  const st = (praxStat()[S.level]) || {};
+  return (m.sections || []).filter(sec =>
+    (sec.items || []).some(it => st[it.id] === 0));
+}
+// Markierte Übungen (nur die, die es noch gibt).
+function markedSecs(){
+  const m = S.modell; if (!m) return [];
+  const set = new Set(marks());
+  return (m.sections || []).filter(sec => set.has(sec.id));
+}
+// Übung direkt öffnen (ihren Teil ermitteln, Rücksprung merken).
+function openSec(secId, from){
+  const m = S.modell;
+  const b = blockOfSection(m, secId);
+  if (!b) return;
+  S.praxisSkill = blockSkill(m, b);
+  screenPractice(b.id, secId, from);
 }
 
 /* ★ Statistik-Leiste: Serie (Streak), gelöste Aufgaben, gemeisterte Items. */
@@ -917,6 +991,53 @@ function screenSkill(skill){
   });
 }
 
+/* ★ Sammel-Seite: Fehler ('mist') oder Lesezeichen ('mark'). Listet die
+   betroffenen Übungen; Antippen öffnet die Übung (Rücksprung hierher). */
+function screenCollection(kind){
+  stopTimer();
+  // Fehler erst im Hintergrund bewerten, dann neu zeichnen (frisch Falsches
+  // taucht auf, frisch Korrigiertes verschwindet).
+  gradePending().then(changed => {
+    if (changed && S.view === 'coll' && S.collKind === kind) screenCollection(kind);
+  });
+  go('coll', () => {
+    S.collKind = kind;
+    const m = S.modell;
+    const secs = kind === 'mist' ? mistakeSecs() : markedSecs();
+    const title = kind === 'mist' ? t('mistCardTitle') : t('markCardTitle');
+    const hint  = kind === 'mist' ? t('mistCardHint')  : t('markCardHint');
+    const empty = kind === 'mist' ? t('mistCardEmpty')  : t('markCardEmpty');
+    app.innerHTML = `
+      <h1>${esc(title)}</h1>
+      <p class="sub">${esc(hint)}</p>
+      ${secs.length ? secs.map(sec => {
+        const b  = blockOfSection(m, sec.id);
+        const sk = b ? blockSkill(m, b) : '';
+        const meta = [sk, b && b.title].filter(Boolean).join(' · ');
+        const ids = (sec.items || []).map(it => it.id);
+        const bs  = statsFor(ids);
+        return `<div class="blockcard"><div class="tile" data-open="${esc(sec.id)}"
+            role="button" tabindex="0">
+          <span class="grow"><span style="font-weight:600">${esc(sec.title || meta || '—')}</span>
+            ${sec.title && meta ? `<div class="meta">${esc(meta)}</div>` : ''}
+            ${ids.length ? `<span class="lvlprog">${ragBar(bs.green, bs.red, bs.total)}</span>` : ''}</span>
+          ${kind === 'mark' ? `<button class="markbtn on listmark" data-unmark="${esc(sec.id)}"
+            aria-label="${esc(t('bookmarkRemove'))}" title="${esc(t('bookmarkRemove'))}">${ICON_STAR}</button>` : ''}
+          <span class="chev">›</span></div></div>`;
+      }).join('') : `<div class="empty">${esc(empty)}</div>`}`;
+    app.querySelectorAll('[data-open]').forEach(el => {
+      const open = () => openSec(el.dataset.open, kind);
+      el.onclick = e => { if (!e.target.closest('[data-unmark]')) open(); };
+      el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } };
+    });
+    app.querySelectorAll('[data-unmark]').forEach(b => b.onclick = e => {
+      e.stopPropagation();
+      toggleMark(b.dataset.unmark);
+      screenCollection(kind);
+    });
+  });
+}
+
 /* Stand pro Teil: { [level]: { [blockId]: { itemId: Antwort } } } */
 function praxisSave(){
   const all = load('b1.praxis', {});
@@ -977,7 +1098,11 @@ function praxisSetHTML(sec){
   const ids = (sec.items || []).map(it => it.id);
   const gradable = sec.format !== 'writing' && ids.length;
   return `<section class="part praxisset${sec.format === 'writing' ? ' w2set' : ''}" id="part-${esc(sec.id)}">
-    ${sec.title ? `<h2 class="setnum">${esc(sec.title)}</h2>` : ''}
+    <div class="sethead">
+      ${sec.title ? `<h2 class="setnum">${esc(sec.title)}</h2>` : '<span class="setnum"></span>'}
+      <button class="markbtn${isMarked(sec.id) ? ' on' : ''}" type="button" data-mark="${esc(sec.id)}"
+        aria-label="${esc(t('bookmark'))}" title="${esc(t('bookmark'))}">${ICON_STAR}</button>
+    </div>
     ${instrBlock(sec.instruction)}
     ${renderPartBody(sec)}
     ${sec.format === 'writing' ? praxisWritingHTML(sec) : ''}
@@ -1112,12 +1237,15 @@ function setShort(sec){
   return num ? num[0] : (sec.title || '•');
 }
 
-function screenPractice(blockId, setId){
+function screenPractice(blockId, setId, from){
   const m = S.modell;
   const b = m && m.blocks.find(x => x.id === blockId);
   if (!b) return;
   const secs = b.parts.map(id => m.sections.find(s => s.id === id)).filter(Boolean);
   stopTimer();
+  // Woher kam man? Aus einer Sammel-Seite ('mist'/'mark') → „zurück" führt
+  // dorthin; sonst (normal über die Teil-Liste) null.
+  S.praxisReturn = from || null;
   S.praxisBlock = blockId;
   S.praxisSecs = secs;              // für das Zurücksetzen-Symbol im Header
   const saved = (load('b1.praxis', {})[S.level] || {})[blockId] || {};
@@ -1152,6 +1280,13 @@ function renderPraxis(b, secs){
   bindSprechen([cur]);
   bindSprechkarten([cur]);
   praxisSyncButtons();
+  // Lesezeichen-Stern der aktuellen Übung umschalten.
+  const mb = app.querySelector('[data-mark]');
+  if (mb) mb.onclick = () => {
+    const on = toggleMark(mb.dataset.mark);
+    mb.classList.toggle('on', on);
+    toast(on ? t('bookmarkAdded') : t('bookmarkRemoved'));
+  };
   document.querySelectorAll('[data-set]').forEach(btn => btn.onclick = () => {
     if (btn.dataset.set === S.praxisSet) return;
     S.praxisSet = btn.dataset.set;
