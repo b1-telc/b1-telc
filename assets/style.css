@@ -764,10 +764,11 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
    بيصير يمين فالرقم ينزاح للحافة وينقصّ. وبلا overflow:hidden عالخانة تا ما
    ينقطع الرقم (لو كبر عن خانته بيفيض على جنبها وبيضلّ كامل). */
 .ragbar{display:flex; direction:ltr; border-radius:7px; overflow:hidden; background:#64718c}
-.ragbar i{display:flex; align-items:center; justify-content:flex-start; height:100%}
+.ragbar i{display:flex; align-items:center; justify-content:flex-start}
 .ragbar.big{height:22px}
-.ragbar.big i{padding-inline-start:6px; font-size:11px; line-height:1; font-weight:800;
-  color:#fff; white-space:nowrap}
+/* ★ ارتفاع صريح للخانة (مو height:100% يلي كان بيطلع 38px ويقصّ الرقم). */
+.ragbar.big i{height:22px; padding-inline-start:6px; font-size:11px; line-height:1;
+  font-weight:800; color:#fff; white-space:nowrap}
 .ragbar i.g{background:var(--ok)}
 .ragbar i.r{background:var(--bad)}
 /* الرمادي (غير محلول): لون محايد ثابت ورقم أبيض واضح على كل الثيمات. */
