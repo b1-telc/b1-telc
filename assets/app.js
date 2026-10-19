@@ -516,27 +516,21 @@ function screenLevel(){
   });
 }
 
-/* ★ Fortschritt der aktuell geladenen Stufe: erledigte Übungen / Gesamt.
-   Goethe: gezählt werden einzelne Übungen (Abschnitte); eine Übung gilt als
-   fertig, wenn alle ihre Aufgaben beantwortet sind (Schreiben/Sprechen ohne
-   Aufgaben zählen nicht mit). telc: ein Modelltest zählt, sobald ein Ergebnis
-   vorliegt. Wird je Stufe gecacht, damit die Startseite den Balken auch für
-   nicht geladene Stufen zeigen kann. */
+/* ★ Fortschritt der aktuell geladenen Stufe.
+   Goethe: 3 Farben über die bewertbaren Aufgaben (Lesen/Hören/Schreiben Teil 1)
+   — grün = richtig, rot = falsch, grau = noch nicht beantwortet/bewertet.
+   Quelle b1.praxstat (automatisch über gradePending gefüllt). telc: ein
+   Modelltest zählt, sobald ein Ergebnis vorliegt. Je Stufe gecacht. */
 function levelProgress(){
   if (isPraxis() && S.modell){
-    const prog = (load('b1.praxis', {})[S.level]) || {};
-    let done = 0, total = 0;
-    S.modell.blocks.forEach(b => {
-      const ans = prog[b.id] || {};
-      b.parts.forEach(pid => {
-        const s = S.modell.sections.find(x => x.id === pid);
-        const ids = s ? (s.items || []).map(it => it.id) : [];
-        if (!ids.length) return;         // ohne Aufgaben (Schreiben/Sprechen) nicht zählen
-        total++;
-        if (ids.every(id => String(ans[id] ?? '').trim() !== '')) done++;
-      });
-    });
-    return { done, total };
+    const st = (praxStat()[S.level]) || {};
+    let green = 0, red = 0, total = 0;
+    S.modell.sections.forEach(s => (s.items || []).forEach(it => {
+      total++;
+      const v = st[it.id];
+      if (v === 1) green++; else if (v === 0) red++;
+    }));
+    return { rag: true, green, red, gray: total - green - red, total };
   }
   const modelle = (S.index && S.index.modelle) || [];
   const prog = load('b1.progress', {});
@@ -613,6 +607,11 @@ async function resumeLast(){
    Inhalt der Stufe (screenLevel); „zurück" führt wieder hierher. */
 function screenHome(){
   stopTimer();
+  // ★ Antworten im Hintergrund bewerten, dann Balken neu zeichnen.
+  gradePending().then(changed => {
+    cacheLevelProgress();
+    if (changed && S.view === 'home') screenHome();
+  });
   cacheLevelProgress();                       // Fortschritt der aktuellen Stufe sichern
   go('home', () => {
     const progCache = load('b1.levelprog', {});
@@ -645,7 +644,21 @@ function screenHome(){
       const soon = h != null && h < 24 * 7;
       const only = S.sub && S.sub.scope && S.sub.scope[l.id];
       const lp = progOf(l);
-      const pct = (lp && lp.total) ? Math.round(lp.done / lp.total * 100) : null;
+      let bar = '';
+      if (lp && lp.rag && lp.total){
+        const g = Math.round(lp.green / lp.total * 100);
+        const r = Math.round(lp.red / lp.total * 100);
+        bar = `<span class="lvlprog">
+          <span class="ragbar"><i class="g" style="width:${g}%"></i><i class="r" style="width:${r}%"></i></span>
+          <span class="lvlprogtxt"><b class="cg">✓ ${lp.green}</b> · <b class="cr">✗ ${lp.red}</b> · <b class="cn">◌ ${lp.gray}</b></span>
+        </span>`;
+      } else if (lp && lp.total){
+        const pct = Math.round(lp.done / lp.total * 100);
+        bar = `<span class="lvlprog">
+          <span class="lvlprogbar"><i style="width:${pct}%"></i></span>
+          <span class="lvlprogtxt">${lp.done} / ${lp.total} · ${pct} %</span>
+        </span>`;
+      }
       return `<div class="abo lvlentry${soon ? ' soon' : ''}" data-enter="${esc(l.id)}"
         role="button" tabindex="0">
         <span class="grow">
@@ -653,10 +666,7 @@ function screenHome(){
           <span class="what">${only
             ? `${esc(t('demo'))} · ${esc(plural(only.length, 'nTest'))}`
             : esc(t('fullAccess'))}</span>
-          ${pct != null ? `<span class="lvlprog">
-            <span class="lvlprogbar"><i style="width:${pct}%"></i></span>
-            <span class="lvlprogtxt">${lp.done} / ${lp.total} · ${pct} %</span>
-          </span>` : ''}
+          ${bar}
         </span>
         <span class="when">
           <b>${esc(remaining(ms))}</b>
@@ -886,6 +896,53 @@ function praxisSave(){
   const all = load('b1.praxis', {});
   (all[S.level] ||= {})[S.praxisBlock] = { ...S.answers };
   save('b1.praxis', all);
+}
+
+/* ★ Richtig/Falsch je Aufgabe für den 3-Farben-Balken: 1 = richtig, 0 = falsch.
+   Wird automatisch im Hintergrund ermittelt (gradePending) — der/die Lernende
+   muss „Antworten anzeigen" nicht drücken. */
+function praxStat(){ return load('b1.praxstat', {}); }
+// Beim Ändern einer Antwort die alte Bewertung verwerfen → wird neu benotet.
+function dropStat(id){
+  const all = praxStat(); const lvl = all[S.level];
+  if (lvl && lvl[id] !== undefined){ delete lvl[id]; save('b1.praxstat', all); }
+}
+function setPraxStat(itemId, ok){
+  const all = praxStat();
+  (all[S.level] ||= {})[itemId] = ok ? 1 : 0;
+  save('b1.praxstat', all);
+}
+/* Stillschweigend bewerten: beantwortete, noch nicht bewertete Aufgaben holen
+   den Lösungsschlüssel (reveal, in Blöcken) und werden mit ihm verglichen.
+   Der Schlüssel wird nirgends angezeigt — nur die Statistik aktualisiert sich. */
+async function gradePending(){
+  if (!isPraxis() || !S.modell) return false;
+  const stat = (praxStat()[S.level]) || {};
+  const allAns = (load('b1.praxis', {})[S.level]) || {};
+  const ans = {}; Object.values(allAns).forEach(b => Object.assign(ans, b));
+  const itemOf = {};
+  S.modell.sections.forEach(s => (s.items || []).forEach(it => { itemOf[it.id] = { it, sec: s }; }));
+  const todo = Object.keys(ans).filter(id =>
+    itemOf[id] && String(ans[id] ?? '').trim() !== '' && stat[id] === undefined);
+  if (!todo.length) return false;
+  const all = praxStat(); const lvl = (all[S.level] ||= {});
+  let changed = false;
+  for (let i = 0; i < todo.length; i += 100){
+    const chunk = todo.slice(i, i + 100);
+    let res; try { res = await API.reveal(chunk); } catch { res = null; }
+    if (!res || !res.ok) continue;
+    const by = {}; (res.answers || []).forEach(a => { if (a.id) by[a.id] = a; });
+    chunk.forEach(id => {
+      const a = by[id]; if (!a) return;
+      const { it, sec } = itemOf[id];
+      // Freies Textfeld (Formular) → tolerant (fillMatch); sonst Schlüssel-Vergleich.
+      const isText = sec.format === 'formular' && !(it.options && it.options.length);
+      const ok = isText ? fillMatch(ans[id], a.answer) : (ans[id] === a.answer);
+      lvl[id] = ok ? 1 : 0; changed = true;
+    });
+  }
+  if (changed) save('b1.praxstat', all);
+  return changed;
 }
 
 /* Eine Übung = ein Abschnitt: seine Texte und Aufgaben verschränkt
@@ -1191,6 +1248,7 @@ function praxisColor(id, a){
     });
   }
   q.classList.add(ok ? 'isok' : 'isbad');
+  setPraxStat(id, ok);                      // صح/خطأ للشريط (مع التصحيح التلقائي كمان)
   if (a.explanation && !q.querySelector('.why'))
     q.insertAdjacentHTML('beforeend', `<div class="why">${esc(a.explanation)}</div>`);
 }
@@ -2159,6 +2217,7 @@ function bindInputs(sec){
       }
       S.dropped[id] = (S.dropped[id] || []).filter(k => k !== key);
       S.answers[id] = key;
+      dropStat(id);                          // Antwort geändert → neu bewerten
       markPart(sec.id);
       const box = lb.closest('.opts');
       box.querySelectorAll('.opt').forEach(x => {
@@ -2172,6 +2231,7 @@ function bindInputs(sec){
   scope.querySelectorAll('[data-key]').forEach(b => b.onclick = () => {
     const [id, key] = b.dataset.key.split('|');
     if (key) S.answers[id] = key; else delete S.answers[id];
+    dropStat(id);
     markPart(sec.id);
     // نعيد رسم المجموعة: التحديد بيتغيّر وزرّ المسح بيظهر أو بيختفي
     const q  = b.closest('.q');
@@ -2186,6 +2246,7 @@ function bindInputs(sec){
     ta.oninput = () => {
       const id = ta.dataset.txt;
       S.answers[id] = ta.value;
+      dropStat(id);
       markPart(sec.id);
       redrawChecks(sec, id);
       updateProgress();
