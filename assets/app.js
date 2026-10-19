@@ -1075,6 +1075,10 @@ function renderPraxis(b, secs){
     renderPraxis(b, secs);
     window.scrollTo(0, 0);
   });
+  // aktiven Tab in der scrollbaren Reihe sichtbar machen (ohne die Seite zu scrollen)
+  const onTab = app.querySelector('.praxtab.on');
+  if (onTab) requestAnimationFrame(() =>
+    onTab.scrollIntoView({ block: 'nearest', inline: 'center' }));
 }
 // Den aktiven Tab grün färben, sobald seine Übung komplett beantwortet ist.
 function praxisSyncTab(){

@@ -408,12 +408,17 @@ h3{font-size:1em; margin:0 0 4px}
 .wc .wcbody b{color:var(--ink); font-weight:700}
 .praxisset{margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid var(--line)}
 .praxisset .setnum{font-size:1.05em; color:var(--brand-dark); margin:18px 0 6px}
-/* ★ Übungs-Tabs: eine Knopfreihe je Teil. Erledigt = grün, offen = neutral,
-   aktiv = blauer Rahmen/Ring. */
-.praxtabs{display:flex; flex-wrap:wrap; gap:8px; margin:2px 0 18px}
-.praxtab{min-width:44px; min-height:40px; padding:7px 13px; border-radius:10px;
-  background:var(--card); border:1.5px solid var(--line); color:var(--ink);
-  font:inherit; font-size:.98em; font-weight:700; cursor:pointer;
+/* ★ Übungs-Tabs: eine kompakte, horizontal scrollbare Reihe (stapelt sich
+   nicht mehr in viele Zeilen). Erledigt = grün, offen = neutral, aktiv = Ring. */
+.praxtabs{display:flex; flex-wrap:nowrap; gap:6px; margin:2px 0 16px;
+  overflow-x:auto; padding-bottom:5px; scrollbar-width:thin;
+  -webkit-overflow-scrolling:touch; scroll-snap-type:x proximity}
+.praxtabs::-webkit-scrollbar{height:6px}
+.praxtabs::-webkit-scrollbar-thumb{background:var(--line); border-radius:999px}
+.praxtab{flex:0 0 auto; min-width:36px; min-height:34px; padding:5px 10px;
+  border-radius:9px; background:var(--card); border:1px solid var(--line);
+  color:var(--ink); font:inherit; font-size:.9em; font-weight:700; cursor:pointer;
+  scroll-snap-align:center;
   transition:border-color .12s, background .12s, color .12s, box-shadow .12s}
 .praxtab:hover{border-color:var(--brand)}
 .praxtab.done{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
