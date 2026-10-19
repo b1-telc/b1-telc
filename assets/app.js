@@ -229,11 +229,12 @@ elBack.onclick = () => {
   }
 };
 
-// ★ Zurücksetzen-Symbol im Header: setzt den aktuellen Übungsteil zurück
-//   (mit Bestätigung). Sichtbar nur in der Übung (view === 'praxis').
+// ★ Zurücksetzen-Symbol im Header: setzt nur die AKTUELLE Übung zurück
+//   (mit Bestätigung). Den ganzen Teil setzt man über seine Karte zurück.
 elReset.onclick = () => {
   if (S.view !== 'praxis' || !S.praxisSecs) return;
-  ask(t('praxisResetAsk'), () => praxisReset(S.praxisSecs), t('praxisReset'));
+  const cur = S.praxisSecs.find(s => s.id === S.praxisSet);
+  ask(t('praxisResetAsk'), () => praxisReset(cur ? [cur] : S.praxisSecs), t('praxisReset'));
 };
 
 // ★ Name im Header = zurück zur Startseite (jederzeit).
@@ -550,8 +551,13 @@ function ragBar(green, red, total){
   if (!total) return '';
   const gray = total - green - red;
   const pctOf = c => Math.round(c / total * 100);
-  const seg = (cls, count) => `<i class="${cls}" style="flex:${count} 1 0;${
-    count ? 'min-width:40px' : ''}">${count ? pctOf(count) + '%' : ''}</i>`;
+  const seg = (cls, count) => {
+    if (!count) return `<i class="${cls}" style="flex:0 0 0"></i>`;
+    const p = pctOf(count);
+    // أدنى عرض حسب طول الرقم تا يبان بلا ما يكبّر الجزء الصغير زيادة.
+    const mw = p < 10 ? 26 : (p < 100 ? 32 : 40);
+    return `<i class="${cls}" style="flex:${count} 1 0;min-width:${mw}px">${p}%</i>`;
+  };
   return `<span class="ragbar big">${seg('g', green)}${seg('r', red)}${seg('n', gray)}</span>`;
 }
 // Richtig/Falsch/Gesamt über eine Menge Aufgaben-IDs (für Teil-Balken).
@@ -889,14 +895,25 @@ function screenSkill(skill){
         const secs = b.parts.map(id => m.sections.find(x => x.id === id)).filter(Boolean);
         const ids = secs.flatMap(s => (s.items || []).map(it => it.id));
         const bs = statsFor(ids);
-        return `<div class="blockcard"><button class="tile" data-part="${esc(b.id)}">
+        const answered = ids.some(id => String((prog[b.id] || {})[id] ?? '').trim() !== '');
+        return `<div class="blockcard"><div class="tile" data-part="${esc(b.id)}"
+            role="button" tabindex="0">
           <span class="grow"><span style="font-weight:600">${esc(b.title)}</span>
             <div class="meta">${esc(plural(secs.length, 'nUebung'))}</div>
             ${ids.length ? `<span class="lvlprog">${ragBar(bs.green, bs.red, bs.total)}</span>` : ''}</span>
-          <span class="chev">›</span></button></div>`;
+          ${answered ? `<button class="blockreset" data-reset="${esc(b.id)}"
+            aria-label="${esc(t('praxisReset'))}" title="${esc(t('praxisReset'))}">↺</button>` : ''}
+          <span class="chev">›</span></div></div>`;
       }).join('')}`;
-    app.querySelectorAll('[data-part]').forEach(x =>
-      x.onclick = () => screenPractice(x.dataset.part));
+    app.querySelectorAll('[data-part]').forEach(el => {
+      const open = () => screenPractice(el.dataset.part);
+      el.onclick = e => { if (!e.target.closest('[data-reset]')) open(); };
+      el.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } };
+    });
+    app.querySelectorAll('[data-reset]').forEach(b => b.onclick = e => {
+      e.stopPropagation();
+      ask(t('praxisResetAsk'), () => blockReset(b.dataset.reset), t('praxisReset'));
+    });
   });
 }
 
@@ -1154,14 +1171,37 @@ function praxisSyncTab(){
   if (tab) tab.classList.add('done');
 }
 
-/* Antworten des ganzen Teils löschen und frisch neu zeichnen. */
+/* Antworten (und Bewertung) der gegebenen Übungen löschen, frisch neu zeichnen. */
 function praxisReset(secs){
+  const stat = praxStat(); const lvl = stat[S.level];
   secs.forEach(sec => (sec.items || []).forEach(it => {
     delete S.answers[it.id]; delete S.dropped[it.id];
+    if (lvl) delete lvl[it.id];                 // صح/خطأ المخزّن ينمسح كمان
   }));
+  if (lvl) save('b1.praxstat', stat);
   praxisSave();
   toast(t('praxisResetDone'));
   screenPractice(S.praxisBlock);
+}
+
+/* ★ Einen ganzen Teil (Block) von seiner Karte aus zurücksetzen:
+   alle Antworten + Bewertungen des Blocks löschen. */
+function blockReset(blockId){
+  const m = S.modell; const b = m && m.blocks.find(x => x.id === blockId);
+  if (!b) return;
+  const all = load('b1.praxis', {});
+  if (all[S.level]) delete all[S.level][blockId];
+  save('b1.praxis', all);
+  const stat = praxStat(); const lvl = stat[S.level];
+  if (lvl){
+    b.parts.forEach(pid => {
+      const s = m.sections.find(x => x.id === pid);
+      (s && s.items || []).forEach(it => delete lvl[it.id]);
+    });
+    save('b1.praxstat', stat);
+  }
+  toast(t('praxisResetDone'));
+  screenSkill(S.praxisSkill);
 }
 
 /* Knopf ist erst aktiv, wenn alle Aufgaben der Übung beantwortet sind. */
