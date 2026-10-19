@@ -422,6 +422,7 @@ function screenLevel(){
     if (S.view === 'level' && review.due !== before) screenLevel();
   });
   go('level', () => {
+    cacheLevelProgress();   // Fortschritt dieser Stufe für die Startseite sichern
     /* المقفولة بتنعرض بعنوانها وعدد أسئلتها بس — محتواها ما بينحمّل
        ولا بينوجد بالصفحة. هدفها إن صاحب التجريبي يعرف إنه في غير
        امتحان. المصدر level_catalog، وهي بترجّع بيانات وصفية فقط. */
@@ -509,12 +510,46 @@ function screenLevel(){
   });
 }
 
+/* ★ Fortschritt der aktuell geladenen Stufe: erledigte Teile / Gesamt.
+   Goethe: ein Teil gilt als fertig, wenn alle seine Aufgaben beantwortet
+   sind. telc: ein Modelltest zählt, sobald ein Ergebnis vorliegt. Wird je
+   Stufe gecacht, damit die Startseite den Balken auch für nicht geladene
+   Stufen zeigen kann. */
+function levelProgress(){
+  if (isPraxis() && S.modell){
+    const prog = (load('b1.praxis', {})[S.level]) || {};
+    let done = 0;
+    S.modell.blocks.forEach(b => {
+      const nItems = b.parts.reduce((a, id) => {
+        const s = S.modell.sections.find(x => x.id === id); return a + (s ? s.items.length : 0);
+      }, 0);
+      const ans = prog[b.id] || {};
+      const nDone = Object.keys(ans).filter(k => String(ans[k] ?? '').trim() !== '').length;
+      if (nItems && nDone >= nItems) done++;
+    });
+    return { done, total: S.modell.blocks.length };
+  }
+  const modelle = (S.index && S.index.modelle) || [];
+  const prog = load('b1.progress', {});
+  let done = 0;
+  modelle.forEach(m => { if (prog[m.id] && Object.keys(prog[m.id]).length) done++; });
+  return { done, total: modelle.length };
+}
+function cacheLevelProgress(){
+  const all = load('b1.levelprog', {});
+  all[S.level] = levelProgress();
+  save('b1.levelprog', all);
+}
+
 /* ★ Startseite: Begrüßung + eine Karte je Stufe (Goethe · A1, telc · B1 …)
    plus eine „+"-Karte zum Code-Einlösen. Antippen einer Karte öffnet den
    Inhalt der Stufe (screenLevel); „zurück" führt wieder hierher. */
 function screenHome(){
   stopTimer();
+  cacheLevelProgress();                       // Fortschritt der aktuellen Stufe sichern
   go('home', () => {
+    const progCache = load('b1.levelprog', {});
+    const progOf = l => l.id === S.level ? levelProgress() : progCache[l.id];
     const name = l => l.provider && l.stufe
       ? `${l.provider} · ${l.stufe}` : (l.title || l.id);
     const leftMs = id => {
@@ -541,12 +576,18 @@ function screenHome(){
       const h  = ms == null ? null : Math.floor(ms / 3600000);
       const soon = h != null && h < 24 * 7;
       const only = S.sub && S.sub.scope && S.sub.scope[l.id];
+      const lp = progOf(l);
+      const pct = (lp && lp.total) ? Math.round(lp.done / lp.total * 100) : null;
       return `<button class="abo lvlentry${soon ? ' soon' : ''}" data-enter="${esc(l.id)}">
         <span class="grow">
           <span class="who">${esc(name(l))}</span>
           <span class="what">${only
             ? `${esc(t('demo'))} · ${esc(plural(only.length, 'nTest'))}`
             : esc(t('fullAccess'))}</span>
+          ${pct != null ? `<span class="lvlprog">
+            <span class="lvlprogbar"><i style="width:${pct}%"></i></span>
+            <span class="lvlprogtxt">${lp.done} / ${lp.total} · ${pct} %</span>
+          </span>` : ''}
         </span>
         <span class="when">
           <b>${esc(remaining(ms))}</b>
