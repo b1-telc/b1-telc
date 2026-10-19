@@ -12,10 +12,17 @@ const I18N = (() => {
 
   /* العلم بيتعرف من بعيد وبلا قراءة — وهاد المطلوب من منتقي لغة: مين
      ما بيقرا الألماني لازم يلاقي لغته بلا ما يقرا شي. */
+  /* ★ أعلام مرسومة SVG بدل إيموجي الأعلام: ويندوز ما بيعرض إيموجي العلم
+     (بيطلع رمز البلد DE/SA/UA)، فمنرسمها تا تبان على كل الأجهزة. */
+  const FLAGS = {
+    de: '<svg class="flagimg" viewBox="0 0 5 3" aria-hidden="true"><rect width="5" height="3" fill="#000"/><rect y="1" width="5" height="1" fill="#D00"/><rect y="2" width="5" height="1" fill="#FFCE00"/></svg>',
+    ar: '<svg class="flagimg" viewBox="0 0 5 3" aria-hidden="true"><rect width="5" height="3" fill="#1a7a3c"/><rect x="0.7" y="1.95" width="3.6" height="0.2" rx="0.1" fill="#fff"/><rect x="1.2" y="1.15" width="2.6" height="0.5" rx="0.25" fill="#fff" opacity=".92"/></svg>',
+    uk: '<svg class="flagimg" viewBox="0 0 5 3" aria-hidden="true"><rect width="5" height="3" fill="#FFD500"/><rect width="5" height="1.5" fill="#0057B7"/></svg>'
+  };
   const LANGS = [
-    { id: 'de', name: 'Deutsch',    flag: '🇩🇪', dir: 'ltr' },
-    { id: 'ar', name: 'العربية',    flag: '🇸🇦', dir: 'rtl' },
-    { id: 'uk', name: 'Українська', flag: '🇺🇦', dir: 'ltr' }
+    { id: 'de', name: 'Deutsch',    flag: FLAGS.de, dir: 'ltr' },
+    { id: 'ar', name: 'العربية',    flag: FLAGS.ar, dir: 'rtl' },
+    { id: 'uk', name: 'Українська', flag: FLAGS.uk, dir: 'ltr' }
   ];
 
   const DICT = {

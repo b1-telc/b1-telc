@@ -172,9 +172,9 @@ function setbarHTML(){
 
   return `<div class="setbar" role="group" aria-label="${esc(t('settings'))}">
     <div class="setgrp">
-      ${I18N.LANGS.map(l => `<button class="chip${l.id === I18N.lang ? ' on' : ''}"
+      ${I18N.LANGS.map(l => `<button class="chip flagchip${l.id === I18N.lang ? ' on' : ''}"
         data-lang="${esc(l.id)}" title="${esc(l.name)}"
-        aria-label="${esc(l.name)}">${esc(l.flag)}</button>`).join('')}
+        aria-label="${esc(l.name)}">${l.flag}</button>`).join('')}
     </div>
     <div class="setgrp">
       ${THEMES.map(x => `<button class="chip${x === th ? ' on' : ''}"
