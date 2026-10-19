@@ -524,12 +524,6 @@ function screenHome(){
       <p class="sub">${isPraxis() ? esc(t('praxisHome'))
         : lvl ? esc(t('homeIntro', { level: name(lvl) }))
               : esc(t('homeIntroPlain'))}</p>
-      <button class="tile" id="resbtn">
-        <span class="n">📖</span>
-        <span class="grow"><span style="font-weight:600">${esc(t('material'))}</span>
-          <div class="meta">${esc(t('materialMeta'))}</div></span>
-        <span class="chev">›</span>
-      </button>
       ${nLocked ? `<div class="upsell">
         ${esc(t('upsell', { n: plural(nLocked, 'nMore') }))}
       </div>` : ''}
@@ -548,13 +542,13 @@ function screenHome(){
           <div class="meta">${review.mastered ? `${plural(review.mastered, 'nSits')}` : esc(t('allRepeated'))}${
             review.next_due ? ` · ${esc(t('nextOn', { date: new Date(review.next_due).toLocaleDateString('de-DE') }))}` : ''}</div></span>
       </div>` : '')}
+      ${cards}
       ${(skills && skills.length) ? `<button class="tile simtile" id="simstart">
         <span class="n">📝</span>
         <span class="grow"><span style="font-weight:600">${esc(t('simStart'))}</span>
           <div class="meta">${esc(t('simDesc'))}</div></span>
         <span class="chev">›</span>
-      </button>` : ''}
-      ${cards}`;
+      </button>` : ''}`;
 
     const simb = document.getElementById('simstart');
     if (simb) simb.onclick = () => startSim();
@@ -566,7 +560,6 @@ function screenHome(){
       b.onclick = () => switchLevel(b.dataset.lvl));
     const addc = document.getElementById('addcode');
     if (addc) addc.onclick = () => screenCode();
-    document.getElementById('resbtn').onclick = screenResources;
     const dr = document.getElementById('drill');
     if (dr) dr.onclick = async () => {
       const run = await drillRun();

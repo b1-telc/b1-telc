@@ -35,6 +35,9 @@ main{max-width:820px; margin:0 auto; padding:18px 16px 24px}
 
 /* ---------- topbar ---------- */
 .topbar{
+  /* ★ الهيدر دائماً LTR: الاسم «Deutsche Pass» يسار والأزرار يمين، حتى
+     لما تكون الواجهة عربي (RTL) — تا يضلّ متل الألماني وما ينقلب. */
+  direction:ltr;
   position:sticky; top:0; z-index:30; display:flex; align-items:center; gap:12px;
   padding:10px 16px; background:var(--card); border-bottom:1px solid var(--line);
 }
