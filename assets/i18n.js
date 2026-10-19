@@ -82,7 +82,7 @@ const I18N = (() => {
       homeIntroPlain: 'Wählen Sie einen Modelltest. Jeder Test hat die ' +
                       'Prüfungsteile der schriftlichen Prüfung — mit der echten Prüfungszeit.',
       /* Üben nach Abschnitt (Goethe) */
-      praxisHome: 'Wählen Sie einen Bereich und üben Sie — ohne Zeit, ohne Noten.',
+      praxisHome: 'Freies Üben ohne Zeit und Noten — oder unten die Prüfungssimulation.',
       praxisPick: 'Wählen Sie einen Teil.',
       praxisHint: 'Ohne Zeit, ohne Punkte. Ihr Stand wird gespeichert. '
                 + 'Nach jedem Text können Sie die Antworten anzeigen.',
@@ -426,7 +426,7 @@ const I18N = (() => {
       requestCorrection: "طلب التصحيح",
       allRepeated: 'تمّت مراجعة الكل',
       nextOn: 'التالي في {date}',
-      praxisHome: "اختر مجالاً وتدرّب — بلا وقت وبلا درجات.",
+      praxisHome: "تدرّب بحرّية بلا وقت ولا درجات — أو جرّب الامتحان التجريبي تحت.",
       praxisPick: "اختر جزءًا.",
       praxisHint: "بلا وقت وبلا نقاط. يُحفظ تقدّمك. بعد كل نص يمكنك عرض الإجابات.",
       praxisDone: "{n} من {total} مُجابة",
@@ -696,7 +696,7 @@ const I18N = (() => {
       requestCorrection: "Запросити перевірку",
       allRepeated: 'Усе повторено',
       nextOn: 'далі {date}',
-      praxisHome: "Виберіть розділ і тренуйтеся — без часу й без оцінок.",
+      praxisHome: "Вільне тренування без часу й оцінок — або внизу пробний іспит.",
       praxisPick: "Виберіть частину.",
       praxisHint: "Без часу й без балів. Ваш прогрес зберігається. Після кожного тексту можна показати відповіді.",
       praxisDone: "Відповіли на {n} з {total}",
