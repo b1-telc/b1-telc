@@ -544,6 +544,24 @@ function cacheLevelProgress(){
   save('b1.levelprog', all);
 }
 
+/* ★ 3-Farben-Balken (grün richtig · rot falsch · grau offen) als HTML.
+   Jedes Segment mit Wert hat eine Mindestbreite, damit die Prozentzahl passt. */
+function ragBar(green, red, total){
+  if (!total) return '';
+  const gray = total - green - red;
+  const pctOf = c => Math.round(c / total * 100);
+  const seg = (cls, count) => `<i class="${cls}" style="flex:${count} 1 0;${
+    count ? 'min-width:40px' : ''}">${count ? pctOf(count) + '%' : ''}</i>`;
+  return `<span class="ragbar big">${seg('g', green)}${seg('r', red)}${seg('n', gray)}</span>`;
+}
+// Richtig/Falsch/Gesamt über eine Menge Aufgaben-IDs (für Teil-Balken).
+function statsFor(ids){
+  const st = (praxStat()[S.level]) || {};
+  let green = 0, red = 0;
+  ids.forEach(id => { const v = st[id]; if (v === 1) green++; else if (v === 0) red++; });
+  return { green, red, total: ids.length };
+}
+
 /* ★ Statistik-Leiste: Serie (Streak), gelöste Aufgaben, gemeisterte Items. */
 const dayKey = d => { d = d || new Date();
   return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`; };
@@ -646,14 +664,7 @@ function screenHome(){
       const lp = progOf(l);
       let bar = '';
       if (lp && lp.rag && lp.total){
-        // كل لون بياخد عرضه بالتناسب (flex)، مع حدّ أدنى يكفّي الرقم تا يبان
-        // دايماً — حتى الأحمر الصغير. القيمة 0 بتنكمش لصفر.
-        const pctOf = c => Math.round(c / lp.total * 100);
-        const seg = (cls, count) => `<i class="${cls}" style="flex:${count} 1 0;${
-          count ? 'min-width:40px' : ''}">${count ? pctOf(count) + '%' : ''}</i>`;
-        bar = `<span class="lvlprog">
-          <span class="ragbar big">${seg('g', lp.green)}${seg('r', lp.red)}${seg('n', lp.gray)}</span>
-        </span>`;
+        bar = `<span class="lvlprog">${ragBar(lp.green, lp.red, lp.total)}</span>`;
       } else if (lp && lp.total){
         const pct = Math.round(lp.done / lp.total * 100);
         bar = `<span class="lvlprog">
@@ -864,6 +875,8 @@ function openSkill(skill){
 function screenSkill(skill){
   stopTimer();
   const m = S.modell;
+  // Antworten im Hintergrund bewerten, dann die Teil-Balken neu zeichnen.
+  gradePending().then(changed => { if (changed && S.view === 'skill') screenSkill(skill); });
   go('skill', () => {
     S.praxisSkill = skill;
     const prog   = (load('b1.praxis', {})[S.level]) || {};
@@ -872,20 +885,14 @@ function screenSkill(skill){
       <h1>${esc(skill)}</h1>
       <p class="sub">${esc(t('praxisPick'))}</p>
       ${blocks.map(b => {
-        // ★ عدد التمارين (أقسام) مو عدد الأسئلة؛ والتقدّم بالتمارين المكتملة.
+        // ★ عدد التمارين + شريط ٣ ألوان (صح/خطأ/غير محلول) لهذا الـTeil.
         const secs = b.parts.map(id => m.sections.find(x => x.id === id)).filter(Boolean);
-        const ans  = prog[b.id] || {};
-        const setDoneHere = s => {
-          const ids = (s.items || []).map(it => it.id);
-          return ids.length && ids.every(id => String(ans[id] ?? '').trim() !== '');
-        };
-        const nSets = secs.length;
-        const doneSets = secs.filter(setDoneHere).length;
-        const meta = [plural(nSets, 'nUebung'),
-          doneSets ? t('praxisSetsDone', { n: doneSets, total: nSets }) : ''].filter(Boolean).join(' · ');
+        const ids = secs.flatMap(s => (s.items || []).map(it => it.id));
+        const bs = statsFor(ids);
         return `<div class="blockcard"><button class="tile" data-part="${esc(b.id)}">
           <span class="grow"><span style="font-weight:600">${esc(b.title)}</span>
-            <div class="meta">${esc(meta)}</div></span>
+            <div class="meta">${esc(plural(secs.length, 'nUebung'))}</div>
+            ${ids.length ? `<span class="lvlprog">${ragBar(bs.green, bs.red, bs.total)}</span>` : ''}</span>
           <span class="chev">›</span></button></div>`;
       }).join('')}`;
     app.querySelectorAll('[data-part]').forEach(x =>
