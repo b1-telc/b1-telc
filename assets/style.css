@@ -760,14 +760,18 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
 .lvlprog{display:block; margin-top:9px}
 /* ★ 3-Farben-Balken mit Prozent am Anfang jeder Farbe:
    grün richtig · rot falsch · grau noch offen. */
-.ragbar{display:flex; border-radius:7px; overflow:hidden; background:var(--line)}
-.ragbar i{display:flex; align-items:center; height:100%}
+/* ★ direction:ltr مهمّ: الواجهة بتصير RTL بالعربي، وبلا هيك «inline-start»
+   بيصير يمين فالرقم ينزاح للحافة وينقصّ. وبلا overflow:hidden عالخانة تا ما
+   ينقطع الرقم (لو كبر عن خانته بيفيض على جنبها وبيضلّ كامل). */
+.ragbar{display:flex; direction:ltr; border-radius:7px; overflow:hidden; background:#64718c}
+.ragbar i{display:flex; align-items:center; justify-content:flex-start; height:100%}
 .ragbar.big{height:20px}
-.ragbar.big i{padding-inline-start:5px; font-size:11px; font-weight:800;
-  color:#fff; white-space:nowrap; overflow:hidden}
+.ragbar.big i{padding-inline-start:6px; font-size:11px; font-weight:800;
+  color:#fff; white-space:nowrap; text-shadow:0 1px 1px rgba(0,0,0,.4)}
 .ragbar i.g{background:var(--ok)}
 .ragbar i.r{background:var(--bad)}
-.ragbar i.n{background:var(--line); color:var(--ink)}
+/* الرمادي (غير محلول): لون محايد ثابت ورقم أبيض واضح على كل الثيمات. */
+.ragbar i.n{background:#64718c; color:#fff}
 /* ★ Zurücksetzen-Knopf auf der Teil-Karte. */
 .blockreset{flex:0 0 auto; width:34px; height:34px; padding:0; margin-inline-start:6px;
   display:inline-flex; align-items:center; justify-content:center;
