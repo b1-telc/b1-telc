@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="icon" href="assets/icons/icon-192.png">
-<link rel="stylesheet" href="assets/style.css?v=40">
+<link rel="stylesheet" href="assets/style.css?v=41">
 </head>
 <body>
 
@@ -20,10 +20,10 @@
   <!-- ★ Alles im Header: ← Zurück, klickbarer Name (zur Startseite),
        ↺ Zurücksetzen (nur Übung), ⚙ Einstellungen (Sprache/Thema/Schrift)
        jederzeit über ein Menü — ohne zur Startseite zurück zu müssen. -->
-  <button id="btnBack" class="hbtn" hidden aria-label="Zurück">←</button>
   <button id="btnHome" class="brand" aria-label="Startseite">Deutsche <span>Pass</span></button>
   <div id="timer" class="timer" hidden><span id="timerText">00:00</span></div>
   <button id="btnReset" class="hbtn" hidden aria-label="Zurücksetzen">↺</button>
+  <button id="btnBack" class="hbtn" hidden aria-label="Zurück">←</button>
   <button id="btnSettings" class="hbtn" aria-label="Einstellungen">⚙</button>
   <div id="setmenu" class="setmenu" hidden></div>
 </header>
@@ -34,10 +34,10 @@
 
 <!-- ★ ?v=… بيكسر الكاش القديم: الرابط بيتغيّر فالمتصفّح مجبور يجيب
      نسخة جديدة. نرفّع الرقم لما يعلق الطلاب على نسخة قديمة. -->
-<script src="assets/i18n.js?v=40"></script>
+<script src="assets/i18n.js?v=41"></script>
 <script src="assets/config.js"></script>
-<script src="assets/api.js?v=40"></script>
-<script src="assets/app.js?v=40"></script>
+<script src="assets/api.js?v=41"></script>
+<script src="assets/app.js?v=41"></script>
 <script>
   if ('serviceWorker' in navigator) {
     addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
