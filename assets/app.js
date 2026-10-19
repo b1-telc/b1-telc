@@ -203,17 +203,21 @@ async function loadCatalog(id){
 elBack.onclick = () => {
   if (S.view === 'exam'){
     ask(t('leaveAsk'),
-        () => { stopTimer(); (S.run && (S.run.drill || S.run.sim)) ? screenHome() : screenModell(S.modell); },
+        () => { stopTimer(); (S.run && (S.run.drill || S.run.sim)) ? screenLevel() : screenModell(S.modell); },
         t('leave'));
   } else if (S.view === 'result' || S.view === 'intro'){
     stopTimer();
-    if (S.run && (S.run.drill || S.run.sim)) screenHome(); else screenModell(S.modell);
+    if (S.run && (S.run.drill || S.run.sim)) screenLevel(); else screenModell(S.modell);
   } else if (S.view === 'resource'){
     screenResources();
   } else if (S.view === 'praxis'){
     // zurück zur Teilliste der Fertigkeit
-    if (S.modell && S.praxisSkill) screenSkill(S.praxisSkill); else screenHome();
-  } else if (S.view === 'skill'){
+    if (S.modell && S.praxisSkill) screenSkill(S.praxisSkill); else screenLevel();
+  } else if (S.view === 'skill' || S.view === 'modell'){
+    // zurück zum Inhalt der Stufe (Fertigkeiten/Modelltests)
+    screenLevel();
+  } else if (S.view === 'level'){
+    // zurück zu den Stufen-Karten (Startseite)
     screenHome();
   } else {
     screenHome();
@@ -406,15 +410,18 @@ async function refreshMistakes(){
   catch { review = { due: 0, total: 0, mastered: 0, next_due: null }; }
 }
 
-function screenHome(){
+/* ★ Inhalt einer Stufe: die Fertigkeiten/Modelltests + Simulation. Erreicht
+   man durch Antippen einer Stufen-Karte auf der Startseite; „zurück" führt
+   wieder zu den Karten. */
+function screenLevel(){
   stopTimer();
   // Die Fehlerzahl kommt vom Server. Neu gezeichnet wird nur, wenn sie sich
   // geändert hat — sonst ruft sich der Bildschirm endlos selbst auf.
   const before = review.due;
   refreshMistakes().then(() => {
-    if (S.view === 'home' && review.due !== before) screenHome();
+    if (S.view === 'level' && review.due !== before) screenLevel();
   });
-  go('home', () => {
+  go('level', () => {
     /* المقفولة بتنعرض بعنوانها وعدد أسئلتها بس — محتواها ما بينحمّل
        ولا بينوجد بالصفحة. هدفها إن صاحب التجريبي يعرف إنه في غير
        امتحان. المصدر level_catalog، وهي بترجّع بيانات وصفية فقط. */
@@ -457,70 +464,8 @@ function screenHome(){
     const name = l => l.provider && l.stufe
       ? `${l.provider} · ${l.stufe}` : (l.title || l.id);
 
-    /* الوقت الباقي. بالساعات لما يكون أقل من يومين: كود تجريبي مدّته
-       ٢٤ ساعة كان بيطلع «١ يوم» طول عمره، وهاد مضلّل — الطالب بيظن
-       إنه باقيله يوم كامل وهو باقيله ساعتين. */
-    const leftMs = id => {
-      const d = S.sub && S.sub.until && S.sub.until[id];
-      return d ? new Date(d) - Date.now() : null;
-    };
-    const remaining = ms => {
-      if (ms == null) return '';
-      if (ms <= 0) return t('expired');
-      if (ms >= 48 * 3600000) return plural(Math.ceil(ms / 86400000), 'daysLeft');
-      const h = Math.ceil(ms / 3600000);
-      if (h >= 1) return plural(h, 'hoursLeft');
-      return t('lessThanHour');
-    };
-    const endsFmt = id => {
-      const d = S.sub && S.sub.until && S.sub.until[id];
-      if (!d) return '';
-      const x = new Date(d);
-      return x.toLocaleDateString('de-DE',
-        { day: '2-digit', month: '2-digit', year: 'numeric' });
-    };
-
-    /* بطاقة الاشتراك: شو عنده، وكم باقيله — دايماً ظاهرة.
-       قبل، هالمعلومة كانت تطلع بس لما يكون عنده أكتر من مستوى، فالطالب
-       العادي ما كان يعرف لا شو اشترى ولا إمتى بينتهي. */
-    const aboRow = l => {
-      const ms = leftMs(l.id);
-      const h  = ms == null ? null : Math.floor(ms / 3600000);
-      const soon = h != null && h < 24 * 7;
-      const only = S.sub && S.sub.scope && S.sub.scope[l.id];
-      // Goethe: نظام أقسام مو نماذج — فما منعدّ «نماذج»
-      const n = (l.id === S.level && isPraxis()) ? 0
-              : only ? only.length
-              : (l.id === S.level ? (S.index && S.index.modelle || []).length : 0);
-      return `<button class="abo${l.id === S.level ? ' on' : ''}${
-        soon ? ' soon' : ''}" data-lvl="${esc(l.id)}"
-        ${S.levels.length > 1 ? '' : 'disabled'}>
-        <span class="grow">
-          <span class="who">${esc(name(l))}</span>
-          <span class="what">${only
-            ? `${esc(t('demo'))} · ${esc(plural(only.length, 'nTest'))}`
-            : `${esc(t('fullAccess'))}${n ? ` · ${esc(plural(n, 'nTest'))}` : ''}`}</span>
-        </span>
-        <span class="when">
-          <b>${esc(remaining(ms))}</b>
-          <span class="bis">${esc(t('until', { date: endsFmt(l.id) }))}</span>
-        </span>
-      </button>`;
-    };
-    /* ★ كود تاني بلا خروج.
-       الطالب بياخد تجريبي، وبعدين بياخد كود كامل — وما كان في ولا طريق
-       يحطّه: شاشة الكود بتطلع بس لمين ما عنده اشتراك. كان بدّه يمسح
-       بيانات الموقع ليرجعلها، ويخسر نتايجه وباقي تجريبيّه.
-       والاشتراكات بتتجمّع (api.js/subscription)، فالاتنين بيشتغلوا سوا. */
-    const abo = S.levels.length
-      ? `<div class="abos">${S.levels.map(aboRow).join('')}</div>
-         <button class="btn ghost" id="addcode"
-                 style="width:100%;margin:-2px 0 14px">${esc(t('addCode'))}</button>`
-      : '';
-
     app.innerHTML = `
-      <h1>${esc(t('welcome'))}</h1>
-      ${abo}
+      <h1>${lvl ? esc(name(lvl)) : ''}</h1>
       <p class="sub">${isPraxis() ? esc(t('praxisHome'))
         : lvl ? esc(t('homeIntro', { level: name(lvl) }))
               : esc(t('homeIntroPlain'))}</p>
@@ -556,10 +501,6 @@ function screenHome(){
       b.onclick = () => openModell(b.dataset.id));
     app.querySelectorAll('.tile[data-skill]').forEach(b =>
       b.onclick = () => openSkill(b.dataset.skill));
-    app.querySelectorAll('[data-lvl]').forEach(b =>
-      b.onclick = () => switchLevel(b.dataset.lvl));
-    const addc = document.getElementById('addcode');
-    if (addc) addc.onclick = () => screenCode();
     const dr = document.getElementById('drill');
     if (dr) dr.onclick = async () => {
       const run = await drillRun();
@@ -568,20 +509,85 @@ function screenHome(){
   });
 }
 
-/* Stufe wechseln: Inhalte, Cache und Merkposten hängen alle daran. */
-async function switchLevel(id){
-  if (id === S.level) return;
-  S.level = id;
-  save('b1.level', id);
-  Object.keys(modellCache).forEach(k => delete modellCache[k]);
-  S.modell = null;
-  app.innerHTML = `<div class="empty">${esc(t('moment'))}</div>`;
-  try { S.index = await API.index(id); }
-  catch { return void toast(t('levelFailed')); }
-  S.catalog = await loadCatalog(id);
-  // Goethe: die Fertigkeiten kommen aus dem (einen) Test — vorab laden
-  if (isPraxis()){ try { S.modell = await praxisTest(); } catch { S.modell = null; } }
-  screenHome();
+/* ★ Startseite: Begrüßung + eine Karte je Stufe (Goethe · A1, telc · B1 …)
+   plus eine „+"-Karte zum Code-Einlösen. Antippen einer Karte öffnet den
+   Inhalt der Stufe (screenLevel); „zurück" führt wieder hierher. */
+function screenHome(){
+  stopTimer();
+  go('home', () => {
+    const name = l => l.provider && l.stufe
+      ? `${l.provider} · ${l.stufe}` : (l.title || l.id);
+    const leftMs = id => {
+      const d = S.sub && S.sub.until && S.sub.until[id];
+      return d ? new Date(d) - Date.now() : null;
+    };
+    // الوقت الباقي: بالساعات لما يكون أقل من يومين (كود ٢٤ ساعة ما يطلع «يوم»).
+    const remaining = ms => {
+      if (ms == null) return '';
+      if (ms <= 0) return t('expired');
+      if (ms >= 48 * 3600000) return plural(Math.ceil(ms / 86400000), 'daysLeft');
+      const h = Math.ceil(ms / 3600000);
+      if (h >= 1) return plural(h, 'hoursLeft');
+      return t('lessThanHour');
+    };
+    const endsFmt = id => {
+      const d = S.sub && S.sub.until && S.sub.until[id];
+      if (!d) return '';
+      return new Date(d).toLocaleDateString('de-DE',
+        { day: '2-digit', month: '2-digit', year: 'numeric' });
+    };
+    const entry = l => {
+      const ms = leftMs(l.id);
+      const h  = ms == null ? null : Math.floor(ms / 3600000);
+      const soon = h != null && h < 24 * 7;
+      const only = S.sub && S.sub.scope && S.sub.scope[l.id];
+      return `<button class="abo lvlentry${soon ? ' soon' : ''}" data-enter="${esc(l.id)}">
+        <span class="grow">
+          <span class="who">${esc(name(l))}</span>
+          <span class="what">${only
+            ? `${esc(t('demo'))} · ${esc(plural(only.length, 'nTest'))}`
+            : esc(t('fullAccess'))}</span>
+        </span>
+        <span class="when">
+          <b>${esc(remaining(ms))}</b>
+          <span class="bis">${esc(t('until', { date: endsFmt(l.id) }))}</span>
+        </span>
+        <span class="chev">›</span>
+      </button>`;
+    };
+    app.innerHTML = `
+      <h1>${esc(t('landingTitle'))}</h1>
+      <p class="sub">${esc(t('landingSub'))}</p>
+      <div class="abos">
+        ${(S.levels || []).map(entry).join('')}
+        <button class="abo addcard" id="addcode">
+          <span class="plus">+</span>
+          <span class="grow"><span class="who">${esc(t('addCode'))}</span></span>
+        </button>
+      </div>`;
+    app.querySelectorAll('[data-enter]').forEach(b =>
+      b.onclick = () => enterLevel(b.dataset.enter));
+    const addc = document.getElementById('addcode');
+    if (addc) addc.onclick = () => screenCode();
+  });
+}
+
+/* Stufe öffnen: Inhalte, Cache und Merkposten hängen alle daran. Lädt bei
+   Bedarf die Daten der Stufe und zeigt dann ihren Inhalt. */
+async function enterLevel(id){
+  if (id && id !== S.level){
+    S.level = id;
+    save('b1.level', id);
+    Object.keys(modellCache).forEach(k => delete modellCache[k]);
+    S.modell = null;
+    app.innerHTML = `<div class="empty">${esc(t('moment'))}</div>`;
+    try { S.index = await API.index(id); }
+    catch { return void toast(t('levelFailed')); }
+    S.catalog = await loadCatalog(id);
+  }
+  // Goethe: die Fertigkeiten kommen aus dem (einen) Test — bei Bedarf laden
+  if (isPraxis() && !S.modell){ try { S.modell = await praxisTest(); } catch { S.modell = null; } }
+  screenLevel();
 }
 
 /* ============ Lesematerial ============ */
@@ -2457,7 +2463,7 @@ function simResult(byId){
       b.textContent = box.hidden ? t('w2Muster') : t('w2MusterHide');
     });
     document.getElementById('simagain').onclick = () => startSim();
-    document.getElementById('simback').onclick  = () => screenHome();
+    document.getElementById('simback').onclick  = () => screenLevel();
   });
 }
 
@@ -2535,10 +2541,10 @@ function screenResult(run, points, max, pct, right, total){
     };
 
     document.getElementById('again').onclick = () =>
-      run.drill ? drillRun().then(r => r ? screenIntro(r) : screenHome())
+      run.drill ? drillRun().then(r => r ? screenIntro(r) : screenLevel())
                 : screenIntro(run);
     document.getElementById('back').onclick  = () =>
-      run.drill ? screenHome() : screenModell(S.modell);
+      run.drill ? screenLevel() : screenModell(S.modell);
   });
 }
 

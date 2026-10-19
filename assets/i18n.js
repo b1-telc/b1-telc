@@ -77,6 +77,8 @@ const I18N = (() => {
       aiErrOther:   'Die Korrektur ist fehlgeschlagen.',
 
       welcome: 'Willkommen 👋',
+      landingTitle: 'Deine Kurse 👋',
+      landingSub: 'Wähle einen Kurs, um loszulegen.',
       homeIntro: 'Wählen Sie einen Modelltest. Jeder Test hat die Prüfungsteile ' +
                  'der schriftlichen Prüfung {level} — mit der echten Prüfungszeit.',
       homeIntroPlain: 'Wählen Sie einen Modelltest. Jeder Test hat die ' +
@@ -338,6 +340,8 @@ const I18N = (() => {
       aiErrOther:   'التصحيح ما نجح.',
 
       welcome: 'أهلاً 👋',
+      landingTitle: 'دوراتك 👋',
+      landingSub: 'اختر دورة لتبدأ.',
       homeIntro: 'اختر نموذج امتحان. كل نموذج فيه أقسام الامتحان التحريري ' +
                  '{level} — بوقت الامتحان الحقيقي.',
       homeIntroPlain: 'اختر نموذج امتحان. كل نموذج فيه أقسام الامتحان ' +
@@ -610,6 +614,8 @@ const I18N = (() => {
       aiErrOther:   'Перевірка не вдалася.',
 
       welcome: 'Вітаємо 👋',
+      landingTitle: 'Твої курси 👋',
+      landingSub: 'Обери курс, щоб почати.',
       homeIntro: 'Оберіть пробний тест. Кожен тест містить частини письмового ' +
                  'іспиту {level} — зі справжнім часом.',
       homeIntroPlain: 'Оберіть пробний тест. Кожен тест містить частини ' +
