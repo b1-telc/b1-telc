@@ -1010,7 +1010,19 @@ function bindW2Del(scope, id){
 }
 
 /* Teil (Block) → alle Übungen, ohne Zeit/Punkte, mit Zurücksetzen. */
-function screenPractice(blockId){
+// Eine Übung gilt als erledigt, wenn alle ihre Aufgaben beantwortet sind.
+function setDone(sec){
+  const ids = (sec.items || []).map(it => it.id);
+  if (!ids.length) return false;     // Schreiben/Sprechen: nicht automatisch messbar
+  return ids.every(id => { const v = S.answers[id]; return v !== undefined && String(v).trim() !== ''; });
+}
+// Kurzes Tab-Label: die Zahl aus dem Titel (Test 94 → 94, Übung 1 → 1).
+function setShort(sec){
+  const num = String(sec.title || '').match(/\d+/);
+  return num ? num[0] : (sec.title || '•');
+}
+
+function screenPractice(blockId, setId){
   const m = S.modell;
   const b = m && m.blocks.find(x => x.id === blockId);
   if (!b) return;
@@ -1024,18 +1036,45 @@ function screenPractice(blockId){
   S.run = { id: blockId, drill: true, parts: secs, title: b.title, maxPoints: 0 };
   recordLast({ level: S.level, levelName: currentLevelName(), type: 'praxis',
                skill: S.praxisSkill, blockId, title: b.title });
-  go('praxis', () => {
-    app.innerHTML = `
-      <h1>${esc(b.title)}</h1>
-      <p class="sub">${esc(t('praxisHint'))}</p>
-      ${secs.map(praxisSetHTML).join('')}`;
-    secs.forEach(bindInputs);
-    praxisBindReveal(secs);
-    bindPraxisWriting(secs);
-    bindSprechen(secs);
-    bindSprechkarten(secs);
-    praxisSyncButtons();
+  // gewählte Übung: angefragt → gemerkt → erste
+  S.praxisSet = (setId && secs.some(s => s.id === setId)) ? setId
+              : (secs.some(s => s.id === S.praxisSet) ? S.praxisSet
+              : (secs[0] && secs[0].id));
+  go('praxis', () => renderPraxis(b, secs));
+}
+
+/* ★ Statt einer langen Seite mit allen Übungen: oben eine Knopfreihe (eine
+   pro Übung), unten nur die gewählte. Erledigte Übungen grün, offene neutral. */
+function renderPraxis(b, secs){
+  stopAudio();
+  const cur = secs.find(s => s.id === S.praxisSet) || secs[0];
+  const tabs = secs.map(s => `<button class="praxtab${s.id === cur.id ? ' on' : ''}${
+      setDone(s) ? ' done' : ''}" data-set="${esc(s.id)}"
+      title="${esc(s.title || '')}">${esc(setShort(s))}</button>`).join('');
+  app.innerHTML = `
+    <h1>${esc(b.title)}</h1>
+    <p class="sub">${esc(t('praxisHint'))}</p>
+    <div class="praxtabs">${tabs}</div>
+    ${praxisSetHTML(cur)}`;
+  bindInputs(cur);
+  praxisBindReveal([cur]);
+  bindPraxisWriting([cur]);
+  bindSprechen([cur]);
+  bindSprechkarten([cur]);
+  praxisSyncButtons();
+  document.querySelectorAll('[data-set]').forEach(btn => btn.onclick = () => {
+    if (btn.dataset.set === S.praxisSet) return;
+    S.praxisSet = btn.dataset.set;
+    renderPraxis(b, secs);
+    window.scrollTo(0, 0);
   });
+}
+// Den aktiven Tab grün färben, sobald seine Übung komplett beantwortet ist.
+function praxisSyncTab(){
+  const sec = (S.praxisSecs || []).find(s => s.id === S.praxisSet);
+  if (!sec || !setDone(sec)) return;
+  const tab = document.querySelector('.praxtab.on');
+  if (tab) tab.classList.add('done');
 }
 
 /* Antworten des ganzen Teils löschen und frisch neu zeichnen. */
@@ -2173,7 +2212,7 @@ const answered = it => {
 };
 
 function updateProgress(){
-  if (S.view === 'praxis'){ praxisSave(); praxisSyncButtons(); return; }
+  if (S.view === 'praxis'){ praxisSave(); praxisSyncButtons(); praxisSyncTab(); return; }
   saveSession(S.run);
   const items = runItems(S.run);
   const done  = items.filter(answered).length;
