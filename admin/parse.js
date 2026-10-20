@@ -120,7 +120,7 @@ const Markup = (() => {
         warn.push(`Teil ${sec.id} hat keine Aufgaben`);
       // ohne Format weiß weder die Datenbank noch die App, was das ist
       if (!sec.format)
-        warn.push(`Teil ${sec.id} hat kein Format (matching, mc, wordbank, truefalse, writing)`);
+        warn.push(`Teil ${sec.id} hat kein Format (${FORMATS.join(', ')})`);
       else if (!FORMATS.includes(sec.format))
         warn.push(`Teil ${sec.id}: unbekanntes Format „${sec.format}" — `
                 + `möglich sind ${FORMATS.join(', ')}`);
