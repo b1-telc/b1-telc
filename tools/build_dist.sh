@@ -46,7 +46,7 @@ fi
 # نفس الموقع بمسار تاني: الحارس بقاعدة البيانات (profiles.is_admin) مو
 # بسرّية الرابط. للنشر بمكان تاني، انسخي assets/config.js معها.
 cp admin/index.html "$OUT/$ADMIN_PATH/"
-for f in admin/admin.js admin/parse.js admin/vorlagen.js admin/admin.css; do
+for f in admin/admin.js admin/parse.js admin/vorlagen.js admin/ui.js admin/admin.css; do
   strip "$f" "$OUT/$ADMIN_PATH/$(basename "$f")"
 done
 
