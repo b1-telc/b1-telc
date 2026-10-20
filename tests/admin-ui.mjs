@@ -35,6 +35,22 @@ const RPC = {
   }]),
   admin_shift_subscription: (a) => { subEnd += Number(a.p_days) * DAY;
     return { ok:true, current_period_end: iso(subEnd) }; },
+  admin_content: () => ({
+    levels:[{ id:'goethe-a1', provider:'Goethe', stufe:'A1', title:'Goethe · A1',
+              published:true, sort:0, tests:1 }],
+    tests:[{ id:'t1', level_id:'goethe-a1', slug:'modell-01', title:'Modell 01', published:true }],
+    resources:[], imports:[] }),
+  admin_codes: () => ([
+    { id:'c1', code:'B1FREI0001', levels:['goethe-a1'], uses:0, max_uses:2, duration_days:30,
+      duration_hours:null, test_slugs:[], redeemers:[], note:'frei',
+      created_at:iso(Date.now()-DAY), revoked_at:null },
+    { id:'c2', code:'B1VOLL0002', levels:['goethe-a1'], uses:2, max_uses:2, duration_days:30,
+      duration_hours:null, test_slugs:[], note:'voll',
+      redeemers:[{ name:'A', at:iso(Date.now()) }, { name:'B', at:iso(Date.now()) }],
+      created_at:iso(Date.now()-2*DAY), revoked_at:null },
+  ]),
+  admin_revoke_code:  () => ({ ok:true }),
+  admin_add_code_use: () => ({ ok:true, max_uses:3 }),
 };
 
 let PORT = 0;
@@ -128,6 +144,24 @@ try {
     document.activeElement?.getAttribute('data-more') != null ||
     document.activeElement === document.body);
   check('الفوكس رجع برّا النافذة', focusBack);
+
+  // ── Codes: sperren / +1 تحديث جزئي بلا إعادة جلب القائمة ──
+  await page.click('[data-tab="codes"]');
+  await until(() => page.$('[data-codes]'));
+  const codesCalls = calls.admin_codes || 0;
+
+  await page.click('[data-coderow="c1"] [data-rev]');
+  const revoked = await until(async () =>
+    /gesperrt/.test((await page.textContent('[data-coderow="c1"]')) || ''));
+  check('sperren: صفّ الكود صار «gesperrt»', revoked);
+  check('sperren: admin_codes ما انعاد جلبها', (calls.admin_codes || 0) === codesCalls);
+
+  await page.click('[data-coderow="c2"] [data-more1]');
+  const bumped = await until(async () =>
+    /2\s*\/\s*3/.test((await page.textContent('[data-coderow="c2"]')) || ''));
+  check('+1: خانة التفعيلات صارت «2 / 3»', bumped);
+  check('+1: زرّ +1 اختفى', !(await page.$('[data-coderow="c2"] [data-more1]')));
+  check('+1: admin_codes ما انعاد جلبها', (calls.admin_codes || 0) === codesCalls);
 
 } catch (e){
   console.log('  ✗ استثناء:', e.message);
