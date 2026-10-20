@@ -278,8 +278,24 @@ function wireCap(){
   });
 }
 
+/* ★ شارة الاشتراك (لون + أيام + تاريخ) — مصدر واحد للرسم الأول وللتحديث
+   الجزئي بعد +30/−30، تا يضلّوا متطابقين. بالرسم الأول منستعمل days_left
+   من الخادم؛ بالتحديث الجزئي منحسبه من التاريخ المرجّع. */
+function subPill(s){
+  const end  = new Date(s.current_period_end);
+  const live = s.status === 'active' && end > new Date();
+  const days = s.days_left != null ? s.days_left
+             : Math.max(0, Math.ceil((end - Date.now()) / 86400000));
+  const cls  = live ? (days <= 7 ? 'warn' : 'ok') : 'bad';
+  const txt  = live ? `${days} Tage`
+             : (s.status === 'revoked' ? 'gesperrt' : 'abgelaufen');
+  return `<span class="pill ${cls}">${esc(txt)}</span>
+    <span class="submeta">bis ${fmtDate(s.current_period_end)}</span>`;
+}
+
 let userSearch = '';
 async function screenUsers(){
+  const sy = window.scrollY;                 // مكان التمرير — منرجّعه بعد الرسم
   app.innerHTML = '<div class="empty">Lädt …</div>';
   const rows = await rpc('admin_users', { p_search: userSearch || null });
 
@@ -299,15 +315,9 @@ async function screenUsers(){
           `<div class="mono" style="color:var(--muted);font-size:12px">${esc(fmtCode(c.code))}</div>`
         ).join('')}
       </td>
-      <td>${subs.length ? subs.map(s => {
-        const live = s.status === 'active' && new Date(s.current_period_end) > new Date();
-        const cls  = live ? (s.days_left <= 7 ? 'warn' : 'ok') : 'bad';
-        const txt  = live ? `${s.days_left} Tage`
-                   : (s.status === 'revoked' ? 'gesperrt' : 'abgelaufen');
-        return `<div class="subrow"><span class="pill ${cls}">${esc(txt)}</span>
-          <span style="color:var(--muted);font-size:12px;margin-inline-start:6px"
-            >bis ${fmtDate(s.current_period_end)}</span></div>`;
-      }).join('') : '<span class="pill">kein Abo</span>'}</td>
+      <td>${subs.length ? subs.map(s =>
+        `<div class="subrow" data-subcell="${esc(s.id)}">${subPill(s)}</div>`
+      ).join('') : '<span class="pill">kein Abo</span>'}</td>
       <td>${cell(s => `<div class="subrow mono">${esc((s.levels || []).join(', '))}</div>`)}</td>
       <td>${u.devices}</td>
       <td>${u.attempts}${u.best_pct != null ? ` · best ${u.best_pct}%` : ''}</td>
@@ -332,7 +342,7 @@ async function screenUsers(){
         ${userSearch ? '<button class="btn grey" id="clr">Zurücksetzen</button>' : ''}
       </div>
     </div>
-    <div class="card"><div class="wrap"><table>
+    <div class="card"><div class="wrap" data-users><table>
       <tr><th>Nutzer</th><th>Abo</th><th>Stufen</th><th>Geräte</th>
           <th>Prüfungen</th><th>zuletzt</th><th></th></tr>
       ${rows.map(line).join('') || '<tr><td colspan="7" class="empty">Keine Nutzer</td></tr>'}
@@ -345,23 +355,31 @@ async function screenUsers(){
   const clr = document.getElementById('clr');
   if (clr) clr.onclick = () => { userSearch = ''; screenUsers(); };
 
-  app.querySelectorAll('[data-shift]').forEach(b => b.onclick = async () => {
-    await act(b, () => rpc('admin_shift_subscription',
-      { p_sub_id: b.dataset.sub, p_days: Number(b.dataset.shift) }),
-      'Abo angepasst');
-    screenUsers();
+  // ★ تفويض حدث على حاوية الجدول (عنصر جديد كل رسم → بلا تراكم مستمعين).
+  //   +30/−30 بيحدّث خانة الاشتراك المعنيّة فقط — بلا إعادة جلب كل القائمة،
+  //   فما بيضيع مكان التمرير ولا الفوكس.
+  const wrap = app.querySelector('[data-users]');
+  UI.delegate(wrap, 'click', '[data-shift]', async b => {
+    const r = await act(b, () => rpc('admin_shift_subscription',
+      { p_sub_id: b.dataset.sub, p_days: Number(b.dataset.shift) }), 'Abo angepasst');
+    if (r && r.current_period_end){
+      const cell = wrap.querySelector(`[data-subcell="${CSS.escape(b.dataset.sub)}"]`);
+      if (cell) cell.innerHTML = subPill({
+        current_period_end: r.current_period_end, status: 'active' });
+    }
   });
-  app.querySelectorAll('[data-more]').forEach(b => b.onclick = () =>
+  UI.delegate(wrap, 'click', '[data-more]', b =>
     userDialog(rows.find(u => u.id === b.dataset.more)));
+
+  if (window.scrollY !== sy) window.scrollTo(0, sy);
 }
 
-/* تفاصيل مستخدم: كل الإجراءات الباقية */
+/* تفاصيل مستخدم: كل الإجراءات الباقية — بنافذة UI.modal الموحّدة
+   (Escape، نقرة الخلفية، حبس الفوكس، إرجاعه). الإجراءات بتقفل النافذة،
+   و onClose بيعيد رسم القائمة تا تبيّن التغيير. */
 function userDialog(u){
   if (!u) return;
   const subs = u.subs || [];
-  const back = document.createElement('div');
-  back.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.45);' +
-    'display:flex;align-items:center;justify-content:center;padding:16px;z-index:40';
 
   /* Ein Block pro Abo. Die Knöpfe tragen die Abo-ID, damit +30 auf B1
      nicht versehentlich das A1-Abo verlängert. */
@@ -389,70 +407,62 @@ function userDialog(u){
             >Abo entsperren</button>`}
     </div>`;
 
-  back.innerHTML = `
-    <div class="card" style="max-width:460px;width:100%;margin:0;max-height:90vh;overflow:auto">
-      <h2 style="margin-top:0">${esc(u.name || 'Nutzer ohne Namen')}</h2>
-      <p class="sub" style="margin-bottom:12px">
-        ${u.attempts} Prüfungen · ${u.mistakes} offene Fehler · ${u.devices} Geräte<br>
-        angelegt ${fmtDate(u.created_at)}
-      </p>
+  const html = `
+    <p class="sub" style="margin-bottom:12px">
+      ${u.attempts} Prüfungen · ${u.mistakes} offene Fehler · ${u.devices} Geräte<br>
+      angelegt ${fmtDate(u.created_at)}
+    </p>
+    <label style="font-size:13px;color:var(--muted)">Name
+      <input id="d_name" value="${esc(u.name || '')}" style="margin-top:4px"></label>
+    <label style="font-size:13px;color:var(--muted);display:block;margin-top:8px">Notiz
+      <input id="d_note" value="${esc(u.note || '')}"
+             placeholder="z. B. WhatsApp-Nummer, bezahlt am …" style="margin-top:4px"></label>
+    <button class="btn sm" id="d_save" style="margin-top:10px">Speichern</button>
 
-      <label style="font-size:13px;color:var(--muted)">Name
-        <input id="d_name" value="${esc(u.name || '')}" style="margin-top:4px"></label>
-      <label style="font-size:13px;color:var(--muted);display:block;margin-top:8px">Notiz
-        <input id="d_note" value="${esc(u.note || '')}"
-               placeholder="z. B. WhatsApp-Nummer, bezahlt am …" style="margin-top:4px"></label>
-      <button class="btn sm" id="d_save" style="margin-top:10px">Speichern</button>
+    <h2>Eingelöste Codes</h2>
+    ${(u.codes || []).length ? `<div class="wrap"><table>
+      <tr><th>Code</th><th>Stufe</th><th>eingelöst</th></tr>
+      ${u.codes.map(c => `<tr>
+        <td class="mono">${esc(fmtCode(c.code))}</td>
+        <td class="mono">${esc((c.levels || []).join(', '))}</td>
+        <td>${fmtDate(c.at)}</td></tr>`).join('')}
+    </table></div>` : '<p class="sub">Noch keinen Code eingelöst.</p>'}
 
-      <h2>Eingelöste Codes</h2>
-      ${(u.codes || []).length ? `<div class="wrap"><table>
-        <tr><th>Code</th><th>Stufe</th><th>eingelöst</th></tr>
-        ${u.codes.map(c => `<tr>
-          <td class="mono">${esc(fmtCode(c.code))}</td>
-          <td class="mono">${esc((c.levels || []).join(', '))}</td>
-          <td>${fmtDate(c.at)}</td></tr>`).join('')}
-      </table></div>` : '<p class="sub">Noch keinen Code eingelöst.</p>'}
+    ${subs.length ? subs.map(aboBlock).join('')
+                  : '<h2>Abo</h2><p class="sub">Kein Abo vorhanden.</p>'}
 
-      ${subs.length ? subs.map(aboBlock).join('')
-                    : '<h2>Abo</h2><p class="sub">Kein Abo vorhanden.</p>'}
+    <h2>Geräte</h2>
+    <p class="sub" style="margin-bottom:8px">${u.devices} registriert.
+      Zurücksetzen, wenn der Nutzer sein Gerät gewechselt hat.</p>
+    <button class="btn sm grey" id="d_dev">Geräte zurücksetzen</button>`;
 
-      <h2>Geräte</h2>
-      <p class="sub" style="margin-bottom:8px">${u.devices} registriert.
-        Zurücksetzen, wenn der Nutzer sein Gerät gewechselt hat.</p>
-      <button class="btn sm grey" id="d_dev">Geräte zurücksetzen</button>
+  const dlg   = UI.modal({ title: u.name || 'Nutzer ohne Namen', html, onClose: screenUsers });
+  const panel = dlg.panel;
+  const $ = id => panel.querySelector('#' + id);
 
-      <div style="margin-top:18px;text-align:right">
-        <button class="btn grey" id="d_close">Schließen</button>
-      </div>
-    </div>`;
-  document.body.appendChild(back);
-  const close = () => { back.remove(); screenUsers(); };
-  back.onclick = e => { if (e.target === back) close(); };
-  back.querySelector('#d_close').onclick = close;
-
-  const $ = id => back.querySelector('#' + id);
   $('d_save').onclick = e => act(e.target, () => rpc('admin_set_profile', {
     p_user_id: u.id, p_name: $('d_name').value.trim() || null,
     p_note: $('d_note').value.trim() || null }), 'Gespeichert');
 
   $('d_dev').onclick = e => act(e.target,
     () => rpc('admin_reset_devices', { p_user_id: u.id }), 'Geräte zurückgesetzt')
-    .then(close);
+    .then(() => dlg.close());
 
-  back.querySelectorAll('[data-d]').forEach(b => b.onclick = () =>
+  panel.querySelectorAll('[data-d]').forEach(b => b.onclick = () =>
     act(b, () => rpc('admin_shift_subscription',
-      { p_sub_id: b.dataset.sub, p_days: Number(b.dataset.d) }), 'Abo angepasst').then(close));
+      { p_sub_id: b.dataset.sub, p_days: Number(b.dataset.d) }), 'Abo angepasst')
+      .then(() => dlg.close()));
 
-  back.querySelectorAll('[data-end]').forEach(b => b.onclick = () =>
+  panel.querySelectorAll('[data-end]').forEach(b => b.onclick = () =>
     act(b, () => rpc('admin_set_period_end', {
       p_sub_id: b.dataset.end,
       p_end: new Date($('d_end' + b.dataset.i).value + 'T12:00:00Z').toISOString() }),
-      'Enddatum gesetzt').then(close));
+      'Enddatum gesetzt').then(() => dlg.close()));
 
-  back.querySelectorAll('[data-st]').forEach(b => b.onclick = () =>
+  panel.querySelectorAll('[data-st]').forEach(b => b.onclick = () =>
     act(b, () => rpc('admin_set_subscription_status',
       { p_sub_id: b.dataset.sub, p_status: b.dataset.st }),
-      b.dataset.st === 'revoked' ? 'Abo gesperrt' : 'Abo entsperrt').then(close));
+      b.dataset.st === 'revoked' ? 'Abo gesperrt' : 'Abo entsperrt').then(() => dlg.close()));
 }
 
 let codeLevel = '';
