@@ -1,0 +1,102 @@
+// =====================================================================
+// LEERE VORLAGE — Goethe-Zertifikat A1 (Übungsmodus)
+//
+// Füllen Sie nur die <...> Stellen aus. Jeder Teil (## Block:) ist ein
+// "Teil" in der App, jede ### Teil:-Einheit eine Übung. Pro Teil können
+// Sie beliebig viele Übungen anlegen — nur die Teile-Liste oben muss zu
+// den ### Teil:-Kennungen unten passen.
+//
+// WICHTIG: Der Anbieter der Stufe muss "Goethe" heißen (Kennung
+// "goethe-a1") — sonst läuft die App im getimten Prüfungsmodus statt
+// im Übungsmodus ohne Zeit.
+//
+// Zeilen mit // sind Kommentare und werden beim Prüfen ignoriert.
+// Ausgefülltes Beispiel: docs/vorlage/goethe-a1-beispiel.txt
+// =====================================================================
+
+# Goethe A1 — Üben
+Untertitel: Lesen · Hören · Schreiben · Sprechen
+
+## Block: lv1
+Titel: Lesen · Teil 1
+Minuten: 0
+Punkte: 10
+Teile: lv1-01
+
+## Block: s1
+Titel: Schreiben · Teil 1 (Formular)
+Minuten: 0
+Punkte: 10
+Teile: sf1-01
+
+## Block: sp1
+Titel: Sprechen · Teil 1 (Sich vorstellen)
+Minuten: 0
+Punkte: 0
+Teile: sp1-01
+
+
+### Teil: lv1-01
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 1
+Minuten: 0
+Punkte: 1
+Maximum: 2
+Anweisung: Lesen Sie den Text und die Aufgaben. Kreuzen Sie an: Richtig oder Falsch.
+// Eine Zeile = ein Absatz. **Fett** für Überschriften. Ein zweiter
+// "Text:"-Block beginnt einen weiteren kurzen Text.
+Text:
+**<Überschrift>**
+<Kurzer Text, z. B. eine E-Mail oder Mitteilung.>
+Aufgaben:
+[1] <Aussage 1>
+Lösung: <richtig oder falsch>
+[2] <Aussage 2>
+Lösung: <richtig oder falsch>
+
+
+### Teil: sf1-01
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 1 — <Formulartitel>
+Minuten: 0
+Punkte: 1
+Maximum: 2
+Anweisung: Lesen Sie den Text und ergänzen Sie die fehlenden Informationen im Formular.
+// "val" = schon ausgefüllte Zeile, "blank": N = eine zu ergänzende
+// Lücke, die zur Aufgabe [N] gehört. Lücke mit Auswahl (A/B) wird zur
+// Ankreuzfrage, ohne Auswahl zum Freitextfeld.
+Extra:
+{ "form": { "title": "<Formulartitel>", "subtitle": "<Untertitel>", "rows": [
+ {"label":"<gegebenes Feld>","val":"<Wert>"},
+ {"label":"<Lücke 1>","blank":1},
+ {"label":"<Lücke 2>","blank":2}
+] } }
+Text:
+<Kurzer Text mit den Informationen, aus denen der Prüfling die Lücken füllt.>
+Aufgaben:
+[1] <Bezeichnung der Lücke 1>
+Lösung: <richtige Antwort | Alternative>
+[2] <Bezeichnung der Lücke 2>
+A) <Option A>
+B) <Option B>
+Lösung: <A oder B>
+
+
+### Teil: sp1-01
+Format: vorstellen
+Gruppe: Sprechen
+Titel: Sich vorstellen
+Minuten: 0
+Hinweis: <Kurzer Hinweis zur Aufgabe.>
+// Referenzmaterial ohne automatische Korrektur: Karten (Stichwort + Beispiel)
+// und optional Prüferfragen. Keine "Aufgaben:" nötig.
+Extra:
+{ "cards": [
+  {"q":"<Stichwort, z. B. Name?>","a":"<Beispielsatz>"},
+  {"q":"<Stichwort>","a":"<Beispielsatz>"}
+ ],
+ "fragen": [
+  {"q":"<Prüferfrage>","a":"<Beispielantwort>"}
+ ] }

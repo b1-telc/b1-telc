@@ -5696,3 +5696,8 @@ end $$;
 -- anon ما إله شي هون: بس المستخدم المسجّل (ولو مجهول) بعد فحص الصلاحية
 revoke all on function reveal_answers(uuid[]) from public;
 grant execute on function reveal_answers(uuid[]) to authenticated;
+
+-- رقم نسخة المخطّط: آخر ترحيل هو 0032 (reveal_answers).
+create or replace function schema_version()
+returns int language sql immutable as $$ select 32 $$;
+grant execute on function schema_version() to authenticated, anon;

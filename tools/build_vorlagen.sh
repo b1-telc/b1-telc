@@ -14,8 +14,10 @@ import json, pathlib
 out = ['/* مولّد من docs/vorlage/*.txt بـtools/build_vorlagen.sh',
        '   لا تعدّليه بالإيد — عدّلي ملفات النص وأعيدي التوليد. */',
        "'use strict';", '']
-for name, src in (('BEISPIEL', 'docs/vorlage/b1-beispiel.txt'),
-                  ('LEER',     'docs/vorlage/b1-leer.txt')):
+for name, src in (('BEISPIEL',       'docs/vorlage/b1-beispiel.txt'),
+                  ('LEER',           'docs/vorlage/b1-leer.txt'),
+                  ('GOETHE_A1',      'docs/vorlage/goethe-a1-beispiel.txt'),
+                  ('GOETHE_A1_LEER', 'docs/vorlage/goethe-a1-leer.txt')):
     out.append(f'const VORLAGE_{name} = {json.dumps(pathlib.Path(src).read_text())};')
     out.append('')
 pathlib.Path('admin/vorlagen.js').write_text('\n'.join(out))

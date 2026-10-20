@@ -43,3 +43,9 @@ end $$;
 -- anon ما إله شي هون: بس المستخدم المسجّل (ولو مجهول) بعد فحص الصلاحية
 revoke all on function reveal_answers(uuid[]) from public;
 grant execute on function reveal_answers(uuid[]) to authenticated;
+
+-- رقم نسخة المخطّط: اللوحة بتفحصه وبتحذّر لو القاعدة ورا الكود. بلا
+-- هالرفع، قاعدة بلا reveal_answers بتقول «محدّثة» والتمرين بيفشل بصمت.
+create or replace function schema_version()
+returns int language sql immutable as $$ select 32 $$;
+grant execute on function schema_version() to authenticated, anon;

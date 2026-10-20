@@ -162,7 +162,7 @@ function screenLogin(err){
 /* ============ الأقسام ============ */
 async function screenHome(){
   app.innerHTML = '<div class="empty">Lädt …</div>';
-  const [o, act, cap, queue] = await Promise.all([
+  const [o, activity, cap, queue] = await Promise.all([
     rpc('admin_overview'),
     rpc('admin_redeem_activity').catch(() => null),
     rpc('admin_limits').catch(() => null),
@@ -184,18 +184,18 @@ async function screenHome(){
       ${stat(o.reports_open ?? 0, 'offene Meldungen',
              o.reports_open > 0 ? 'warn' : '')}
     </div>
-    ${act ? `<h2>Code-Eingaben</h2>
+    ${activity ? `<h2>Code-Eingaben</h2>
     <p class="sub" style="margin-bottom:10px">Viele Fehlversuche heißt entweder
       vertippt — oder jemand probiert Codes durch. Nach
-      ${act.limits.max_failed} Fehlversuchen in ${act.limits.window_minutes}
+      ${activity.limits.max_failed} Fehlversuchen in ${activity.limits.window_minutes}
       Minuten wird die Eingabe gesperrt.</p>
     <div class="stats">
-      <div class="stat"><b>${act.ok_24h}</b><span>eingelöst (24 h)</span></div>
-      <div class="stat ${act.failed_1h > 5 ? 'warn' : ''}">
-        <b>${act.failed_1h}</b><span>Fehlversuche (1 h)</span></div>
-      <div class="stat ${act.failed_24h > 20 ? 'warn' : ''}">
-        <b>${act.failed_24h}</b><span>Fehlversuche (24 h)</span></div>
-      ${act.blocked ? `<div class="stat warn"><b>${act.blocked}</b>
+      <div class="stat"><b>${activity.ok_24h}</b><span>eingelöst (24 h)</span></div>
+      <div class="stat ${activity.failed_1h > 5 ? 'warn' : ''}">
+        <b>${activity.failed_1h}</b><span>Fehlversuche (1 h)</span></div>
+      <div class="stat ${activity.failed_24h > 20 ? 'warn' : ''}">
+        <b>${activity.failed_24h}</b><span>Fehlversuche (24 h)</span></div>
+      ${activity.blocked ? `<div class="stat warn"><b>${activity.blocked}</b>
         <span>gerade gesperrt</span></div>` : ''}
     </div>` : ''}
 
@@ -792,6 +792,10 @@ async function screenContent(){
       Goethe·B1 sind zwei verschiedene Produkte mit eigenen Modelltests,
       eigenen Codes und eigenem Abo. Ein Code für telc·B1 öffnet Goethe·B1
       nicht.</p>
+    <p class="sub" style="margin-top:-6px">★ Anbieter <b>Goethe</b> (die Kennung
+      wird dann <code>goethe-…</code>) schaltet in der App den <b>Übungsmodus
+      ohne Zeit</b> — nach Fertigkeit und Teil. Jede andere Schreibweise des
+      Anbieters zeigt die Stufe als getimte Prüfung.</p>
     <div class="card">
       <div class="row">
         <label>Anbieter<input id="l_prov" list="anbieter" placeholder="telc"></label>
@@ -1001,7 +1005,12 @@ function wirePicker(idBase, levels, onChange, opts = {}){
   if (!selP || !selS) return;
 
   selP.onchange = () => {
+    // ★ لو منتقي الدرجة فيه «+ neue Stufe anlegen …» (مضافة بـwireNewLevel)،
+    //   إعادة بناء innerHTML بتشيلها — فمنرجّعها بعد البناء. المستمع على
+    //   العنصر نفسه، فبيضل شغّال.
+    const hadNew = !!selS.querySelector(`option[value="${NEW_LEVEL}"]`);
     selS.innerHTML = stufeOptions(levels, selP.value, null, withAll, extra);
+    if (hadNew) selS.insertAdjacentHTML('beforeend', newLevelOption);
     onChange(selS.value);
   };
   selS.addEventListener('change', () => onChange(selS.value));
@@ -1150,7 +1159,7 @@ const STALE_MSG = '⚠ Die Datenbank ist noch nicht aktualisiert — bitte '
    بتفشل بصمت بطريقتها، وولا وحدة بتقول السبب. الرقم بيخلّي اللوحة تقوله.
 
    لما يتضاف ترحيل: يزيد الرقم هون وبـ0019_version.sql. */
-const SCHEMA_MIN = 31;
+const SCHEMA_MIN = 32;
 let schemaHave = null;      // null = لسا ما انفحص
 
 async function checkSchema(){
@@ -1227,8 +1236,13 @@ async function screenAssets(){
 /* ============ الاستيراد ============ */
 /* القوالب بـadmin/vorlagen.js، مولّدة من docs/vorlage/*.txt.
    المختصر تحت للعين بس؛ الكامل بالزرّين. */
-const SAMPLE = VORLAGE_BEISPIEL.split('\n').filter(l => !l.startsWith('//'))
-  .join('\n').split('### Teil: lv2')[0].trim();
+/* مقتطف قصير للعين: الكتل (## Block) + أوّل Teil فقط. مستقل عن معرّف
+   القسم — منقصّ قبل ثاني «### Teil:» أيّاً كان اسمه (كان مربوط بـlv2). */
+const SAMPLE = (() => {
+  const full = VORLAGE_BEISPIEL.split('\n').filter(l => !l.startsWith('//')).join('\n');
+  const parts = full.split(/\n(?=### Teil:)/);
+  return (parts.length > 1 ? parts.slice(0, 2).join('\n') : full).trim();
+})();
 
 let importState = { id: null, doc: null, raw: '' };
 /* لما تضغطي «bearbeiten» بالإنهالته، منخزّن الامتحان هون ومنقفز لشاشة
@@ -1287,7 +1301,13 @@ async function screenImport(){
           <b>Beispiel einfügen</b> lädt eine vollständige B1-Prüfung mit allen fünf
           Formaten, Bild und Hörtext. <b>Leere Vorlage</b> lädt dasselbe Gerüst mit
           allen 61 Aufgaben zum Ausfüllen — jede noch offene Stelle
-          <code>&lt;…&gt;</code> wird beim Prüfen gemeldet.
+          <code>&lt;…&gt;</code> wird beim Prüfen gemeldet.<br>
+          Ist die gewählte Stufe von <b>Goethe</b>, laden die Knöpfe stattdessen
+          eine <b>A1-Übungsvorlage</b> — mit den A1-Formaten
+          <code>formular</code> (Schreiben 1), Brief (Schreiben 2),
+          <code>vorstellen</code> und <code>sprechkarten</code> (Sprechen).
+          Goethe-Übungen haben keine Zeit; der Anbieter der Stufe muss
+          <b>Goethe</b> heißen, damit die App den Übungsmodus zeigt.
         </p>
       </details>
     </div>
@@ -1379,11 +1399,17 @@ async function screenImport(){
     fill(text);
     toast(`„${slug}" geladen — Speichern ersetzt den Test`);
   }
+  // ★ القالب بيتبع مؤسسة الستوفة المختارة: Goethe → قالب تمرين A1
+  //   (نموذج، رسالة، محادثة…)، وأي مؤسسة تانية → امتحان telc B1 الكامل.
+  const goetheSel = () => {
+    const lvl = (c.levels || []).find(l => l.id === $('i_lvl').value);
+    return !!(lvl && /goethe/i.test(provOf(lvl) || ''));
+  };
   // المثال معبّى وبيمرق بلا تحذير — بيبيّن الشكل الصح.
-  $('i_sample').onclick = () => fill(VORLAGE_BEISPIEL);
-  // القالب الفاضي فيه كل الـ٦١ سؤال وكل خاناته <…>. المحلّل بينبّه على
-  // كل خانة باقية، فبتعرفي إذا الذكاء الاصطناعي نسي شي قبل النشر.
-  $('i_leer').onclick   = () => fill(VORLAGE_LEER);
+  $('i_sample').onclick = () => fill(goetheSel() ? VORLAGE_GOETHE_A1 : VORLAGE_BEISPIEL);
+  // القالب الفاضي فيه كل خاناته <…>. المحلّل بينبّه على كل خانة باقية،
+  // فبتعرفي إذا الذكاء الاصطناعي نسي شي قبل النشر.
+  $('i_leer').onclick   = () => fill(goetheSel() ? VORLAGE_GOETHE_A1_LEER : VORLAGE_LEER);
   $('i_clear').onclick  = () => { $('i_text').value = ''; $('i_result').innerHTML = '';
                                   importState = { id:null, doc:null, raw:'' }; };
   $('i_parse').onclick  = () => runParse($('i_text').value);
@@ -1416,7 +1442,17 @@ function runParse(raw){
   const fatal = warnings.filter(w =>
     /keine Aufgaben|unbekannten Teil|doppelt|Kein Titel|Keine Teile|kein Format|unbekanntes Format/
       .test(w));
-  const ok = fatal.length === 0 && counts.items > 0;
+  // ★ الفورمات يلي ما إلها حل أوتوماتيكي: التعبير الكتابي، والنموذج
+  //   (خانات نصّ حرّة)، والمحادثة (مادة مرجعية). هدول طبيعي بلا «Lösung».
+  const NOSOL = new Set(['writing', 'formular', 'vorstellen', 'sprechkarten']);
+  // ★ أسئلة بلا حل أوتوماتيكي = أسئلة التعبير الكتابي (بتتصحّح بالذكاء
+  //   الاصطناعي). النموذج أسئلته إلها حل، فما بتنحسب هون. بنقصها من
+  //   المتوقّع تا ما يطلع تحذير «ناقص حلول» على قسم كتابي سليم.
+  const writingItems = test.sections.filter(s => s.format === 'writing')
+    .reduce((a, s) => a + s.items.length, 0);
+  // ★ أقسام بلا أسئلة (vorstellen/sprechkarten) محتوى صالح للنشر — فمنقبل
+  //   إمّا أسئلة وإمّا أقسام. البوابة بتبقى تمنع الفراغ التام والأخطاء القاتلة.
+  const ok = fatal.length === 0 && (counts.items > 0 || counts.sections > 0);
 
   const preview = test.sections.map(s => `
     <h4>${esc(s.id)} · ${esc(s.format)} · ${s.items.length} Aufgaben
@@ -1424,7 +1460,7 @@ function runParse(raw){
     ${s.items.slice(0, 4).map(it => `<div class="it">
        <b>${esc(it.id)}</b> ${esc(String(it.text || '').slice(0, 90))}
        ${it.answer != null ? `<span class="ans">→ ${esc(it.answer)}</span>`
-         : (s.format === 'writing' ? '' : '<span class="no">→ keine Lösung</span>')}
+         : (NOSOL.has(s.format) ? '' : '<span class="no">→ keine Lösung</span>')}
      </div>`).join('')}
     ${s.items.length > 4 ? `<div class="it" style="color:var(--muted)">
        … ${s.items.length - 4} weitere</div>` : ''}`).join('');
@@ -1434,7 +1470,7 @@ function runParse(raw){
       <div class="stat"><b>${counts.blocks}</b><span>Prüfungsteile</span></div>
       <div class="stat"><b>${counts.sections}</b><span>Abschnitte</span></div>
       <div class="stat"><b>${counts.items}</b><span>Aufgaben</span></div>
-      <div class="stat ${counts.answers < counts.items - counts.sections ? 'warn' : ''}">
+      <div class="stat ${counts.answers < counts.items - writingItems ? 'warn' : ''}">
         <b>${counts.answers}</b><span>Lösungen</span></div>
     </div>
     ${warnings.length ? `<ul class="warns ${fatal.length ? 'bad' : ''}">

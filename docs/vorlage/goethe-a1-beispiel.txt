@@ -1,0 +1,208 @@
+// =========================================================
+// Beispiel: Goethe-Zertifikat A1 — Übungsmodus
+//
+// Zeigt alle A1-Formate: truefalse (Lesen 1), truefalse mit
+// Schildern (Lesen 3), mc (Hören), formular (Schreiben 1),
+// writing/Brief (Schreiben 2), vorstellen (Sprechen 1) und
+// sprechkarten (Sprechen 2). Jeder Teil hat hier nur ein bis
+// zwei Übungen statt aller — die Struktur ist vollständig.
+//
+// WICHTIG: Der Anbieter der Stufe muss "Goethe" sein (die
+// Kennung wird zu "goethe-a1" — nur dann läuft der Übungsmodus
+// ohne Zeit statt einer getimten Prüfung).
+// =========================================================
+
+# Goethe A1 — Üben
+Untertitel: Lesen · Hören · Schreiben · Sprechen
+
+## Block: lv1
+Titel: Lesen · Teil 1
+Minuten: 0
+Punkte: 10
+Teile: lv1-01
+
+## Block: lv3
+Titel: Lesen · Teil 3
+Minuten: 0
+Punkte: 10
+Teile: lv3-01
+
+## Block: ht1
+Titel: Hören · Teil 1
+Minuten: 0
+Punkte: 10
+Teile: ht1-01
+
+## Block: s1
+Titel: Schreiben · Teil 1 (Formular)
+Minuten: 0
+Punkte: 10
+Teile: sf1-01
+
+## Block: s2
+Titel: Schreiben · Teil 2 (Brief)
+Minuten: 0
+Punkte: 10
+Teile: sf2-01
+
+## Block: sp1
+Titel: Sprechen · Teil 1 (Sich vorstellen)
+Minuten: 0
+Punkte: 0
+Teile: sp1-01
+
+## Block: sp2
+Titel: Sprechen · Teil 2 (Karten)
+Minuten: 0
+Punkte: 0
+Teile: sp2-01
+
+
+### Teil: lv1-01
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 1
+Minuten: 0
+Punkte: 1
+Maximum: 2
+Anweisung: Lesen Sie den Text und die Aufgaben. Kreuzen Sie an: Richtig oder Falsch.
+Text:
+**Einladung zum Jazz-Konzert**
+Liebe Frau Dehner, vielen Dank für die Einladung zu Ihrem Konzert. Ich komme gern und freue mich sehr. Mein Zug kommt schon um 16 Uhr an.
+Herzliche Grüße, Winfried Beck
+Aufgaben:
+[1] Herr Beck freut sich auf das Konzert.
+Lösung: richtig
+[2] Der Zug von Herrn Beck kommt am Abend an.
+Lösung: falsch
+
+
+### Teil: lv3-01
+Format: truefalse
+Gruppe: Lesen
+Titel: Übung 1
+Minuten: 0
+Punkte: 1
+Maximum: 2
+Anweisung: Lesen Sie die Schilder und die Aufgaben. Kreuzen Sie an: Richtig oder Falsch.
+Stil: schild
+Text:
+@ Vor einem Blumenladen
+**Neu!**
+Ab sofort haben wir auch sonntags von 9–12 Uhr für Sie geöffnet.
+Aufgaben:
+[1] Am Sonntagvormittag bekommen Sie hier Blumen.
+Lösung: richtig
+Text:
+@ Im Restaurant
+Im nächsten Monat kocht bei uns ein Koch aus Kalkutta indische Spezialitäten.
+Aufgaben:
+[2] Das Restaurant bietet jeden Montag indisches Essen an.
+Lösung: falsch
+
+
+### Teil: ht1-01
+Format: mc
+Gruppe: Hören
+Titel: Übung 1
+Minuten: 0
+Punkte: 1
+Maximum: 2
+Hörtext: a1hoeren/beispiel-t1.mp3
+Wiedergaben: 2
+Anweisung: Sie hören zwei kurze Texte. Sie hören jeden Text zweimal. Wählen Sie: a, b oder c.
+Aufgaben:
+[1] Wann läuft der Film am Samstag?
+A) Um 20.30 Uhr
+B) Um 20.00 Uhr
+C) Um 19.00 Uhr
+Lösung: a
+[2] Was bestellt die Frau?
+A) Tomatensuppe
+B) Ein Käsebrot
+C) Hähnchen mit Reis
+Lösung: b
+
+
+### Teil: sf1-01
+Format: formular
+Gruppe: Schreiben
+Titel: Übung 1 — Sprachenschule
+Minuten: 0
+Punkte: 1
+Maximum: 2
+Anweisung: Lesen Sie den Text und ergänzen Sie die fehlenden Informationen im Formular.
+Extra:
+{ "form": { "title": "Sprachenschule Lingua", "subtitle": "Anmeldung", "rows": [
+ {"label":"Familienname","val":"Gonman"},
+ {"label":"Vorname","blank":1},
+ {"label":"Muttersprache","val":"Englisch"},
+ {"label":"schon Deutsch gelernt?","blank":2}
+] } }
+Text:
+Ihr Freund Marco aus England möchte im September einen Deutschkurs machen. Er ist Anfänger.
+Aufgaben:
+[1] Vorname
+Lösung: Marco
+[2] schon Deutsch gelernt?
+A) ja
+B) nein
+Lösung: B
+
+
+### Teil: sf2-01
+Format: writing
+Gruppe: Schreiben
+Titel: Übung 1 — Kühlschrank
+Minuten: 0
+Punkte: 10
+Maximum: 10
+Anweisung: Sie bekommen am Dienstag einen neuen Kühlschrank, müssen aber arbeiten. Schreiben Sie an Ihren Nachbarn Herrn Maier und bitten Sie um Hilfe (ca. 30 Wörter).
+Extra:
+{ "criteria": [
+  {"title":"Inhaltspunkt 1","hint":"Warum schreiben Sie?","levels":[{"key":"A","label":"vollständig und verständlich","points":3},{"key":"B","label":"nur teilweise","points":1.5},{"key":"C","label":"nicht bearbeitet","points":0}]},
+  {"title":"Kommunikative Gestaltung","hint":"Passende Anrede und Gruß.","levels":[{"key":"A","label":"Anrede und Gruß passend","points":1},{"key":"B","label":"nur teilweise","points":0.5},{"key":"C","label":"fehlt","points":0}]}
+ ],
+ "muster": "Sehr geehrter Herr Maier,\n\nam Dienstag bekomme ich einen neuen Kühlschrank, aber ich muss arbeiten. Können Sie bitte zu Hause sein? Er wird um 8 Uhr geliefert. Meinen Schlüssel lege ich in Ihren Briefkasten.\n\nVielen Dank und herzliche Grüße" }
+Aufgaben:
+[1] Schreiben Sie eine E-Mail oder einen kurzen Brief an Herrn Maier:
+Mindestwoerter: 30
+Punkt: Warum schreiben Sie?
+Punkt: Wann wird der Kühlschrank geliefert?
+Punkt: Wo ist der Schlüssel?
+
+
+### Teil: sp1-01
+Format: vorstellen
+Gruppe: Sprechen
+Titel: Sich vorstellen
+Minuten: 0
+Hinweis: Im Sprechen Teil 1 stellen Sie sich vor. Sprechen Sie über die Stichwörter. Danach stellt die Prüferin oder der Prüfer ein bis zwei Fragen.
+Extra:
+{ "cards": [
+  {"q":"Name?","a":"Ich heiße … / Mein Name ist …"},
+  {"q":"Land?","a":"Ich komme aus …"},
+  {"q":"Wohnort?","a":"Ich wohne in …"},
+  {"q":"Sprachen?","a":"Ich spreche … und ein bisschen Deutsch."},
+  {"q":"Beruf?","a":"Ich bin … von Beruf. / Ich arbeite als …"},
+  {"q":"Hobby?","a":"Mein Hobby ist … / In meiner Freizeit … ich gern."}
+ ],
+ "fragen": [
+  {"q":"Buchstabieren Sie bitte Ihren Namen.","a":"Zum Beispiel: A – M – A – N – I."},
+  {"q":"Wie ist Ihre Telefonnummer?","a":"Meine Telefonnummer ist …"}
+ ] }
+
+
+### Teil: sp2-01
+Format: sprechkarten
+Gruppe: Sprechen
+Titel: Fragen und antworten
+Minuten: 0
+Hinweis: Im Sprechen Teil 2 bekommen Sie Karten mit einem Thema und einem Stichwort. Bilden Sie zum Stichwort eine Frage. Ihre Partnerin oder Ihr Partner antwortet.
+Extra:
+{ "karten": [
+  {"thema":"Essen & Trinken","wort":"Gemüse","frage":"Essen Sie gern Gemüse?","antwort":"Ja, ich esse gern Gemüse."},
+  {"thema":"Essen & Trinken","wort":"Kaffee","frage":"Trinken Sie gern Kaffee?","antwort":"Ja, am Morgen trinke ich Kaffee."},
+  {"thema":"Einkaufen","wort":"Obst","frage":"Was kostet ein Kilo Obst?","antwort":"Das kostet 2 Euro."},
+  {"thema":"Einkaufen","wort":"Kasse","frage":"Wo ist die Kasse?","antwort":"Die Kasse ist da vorne."}
+ ] }
