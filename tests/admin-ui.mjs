@@ -38,8 +38,15 @@ const RPC = {
   admin_content: () => ({
     levels:[{ id:'goethe-a1', provider:'Goethe', stufe:'A1', title:'Goethe · A1',
               published:true, sort:0, tests:1 }],
-    tests:[{ id:'t1', level_id:'goethe-a1', slug:'modell-01', title:'Modell 01', published:true }],
-    resources:[], imports:[] }),
+    tests:[{ id:'t1', level_id:'goethe-a1', slug:'modell-01', title:'Modell 01',
+             sections:7, aufgaben:9, answers:8, published:true }],
+    resources:[{ id:'r1', level_id:'goethe-a1', title:'Wortschatz Reisen',
+                 length:1200, published:true }],
+    imports:[] }),
+  admin_upsert_level:       () => ({ ok:true }),
+  admin_set_test_published: () => ({ ok:true }),
+  admin_delete_test:        () => ({ ok:true }),
+  admin_delete_resource:    () => ({ ok:true }),
   admin_codes: () => ([
     { id:'c1', code:'B1FREI0001', levels:['goethe-a1'], uses:0, max_uses:2, duration_days:30,
       duration_hours:null, test_slugs:[], redeemers:[], note:'frei',
@@ -95,6 +102,7 @@ async function until(fn, ms = 3000){ const t0 = Date.now();
 
 const browser = await chromium.launch();
 const page = await browser.newPage();
+page.on('dialog', d => d.accept().catch(() => {}));   // confirm() → OK (للحذف)
 page.on('console', m => { if (m.type() === 'error') console.log('  · console:', m.text()); });
 page.on('pageerror', e => console.log('  · pageerror:', e.message));
 await page.addInitScript(() => {
@@ -162,6 +170,30 @@ try {
   check('+1: خانة التفعيلات صارت «2 / 3»', bumped);
   check('+1: زرّ +1 اختفى', !(await page.$('[data-coderow="c2"] [data-more1]')));
   check('+1: admin_codes ما انعاد جلبها', (calls.admin_codes || 0) === codesCalls);
+
+  // ── Inhalte: تبديل نشر + حذف جزئي بلا إعادة جلب الكتالوج ──
+  await page.click('[data-tab="content"]');
+  await until(() => page.$('[data-levels]'));
+  const contentCalls = calls.admin_content || 0;
+
+  await page.click('[data-lvlrow="goethe-a1"] [data-lvl]');
+  check('Inhalte: نشر الستوفة → «versteckt»', await until(async () =>
+    /versteckt/.test((await page.textContent('[data-lvlrow="goethe-a1"]')) || '')));
+
+  await page.click('[data-testrow="t1"] [data-tpub]');
+  check('Inhalte: نشر الامتحان → «Entwurf»', await until(async () =>
+    /Entwurf/.test((await page.textContent('[data-testrow="t1"]')) || '')));
+
+  await page.click('[data-testrow="t1"] [data-tdel]');
+  check('Inhalte: حذف الامتحان → الصفّ انشال', await until(async () =>
+    !(await page.$('[data-testrow="t1"]'))));
+
+  await page.click('[data-resrow="r1"] [data-rdel]');
+  check('Inhalte: حذف المادة → الصفّ انشال', await until(async () =>
+    !(await page.$('[data-resrow="r1"]'))));
+
+  check('Inhalte: admin_content ما انعاد جلبها بعد الإجراءات',
+    (calls.admin_content || 0) === contentCalls);
 
 } catch (e){
   console.log('  ✗ استثناء:', e.message);

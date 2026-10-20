@@ -767,7 +767,9 @@ async function screenContent(){
   // وحدة، والقوائم صغيرة — نداء تاني لكل تبديل مو مستاهل.
   const tests = (c.tests || []).filter(t => !contentLevel || t.level_id === contentLevel);
 
-  const lvlRow = l => `<tr>
+  /* خلايا الصفوف (بلا <tr>) — مصدر واحد للرسم الأول وللتحديث الجزئي بعد
+     تبديل النشر؛ والحذف بيشيل الصفّ من الـDOM مباشرة. */
+  const lvlCells = l => `
     <td>${l.provider
       ? `<b>${esc(l.provider)}</b>`
       : '<span style="color:var(--warn)">ohne Anbieter</span>'}</td>
@@ -780,10 +782,9 @@ async function screenContent(){
           data-pub="${l.published ? 0 : 1}" data-title="${esc(l.title)}"
           data-sort="${l.sort}" data-prov="${esc(l.provider || '')}"
           data-stufe="${esc(l.stufe || '')}"
-          >${l.published ? 'verstecken' : 'online stellen'}</button></td>
-  </tr>`;
+          >${l.published ? 'verstecken' : 'online stellen'}</button></td>`;
 
-  const testRow = t => `<tr>
+  const testCells = t => `
     <td class="mono">${esc(t.level_id)}</td>
     <td><b>${esc(t.title)}</b>
       <div class="mono" style="color:var(--muted);font-size:12px">${esc(t.slug)}</div></td>
@@ -796,9 +797,9 @@ async function screenContent(){
       <button class="btn sm grey" data-tpub="${esc(t.id)}" data-v="${t.published ? 0 : 1}">
         ${t.published ? 'verstecken' : 'online'}</button>
       <button class="btn sm danger" data-tdel="${esc(t.id)}" data-n="${esc(t.title)}">löschen</button>
-    </td></tr>`;
+    </td>`;
 
-  const resRow = r => `<tr>
+  const resCells = r => `
     <td class="mono">${esc(r.level_id || 'alle')}</td>
     <td>${esc(r.title)}</td>
     <td>${r.length} Zeichen</td>
@@ -806,7 +807,7 @@ async function screenContent(){
     <td style="white-space:nowrap">
       <button class="btn sm grey" data-redit="${esc(r.id)}">bearbeiten</button>
       <button class="btn sm danger" data-rdel="${esc(r.id)}" data-n="${esc(r.title)}">löschen</button>
-    </td></tr>`;
+    </td>`;
 
   app.innerHTML = `
     <h1>Inhalte</h1>
@@ -837,10 +838,10 @@ async function screenContent(){
         <label>Reihenfolge<input id="l_sort" type="number" value="0"></label>
         <button class="btn" id="l_go">Anlegen / ändern</button>
       </div>
-      <div class="wrap" style="margin-top:12px"><table>
+      <div class="wrap" data-levels style="margin-top:12px"><table>
         <tr><th>Anbieter</th><th>Stufe</th><th>Titel</th><th>Tests</th>
             <th>Status</th><th></th></tr>
-        ${c.levels.map(lvlRow).join('')
+        ${c.levels.map(l => `<tr data-lvlrow="${esc(l.id)}">${lvlCells(l)}</tr>`).join('')
           || '<tr><td colspan="6" class="empty">Noch keine Prüfung</td></tr>'}
       </table></div>
     </div>
@@ -853,9 +854,9 @@ async function screenContent(){
           <b>bearbeiten</b> öffnet den Test im Import-Editor — dieselbe
           Vorlagensprache wie beim Anlegen. Speichern ersetzt ihn.</p>
       </div>
-      <div class="wrap" style="margin-top:12px"><table>
+      <div class="wrap" data-tests style="margin-top:12px"><table>
         <tr><th>Stufe</th><th>Test</th><th>Teile / Aufg.</th><th>Lösungen</th><th>Status</th><th></th></tr>
-        ${tests.map(testRow).join('')
+        ${tests.map(t => `<tr data-testrow="${esc(t.id)}">${testCells(t)}</tr>`).join('')
           || '<tr><td colspan="6" class="empty">Keine Tests in dieser Stufe</td></tr>'}
       </table></div>
     </div>
@@ -878,13 +879,21 @@ async function screenContent(){
         <button class="btn grey" id="r_draft">Als Entwurf speichern</button>
         <button class="btn grey" id="r_new" hidden>Neu</button>
       </div>
-      <div class="wrap" style="margin-top:12px"><table>
+      <div class="wrap" data-resources style="margin-top:12px"><table>
         <tr><th>Stufe</th><th>Titel</th><th>Länge</th><th>Status</th><th></th></tr>
-        ${c.resources.map(resRow).join('') || '<tr><td colspan="5" class="empty">Noch nichts</td></tr>'}
+        ${c.resources.map(r => `<tr data-resrow="${esc(r.id)}">${resCells(r)}</tr>`).join('')
+          || '<tr><td colspan="5" class="empty">Noch nichts</td></tr>'}
       </table></div>
     </div>`;
 
   const $ = id => document.getElementById(id);
+  const levelsWrap = app.querySelector('[data-levels]');
+  const testsWrap  = app.querySelector('[data-tests]');
+  const resWrap    = app.querySelector('[data-resources]');
+  const patchIn = (wrap, attr, id, cells) => {
+    const tr = wrap.querySelector(`[data-${attr}="${CSS.escape(id)}"]`);
+    if (tr) tr.innerHTML = cells;
+  };
 
   wirePicker('t_lvl', c.levels, id => { contentLevel = id; screenContent(); },
              { all: true });
@@ -892,7 +901,7 @@ async function screenContent(){
   /* التعديل: القراءة رجوعاً من القاعدة، تحويل لنص القالب، وفتح المحرّر.
      نفس اللغة يلي بتنكتب فيها الامتحانات الجديدة — ما في صيغة تانية
      تتعلّميها، والحفظ بيستبدل الامتحان على نفس الـslug. */
-  app.querySelectorAll('[data-tedit]').forEach(b => b.onclick = async () => {
+  UI.delegate(testsWrap, 'click', '[data-tedit]', async b => {
     const t = (c.tests || []).find(x => x.id === b.dataset.tedit);
     const doc = await act(b, () => rpc('admin_test_doc', { p_test_id: b.dataset.tedit }));
     if (!doc) return;
@@ -901,6 +910,8 @@ async function screenContent(){
     show('import');
   });
 
+  // إنشاء/تعديل ستوفة: بيضيف صفّ أو بيغيّر العنوان، وبيصفّي الفورم بعد
+  //   الإنشاء — فإعادة الرسم الكاملة هون مقصودة.
   $('l_go').onclick = async e => {
     const provider = $('l_prov').value.trim();
     const stufe    = $('l_stufe').value.trim().toUpperCase();
@@ -913,25 +924,35 @@ async function screenContent(){
       p_provider: provider, p_stufe: stufe }), 'Prüfung gespeichert');
     screenContent();
   };
-  app.querySelectorAll('[data-lvl]').forEach(b => b.onclick = async () => {
-    await act(b, () => rpc('admin_upsert_level', {
-      p_id: b.dataset.lvl, p_title: b.dataset.title,
-      p_sort: Number(b.dataset.sort), p_published: b.dataset.pub === '1',
-      p_provider: b.dataset.prov || null, p_stufe: b.dataset.stufe || null }),
-      'Gespeichert');
-    screenContent();
+
+  // ★ تبديل نشر الستوفة / الامتحان، وحذف امتحان / مادة: تحديث (أو شطب)
+  //   الصفّ المعنيّ فقط — بلا إعادة جلب كل الكتالوج.
+  UI.delegate(levelsWrap, 'click', '[data-lvl]', async b => {
+    try {
+      await act(b, () => rpc('admin_upsert_level', {
+        p_id: b.dataset.lvl, p_title: b.dataset.title,
+        p_sort: Number(b.dataset.sort), p_published: b.dataset.pub === '1',
+        p_provider: b.dataset.prov || null, p_stufe: b.dataset.stufe || null }), 'Gespeichert');
+    } catch { return; }
+    const l = c.levels.find(x => x.id === b.dataset.lvl);
+    if (l){ l.published = b.dataset.pub === '1'; patchIn(levelsWrap, 'lvlrow', l.id, lvlCells(l)); }
   });
-  app.querySelectorAll('[data-tpub]').forEach(b => b.onclick = async () => {
-    await act(b, () => rpc('admin_set_test_published',
-      { p_test_id: b.dataset.tpub, p_published: b.dataset.v === '1' }), 'Gespeichert');
-    screenContent();
+  UI.delegate(testsWrap, 'click', '[data-tpub]', async b => {
+    try {
+      await act(b, () => rpc('admin_set_test_published',
+        { p_test_id: b.dataset.tpub, p_published: b.dataset.v === '1' }), 'Gespeichert');
+    } catch { return; }
+    const t = (c.tests || []).find(x => x.id === b.dataset.tpub);
+    if (t){ t.published = b.dataset.v === '1'; patchIn(testsWrap, 'testrow', t.id, testCells(t)); }
   });
-  app.querySelectorAll('[data-tdel]').forEach(b => b.onclick = async () => {
+  UI.delegate(testsWrap, 'click', '[data-tdel]', async b => {
     if (!confirm(`„${b.dataset.n}“ mit allen Aufgaben und Lösungen löschen?`)) return;
-    await act(b, () => rpc('admin_delete_test', { p_test_id: b.dataset.tdel }), 'Gelöscht');
-    screenContent();
+    try { await act(b, () => rpc('admin_delete_test', { p_test_id: b.dataset.tdel }), 'Gelöscht'); }
+    catch { return; }
+    testsWrap.querySelector(`[data-testrow="${CSS.escape(b.dataset.tdel)}"]`)?.remove();
   });
 
+  // حفظ مادة قرائية: بيضيف/بيعدّل وبيصفّي الفورم — إعادة رسم كاملة مقصودة.
   const saveRes = pub => async e => {
     const id = $('r_id').value || null;
     if (!$('r_title').value.trim()) return toast('Titel fehlt');
@@ -943,12 +964,13 @@ async function screenContent(){
   };
   $('r_save').onclick  = saveRes(true);
   $('r_draft').onclick = saveRes(false);
-  app.querySelectorAll('[data-rdel]').forEach(b => b.onclick = async () => {
+  UI.delegate(resWrap, 'click', '[data-rdel]', async b => {
     if (!confirm(`„${b.dataset.n}“ löschen?`)) return;
-    await act(b, () => rpc('admin_delete_resource', { p_id: b.dataset.rdel }), 'Gelöscht');
-    screenContent();
+    try { await act(b, () => rpc('admin_delete_resource', { p_id: b.dataset.rdel }), 'Gelöscht'); }
+    catch { return; }
+    resWrap.querySelector(`[data-resrow="${CSS.escape(b.dataset.rdel)}"]`)?.remove();
   });
-  app.querySelectorAll('[data-redit]').forEach(b => b.onclick = async () => {
+  UI.delegate(resWrap, 'click', '[data-redit]', async b => {
     const rows = await api(`resources?select=id,level_id,title,body,sort&id=eq.${b.dataset.redit}`);
     const r = rows[0]; if (!r) return;
     $('r_id').value = r.id; $('r_title').value = r.title || '';
