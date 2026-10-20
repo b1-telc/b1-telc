@@ -488,6 +488,31 @@ async function screenCodes(){
                    : c.uses >= c.max_uses ? ['', 'aufgebraucht']
                    : c.uses > 0           ? ['warn', `${c.uses}/${c.max_uses} benutzt`]
                    :                        ['ok', `${c.max_uses}× frei`];
+  // ★ خلايا صفّ الكود — مصدر واحد للرسم الأول وللتحديث الجزئي بعد
+  //   «sperren» أو «+1»، بلا إعادة جلب كل القائمة.
+  const rowHTML = c => { const [cls, txt] = state(c); return `
+    <td class="mono"><b>${esc(fmtCode(c.code))}</b></td>
+    <td><span class="pill ${cls}">${txt}</span></td>
+    <td>${esc((c.levels || []).join(', '))}</td>
+    <td>${c.duration_days ? c.duration_days + ' Tage' : ''}${
+      c.duration_days && c.duration_hours ? ' + ' : ''}${
+      c.duration_hours ? c.duration_hours + ' Std' : ''}</td>
+    <td>${(c.test_slugs || []).length
+      ? `<span class="pill warn">Demo</span> <span class="mono"
+           style="font-size:12px">${esc(c.test_slugs.join(', '))}</span>`
+      : 'ganze Stufe'}</td>
+    <td>${c.uses} / ${c.max_uses}
+      ${(c.redeemers || []).length ? `<div style="color:var(--muted);font-size:12px">
+        ${c.redeemers.map(x => esc(x.name || 'ohne Namen') + ' · ' + fmtDate(x.at)).join('<br>')}
+      </div>` : ''}</td>
+    <td>${esc(c.note || '—')}</td><td>${fmtDate(c.created_at)}</td>
+    <td style="white-space:nowrap">
+      ${!c.revoked_at && c.uses >= c.max_uses
+        ? `<button class="btn sm grey" data-more1="${esc(c.id)}"
+             title="Eine weitere Aktivierung freigeben">+1</button>` : ''}
+      ${!c.revoked_at && c.uses === 0
+        ? `<button class="btn sm danger" data-rev="${esc(c.id)}">sperren</button>` : ''}
+    </td>`; };
   app.innerHTML = `
     <h1>Zugangscodes</h1>
     <p class="sub">Erzeugen, ausdrucken, weitergeben. Ein Code wird einmal
@@ -530,33 +555,11 @@ async function screenCodes(){
       <div id="c_out"></div>
     </div>
 
-    <div class="card"><div class="wrap"><table>
+    <div class="card"><div class="wrap" data-codes><table>
       <tr><th>Code</th><th>Status</th><th>Stufen</th><th>Gültig</th><th>Umfang</th>
           <th>Aktivierungen</th><th>Notiz</th><th>erstellt</th><th></th></tr>
-      ${codes.map(c => { const [cls, txt] = state(c); return `<tr>
-        <td class="mono"><b>${esc(fmtCode(c.code))}</b></td>
-        <td><span class="pill ${cls}">${txt}</span></td>
-        <td>${esc((c.levels || []).join(', '))}</td>
-        <td>${c.duration_days ? c.duration_days + ' Tage' : ''}${
-          c.duration_days && c.duration_hours ? ' + ' : ''}${
-          c.duration_hours ? c.duration_hours + ' Std' : ''}</td>
-        <td>${(c.test_slugs || []).length
-          ? `<span class="pill warn">Demo</span> <span class="mono"
-               style="font-size:12px">${esc(c.test_slugs.join(', '))}</span>`
-          : 'ganze Stufe'}</td>
-        <td>${c.uses} / ${c.max_uses}
-          ${(c.redeemers || []).length ? `<div style="color:var(--muted);font-size:12px">
-            ${c.redeemers.map(x => esc(x.name || 'ohne Namen') + ' · ' + fmtDate(x.at)).join('<br>')}
-          </div>` : ''}</td>
-        <td>${esc(c.note || '—')}</td><td>${fmtDate(c.created_at)}</td>
-        <td style="white-space:nowrap">
-          ${!c.revoked_at && c.uses >= c.max_uses
-            ? `<button class="btn sm grey" data-more1="${esc(c.id)}"
-                 title="Eine weitere Aktivierung freigeben">+1</button>` : ''}
-          ${!c.revoked_at && c.uses === 0
-            ? `<button class="btn sm danger" data-rev="${esc(c.id)}">sperren</button>` : ''}
-        </td>
-      </tr>`; }).join('') || '<tr><td colspan="9" class="empty">Noch keine Codes</td></tr>'}
+      ${codes.map(c => `<tr data-coderow="${esc(c.id)}">${rowHTML(c)}</tr>`).join('')
+        || '<tr><td colspan="9" class="empty">Noch keine Codes</td></tr>'}
     </table></div></div>`;
 
   /* Vor dem Erzeugen sichtbar machen, was der Code öffnet — eine Stufe,
@@ -655,15 +658,27 @@ async function screenCodes(){
         .then(() => toast('Kopiert')).catch(() => toast('Kopieren nicht möglich'));
     };
   };
-  app.querySelectorAll('[data-rev]').forEach(b => b.onclick = async () => {
-    await act(b, () => rpc('admin_revoke_code', { p_code_id: b.dataset.rev }), 'Code gesperrt');
-    screenCodes();
+  // ★ sperren / +1: تحديث صفّ الكود المعنيّ فقط (تفويض حدث على الجدول)،
+  //   بلا إعادة جلب كل القائمة — فما يضيع مكان التمرير ولا بيانات الفورم.
+  const codesWrap = app.querySelector('[data-codes]');
+  const patchCode = c => {
+    const tr = codesWrap.querySelector(`[data-coderow="${CSS.escape(c.id)}"]`);
+    if (tr) tr.innerHTML = rowHTML(c);
+  };
+  UI.delegate(codesWrap, 'click', '[data-rev]', async b => {
+    const r = await act(b, () => rpc('admin_revoke_code',
+      { p_code_id: b.dataset.rev }), 'Code gesperrt');
+    if (!r) return;
+    const c = codes.find(x => x.id === b.dataset.rev);
+    if (c){ c.revoked_at = new Date().toISOString(); patchCode(c); }
   });
   // Gerät verloren, Browser gelöscht: eine Aktivierung nachlegen
-  app.querySelectorAll('[data-more1]').forEach(b => b.onclick = async () => {
-    await act(b, () => rpc('admin_add_code_use',
+  UI.delegate(codesWrap, 'click', '[data-more1]', async b => {
+    const r = await act(b, () => rpc('admin_add_code_use',
       { p_code_id: b.dataset.more1, p_extra: 1 }), 'Eine Aktivierung freigegeben');
-    screenCodes();
+    if (!r) return;
+    const c = codes.find(x => x.id === b.dataset.more1);
+    if (c){ if (r.max_uses != null) c.max_uses = r.max_uses; patchCode(c); }
   });
 }
 
