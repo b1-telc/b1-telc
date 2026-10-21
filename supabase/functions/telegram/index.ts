@@ -468,11 +468,21 @@ async function stepProvider(chat: number, lang: Lang, levels: Level[],
   if (!levels.length) return void await screen(chat, msg, ask(t(lang, "none")));
   const provs = [...new Set(levels.map(l => l.provider || "—"))];
 
-  // مؤسسة وحدة بس: ما في معنى نسأل — منقفز للدرجات
-  if (provs.length === 1) return stepStufe(chat, lang, levels, provs[0], msg, head);
+  // مؤسسة «قريباً»: ما فيها ولا مستوى جاهز (كلها soon). بتطلع زرّ معطّل برّا
+  // بـ«قريباً»، وضغطها بيعطي تنبيه بلا ما يفوّت جوا. أوّل ما ينتشر منها مستوى
+  // بتصير قابلة للضغط وبتفوّت لمستوياتها.
+  const isSoonProv = (p: string) =>
+    levels.filter(l => (l.provider || "—") === p).every(l => l.soon);
+
+  // مؤسسة وحدة جاهزة بس: ما في معنى نسأل — منقفز للدرجات. (لو كلها «قريباً»
+  // منعرضها برّا بدل ما نفوّت على قائمة قريباً فاضية.)
+  if (provs.length === 1 && !isSoonProv(provs[0]))
+    return stepStufe(chat, lang, levels, provs[0], msg, head);
 
   await screen(chat, msg, ask(t(lang, "pickProvider")),
-    rows(provs.map(p => ({ text: p, callback_data: `p|${lang}|${p}` }))));
+    rows(provs.map(p => isSoonProv(p)
+      ? { text: `${p} — ${t(lang, "soonTag")}`, callback_data: `s|${lang}` }
+      : { text: p, callback_data: `p|${lang}|${p}` })));
 }
 
 async function stepStufe(chat: number, lang: Lang, levels: Level[], prov: string,

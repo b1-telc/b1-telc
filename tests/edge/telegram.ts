@@ -670,40 +670,51 @@ check("★ ولا بالمجموعة كمان",
                         && /اختار لغتك/.test(String(x.body?.text))));
 }
 
-/* ---- ١٩) ★★ مستوى «قريباً»: زرّ معطّل بتنبيه، بلا كود ----
-   المصدر صار القاعدة (عمود soon، بيتدار بزرّ «bald» باللوحة). منزرع مستوى
-   Goethe·A2 معلّم soon ومو منشور، فبيطلع «قريباً»؛ telc·B1 منشور فبيضل نشط
-   (ولو كان بالقائمة كان بينشال بالتكرار). منشيله بالآخر تا ما يأثّر على غيره. */
+/* ---- ١٩) ★★ «قريباً»: على مستوى المؤسسة برّا + على مستوى الدرجة جوا ----
+   المصدر القاعدة (عمود soon، بيتدار بزرّ «bald» باللوحة).
+   أ) مؤسسة كلها «قريباً» (ما فيها ولا مستوى جاهز) → زرّ معطّل برّا بـ«قريباً»،
+      ضغطه تنبيه بلا دخول. ب) مؤسسة فيها جاهز + درجة «قريباً» → بتفوّت جوا،
+      والدرجة الغير جاهزة بتطلع «قريباً» لحالها. telc·B1 (id=b1) منشور. */
 {
+  // ── أ) مؤسسة «قريباً» برّا ──
   psql(`delete from tests where level_id<>'b1'; delete from levels where id<>'b1';`);
   psql(`insert into levels (id,title,provider,stufe,published,soon)
         values ('goethe-a2','Goethe-Zertifikat A2','Goethe','A2',false,true);`);
 
-  // مؤسستين هلّأ: telc (منشور) + Goethe (قريباً) ← بيسأل عن المؤسسة
+  // شاشة المؤسسات: telc جاهزة (زرّ دخول p)، Goethe كلها «قريباً» (زرّ s برّا)
   sent.length = 0;
   await post(click("g|ar", "ar"));
-  const prov2 = flat().filter((b: any) => String(b.callback_data).startsWith("p|"));
-  check(`★★ «قريباً» بيزيد مؤسسة Goethe جنب telc (${prov2.map((b:any)=>b.text).join(', ')})`,
-        prov2.some((b: any) => b.text === "Goethe") && prov2.some((b: any) => b.text === "telc"));
+  const btns = flat();
+  const telcBtn   = btns.find((b: any) => b.callback_data === "p|ar|telc");
+  const goetheBtn = btns.find((b: any) =>
+    /Goethe/.test(String(b.text)) && b.callback_data === "s|ar");
+  check("★★ مؤسسة جاهزة (telc) = زرّ دخول (p)", !!telcBtn);
+  check(`★★ مؤسسة كلها «قريباً» (Goethe) = زرّ معطّل برّا بـ«قريباً»`,
+        !!goetheBtn && /قريباً/.test(String(goetheBtn?.text)));
 
-  // درجات Goethe: A2 «قريباً» بزرّ callback s
-  sent.length = 0;
-  await post(click("p|ar|Goethe", "ar"));
-  const soonBtn = flat().find((b: any) => b.callback_data === "s|ar");
-  check("★★ مستوى غير جاهز ← زرّ «— قريباً» (callback s)",
-        !!soonBtn && /قريباً/.test(String(soonBtn?.text)));
-
-  // الضغط: تنبيه show_alert بلغته، وبلا توليد كود
+  // ضغط مؤسسة «قريباً»: تنبيه show_alert، بلا كود وبلا دخول للدرجات
   const before = psql(`select count(*) from access_codes;`);
   sent.length = 0;
   await post(click("s|ar", "ar"));
-  check("★★ ضغط «قريباً» ← تنبيه show_alert بلغته",
+  check("★★ ضغط مؤسسة «قريباً» ← تنبيه show_alert بلغته",
         lastOf("answerCallbackQuery")?.show_alert === true
         && /قريباً/.test(String(lastOf("answerCallbackQuery")?.text)));
   check("★★ وما انولّد ولا كود",
         psql(`select count(*) from access_codes;`) === before);
-
   psql(`delete from levels where id='goethe-a2';`);
+
+  // ── ب) مؤسسة فيها جاهز + درجة «قريباً» → جوا ──
+  psql(`insert into levels (id,title,provider,stufe,published,soon)
+        values ('telc-b2s','telc Deutsch B2','telc','B2',false,true);`);
+  sent.length = 0;
+  await post(click("g|ar", "ar"));   // telc لحالها جاهزة → بيقفز للدرجات
+  const inside = flat();
+  check("★★ الدرجة الجاهزة (B1) = زرّ دخول (l)",
+        inside.some((b: any) => String(b.callback_data).startsWith("l|ar|")));
+  check("★★ والدرجة الغير جاهزة (B2) «قريباً» جوا (s)",
+        inside.some((b: any) => b.callback_data === "s|ar"
+                             && /قريباً/.test(String(b.text))));
+  psql(`delete from levels where id='telc-b2s';`);
 }
 
 await supa.shutdown(); await tgSrv.shutdown();
