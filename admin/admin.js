@@ -854,7 +854,7 @@ async function screenContent(){
       </table></div>
     </div>
 
-    <h2>Modelltests</h2>
+    <h2>Modelltests <button class="linkbtn" id="t_import" type="button">+ Neuen Test importieren</button></h2>
     <div class="card">
       <div class="row">
         ${pickerHTML('t_lvl', c.levels, contentLevel, { all: true })}
@@ -898,6 +898,9 @@ async function screenContent(){
     const tr = wrap.querySelector(`[data-${attr}="${CSS.escape(id)}"]`);
     if (tr) tr.innerHTML = cells;
   };
+
+  // رابط سير العمل: استيراد امتحان جديد بالمحرّر مباشرة.
+  $('t_import').onclick = () => show('import');
 
   // تبديل فلتر الستوفة: يعيد رسم جدول الامتحانات فقط (التفويض على
   //   testsWrap بيضل شغّال)، بلا إعادة جلب الكتالوج.
@@ -1323,9 +1326,12 @@ async function screenImport(){
   if (pendingFiles) importLevel = pendingFiles.level;
 
   app.innerHTML = `
-    <h1>Import</h1>
+    <h1>Import <button class="linkbtn" id="i_toinhalt" type="button">← Modelltests</button></h1>
     <p class="sub">Prüfungstext einfügen, prüfen, dann veröffentlichen.
       Nichts geht online, bevor Sie die Vorschau gesehen haben.</p>
+    <p class="sub" style="margin-top:-10px">Gehört zu <b>Inhalte</b>: hier anlegen,
+      dort verwalten. Die Bilder und Hörtexte dieses Tests erscheinen nach dem
+      Veröffentlichen unten.</p>
 
     <div class="card">
       <div class="row">
@@ -1472,6 +1478,8 @@ async function screenImport(){
   $('i_clear').onclick  = () => { $('i_text').value = ''; $('i_result').innerHTML = '';
                                   importState = { id:null, doc:null, raw:'' }; };
   $('i_parse').onclick  = () => runParse($('i_text').value);
+  // رابط سير العمل: رجوع لإدارة الامتحانات.
+  $('i_toinhalt').onclick = () => show('content');
 
   app.querySelectorAll('[data-iload]').forEach(b => b.onclick = async () => {
     const rows = await api(`imports?select=id,level_id,raw_text&id=eq.${b.dataset.iload}`);

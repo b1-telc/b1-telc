@@ -10,13 +10,19 @@
 <body>
 <header class="bar">
   <div class="brand">telc <span>Admin</span></div>
+  <!-- ★ مجمّع بصرياً بمجموعات (فواصل) بلا ما نشيل أي زرّ: لوحة المفاتيح
+       والاختبار بيضلّوا يلاقوا كل تبويب بـdata-tab. ترتيب مجموعة المحتوى
+       بيتبع سير العمل: Inhalte (إدارة) ← Import (إنشاء) ← Dateien (ملفات). -->
   <nav id="nav" hidden>
     <button data-tab="home" class="on">Übersicht</button>
+    <span class="navsep"></span>
     <button data-tab="users">Nutzer</button>
     <button data-tab="codes">Codes</button>
+    <span class="navsep"></span>
     <button data-tab="content">Inhalte</button>
-    <button data-tab="assets">Dateien</button>
     <button data-tab="import">Import</button>
+    <button data-tab="assets">Dateien</button>
+    <span class="navsep"></span>
     <button data-tab="reports">Meldungen</button>
     <button data-tab="audit">Protokoll</button>
   </nav>
