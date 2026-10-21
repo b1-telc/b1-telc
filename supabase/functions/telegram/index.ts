@@ -430,26 +430,27 @@ const levelName = (l: Level) =>
   l.provider && l.stufe ? `${l.provider} · ${l.stufe}` : l.title;
 
 /* ★ مستويات «قريباً»: بتطلع أزرار معطّلة بالبوت (ضغطها بيعطي تنبيه «قريباً»
-   بلا كود). المصدر سرّ BOT_SOON (JSON) — بتتحكّمي فيه من Supabase بلا تعديل
-   كود ولا إعادة بناء:
-     BOT_SOON = [{"provider":"Goethe","stufe":"A2"},{"provider":"telc","stufe":"B1"}]
-   فاضي (الافتراضي) = ما في «قريباً» — نفس السلوك السابق تماماً. وأوّل ما
-   تنشري مستوى فعلاً (نفس المؤسسة+الدرجة) بينشال من «قريباً» أوتوماتيكياً. */
-function soonLevels(): Level[] {
-  let list: { provider: string; stufe: string }[] = [];
-  try { list = JSON.parse(Deno.env.get("BOT_SOON") ?? "[]"); } catch { list = []; }
-  return list.map((s, i) => ({
-    id: `soon-${i}`, provider: s.provider, stufe: s.stufe,
-    title: `${s.provider} · ${s.stufe}`, soon: true,
+   بلا كود). المصدر صار قاعدة البيانات — بتتحكّمي فيه بزرّ «bald» بلوحة الأدمن،
+   بلا تعديل سرّ ولا تنصيص JSON. bot_soon_levels بيرجّع المستويات المعلّمة
+   soon والمو منشورة. */
+async function soonLevels(): Promise<Level[]> {
+  const rows: { id: string; provider: string; stufe: string; title: string }[] =
+    await rpc("bot_soon_levels");
+  return (rows || []).map((s) => ({
+    id: s.id || `soon-${s.provider}-${s.stufe}`,
+    provider: s.provider, stufe: s.stufe,
+    title: s.title || `${s.provider} · ${s.stufe}`, soon: true,
   }));
 }
 
 /* المستويات النشطة (من القاعدة) + «قريباً»، بلا تكرار: لو مستوى «قريباً»
    اننشر فعلاً (نفس المؤسسة+الدرجة) بيغلب النشط ومنشيله من قائمة قريباً. */
 async function allLevels(): Promise<Level[]> {
-  const live: Level[] = await rpc("bot_levels");
-  const liveKey = new Set(live.map(l => `${l.provider}|${l.stufe}`));
-  return [...live, ...soonLevels().filter(s => !liveKey.has(`${s.provider}|${s.stufe}`))];
+  const [live, soon] = await Promise.all([
+    rpc("bot_levels") as Promise<Level[]>, soonLevels(),
+  ]);
+  const liveKey = new Set(live.map((l) => `${l.provider}|${l.stufe}`));
+  return [...live, ...soon.filter((s) => !liveKey.has(`${s.provider}|${s.stufe}`))];
 }
 
 /* ---------------- الخطوات ---------------- */

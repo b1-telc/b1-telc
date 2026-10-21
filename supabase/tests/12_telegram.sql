@@ -52,6 +52,23 @@ begin
   perform t_check('★ ومستوى مو منشور كمان',
     not exists (select 1 from jsonb_array_elements(r) x where x->>'id' = 'bot-hidden'));
 
+  ------------------------------------------------- ★ مستويات «قريباً» (soon)
+  -- معلّم soon ومو منشور → بيطلع بـ bot_soon_levels بس (زرّ معطّل، بلا كود)
+  insert into levels (id, title, provider, stufe, published, soon)
+  values ('bot-soon', 'Bald B2', 'botprov4', 'B2', false, true);
+  perform t_check('★ مستوى «قريباً» بيطلع بقائمة الـsoon',
+    exists (select 1 from jsonb_array_elements(bot_soon_levels()) x
+            where x->>'id' = 'bot-soon'));
+  perform t_check('★ وما بيطلع بالنشطة (ما بيعطي كود)',
+    not exists (select 1 from jsonb_array_elements(bot_levels()) x
+                where x->>'id' = 'bot-soon'));
+  -- المنشور بيغلب: مستوى منشور ما بيطلع «قريباً» ولو كان soon لسا مضبوط
+  update levels set published = true where id = 'bot-soon';
+  perform t_check('★ المنشور بيغلب «قريباً» بالعرض',
+    not exists (select 1 from jsonb_array_elements(bot_soon_levels()) x
+                where x->>'id' = 'bot-soon'));
+  update levels set published = false, soon = false where id = 'bot-soon';
+
   ---------------------------------------------------------- ٢ الكود التجريبي
   r := bot_demo_code(111222333, 111222333, 'ahmad', 'ar', 'b1');
   perform t_check(format('البوت أعطى كود (%s)', r->>'code'), (r->>'ok')::boolean);

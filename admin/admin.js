@@ -208,7 +208,9 @@ async function screenHome(){
       ${(o.levels || []).map(l => `<tr>
         <td>${esc(l.provider || '—')}</td>
         <td class="mono">${esc(l.stufe || l.id)}</td><td>${esc(l.title)}</td>
-        <td><span class="pill ${l.published ? 'ok' : ''}">${l.published ? 'online' : 'versteckt'}</span></td>
+        <td>${l.published ? '<span class="pill ok">online</span>'
+           : l.soon ? '<span class="pill warn">bald 🔜</span>'
+           : '<span class="pill">versteckt</span>'}</td>
       </tr>`).join('') || '<tr><td colspan="4" class="empty">Keine Prüfungen</td></tr>'}
     </table></div></div>`;
 
@@ -775,8 +777,15 @@ async function screenContent(){
         || '<tr><td colspan="6" class="empty">Keine Tests in dieser Stufe</td></tr>'}`;
   };
 
+  /* حالة المستوى: ثلاث حالات حصرية. المنشور بيغلب «قريباً» بالعرض كمان،
+     فمستوى منشور بيضل online ولو كان soon لسا مضبوط بالقاعدة. */
+  const lvlStatus = l => l.published
+    ? '<span class="pill ok">online</span>'
+    : l.soon ? '<span class="pill warn">bald 🔜</span>'
+             : '<span class="pill">versteckt</span>';
+
   /* خلايا الصفوف (بلا <tr>) — مصدر واحد للرسم الأول وللتحديث الجزئي بعد
-     تبديل النشر؛ والحذف بيشيل الصفّ من الـDOM مباشرة. */
+     تبديل النشر / «قريباً»؛ والحذف بيشيل الصفّ من الـDOM مباشرة. */
   const lvlCells = l => `
     <td>${l.provider
       ? `<b>${esc(l.provider)}</b>`
@@ -785,12 +794,14 @@ async function screenContent(){
     <td>${esc(l.title)}
       <div class="mono" style="color:var(--muted);font-size:12px">${esc(l.id)}</div></td>
     <td>${l.tests}</td>
-    <td><span class="pill ${l.published ? 'ok' : ''}">${l.published ? 'online' : 'versteckt'}</span></td>
+    <td>${lvlStatus(l)}</td>
     <td><button class="btn sm grey" data-lvl="${esc(l.id)}"
           data-pub="${l.published ? 0 : 1}" data-title="${esc(l.title)}"
           data-sort="${l.sort}" data-prov="${esc(l.provider || '')}"
           data-stufe="${esc(l.stufe || '')}"
-          >${l.published ? 'verstecken' : 'online stellen'}</button></td>`;
+          >${l.published ? 'verstecken' : 'online stellen'}</button>
+      <button class="btn sm grey" data-soon="${esc(l.id)}" data-sv="${l.soon ? 0 : 1}"
+          >${l.soon ? 'bald ✕' : 'bald 🔜'}</button></td>`;
 
   const testCells = t => `
     <td class="mono">${esc(t.level_id)}</td>
@@ -946,7 +957,21 @@ async function screenContent(){
         p_provider: b.dataset.prov || null, p_stufe: b.dataset.stufe || null }), 'Gespeichert');
     } catch { return; }
     const l = c.levels.find(x => x.id === b.dataset.lvl);
-    if (l){ l.published = b.dataset.pub === '1'; patchIn(levelsWrap, 'lvlrow', l.id, lvlCells(l)); }
+    if (l){ l.published = b.dataset.pub === '1';
+            // النشر بيلغي «قريباً» (حصري) — نفس سلوك القاعدة
+            if (l.published) l.soon = false;
+            patchIn(levelsWrap, 'lvlrow', l.id, lvlCells(l)); }
+  });
+  // ★ زرّ «قريباً / bald»: بيداره من القاعدة، تفعيله بيلغي النشر (حصري)
+  UI.delegate(levelsWrap, 'click', '[data-soon]', async b => {
+    try {
+      await act(b, () => rpc('admin_set_level_soon',
+        { p_id: b.dataset.soon, p_soon: b.dataset.sv === '1' }), 'Gespeichert');
+    } catch { return; }
+    const l = c.levels.find(x => x.id === b.dataset.soon);
+    if (l){ l.soon = b.dataset.sv === '1';
+            if (l.soon) l.published = false;
+            patchIn(levelsWrap, 'lvlrow', l.id, lvlCells(l)); }
   });
   UI.delegate(testsWrap, 'click', '[data-tpub]', async b => {
     try {
@@ -1219,7 +1244,7 @@ const STALE_MSG = '⚠ Die Datenbank ist noch nicht aktualisiert — bitte '
    بتفشل بصمت بطريقتها، وولا وحدة بتقول السبب. الرقم بيخلّي اللوحة تقوله.
 
    لما يتضاف ترحيل: يزيد الرقم هون وبـ0019_version.sql. */
-const SCHEMA_MIN = 32;
+const SCHEMA_MIN = 33;
 let schemaHave = null;      // null = لسا ما انفحص
 
 async function checkSchema(){

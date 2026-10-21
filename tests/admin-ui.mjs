@@ -38,9 +38,9 @@ const RPC = {
   admin_content: () => ({
     levels:[
       { id:'goethe-a1', provider:'Goethe', stufe:'A1', title:'Goethe · A1',
-        published:true, sort:0, tests:1 },
+        published:true, soon:false, sort:0, tests:1 },
       { id:'telc-b1', provider:'telc', stufe:'B1', title:'telc · B1',
-        published:true, sort:1, tests:1 },
+        published:true, soon:false, sort:1, tests:1 },
     ],
     tests:[
       { id:'t1', level_id:'goethe-a1', slug:'modell-01', title:'Goethe Modell 01',
@@ -52,6 +52,7 @@ const RPC = {
                  length:1200, published:true }],
     imports:[] }),
   admin_upsert_level:       () => ({ ok:true }),
+  admin_set_level_soon:     () => ({ ok:true }),
   admin_set_test_published: () => ({ ok:true }),
   admin_delete_test:        () => ({ ok:true }),
   admin_delete_resource:    () => ({ ok:true }),
@@ -195,6 +196,13 @@ try {
   await page.click('[data-lvlrow="goethe-a1"] [data-lvl]');
   check('Inhalte: نشر الستوفة → «versteckt»', await until(async () =>
     /versteckt/.test((await page.textContent('[data-lvlrow="goethe-a1"]')) || '')));
+
+  // ── زرّ «قريباً / bald»: تحديث جزئي، بلا إعادة جلب الكتالوج ──
+  check('Inhalte: الحالة قبل الزرّ «versteckt»', await until(async () =>
+    /versteckt/.test((await page.textContent('[data-lvlrow="goethe-a1"] .pill')) || '')));
+  await page.click('[data-lvlrow="goethe-a1"] [data-soon]');
+  check('Inhalte: زرّ «bald» → الحالة (pill) صارت «bald»', await until(async () =>
+    /bald/.test((await page.textContent('[data-lvlrow="goethe-a1"] .pill')) || '')));
 
   await page.click('[data-testrow="t1"] [data-tpub]');
   check('Inhalte: نشر الامتحان → «Entwurf»', await until(async () =>
