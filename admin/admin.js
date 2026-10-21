@@ -161,6 +161,7 @@ function screenLogin(err){
 
 /* ============ الأقسام ============ */
 async function screenHome(){
+  const sy = window.scrollY;                 // مكان التمرير — منرجّعه بعد الإجراء (حدود، durchlassen)
   app.innerHTML = '<div class="empty">Lädt …</div>';
   const [o, activity, cap, queue] = await Promise.all([
     rpc('admin_overview'),
@@ -212,6 +213,7 @@ async function screenHome(){
     </table></div></div>`;
 
   if (cap) wireCap();
+  if (window.scrollY !== sy) window.scrollTo(0, sy);
 }
 
 /* ---- Warteliste: zwei Zahlen, und was sie gerade bewirken ----
@@ -764,9 +766,14 @@ async function screenContent(){
   const sy = window.scrollY;                 // مكان التمرير — منرجّعه بعد الإجراء
   app.innerHTML = '<div class="empty">Lädt …</div>';
   const c = contentCache = await rpc('admin_content');
-  // مرشّح الستوفة بينطبق هون بالعميل: admin_content بترجّع كل شي مرة
-  // وحدة، والقوائم صغيرة — نداء تاني لكل تبديل مو مستاهل.
-  const tests = (c.tests || []).filter(t => !contentLevel || t.level_id === contentLevel);
+  // مرشّح الستوفة بينطبق بالعميل: admin_content بترجّع كل شي مرة وحدة،
+  // فتبديل الفلتر بيعيد رسم جدول الامتحانات بس — بلا نداء جديد للخادم.
+  const testRows = () => {
+    const list = (c.tests || []).filter(t => !contentLevel || t.level_id === contentLevel);
+    return `<tr><th>Stufe</th><th>Test</th><th>Teile / Aufg.</th><th>Lösungen</th><th>Status</th><th></th></tr>
+      ${list.map(t => `<tr data-testrow="${esc(t.id)}">${testCells(t)}</tr>`).join('')
+        || '<tr><td colspan="6" class="empty">Keine Tests in dieser Stufe</td></tr>'}`;
+  };
 
   /* خلايا الصفوف (بلا <tr>) — مصدر واحد للرسم الأول وللتحديث الجزئي بعد
      تبديل النشر؛ والحذف بيشيل الصفّ من الـDOM مباشرة. */
@@ -855,11 +862,7 @@ async function screenContent(){
           <b>bearbeiten</b> öffnet den Test im Import-Editor — dieselbe
           Vorlagensprache wie beim Anlegen. Speichern ersetzt ihn.</p>
       </div>
-      <div class="wrap" data-tests style="margin-top:12px"><table>
-        <tr><th>Stufe</th><th>Test</th><th>Teile / Aufg.</th><th>Lösungen</th><th>Status</th><th></th></tr>
-        ${tests.map(t => `<tr data-testrow="${esc(t.id)}">${testCells(t)}</tr>`).join('')
-          || '<tr><td colspan="6" class="empty">Keine Tests in dieser Stufe</td></tr>'}
-      </table></div>
+      <div class="wrap" data-tests style="margin-top:12px"><table>${testRows()}</table></div>
     </div>
 
     <h2>Lesematerial</h2>
@@ -896,8 +899,12 @@ async function screenContent(){
     if (tr) tr.innerHTML = cells;
   };
 
-  wirePicker('t_lvl', c.levels, id => { contentLevel = id; screenContent(); },
-             { all: true });
+  // تبديل فلتر الستوفة: يعيد رسم جدول الامتحانات فقط (التفويض على
+  //   testsWrap بيضل شغّال)، بلا إعادة جلب الكتالوج.
+  wirePicker('t_lvl', c.levels, id => {
+    contentLevel = id;
+    testsWrap.querySelector('table').innerHTML = testRows();
+  }, { all: true });
 
   /* التعديل: القراءة رجوعاً من القاعدة، تحويل لنص القالب، وفتح المحرّر.
      نفس اللغة يلي بتنكتب فيها الامتحانات الجديدة — ما في صيغة تانية

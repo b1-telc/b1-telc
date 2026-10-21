@@ -36,10 +36,18 @@ const RPC = {
   admin_shift_subscription: (a) => { subEnd += Number(a.p_days) * DAY;
     return { ok:true, current_period_end: iso(subEnd) }; },
   admin_content: () => ({
-    levels:[{ id:'goethe-a1', provider:'Goethe', stufe:'A1', title:'Goethe · A1',
-              published:true, sort:0, tests:1 }],
-    tests:[{ id:'t1', level_id:'goethe-a1', slug:'modell-01', title:'Modell 01',
-             sections:7, aufgaben:9, answers:8, published:true }],
+    levels:[
+      { id:'goethe-a1', provider:'Goethe', stufe:'A1', title:'Goethe · A1',
+        published:true, sort:0, tests:1 },
+      { id:'telc-b1', provider:'telc', stufe:'B1', title:'telc · B1',
+        published:true, sort:1, tests:1 },
+    ],
+    tests:[
+      { id:'t1', level_id:'goethe-a1', slug:'modell-01', title:'Goethe Modell 01',
+        sections:7, aufgaben:9, answers:8, published:true },
+      { id:'t2', level_id:'telc-b1', slug:'telc-01', title:'telc Modell 01',
+        sections:5, aufgaben:40, answers:40, published:true },
+    ],
     resources:[{ id:'r1', level_id:'goethe-a1', title:'Wortschatz Reisen',
                  length:1200, published:true }],
     imports:[] }),
@@ -175,6 +183,14 @@ try {
   await page.click('[data-tab="content"]');
   await until(() => page.$('[data-levels]'));
   const contentCalls = calls.admin_content || 0;
+
+  // فلتر الامتحانات: يعيد الرسم client-side بلا إعادة جلب الكتالوج
+  check('Inhalte: الجدول يبدأ بامتحانين', (await page.locator('[data-testrow]').count()) === 2);
+  await page.selectOption('#t_lvl', 'goethe-a1');
+  check('Inhalte: الفلتر عرض امتحان واحد', await until(async () =>
+    (await page.locator('[data-testrow]').count()) === 1));
+  check('Inhalte: الفلتر ما أعاد جلب الكتالوج', (calls.admin_content || 0) === contentCalls);
+  await page.selectOption('#t_lvl', '');   // رجوع لـ«alle» لباقي الفحوص
 
   await page.click('[data-lvlrow="goethe-a1"] [data-lvl]');
   check('Inhalte: نشر الستوفة → «versteckt»', await until(async () =>
