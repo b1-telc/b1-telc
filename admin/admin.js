@@ -761,6 +761,7 @@ let contentCache = null;
 let contentLevel = '';
 
 async function screenContent(){
+  const sy = window.scrollY;                 // مكان التمرير — منرجّعه بعد الإجراء
   app.innerHTML = '<div class="empty">Lädt …</div>';
   const c = contentCache = await rpc('admin_content');
   // مرشّح الستوفة بينطبق هون بالعميل: admin_content بترجّع كل شي مرة
@@ -980,6 +981,8 @@ async function screenContent(){
     $('r_new').onclick = () => screenContent();
     $('r_title').scrollIntoView({ behavior:'smooth', block:'center' });
   });
+
+  if (window.scrollY !== sy) window.scrollTo(0, sy);
 }
 
 /* ============ الاستماع ============
@@ -1240,6 +1243,7 @@ const AUD_HINT = 'Die Aufnahme zum Abschnitt. Wie oft sie abgespielt werden darf
 let assetLevel = '';
 
 async function screenAssets(){
+  const sy = window.scrollY;                 // مكان التمرير — منرجّعه بعد الرفع
   app.innerHTML = '<div class="empty">Lädt …</div>';
   let rows, content;
   try {
@@ -1278,6 +1282,7 @@ async function screenAssets(){
   wirePicker('as_lvl', content.levels || [], id => { assetLevel = id; screenAssets(); },
              { all: true });
   wireAssets(app, screenAssets);
+  if (window.scrollY !== sy) window.scrollTo(0, sy);
 }
 
 /* ============ الاستيراد ============ */
