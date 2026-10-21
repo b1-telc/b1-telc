@@ -174,16 +174,19 @@ check("★ وفيهن العربي والأوكراني والإنكليزي",
    اللغة وبيجدّد القائمة الثابتة بلغتها؛ التجريبي صار باختيار صريح من القائمة. */
 sent.length = 0;
 await post(click("g|ar"));
-// الترحيب بيتعدّل برسالة اختيار اللغة (editMessageText)، والقائمة الثابتة
-// بتجي برسالة جديدة (sendMessage) لأنّ التعديل ما بيحمل لوحة ثابتة
-const introMsg = last("editMessageText") ?? screenNow();
-check("★★ اختيار اللغة بيشرح شو البوت (ترحيب) بلغته العربية",
+// اختيار اللغة: منشيل رسالة اختيار اللغة، ومنبعت الترحيب ومعه القائمة
+// الثابتة بلغته بـرسالة وحدة — بلا رسالة «اختار من القائمة» زيادة.
+const introMsg = last("sendMessage");
+check("★★ اختيار اللغة بيرحّب بلغته العربية (رسالة وحدة)",
       /رمز مجّاني/.test(String(introMsg?.text)) && /٢٤ ساعة/.test(String(introMsg?.text))
       && !/kostenlos|Welcome/.test(String(introMsg?.text)));
-check("★★ وما بيفوّت عالتجريبي — الترحيب بلا أزرار مؤسسة/درجة",
+check("★★ وما بيفوّت عالتجريبي — بلا أزرار مؤسسة/درجة",
       (introMsg?.reply_markup?.inline_keyboard ?? []).flat().length === 0);
-check("★★ والقائمة الثابتة اتجدّدت بلغته (تغيير اللغة حتى بالأزرار)",
-      perm(TG_ID).includes("🎁 نسختي التجريبية"));
+check("★★ والقائمة الثابتة بلغته بنفس الرسالة (مو رسالة زيادة)",
+      (introMsg?.reply_markup?.keyboard ?? []).flat()
+        .some((btn: any) => String(btn.text).includes("نسختي التجريبية")));
+check("★★ وبيشيل رسالة اختيار اللغة (deleteMessage)",
+      sent.some(x => x.method === "deleteMessage"));
 
 /* ---- ٣ب) التجريبي: مؤسسة وحدة ← بيقفز للدرجات مباشرة ---- */
 sent.length = 0;
@@ -609,15 +612,14 @@ check("★ ولا بالمجموعة كمان",
   const M = 777;
   sent.length = 0;
   await post(clickSame("g|ar", M));
-  const editsA = sent.filter(x => x.method === "editMessageText");
-  check(`★★ اختيار اللغة بيعدّل نفس الرسالة لترحيب (${editsA.length} تعديل)`,
-        editsA.length === 1 && editsA[0].body.message_id === M
-        && /رمز مجّاني/.test(String(editsA[0].body.text)));
-  // تغيير اللغة بيجدّد القائمة الثابتة — وهي لازمها رسالة جديدة (التعديل ما
-  // بيحمل لوحة ثابتة). رسالة وحدة بس، ومعها القائمة بلغته الجديدة.
+  // تغيير اللغة: بيشيل رسالة اختيار اللغة ويبعت الترحيب ومعه القائمة الثابتة
+  // بلغته — رسالة وحدة (القائمة الثابتة لازمها رسالة، فما في تعديل هون).
+  check("★★ اختيار اللغة بيشيل رسالة اختيار اللغة (deleteMessage)",
+        sent.some(x => x.method === "deleteMessage" && x.body?.message_id === M));
   const sendsA = sent.filter(x => x.method === "sendMessage" && x.body?.chat_id === TG_ID);
-  check("★★ وبيجدّد القائمة الثابتة برسالة وحدة بلغته",
+  check("★★ وبيبعت رسالة وحدة فيها الترحيب والقائمة الثابتة بلغته",
         sendsA.length === 1
+        && /رمز مجّاني/.test(String(sendsA[0].body?.text))
         && (sendsA[0].body?.reply_markup?.keyboard ?? []).flat()
              .some((btn: any) => String(btn.text).includes("نسختي التجريبية")));
 
