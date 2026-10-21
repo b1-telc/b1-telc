@@ -149,6 +149,30 @@ begin
                   not has_test_access(stud, 'b1', 'modell-02'));
 
   reset role;
+
+  ----------------------------- ٦ ★ «وصول كامل»: اختيار مستوى + حارس التوفّر
+  insert into levels (id, title, provider, stufe, published)
+  values ('bot-req', 'Req B2', 'reqprov', 'B2', true);
+  insert into tests (level_id, slug, title, blocks, aufgaben, published, sort)
+  values ('bot-req', 'bot-req-01', 'R1', '[]'::jsonb, 0, true, 1);
+  perform bot_demo_code(555000111, 555000111, 'kiko', 'ar', 'bot-req');
+
+  -- طلب بالمستوى المختار (p_level_id) لمستوى منشور → ماشي، وبنفس المستوى
+  r := bot_request_access(555000111, 2, 'ar', 'bot-req');
+  perform t_check('★ وصول كامل بمستوى مختار منشور → ماشي',
+                  (r->>'ok')::boolean and r->>'level_id' = 'bot-req');
+
+  -- صار «قريباً» (مو منشور)؛ طلب جديد (آخر مخزّن) → مرفوض
+  delete from access_requests where telegram_id = 555000111;
+  update levels set published = false, soon = true where id = 'bot-req';
+  begin
+    perform bot_request_access(555000111, 2, 'ar');
+    perform t_check('★ وصول كامل لمستوى «قريباً» مرفوض', false);
+  exception when others then
+    perform t_check('★ وصول كامل لمستوى «قريباً» مرفوض',
+                    sqlerrm = 'level_unavailable');
+  end;
+
   raise notice '';
   raise notice '  كل اختبارات بوت تلغرام نجحت ✓';
 end $$;

@@ -462,8 +462,12 @@ async function stepLang(chat: number, lang: Lang, msg?: number) {
 /* head: شرح بينحطّ فوق السؤال بنفس الرسالة.
    بدونه كان لازم رسالتين — وحدة للشرح ووحدة للسؤال — وتانية بتعدّل
    الأولى بتمسح الشرح قبل ما يقراه. */
+/* full=true: مسار «وصول كامل» — نفس اختيار المؤسسة/الدرجة متل التجريبي، بس
+   الأزرار بتوصّل لاختيار الشهور ثم الطلب بدل توليد كود. منمرّر العلم بكل خطوة
+   تا الزرّ يحمل الـcallback الصحّ (pf/lf/mf/bf بدل p/l/m/b). «قريباً» بيضل s
+   بالحالتين — ما بينطلب وصول كامل لمستوى مو جاهز. */
 async function stepProvider(chat: number, lang: Lang, levels: Level[],
-                            msg?: number, head?: string) {
+                            msg?: number, head?: string, full = false) {
   const ask = (body: string) => (head ? `${head}\n\n${body}` : body);
   if (!levels.length) return void await screen(chat, msg, ask(t(lang, "none")));
   const provs = [...new Set(levels.map(l => l.provider || "—"))];
@@ -477,24 +481,27 @@ async function stepProvider(chat: number, lang: Lang, levels: Level[],
   // مؤسسة وحدة جاهزة بس: ما في معنى نسأل — منقفز للدرجات. (لو كلها «قريباً»
   // منعرضها برّا بدل ما نفوّت على قائمة قريباً فاضية.)
   if (provs.length === 1 && !isSoonProv(provs[0]))
-    return stepStufe(chat, lang, levels, provs[0], msg, head);
+    return stepStufe(chat, lang, levels, provs[0], msg, head, full);
 
+  const pk = full ? "pf" : "p";
   await screen(chat, msg, ask(t(lang, "pickProvider")),
     rows(provs.map(p => isSoonProv(p)
       ? { text: `${p} — ${t(lang, "soonTag")}`, callback_data: `s|${lang}` }
-      : { text: p, callback_data: `p|${lang}|${p}` })));
+      : { text: p, callback_data: `${pk}|${lang}|${p}` })));
 }
 
 async function stepStufe(chat: number, lang: Lang, levels: Level[], prov: string,
-                         msg?: number, head?: string) {
+                         msg?: number, head?: string, full = false) {
   const mine = levels.filter(l => (l.provider || "—") === prov);
   if (!mine.length) return void await screen(chat, msg, t(lang, "none"));
+  const lk = full ? "lf" : "l";
+  const back = full ? `bf|${lang}` : `b|${lang}`;
   await screen(chat, msg, head ? `${head}\n\n${t(lang, "pickStufe")}`
                                : t(lang, "pickStufe"), [
     ...rows(mine.map(l => l.soon
       ? { text: `${l.stufe || l.title} — ${t(lang, "soonTag")}`, callback_data: `s|${lang}` }
-      : { text: l.stufe || l.title, callback_data: `l|${lang}|${l.id}` }), 3),
-    [{ text: t(lang, "back"), callback_data: `b|${lang}` }],
+      : { text: l.stufe || l.title, callback_data: `${lk}|${lang}|${l.id}` }), 3),
+    [{ text: t(lang, "back"), callback_data: back }],
   ]);
 }
 
@@ -633,25 +640,34 @@ async function stepOther(chat: number, lang: Lang, from: any) {
 }
 
 /* ---------------- الوصول الكامل ---------------- */
-async function stepMonths(chat: number, lang: Lang, msg?: number) {
+/* levelId موجود = مسار «وصول كامل» المختار (بياخد mf وبيحمل المستوى للطلب).
+   بلاه = المسار القديم (f من تنبيه «باقي ساعة»): آخر مستوى تجريبي مخزّن. */
+async function stepMonths(chat: number, lang: Lang, msg?: number, levelId?: string) {
+  const mk = levelId ? "mf" : "m";
+  const suffix = levelId ? `|${levelId}` : "";
+  const back = levelId ? `bf|${lang}` : `b|${lang}`;
   await screen(chat, msg, t(lang, "pickMonths"), [
     [1, 2, 3].map((n) => ({
-      text: t(lang, "mon", { n }), callback_data: `m|${lang}|${n}` })),
-    [{ text: t(lang, "back"), callback_data: `b|${lang}` }],
+      text: t(lang, "mon", { n }), callback_data: `${mk}|${lang}|${n}${suffix}` })),
+    [{ text: t(lang, "back"), callback_data: back }],
   ]);
 }
 
 async function stepRequest(chat: number, lang: Lang, from: any, months: number,
-                           msg?: number) {
+                           msg?: number, levelId?: string) {
   let res: any;
   try {
     res = await rpc("bot_request_access",
       // ★ آخر لغة اختارها هي لغته — بلاها بياخد الردّ بلغة تجريبيّه القديم
-      { p_telegram_id: from.id, p_months: months, p_lang: lang });
+      { p_telegram_id: from.id, p_months: months, p_lang: lang,
+        ...(levelId ? { p_level_id: levelId } : {}) });
   } catch (e) {
     // ما أخد تجريبي بعد: منقلّه بلغته بدل رسالة خطأ عامّة
     if (String(e).includes("no_demo_yet"))
       return void await screen(chat, msg, t(lang, "needDemo"));
+    // المستوى صار «قريباً» / مسحوب بين الاختيار والطلب: نفس رسالة «قريباً»
+    if (String(e).includes("level_unavailable"))
+      return void await screen(chat, msg, t(lang, "soonMsg"));
     throw e;
   }
 
@@ -951,6 +967,16 @@ Deno.serve(async (req) => {
       else if (kind === "l") await stepCode(chat, lang, from, b, mid);
       else if (kind === "f") await stepMonths(chat, lang, mid);
       else if (kind === "m") await stepRequest(chat, lang, from, Number(b), mid);
+      // ★ مسار «وصول كامل» المختار: مؤسسة → درجة → شهور → طلب (متل التجريبي)
+      else if (kind === "pf")
+        await stepStufe(chat, lang, await allLevels(), b, mid, undefined, true);
+      else if (kind === "lf") await stepMonths(chat, lang, mid, b);   // b = معرّف المستوى
+      else if (kind === "mf") {
+        const [n, lvl] = b.split("|");                 // n|levelId
+        await stepRequest(chat, lang, from, Number(n), mid, lvl);
+      }
+      else if (kind === "bf")
+        await stepProvider(chat, lang, await allLevels(), mid, undefined, true);
       return new Response("ok");
     }
 
@@ -975,7 +1001,9 @@ Deno.serve(async (req) => {
       const L = hit.lang;
       if (hit.act === "mTrial")
         await stepProvider(chat, L, await allLevels());
-      else if (hit.act === "mFull")  await stepMonths(chat, L);
+      // ★ «وصول كامل» بيختار المؤسسة/الدرجة متل التجريبي (full=true)
+      else if (hit.act === "mFull")  await stepProvider(chat, L, await allLevels(),
+                                                        undefined, undefined, true);
       else if (hit.act === "mMine")  await stepMine(chat, L, from);
       else if (hit.act === "mLang")  await stepLang(chat, L);
       // اللوحة الثابتة ما بتحمل روابط — فالمشاركة برسالتها هي
