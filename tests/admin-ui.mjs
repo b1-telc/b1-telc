@@ -211,6 +211,12 @@ try {
   check('Inhalte: admin_content ما انعاد جلبها بعد الإجراءات',
     (calls.admin_content || 0) === contentCalls);
 
+  // ── روابط سير العمل بين Inhalte ↔ Import ──
+  await page.click('#t_import');
+  check('رابط «+ Neuen Test importieren» فتح Import', await until(() => page.$('#i_slug')));
+  await page.click('#i_toinhalt');
+  check('رابط «← Modelltests» رجّع لـInhalte', await until(() => page.$('#t_import')));
+
 } catch (e){
   console.log('  ✗ استثناء:', e.message);
   fail++;
