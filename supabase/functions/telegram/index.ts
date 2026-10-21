@@ -91,6 +91,7 @@ const T: Record<Lang, Record<string, string>> = {
     mShare: "📣 شارك البوت",
     copyCode: "📋 انسخ الرمز",
     intro: "أهلاً فيك! 👋\n\nهون بتاخد <b>رمز مجّاني</b> بيفتحلك امتحان نموذجي كامل — قراءة، سماع، وكتابة — لمدّة <b>٢٤ ساعة</b>.\n\n• بلا تسجيل وبلا دفع\n• كل مستوى فيك تجرّبه مرّة\n• بتقدر تطلب وصول كامل بضغطة",
+    menuHint: "👇 اختار من القائمة تحت.",
     mMine: "🎟 كودي",
     noCodes: "لسا ما أخدت ولا كود. اضغط «🎁 نسختي التجريبية».",
     myTitle: "أكوادك:",
@@ -146,6 +147,7 @@ const T: Record<Lang, Record<string, string>> = {
     mShare: "📣 Bot teilen",
     copyCode: "📋 Code kopieren",
     intro: "Willkommen! 👋\n\nHier bekommen Sie einen <b>kostenlosen Code</b> für einen kompletten Modelltest — Lesen, Hören und Schreiben — <b>24 Stunden</b> lang.\n\n• Ohne Anmeldung, ohne Bezahlung\n• Jede Stufe einmal testen\n• Vollzugang auf Anfrage, ein Tippen",
+    menuHint: "👇 Bitte unten im Menü wählen.",
     mMine: "🎟 Mein Code",
     noCodes: "Noch kein Code. Tippen Sie auf „🎁 Meine Testversion“.",
     myTitle: "Ihre Codes:",
@@ -201,6 +203,7 @@ const T: Record<Lang, Record<string, string>> = {
     mShare: "📣 Поділитися",
     copyCode: "📋 Копіювати код",
     intro: "Вітаємо! 👋\n\nТут ви отримаєте <b>безкоштовний код</b> до повного пробного іспиту — читання, аудіювання та письмо — на <b>24 години</b>.\n\n• Без реєстрації та оплати\n• Кожен рівень можна спробувати раз\n• Повний доступ — одним дотиком",
+    menuHint: "👇 Оберіть у меню нижче.",
     mMine: "🎟 Мій код",
     noCodes: "Ще немає коду. Натисніть «🎁 Моя пробна версія».",
     myTitle: "Ваші коди:",
@@ -256,6 +259,7 @@ const T: Record<Lang, Record<string, string>> = {
     mShare: "📣 Share bot",
     copyCode: "📋 Copy code",
     intro: "Welcome! 👋\n\nHere you get a <b>free code</b> for a complete practice exam — reading, listening and writing — for <b>24 hours</b>.\n\n• No sign-up, no payment\n• One trial per level\n• Full access on request, one tap",
+    menuHint: "👇 Choose from the menu below.",
     mMine: "🎟 My code",
     noCodes: "No code yet. Tap “🎁 My free trial”.",
     myTitle: "Your codes:",
@@ -955,14 +959,18 @@ Deno.serve(async (req) => {
 
       await tg("answerCallbackQuery", { callback_query_id: cb.id });
 
-      if (kind === "g" || kind === "b") {
+      if (kind === "g") {
         const L = (T[a as Lang] ? a : lang) as Lang;
-        // ★ الشرح بعد اختيار اللغة بس — مو مع «رجوع».
-        //   الطالب لازم يعرف شو رح ياخد قبل ما يختار، وبلغته.
-        //   وبياخد مطرح شاشة اللغات: رسالة وحدة بتمشي مع الطالب.
-        await stepProvider(chat, L, await allLevels(), mid,
-                           kind === "g" ? t(L, "intro") : undefined);
+        // ★ اختيار اللغة = تغيير اللغة وبس — ما بيفوّت عالنسخة المجانية.
+        //   منعدّل رسالة اختيار اللغة لترحيب بلغته الجديدة، ومنبعت القائمة
+        //   الثابتة بلغتها الجديدة (فبتتبدّل الأزرار كمان). التجريبي والوصول
+        //   الكامل صاروا باختيار صريح من القائمة.
+        await screen(chat, mid, t(L, "intro"));
+        await send(chat, t(L, "menuHint"), undefined, menu(L));
       }
+      // «رجوع» من اختيار الدرجة (التجريبي): رجوع لاختيار المؤسسة
+      else if (kind === "b")
+        await stepProvider(chat, lang, await allLevels(), mid);
       else if (kind === "p") await stepStufe(chat, lang, await allLevels(), b, mid);
       else if (kind === "l") await stepCode(chat, lang, from, b, mid);
       else if (kind === "f") await stepMonths(chat, lang, mid);

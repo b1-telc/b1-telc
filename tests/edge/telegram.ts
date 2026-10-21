@@ -169,26 +169,30 @@ check(`اللغات الأربعة ظهرت (${flat().length})`, flat().length =
 check("★ وفيهن العربي والأوكراني والإنكليزي",
       ["g|ar","g|uk","g|en","g|de"].every(d => flat().some((b: any) => b.callback_data === d)));
 
-/* ---- ٣) اختيار اللغة ← الدرجات ----
-   مؤسسة وحدة معناها ما في شي تختار — السؤال وقتها ضغطة بلا معنى. */
+/* ---- ٣) اختيار اللغة = تغيير اللغة وبس (ما بيفوّت عالتجريبي) ----
+   قبل، اختيار اللغة كان بيفوّت مباشرة عالنسخة المجانية. هلّأ بس بيغيّر
+   اللغة وبيجدّد القائمة الثابتة بلغتها؛ التجريبي صار باختيار صريح من القائمة. */
 sent.length = 0;
 await post(click("g|ar"));
-/* ★ الشرح فوق الأزرار **بنفس الرسالة**: الطالب لازم يعرف شو رح ياخد.
-   كان برسالة لحاله، وبعد ما صار التنقّل يعدّل شاشة وحدة، رسالة الشرح
-   كانت رح تنمسح بالشاشة يلي بعدها قبل ما يقراها. */
-const introMsg = screenNow();
-check("★★ بعد اختيار اللغة بيشرح شو رح ياخد",
-      /رمز مجّاني/.test(String(introMsg?.text))
-      && /٢٤ ساعة/.test(String(introMsg?.text)));
-check("★★ والشرح والسؤال بنفس الشاشة، مو رسالتين",
-      /رمز مجّاني/.test(String(introMsg?.text))
-      && (introMsg?.reply_markup?.inline_keyboard ?? []).flat().length > 0);
-check("★ وبلغته يلي اختارها", !/kostenlos|Welcome/.test(String(introMsg?.text)));
+// الترحيب بيتعدّل برسالة اختيار اللغة (editMessageText)، والقائمة الثابتة
+// بتجي برسالة جديدة (sendMessage) لأنّ التعديل ما بيحمل لوحة ثابتة
+const introMsg = last("editMessageText") ?? screenNow();
+check("★★ اختيار اللغة بيشرح شو البوت (ترحيب) بلغته العربية",
+      /رمز مجّاني/.test(String(introMsg?.text)) && /٢٤ ساعة/.test(String(introMsg?.text))
+      && !/kostenlos|Welcome/.test(String(introMsg?.text)));
+check("★★ وما بيفوّت عالتجريبي — الترحيب بلا أزرار مؤسسة/درجة",
+      (introMsg?.reply_markup?.inline_keyboard ?? []).flat().length === 0);
+check("★★ والقائمة الثابتة اتجدّدت بلغته (تغيير اللغة حتى بالأزرار)",
+      perm(TG_ID).includes("🎁 نسختي التجريبية"));
+
+/* ---- ٣ب) التجريبي: مؤسسة وحدة ← بيقفز للدرجات مباشرة ---- */
+sent.length = 0;
+await post(msg("🎁 نسختي التجريبية"));
 const stufen = flat().filter((b: any) => String(b.callback_data).startsWith("l|"));
 check(`★ مؤسسة وحدة ← بيقفز للدرجات مباشرة (${stufen.length})`, stufen.length >= 1);
 check("★ والنص بالعربي", /اختار المستوى/.test(String(screenNow()?.text)));
 
-/* ---- ٣ب) مؤسستين ← بيسأل عن المؤسسة أول ---- */
+/* ---- ٣ج) التجريبي: مؤسستين ← بيسأل عن المؤسسة أول ---- */
 // اسم مؤسسة ما بيتصادم مع يلي بتخلّفه اختبارات SQL —
 // (provider, stufe) عليها فهرس فريد
 psql(`insert into levels (id,title,provider,stufe,published)
@@ -196,7 +200,7 @@ psql(`insert into levels (id,title,provider,stufe,published)
       insert into tests (level_id,slug,title,blocks,aufgaben,published,sort)
         values ('bot-x-b1','bot-x-01','X Modell 1','[]'::jsonb,0,true,1);`);
 sent.length = 0;
-await post(click("g|ar"));
+await post(msg("🎁 نسختي التجريبية"));
 const provs = flat().filter((b: any) => String(b.callback_data).startsWith("p|"));
 check(`★ مؤسستين ← بيسأل عن المؤسسة أول (${provs.map((b:any)=>b.text).join(', ')})`,
       provs.length === 2);
@@ -606,10 +610,16 @@ check("★ ولا بالمجموعة كمان",
   sent.length = 0;
   await post(clickSame("g|ar", M));
   const editsA = sent.filter(x => x.method === "editMessageText");
-  check(`★★ اختيار اللغة بيعدّل نفس الرسالة (${editsA.length} تعديل)`,
-        editsA.length === 1 && editsA[0].body.message_id === M);
-  check("★★ وما بيبعت ولا رسالة جديدة للطالب",
-        !sent.some(x => x.method === "sendMessage" && x.body?.chat_id === TG_ID));
+  check(`★★ اختيار اللغة بيعدّل نفس الرسالة لترحيب (${editsA.length} تعديل)`,
+        editsA.length === 1 && editsA[0].body.message_id === M
+        && /رمز مجّاني/.test(String(editsA[0].body.text)));
+  // تغيير اللغة بيجدّد القائمة الثابتة — وهي لازمها رسالة جديدة (التعديل ما
+  // بيحمل لوحة ثابتة). رسالة وحدة بس، ومعها القائمة بلغته الجديدة.
+  const sendsA = sent.filter(x => x.method === "sendMessage" && x.body?.chat_id === TG_ID);
+  check("★★ وبيجدّد القائمة الثابتة برسالة وحدة بلغته",
+        sendsA.length === 1
+        && (sendsA[0].body?.reply_markup?.keyboard ?? []).flat()
+             .some((btn: any) => String(btn.text).includes("نسختي التجريبية")));
 
   sent.length = 0;
   await post(clickSame("p|ar|telc", M));
@@ -690,9 +700,10 @@ check("★ ولا بالمجموعة كمان",
   psql(`insert into levels (id,title,provider,stufe,published,soon)
         values ('goethe-a2','Goethe-Zertifikat A2','Goethe','A2',false,true);`);
 
-  // شاشة المؤسسات: telc جاهزة (زرّ دخول p)، Goethe كلها «قريباً» (زرّ s برّا)
+  // شاشة المؤسسات (عبر زرّ التجريبي): telc جاهزة (زرّ دخول p)، Goethe كلها
+  // «قريباً» (زرّ s برّا). اختيار اللغة ما عاد يفوّت هون — صار بزرّ القائمة.
   sent.length = 0;
-  await post(click("g|ar", "ar"));
+  await post(msg("🎁 نسختي التجريبية"));
   const btns = flat();
   const telcBtn   = btns.find((b: any) => b.callback_data === "p|ar|telc");
   const goetheBtn = btns.find((b: any) =>
@@ -716,7 +727,7 @@ check("★ ولا بالمجموعة كمان",
   psql(`insert into levels (id,title,provider,stufe,published,soon)
         values ('telc-b2s','telc Deutsch B2','telc','B2',false,true);`);
   sent.length = 0;
-  await post(click("g|ar", "ar"));   // telc لحالها جاهزة → بيقفز للدرجات
+  await post(msg("🎁 نسختي التجريبية"));   // telc لحالها جاهزة → بيقفز للدرجات
   const inside = flat();
   check("★★ الدرجة الجاهزة (B1) = زرّ دخول (l)",
         inside.some((b: any) => String(b.callback_data).startsWith("l|ar|")));
