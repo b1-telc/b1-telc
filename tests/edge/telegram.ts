@@ -671,12 +671,13 @@ check("★ ولا بالمجموعة كمان",
 }
 
 /* ---- ١٩) ★★ مستوى «قريباً»: زرّ معطّل بتنبيه، بلا كود ----
-   المصدر سرّ BOT_SOON (JSON). منضبطه هون بس، ومنمسحه بالآخر تا ما يأثّر
-   على غيره. Goethe مو منشور بالقاعدة، فبيطلع «قريباً»؛ telc·B1 منشور
-   فبيضل نشط (ولو كان بالقائمة كان بينشال بالتكرار). */
+   المصدر صار القاعدة (عمود soon، بيتدار بزرّ «bald» باللوحة). منزرع مستوى
+   Goethe·A2 معلّم soon ومو منشور، فبيطلع «قريباً»؛ telc·B1 منشور فبيضل نشط
+   (ولو كان بالقائمة كان بينشال بالتكرار). منشيله بالآخر تا ما يأثّر على غيره. */
 {
   psql(`delete from tests where level_id<>'b1'; delete from levels where id<>'b1';`);
-  Deno.env.set("BOT_SOON", JSON.stringify([{ provider: "Goethe", stufe: "A2" }]));
+  psql(`insert into levels (id,title,provider,stufe,published,soon)
+        values ('goethe-a2','Goethe-Zertifikat A2','Goethe','A2',false,true);`);
 
   // مؤسستين هلّأ: telc (منشور) + Goethe (قريباً) ← بيسأل عن المؤسسة
   sent.length = 0;
@@ -702,7 +703,7 @@ check("★ ولا بالمجموعة كمان",
   check("★★ وما انولّد ولا كود",
         psql(`select count(*) from access_codes;`) === before);
 
-  Deno.env.delete("BOT_SOON");
+  psql(`delete from levels where id='goethe-a2';`);
 }
 
 await supa.shutdown(); await tgSrv.shutdown();

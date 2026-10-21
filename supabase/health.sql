@@ -29,12 +29,13 @@ declare v int; t text; n int; m int; k int; begin
   -- ٢) دوال البوت كلها
   select count(*) into n from pg_proc p join pg_namespace ns on ns.oid = p.pronamespace
    where ns.nspname = 'public' and p.proname in
-     ('bot_levels','bot_demo_code','bot_request_access','bot_decide_request',
-      'bot_reserve_request','bot_sweep_reservations','bot_my_codes',
-      'bot_untried_levels','bot_sweep_expiring','bot_is_admin','bot_set_card');
-  insert into _health values (2, case when n = 11 then '✅' else '❌' end,
-    'دوال البوت', n || ' من 11'
-    || case when n < 11 then '  ←  شغّل supabase/setup.sql' else '' end);
+     ('bot_levels','bot_soon_levels','bot_demo_code','bot_request_access',
+      'bot_decide_request','bot_reserve_request','bot_sweep_reservations',
+      'bot_my_codes','bot_untried_levels','bot_sweep_expiring','bot_is_admin',
+      'bot_set_card');
+  insert into _health values (2, case when n = 12 then '✅' else '❌' end,
+    'دوال البوت', n || ' من 12'
+    || case when n < 12 then '  ←  شغّل supabase/setup.sql' else '' end);
 
   -- ٣) جداول البوت
   select count(*) into n from (values
