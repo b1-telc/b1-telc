@@ -670,6 +670,41 @@ check("★ ولا بالمجموعة كمان",
                         && /اختار لغتك/.test(String(x.body?.text))));
 }
 
+/* ---- ١٩) ★★ مستوى «قريباً»: زرّ معطّل بتنبيه، بلا كود ----
+   المصدر سرّ BOT_SOON (JSON). منضبطه هون بس، ومنمسحه بالآخر تا ما يأثّر
+   على غيره. Goethe مو منشور بالقاعدة، فبيطلع «قريباً»؛ telc·B1 منشور
+   فبيضل نشط (ولو كان بالقائمة كان بينشال بالتكرار). */
+{
+  psql(`delete from tests where level_id<>'b1'; delete from levels where id<>'b1';`);
+  Deno.env.set("BOT_SOON", JSON.stringify([{ provider: "Goethe", stufe: "A2" }]));
+
+  // مؤسستين هلّأ: telc (منشور) + Goethe (قريباً) ← بيسأل عن المؤسسة
+  sent.length = 0;
+  await post(click("g|ar", "ar"));
+  const prov2 = flat().filter((b: any) => String(b.callback_data).startsWith("p|"));
+  check(`★★ «قريباً» بيزيد مؤسسة Goethe جنب telc (${prov2.map((b:any)=>b.text).join(', ')})`,
+        prov2.some((b: any) => b.text === "Goethe") && prov2.some((b: any) => b.text === "telc"));
+
+  // درجات Goethe: A2 «قريباً» بزرّ callback s
+  sent.length = 0;
+  await post(click("p|ar|Goethe", "ar"));
+  const soonBtn = flat().find((b: any) => b.callback_data === "s|ar");
+  check("★★ مستوى غير جاهز ← زرّ «— قريباً» (callback s)",
+        !!soonBtn && /قريباً/.test(String(soonBtn?.text)));
+
+  // الضغط: تنبيه show_alert بلغته، وبلا توليد كود
+  const before = psql(`select count(*) from access_codes;`);
+  sent.length = 0;
+  await post(click("s|ar", "ar"));
+  check("★★ ضغط «قريباً» ← تنبيه show_alert بلغته",
+        lastOf("answerCallbackQuery")?.show_alert === true
+        && /قريباً/.test(String(lastOf("answerCallbackQuery")?.text)));
+  check("★★ وما انولّد ولا كود",
+        psql(`select count(*) from access_codes;`) === before);
+
+  Deno.env.delete("BOT_SOON");
+}
+
 await supa.shutdown(); await tgSrv.shutdown();
 const bad = R.filter(x => !x[1]);
 console.log(bad.length ? `\n✗ ${bad.length} فشل من ${R.length}` : `\n✓ كل الـ${R.length} اختبارات نجحت`);

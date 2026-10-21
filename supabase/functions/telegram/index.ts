@@ -57,6 +57,8 @@ const T: Record<Lang, Record<string, string>> = {
     hello: "أهلاً! 👋\nاختار لغتك:",
     pickProvider: "اختار نوع الامتحان:",
     pickStufe: "اختار المستوى:",
+    soonTag: "قريباً 🔜",
+    soonMsg: "هالمستوى لسا مو جاهز — قريباً إن شاء الله 🔜",
     none: "ما في امتحانات متاحة هلق. جرّب بعدين.",
     got: "تفضّل نسختك التجريبية 🎁",
     codeIs: "الرمز:",
@@ -110,6 +112,8 @@ const T: Record<Lang, Record<string, string>> = {
     hello: "Willkommen! 👋\nBitte Sprache wählen:",
     pickProvider: "Welche Prüfung?",
     pickStufe: "Welche Stufe?",
+    soonTag: "bald 🔜",
+    soonMsg: "Diese Stufe ist noch nicht verfügbar — kommt bald 🔜",
     none: "Zurzeit sind keine Prüfungen verfügbar. Bitte später noch einmal.",
     got: "Hier ist Ihre kostenlose Testversion 🎁",
     codeIs: "Code:",
@@ -163,6 +167,8 @@ const T: Record<Lang, Record<string, string>> = {
     hello: "Вітаємо! 👋\nОберіть мову:",
     pickProvider: "Який іспит?",
     pickStufe: "Який рівень?",
+    soonTag: "скоро 🔜",
+    soonMsg: "Цей рівень ще недоступний — скоро 🔜",
     none: "Наразі немає доступних іспитів. Спробуйте пізніше.",
     got: "Ось ваша безкоштовна пробна версія 🎁",
     codeIs: "Код:",
@@ -216,6 +222,8 @@ const T: Record<Lang, Record<string, string>> = {
     hello: "Welcome! 👋\nChoose your language:",
     pickProvider: "Which exam?",
     pickStufe: "Which level?",
+    soonTag: "soon 🔜",
+    soonMsg: "This level isn't ready yet — coming soon 🔜",
     none: "No exams available right now. Please try again later.",
     got: "Here is your free trial 🎁",
     codeIs: "Code:",
@@ -414,11 +422,35 @@ async function rpc(fn: string, args: Record<string, unknown> = {}) {
   return body;
 }
 
-type Level = { id: string; provider: string | null; stufe: string | null; title: string };
+type Level = { id: string; provider: string | null; stufe: string | null;
+               title: string; soon?: boolean };
 
 /* الاسم يلي بينعرض: «telc · B1». مستوى قديم بلا مؤسسة بيضل بعنوانه. */
 const levelName = (l: Level) =>
   l.provider && l.stufe ? `${l.provider} · ${l.stufe}` : l.title;
+
+/* ★ مستويات «قريباً»: بتطلع أزرار معطّلة بالبوت (ضغطها بيعطي تنبيه «قريباً»
+   بلا كود). المصدر سرّ BOT_SOON (JSON) — بتتحكّمي فيه من Supabase بلا تعديل
+   كود ولا إعادة بناء:
+     BOT_SOON = [{"provider":"Goethe","stufe":"A2"},{"provider":"telc","stufe":"B1"}]
+   فاضي (الافتراضي) = ما في «قريباً» — نفس السلوك السابق تماماً. وأوّل ما
+   تنشري مستوى فعلاً (نفس المؤسسة+الدرجة) بينشال من «قريباً» أوتوماتيكياً. */
+function soonLevels(): Level[] {
+  let list: { provider: string; stufe: string }[] = [];
+  try { list = JSON.parse(Deno.env.get("BOT_SOON") ?? "[]"); } catch { list = []; }
+  return list.map((s, i) => ({
+    id: `soon-${i}`, provider: s.provider, stufe: s.stufe,
+    title: `${s.provider} · ${s.stufe}`, soon: true,
+  }));
+}
+
+/* المستويات النشطة (من القاعدة) + «قريباً»، بلا تكرار: لو مستوى «قريباً»
+   اننشر فعلاً (نفس المؤسسة+الدرجة) بيغلب النشط ومنشيله من قائمة قريباً. */
+async function allLevels(): Promise<Level[]> {
+  const live: Level[] = await rpc("bot_levels");
+  const liveKey = new Set(live.map(l => `${l.provider}|${l.stufe}`));
+  return [...live, ...soonLevels().filter(s => !liveKey.has(`${s.provider}|${s.stufe}`))];
+}
 
 /* ---------------- الخطوات ---------------- */
 async function stepLang(chat: number, lang: Lang, msg?: number) {
@@ -448,8 +480,9 @@ async function stepStufe(chat: number, lang: Lang, levels: Level[], prov: string
   if (!mine.length) return void await screen(chat, msg, t(lang, "none"));
   await screen(chat, msg, head ? `${head}\n\n${t(lang, "pickStufe")}`
                                : t(lang, "pickStufe"), [
-    ...rows(mine.map(l => ({
-      text: l.stufe || l.title, callback_data: `l|${lang}|${l.id}` })), 3),
+    ...rows(mine.map(l => l.soon
+      ? { text: `${l.stufe || l.title} — ${t(lang, "soonTag")}`, callback_data: `s|${lang}` }
+      : { text: l.stufe || l.title, callback_data: `l|${lang}|${l.id}` }), 3),
     [{ text: t(lang, "back"), callback_data: `b|${lang}` }],
   ]);
 }
@@ -886,6 +919,13 @@ Deno.serve(async (req) => {
         return new Response("ok");
       }
 
+      // ★ مستوى «قريباً»: تنبيه للضاغط وحده، بلا توليد كود ولا تغيير شاشة.
+      if (kind === "s") {
+        await tg("answerCallbackQuery", {
+          callback_query_id: cb.id, text: t(lang, "soonMsg"), show_alert: true });
+        return new Response("ok");
+      }
+
       await tg("answerCallbackQuery", { callback_query_id: cb.id });
 
       if (kind === "g" || kind === "b") {
@@ -893,10 +933,10 @@ Deno.serve(async (req) => {
         // ★ الشرح بعد اختيار اللغة بس — مو مع «رجوع».
         //   الطالب لازم يعرف شو رح ياخد قبل ما يختار، وبلغته.
         //   وبياخد مطرح شاشة اللغات: رسالة وحدة بتمشي مع الطالب.
-        await stepProvider(chat, L, await rpc("bot_levels"), mid,
+        await stepProvider(chat, L, await allLevels(), mid,
                            kind === "g" ? t(L, "intro") : undefined);
       }
-      else if (kind === "p") await stepStufe(chat, lang, await rpc("bot_levels"), b, mid);
+      else if (kind === "p") await stepStufe(chat, lang, await allLevels(), b, mid);
       else if (kind === "l") await stepCode(chat, lang, from, b, mid);
       else if (kind === "f") await stepMonths(chat, lang, mid);
       else if (kind === "m") await stepRequest(chat, lang, from, Number(b), mid);
@@ -923,7 +963,7 @@ Deno.serve(async (req) => {
     if (hit) {
       const L = hit.lang;
       if (hit.act === "mTrial")
-        await stepProvider(chat, L, await rpc("bot_levels"));
+        await stepProvider(chat, L, await allLevels());
       else if (hit.act === "mFull")  await stepMonths(chat, L);
       else if (hit.act === "mMine")  await stepMine(chat, L, from);
       else if (hit.act === "mLang")  await stepLang(chat, L);
