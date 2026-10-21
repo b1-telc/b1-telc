@@ -4,7 +4,10 @@
 }
 @media (prefers-color-scheme: dark){
   :root{ --bg:#111722; --card:#1a2231; --ink:#e8edf5; --muted:#93a0b4;
-         --line:#2a3446; --blue:#5b8bff; }
+         --line:#2a3446; --blue:#5b8bff;
+         /* الألوان الدلالية لازم تنعاد بالوضع الداكن كمان، وإلا بتضل
+            بقيم فاتحة باهتة (pills وstats واطئة التباين على خلفية داكنة). */
+         --ok:#43c795; --bad:#ff7d95; --warn:#e0b25e; }
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);
@@ -55,10 +58,15 @@ tr:last-child td{border-bottom:0}
    stapeln dann je eine Zeile pro Abo — feste Zeilenhöhe hält sie auf
    gleicher Linie, sonst steht die Stufe neben dem falschen Abo. */
 /* شريط «القاعدة ورا». مو toast: الـtoast بيروح، وهاد لازم يضل. */
-.stale{background:#3a2a12;border:1px solid var(--warn);border-radius:12px;
-  padding:14px 16px;margin:0 0 16px;line-height:1.6;font-size:14px}
+/* ★ خلفية متوافقة مع الثيم (مو #3a2a12 ثابت داكن يلي كان بيطلع لوحة
+   داكنة على الثيم الفاتح). نفس نهج .warns بالاستيراد: مزج --warn مع
+   السطح، فبيطلع فاتح على الفاتح وداكن على الداكن. */
+.stale{background:color-mix(in srgb, var(--warn) 16%, var(--card));
+  border:1px solid color-mix(in srgb, var(--warn) 50%, var(--line));
+  border-radius:12px;padding:14px 16px;margin:0 0 16px;line-height:1.6;font-size:14px}
 .stale b{color:var(--warn)}
-.stale code{background:rgba(0,0,0,.3);padding:1px 6px;border-radius:5px}
+.stale code{background:color-mix(in srgb, var(--ink) 10%, transparent);
+  padding:1px 6px;border-radius:5px}
 .stale .sub{display:block;margin-top:6px;color:var(--muted);font-size:13px}
 
 .subrow{display:flex;align-items:center;min-height:32px;white-space:nowrap;gap:6px}
