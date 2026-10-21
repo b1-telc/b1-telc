@@ -317,11 +317,20 @@ check("★★ والرابط بـ<code> — ضغطة بتنسخه لأي مطر�
 
 sent.length = 0;
 await post(msg("🔓 وصول كامل"));
-check("★ بيسأل لكم شهر",
-      ["m|ar|1","m|ar|2","m|ar|3"].every(d => flat().some((b: any) => b.callback_data === d)));
+// ★ المسار الجديد: «وصول كامل» بيختار المؤسسة/الدرجة متل التجريبي. حالة
+//   «b1 لحاله» = مؤسسة وحدة → بيقفز عالدرجات مباشرة بزرّ lf (مو شهور فوراً).
+const lf = flat().find((b: any) => String(b.callback_data).startsWith("lf|ar|"));
+check("★ «وصول كامل» بيختار الدرجة متل التجريبي (زرّ lf، مو شهور فوراً)",
+      !!lf && !flat().some((b: any) => String(b.callback_data).startsWith("m|ar|")));
 
 sent.length = 0;
-await post(click("m|ar|3"));
+await post(click(String(lf?.callback_data ?? "lf|ar|b1")));   // درجة b1 → شهور
+const mf = flat().filter((b: any) => String(b.callback_data).startsWith("mf|ar|"));
+check("★ وبعد الدرجة بيسأل لكم شهر (mf محمّل بالمستوى)",
+      mf.length === 3 && mf.every((b: any) => String(b.callback_data).endsWith("|b1")));
+
+sent.length = 0;
+await post(click("mf|ar|3|b1"));
 check("★ الطالب بيوصله «استنى»", /طلبك وصل/.test(String(shown(TG_ID)?.text)));
 const adminMsg = toChat(GROUP);
 check("★★ والطلب بيوصل المجموعة",
