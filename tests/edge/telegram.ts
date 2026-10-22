@@ -300,6 +300,18 @@ check("★ وبتضل ظاهرة (is_persistent)",
 sent.length = 0;
 await post(msg("🌐 اللغة"));
 check("★ زرّ «اللغة» بيعرض اللغات بلا ما يكتب /sprache", flat().length === 4);
+// ★ تغيير اللغة من القائمة = أزرار «gl» (تبديل لغة بلا شاشة النسخة المجانية)
+check("★★ وأزرارها «gl» (تبديل لغة، مو «g» يلي معها ترحيب)",
+      flat().length === 4 && flat().every((b: any) => String(b.callback_data).startsWith("gl|")));
+sent.length = 0;
+await post(click("gl|de"));
+const langMsg = last("sendMessage");
+check("★★ تغيير اللغة من القائمة بلا ترحيب/نسخة مجانية",
+      !/kostenlos|رمز مجّاني|Welcome/.test(String(langMsg?.text)));
+check("★★ بس تأكيد قصير + القائمة الثابتة بلغته الجديدة",
+      /Sprache geändert/.test(String(langMsg?.text))
+      && (langMsg?.reply_markup?.keyboard ?? []).flat()
+           .some((btn: any) => String(btn.text).includes("Vollzugang")));
 
 /* ★ getMe فشل: أحسن نصّ بلا رابط من رابط مكسور.
    لازم يجي **قبل** أوّل مشاركة ناجحة — botUsername بتخزّن الاسم
