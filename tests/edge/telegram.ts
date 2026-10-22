@@ -266,10 +266,13 @@ check(`★ وبيبعت رسالة خطأ مفهومة (${String(last()?.text).s
 check("★ وما انولّد ولا كود",
       psql(`select count(*) from access_codes where note='telegram:55501';`) === "0");
 
-/* ---- ٨) أي نص تاني بيرجّعه للبداية ---- */
+/* ---- ٨) أي نص تاني بيرجّعه لاختيار اللغة — بس كـ«تبديل» (gl)، مو ترحيب ----
+   نصّ غير متوقّع لازم بس يسأل عن اللغة تا يعرف لغته؛ اختياره وقتها تبديل
+   لغة (بلا شاشة النسخة المجانية)، مو إعادة onboarding. /start لحاله بيرحّب. */
 sent.length = 0;
 await post(msg("مرحبا"));
-check("نص عادي بيرجّعه لاختيار اللغة", flat().length === 4);
+check("نص عادي بيرجّعه لاختيار اللغة (تبديل gl، مو ترحيب)",
+      flat().length === 4 && flat().every((b: any) => String(b.callback_data).startsWith("gl|")));
 
 /* ---- ٩) تحديث ناقص ما بينهار ---- */
 r = await post({ update_id: 1 });

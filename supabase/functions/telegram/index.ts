@@ -1025,7 +1025,10 @@ Deno.serve(async (req) => {
     }
 
     await ensureCommands();
-    await stepLang(chat, fallback);        // /start أو أي شي تاني
+    // /start = ترحيب أوّل مرّة (g → intro). أي نصّ تاني غير متوقّع: بس منسأل
+    // عن اللغة تا نعرف نردّ بلغته، ومنعتبرها تبديل لغة (gl) — بلا ما نرجّعه
+    // لشاشة الترحيب/النسخة المجانية من جديد.
+    await stepLang(chat, fallback, undefined, !text.startsWith("/start"));
   } catch (e) {
     console.error("telegram:", String(e));
     await send(chat, t(fallback, "err")).catch(() => {});
