@@ -55,6 +55,7 @@ const LANGS: { id: Lang; label: string }[] = [
 const T: Record<Lang, Record<string, string>> = {
   ar: {
     hello: "أهلاً! 👋\nاختار لغتك:",
+    langDone: "✅ تمّ تغيير اللغة.",
     pickProvider: "اختار نوع الامتحان:",
     pickStufe: "اختار المستوى:",
     soonTag: "قريباً 🔜",
@@ -110,6 +111,7 @@ const T: Record<Lang, Record<string, string>> = {
   },
   de: {
     hello: "Willkommen! 👋\nBitte Sprache wählen:",
+    langDone: "✅ Sprache geändert.",
     pickProvider: "Welche Prüfung?",
     pickStufe: "Welche Stufe?",
     soonTag: "bald 🔜",
@@ -165,6 +167,7 @@ const T: Record<Lang, Record<string, string>> = {
   },
   uk: {
     hello: "Вітаємо! 👋\nОберіть мову:",
+    langDone: "✅ Мову змінено.",
     pickProvider: "Який іспит?",
     pickStufe: "Який рівень?",
     soonTag: "скоро 🔜",
@@ -220,6 +223,7 @@ const T: Record<Lang, Record<string, string>> = {
   },
   en: {
     hello: "Welcome! 👋\nChoose your language:",
+    langDone: "✅ Language changed.",
     pickProvider: "Which exam?",
     pickStufe: "Which level?",
     soonTag: "soon 🔜",
@@ -454,9 +458,12 @@ async function allLevels(): Promise<Level[]> {
 }
 
 /* ---------------- الخطوات ---------------- */
-async function stepLang(chat: number, lang: Lang, msg?: number) {
+/* change=true: تغيير اللغة من القائمة — الأزرار بتوصّل لـ«gl» (تبديل لغة
+   بلا ترحيب). أول مرّة (من /start) = «g» (معها ترحيب). */
+async function stepLang(chat: number, lang: Lang, msg?: number, change = false) {
+  const gk = change ? "gl" : "g";
   await screen(chat, msg, t(lang, "hello"),
-    rows(LANGS.map(l => ({ text: l.label, callback_data: `g|${l.id}` }))));
+    rows(LANGS.map(l => ({ text: l.label, callback_data: `${gk}|${l.id}` }))));
 }
 
 /* head: شرح بينحطّ فوق السؤال بنفس الرسالة.
@@ -955,15 +962,16 @@ Deno.serve(async (req) => {
 
       await tg("answerCallbackQuery", { callback_query_id: cb.id });
 
-      if (kind === "g") {
+      if (kind === "g" || kind === "gl") {
         const L = (T[a as Lang] ? a : lang) as Lang;
-        // ★ اختيار اللغة = تغيير اللغة وبس — ما بيفوّت عالنسخة المجانية.
-        //   منشيل رسالة اختيار اللغة، ومنبعت الترحيب ومعه القائمة الثابتة
-        //   بلغته الجديدة بـ**رسالة وحدة**. (القائمة الثابتة لازمها sendMessage،
-        //   فمنخلّيها تحمل الترحيب بدل رسالة «اختار من القائمة» زيادة.)
+        // ★ اختيار اللغة = تغيير اللغة وبس. منشيل رسالة الاختيار، ومنبعت
+        //   القائمة الثابتة بلغته برسالة وحدة (القائمة لازمها sendMessage).
+        //   أوّل مرّة (g) معها ترحيب؛ تغيير من القائمة (gl) بلا ترحيب — المستخدم
+        //   بس بدّو يبدّل اللغة، مو يدخل شاشة النسخة المجانية.
         if (mid) await tg("deleteMessage",
           { chat_id: chat, message_id: mid }).catch(() => {});
-        await send(chat, t(L, "intro"), undefined, menu(L));
+        await send(chat, t(L, kind === "g" ? "intro" : "langDone"),
+                   undefined, menu(L));
       }
       // «رجوع» من اختيار الدرجة (التجريبي): رجوع لاختيار المؤسسة
       else if (kind === "b")
@@ -1010,7 +1018,7 @@ Deno.serve(async (req) => {
       else if (hit.act === "mFull")  await stepProvider(chat, L, await allLevels(),
                                                         undefined, undefined, true);
       else if (hit.act === "mMine")  await stepMine(chat, L, from);
-      else if (hit.act === "mLang")  await stepLang(chat, L);
+      else if (hit.act === "mLang")  await stepLang(chat, L, undefined, true);
       // اللوحة الثابتة ما بتحمل روابط — فالمشاركة برسالتها هي
       else if (hit.act === "mShare") await shareMsg(chat, L);
       return new Response("ok");
