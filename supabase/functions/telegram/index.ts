@@ -93,6 +93,9 @@ const T: Record<Lang, Record<string, string>> = {
     copyCode: "📋 انسخ الرمز",
     intro: "أهلاً فيك! 👋\n\nهون بتاخد <b>رمز مجّاني</b> بيفتحلك امتحان نموذجي كامل — قراءة، سماع، وكتابة — لمدّة <b>٢٤ ساعة</b>.\n\n• بلا تسجيل وبلا دفع\n• كل مستوى فيك تجرّبه مرّة\n• بتقدر تطلب وصول كامل بضغطة",
     mMine: "🎟 كودي",
+    mPay: "💳 كيف أدفع؟",
+    payCaption: "طريقة الشراء خطوة بخطوة 🎬",
+    payNoVideo: "للشراء والدفع، احكي معنا وبنرشدك خطوة بخطوة 🙏",
     noCodes: "لسا ما أخدت ولا كود. اضغط «🎁 نسختي التجريبية».",
     myTitle: "أكوادك:",
     kDemo: "تجريبي",
@@ -149,6 +152,9 @@ const T: Record<Lang, Record<string, string>> = {
     copyCode: "📋 Code kopieren",
     intro: "Willkommen! 👋\n\nHier bekommen Sie einen <b>kostenlosen Code</b> für einen kompletten Modelltest — Lesen, Hören und Schreiben — <b>24 Stunden</b> lang.\n\n• Ohne Anmeldung, ohne Bezahlung\n• Jede Stufe einmal testen\n• Vollzugang auf Anfrage, ein Tippen",
     mMine: "🎟 Mein Code",
+    mPay: "💳 Wie bezahlen?",
+    payCaption: "So kaufen Sie — Schritt für Schritt 🎬",
+    payNoVideo: "Für den Kauf schreiben Sie uns — wir helfen Schritt für Schritt 🙏",
     noCodes: "Noch kein Code. Tippen Sie auf „🎁 Meine Testversion“.",
     myTitle: "Ihre Codes:",
     kDemo: "Test",
@@ -205,6 +211,9 @@ const T: Record<Lang, Record<string, string>> = {
     copyCode: "📋 Копіювати код",
     intro: "Вітаємо! 👋\n\nТут ви отримаєте <b>безкоштовний код</b> до повного пробного іспиту — читання, аудіювання та письмо — на <b>24 години</b>.\n\n• Без реєстрації та оплати\n• Кожен рівень можна спробувати раз\n• Повний доступ — одним дотиком",
     mMine: "🎟 Мій код",
+    mPay: "💳 Як оплатити?",
+    payCaption: "Як купити — крок за кроком 🎬",
+    payNoVideo: "Щодо купівлі напишіть нам — допоможемо крок за кроком 🙏",
     noCodes: "Ще немає коду. Натисніть «🎁 Моя пробна версія».",
     myTitle: "Ваші коди:",
     kDemo: "Пробний",
@@ -261,6 +270,9 @@ const T: Record<Lang, Record<string, string>> = {
     copyCode: "📋 Copy code",
     intro: "Welcome! 👋\n\nHere you get a <b>free code</b> for a complete practice exam — reading, listening and writing — for <b>24 hours</b>.\n\n• No sign-up, no payment\n• One trial per level\n• Full access on request, one tap",
     mMine: "🎟 My code",
+    mPay: "💳 How to pay?",
+    payCaption: "How to buy — step by step 🎬",
+    payNoVideo: "To purchase, message us — we'll guide you step by step 🙏",
     noCodes: "No code yet. Tap “🎁 My free trial”.",
     myTitle: "Your codes:",
     kDemo: "Trial",
@@ -375,12 +387,12 @@ async function screen(chat: number, msg: number | undefined | null,
    بترسل نصّ عادي، والنصّ نفسه بيقول شو الفعل **وشو اللغة** سوا:
    «🌐 اللغة» عربي و«🌐 Sprache» ألماني. فما منحتاج نحفظ لغة حدا بين
    الرسايل — نفس مبدأ callback_data يلي حامل حاله. */
-const MKEYS = ["mTrial", "mFull", "mMine", "mLang", "mShare"] as const;
+const MKEYS = ["mTrial", "mFull", "mMine", "mPay", "mLang", "mShare"] as const;
 const menu = (lang: Lang) => ({
   reply_markup: {
     keyboard: [
       [{ text: t(lang, "mTrial") }, { text: t(lang, "mFull") }],
-      [{ text: t(lang, "mMine") }],
+      [{ text: t(lang, "mMine") }, { text: t(lang, "mPay") }],
       [{ text: t(lang, "mLang") }, { text: t(lang, "mShare") }],
     ],
     is_persistent: true, resize_keyboard: true,
@@ -464,6 +476,31 @@ async function stepLang(chat: number, lang: Lang, msg?: number, change = false) 
   const gk = change ? "gl" : "g";
   await screen(chat, msg, t(lang, "hello"),
     rows(LANGS.map(l => ({ text: l.label, callback_data: `${gk}|${l.id}` }))));
+}
+
+/* ★ زرّ «كيف أدفع؟»: بيبعت فيديو شرح الشراء (file_id من تلغرام، أو رابط mp4
+   مباشر) من سرّ PAY_VIDEO. منقراه وقت الضغط — فتغييره بالسرّ بيمشي فوراً.
+   فاضي أو الإرسال فشل → رسالة «احكي معنا» بدل ما يضيع الزرّ. */
+/* أدمن فعلاً: مسجّل بـbot_admins، أو عضو بمجموعة الأدمن (نفس منطق الموافقات —
+   العضوية بتكفي، فالمالك ما لازم يسجّل رقمه الشخصي). لالتقاط file_id. */
+async function isAdminUser(userId: number): Promise<boolean> {
+  if (await rpc("bot_is_admin", { p_telegram_id: userId }).catch(() => false)) return true;
+  if (!ADMIN) return false;
+  const r = await tgJson("getChatMember", { chat_id: Number(ADMIN), user_id: userId });
+  const st = r.result?.status;
+  return r.ok && !!st && st !== "left" && st !== "kicked";
+}
+
+async function stepPay(chat: number, lang: Lang) {
+  const vid = Deno.env.get("PAY_VIDEO") ?? "";
+  if (vid) {
+    const r = await tgJson("sendVideo", {
+      chat_id: chat, video: vid,
+      caption: t(lang, "payCaption"), parse_mode: "HTML",
+    });
+    if (r.ok) return;
+  }
+  await send(chat, t(lang, "payNoVideo"));
 }
 
 /* head: شرح بينحطّ فوق السؤال بنفس الرسالة.
@@ -1008,6 +1045,19 @@ Deno.serve(async (req) => {
       return new Response("ok");
     }
 
+    // ★ أدمن بيبعت فيديو (أو ملف فيديو) → منرجّعله الـfile_id ليحطّه بسرّ
+    //   PAY_VIDEO. هيك ما بيحتاج أدوات برّا تا ياخد المعرّف. لغير الأدمن
+    //   منتجاهله ومنكمّل عادي.
+    const media = update.message?.video ?? update.message?.document
+               ?? update.message?.animation;
+    if (media?.file_id && await isAdminUser(from.id)) {
+      await send(chat,
+        `🎬 <b>file_id تبع الفيديو:</b>\n<code>${media.file_id}</code>\n\n`
+        + `حطّه بسرّ <b>PAY_VIDEO</b> (Supabase → Edge Functions → Secrets) `
+        + `وأعد نشر البوت — وبيصير زرّ «💳 كيف أدفع؟» يعرضه.`);
+      return new Response("ok");
+    }
+
     // ★ زرّ من اللوحة الثابتة: نصّه بيقول الفعل واللغة سوا
     const hit = LABEL[text];
     if (hit) {
@@ -1018,6 +1068,7 @@ Deno.serve(async (req) => {
       else if (hit.act === "mFull")  await stepProvider(chat, L, await allLevels(),
                                                         undefined, undefined, true);
       else if (hit.act === "mMine")  await stepMine(chat, L, from);
+      else if (hit.act === "mPay")   await stepPay(chat, L);
       else if (hit.act === "mLang")  await stepLang(chat, L, undefined, true);
       // اللوحة الثابتة ما بتحمل روابط — فالمشاركة برسالتها هي
       else if (hit.act === "mShare") await shareMsg(chat, L);
