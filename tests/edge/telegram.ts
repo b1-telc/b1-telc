@@ -288,7 +288,9 @@ const MATE  = 700002;             // شريكك — عضو كمان، وما ه�
 sent.length = 0;
 await post(click("l|ar|b1"));     // كوده التجريبي (تكرار)
 check(`★ مع الكود بتطلع لوحة ثابتة (${perm(TG_ID).length} أزرار)`,
-      perm(TG_ID).length === 5);
+      perm(TG_ID).length === 6);
+check("★ وفيها زرّ «كيف أدفع؟»",
+      perm(TG_ID).includes("💳 كيف أدفع؟"));
 check("★★ والرمز عليه زرّ نسخ بضغطة وحدة",
       (codeMsg()?.reply_markup?.inline_keyboard ?? []).flat()
         .some((b: any) => b.copy_text?.text === code));
@@ -752,6 +754,45 @@ check("★ ولا بالمجموعة كمان",
         inside.some((b: any) => b.callback_data === "s|ar"
                              && /قريباً/.test(String(b.text))));
   psql(`delete from levels where id='telc-b2s';`);
+}
+
+/* ---- ٢٠) ★ زرّ «كيف أدفع؟» + التقاط file_id للأدمن ---- */
+{
+  // بلا PAY_VIDEO: الزرّ بيعطي رسالة إرشاد، بلا sendVideo
+  Deno.env.delete("PAY_VIDEO");
+  sent.length = 0;
+  await post(msg("💳 كيف أدفع؟"));
+  check("★ «كيف أدفع؟» بلا فيديو مضبوط ← رسالة إرشاد بلا sendVideo",
+        !sent.some(x => x.method === "sendVideo")
+        && /احكي معنا/.test(String(last()?.text)));
+
+  // مع PAY_VIDEO: بيبعت فيديو بالـfile_id والتعليق
+  Deno.env.set("PAY_VIDEO", "VIDEO_FILE_ID_123");
+  sent.length = 0;
+  await post(msg("💳 كيف أدفع؟"));
+  const vid = lastOf("sendVideo");
+  check("★★ مع PAY_VIDEO ← بيبعت فيديو بالـfile_id المضبوط والتعليق",
+        vid?.video === "VIDEO_FILE_ID_123" && /طريقة الشراء/.test(String(vid?.caption)));
+  Deno.env.delete("PAY_VIDEO");
+
+  // أدمن بيبعت فيديو ← بيرجّعله الـfile_id ليحطّه بالسرّ
+  const ADM = 700777;
+  psql(`insert into bot_admins (telegram_id, label) values (${ADM}, 'tester')
+        on conflict do nothing;`);
+  sent.length = 0;
+  await post({ message: { chat: { id: ADM },
+    from: { id: ADM, username: "adm" }, video: { file_id: "NEW_FILE_ID_999" } } });
+  check("★★ أدمن بيبعت فيديو ← بيرجّعله الـfile_id + ذكر PAY_VIDEO",
+        /NEW_FILE_ID_999/.test(String(last()?.text))
+        && /PAY_VIDEO/.test(String(last()?.text)));
+
+  // غير أدمن بيبعت فيديو ← ما بياخد file_id
+  sent.length = 0;
+  await post({ message: { chat: { id: 700888 },
+    from: { id: 700888, username: "rando" }, video: { file_id: "SECRET_X" } } });
+  check("★★ غير أدمن ما بياخد file_id",
+        !sent.some(x => /SECRET_X/.test(String(x.body?.text))));
+  psql(`delete from bot_admins where telegram_id = ${ADM};`);
 }
 
 await supa.shutdown(); await tgSrv.shutdown();
