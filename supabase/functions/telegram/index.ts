@@ -78,6 +78,9 @@ const T: Record<Lang, Record<string, string>> = {
     mon: "{n} شهر",
     sent: "طلبك وصل ✅\nاستنى شوي — رح يوصلك ردّ قريباً.",
     pending: "عندك طلب معلّق ⏳\nاستنى الردّ عليه.",
+    priceIs: "💰 السعر: €{price}",
+    payNow: "💳 اشترِ قسيمة الدفع",
+    payInstr: "اشترِ قسيمة Wunschgutschein بالمبلغ من الزرّ فوق، وابعتلنا صورة التأكيد هون 📸 — ومنفعّلك بعد المراجعة.",
     needDemo: "خد نسختك التجريبية أوّلاً، بعدها فيك تطلب الوصول الكامل.",
     okFull: "تمّت الموافقة! 🎉",
     fullWhat: "بيفتحلك كل امتحانات {lvl} لمدّة {m} شهر، على جهازين.",
@@ -137,6 +140,9 @@ const T: Record<Lang, Record<string, string>> = {
     mon: "{n} Monate",
     sent: "Anfrage eingegangen ✅\nBitte kurz warten — Sie bekommen bald eine Antwort.",
     pending: "Sie haben eine offene Anfrage ⏳\nBitte warten Sie auf die Antwort.",
+    priceIs: "💰 Preis: {price} €",
+    payNow: "💳 Gutschein kaufen",
+    payInstr: "Kaufen Sie einen Wunschgutschein über den Button oben und senden Sie uns den Kaufbeleg hier 📸 — wir schalten Sie nach Prüfung frei.",
     needDemo: "Holen Sie sich zuerst Ihre Testversion, danach können Sie Vollzugang anfragen.",
     okFull: "Freigegeben! 🎉",
     fullWhat: "Öffnet alle Modelltests von {lvl} für {m} Monate, auf zwei Geräten.",
@@ -196,6 +202,9 @@ const T: Record<Lang, Record<string, string>> = {
     mon: "{n} міс.",
     sent: "Запит надіслано ✅\nЗачекайте — скоро отримаєте відповідь.",
     pending: "У вас є відкритий запит ⏳\nЗачекайте на відповідь.",
+    priceIs: "💰 Ціна: {price} €",
+    payNow: "💳 Купити ваучер",
+    payInstr: "Купіть ваучер Wunschgutschein через кнопку вище та надішліть нам підтвердження сюди 📸 — активуємо після перевірки.",
     needDemo: "Спочатку отримайте пробну версію, потім зможете запросити повний доступ.",
     okFull: "Схвалено! 🎉",
     fullWhat: "Відкриє всі іспити {lvl} на {m} міс., на двох пристроях.",
@@ -255,6 +264,9 @@ const T: Record<Lang, Record<string, string>> = {
     mon: "{n} months",
     sent: "Request received ✅\nPlease wait — you’ll get a reply shortly.",
     pending: "You have an open request ⏳\nPlease wait for the reply.",
+    priceIs: "💰 Price: €{price}",
+    payNow: "💳 Buy voucher",
+    payInstr: "Buy a Wunschgutschein via the button above and send us the payment confirmation here 📸 — we'll activate after review.",
     needDemo: "Get your free trial first, then you can request full access.",
     okFull: "Approved! 🎉",
     fullWhat: "Opens every exam in {lvl} for {m} months, on two devices.",
@@ -684,6 +696,23 @@ async function stepOther(chat: number, lang: Lang, from: any) {
 }
 
 /* ---------------- الوصول الكامل ---------------- */
+/* الأسعار وروابط الدفع — أسرار JSON مفاتيحها عدد الشهور ("1"/"2"/"3"):
+     BOT_PRICES    = {"1":20,"2":25,"3":30}
+     BOT_PAY_LINKS = {"1":"https://…","2":"https://…","3":"https://…"}
+   منقراهن وقت الطلب فتغييرهن بالسرّ بيمشي فوراً. فاضي = بلا سعر/رابط (البوت
+   بيشتغل عادي). الرابط بتولّده إنتي مسبقاً (قسيمة لكل مبلغ)، والبوت بس بيعرضه. */
+function envJson(key: string): Record<string, unknown> {
+  try { return JSON.parse(Deno.env.get(key) ?? "{}"); } catch { return {}; }
+}
+function priceOf(n: number): number | undefined {
+  const v = envJson("BOT_PRICES")[String(n)];
+  return typeof v === "number" ? v : undefined;
+}
+function payLinkOf(n: number): string {
+  const v = envJson("BOT_PAY_LINKS")[String(n)];
+  return typeof v === "string" ? v : "";
+}
+
 /* levelId موجود = مسار «وصول كامل» المختار (بياخد mf وبيحمل المستوى للطلب).
    بلاه = المسار القديم (f من تنبيه «باقي ساعة»): آخر مستوى تجريبي مخزّن. */
 async function stepMonths(chat: number, lang: Lang, msg?: number, levelId?: string) {
@@ -691,8 +720,11 @@ async function stepMonths(chat: number, lang: Lang, msg?: number, levelId?: stri
   const suffix = levelId ? `|${levelId}` : "";
   const back = levelId ? `bf|${lang}` : `b|${lang}`;
   await screen(chat, msg, t(lang, "pickMonths"), [
-    [1, 2, 3].map((n) => ({
-      text: t(lang, "mon", { n }), callback_data: `${mk}|${lang}|${n}${suffix}` })),
+    [1, 2, 3].map((n) => {
+      const pr = priceOf(n);
+      return { text: t(lang, "mon", { n }) + (pr ? ` · €${pr}` : ""),
+               callback_data: `${mk}|${lang}|${n}${suffix}` };
+    }),
     [{ text: t(lang, "back"), callback_data: back }],
   ]);
 }
@@ -715,9 +747,15 @@ async function stepRequest(chat: number, lang: Lang, from: any, months: number,
     throw e;
   }
 
-  // اللوحة الثابتة موجودة أصلاً (is_persistent) — فالتأكيد بياخد مطرح
-  // شاشة اختيار الشهور بدل ما يزيد رسالة
-  await screen(chat, msg, t(lang, res.again ? "pending" : "sent"));
+  // التأكيد مع السعر ورابط الدفع (لو مضبوطين بالأسرار). اللوحة الثابتة
+  // موجودة أصلاً — فالتأكيد بياخد مطرح شاشة اختيار الشهور بدل ما يزيد رسالة.
+  const pr = priceOf(res.months);
+  const link = payLinkOf(res.months);
+  const parts = [t(lang, res.again ? "pending" : "sent")];
+  if (pr) parts.push(t(lang, "priceIs", { price: pr }));
+  if (link) parts.push(t(lang, "payInstr"));
+  await screen(chat, msg, parts.join("\n\n"),
+    link ? [[{ text: t(lang, "payNow"), url: link }]] : undefined);
   if (res.again) return;          // ما منزعجك مرّتين بنفس الطلب
 
   // ★ الحجز أوّلاً: بمجموعة فيها أكتر من شخص، تنين بيفتحوا نفس الطلب
@@ -725,7 +763,7 @@ async function stepRequest(chat: number, lang: Lang, from: any, months: number,
   const card = await toAdmin(
     `🔓 <b>طلب وصول كامل</b>\n` +
     `${who(from)}\n` +
-    `${levelLine(res)} · <b>${res.months}</b> شهر`,
+    `${levelLine(res)} · <b>${res.months}</b> شهر${pr ? ` · <b>€${pr}</b>` : ""}`,
     [[{ text: "🖐 احجزه", callback_data: `V|${res.request_id}` }]]);
 
   // وين البطاقة: منحتاجها للتنبيه بعد ما ينتهي الحجز

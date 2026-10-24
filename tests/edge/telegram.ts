@@ -795,6 +795,36 @@ check("★ ولا بالمجموعة كمان",
   psql(`delete from bot_admins where telegram_id = ${ADM};`);
 }
 
+/* ---- ٢١) ★ السعر لكل شهر + رابط الدفع (BOT_PRICES / BOT_PAY_LINKS) ---- */
+{
+  Deno.env.set("BOT_PRICES", JSON.stringify({ "1": 20, "2": 25, "3": 30 }));
+  Deno.env.set("BOT_PAY_LINKS", JSON.stringify({
+    "1": "https://pay.example/20", "2": "https://pay.example/25",
+    "3": "https://pay.example/30" }));
+
+  // «وصول كامل» → درجة → شاشة الشهور: الأزرار فيها السعر
+  sent.length = 0;
+  await post(msg("🔓 وصول كامل"));          // مؤسسة وحدة (telc) → الدرجات
+  const lf = flat().find((b: any) => String(b.callback_data).startsWith("lf|ar|"));
+  await post(click(String(lf?.callback_data ?? "lf|ar|b1")));
+  const mbtns = flat().filter((b: any) => String(b.callback_data).startsWith("mf|ar|"));
+  check("★★ أزرار الشهور فيها السعر (€20 … €30)",
+        mbtns.some((b: any) => /€20/.test(String(b.text)))
+        && mbtns.some((b: any) => /€30/.test(String(b.text))));
+
+  // اختيار ٣ شهور: تأكيد الطالب فيه السعر وزرّ دفع بالرابط الصحّ للمبلغ
+  sent.length = 0;
+  await post(click("mf|ar|3|b1"));
+  const conf = shown(TG_ID);
+  check("★★ تأكيد الطالب فيه السعر €30", /€30/.test(String(conf?.text)));
+  const payBtn = (conf?.reply_markup?.inline_keyboard ?? []).flat()
+    .find((b: any) => b.url);
+  check("★★ وزرّ دفع بالرابط الصحّ للمبلغ",
+        payBtn?.url === "https://pay.example/30");
+
+  Deno.env.delete("BOT_PRICES"); Deno.env.delete("BOT_PAY_LINKS");
+}
+
 await supa.shutdown(); await tgSrv.shutdown();
 const bad = R.filter(x => !x[1]);
 console.log(bad.length ? `\n✗ ${bad.length} فشل من ${R.length}` : `\n✓ كل الـ${R.length} اختبارات نجحت`);
