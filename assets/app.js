@@ -7,6 +7,7 @@ const elReset= document.getElementById('btnReset');
 const elHome = document.getElementById('btnHome');
 const elSettings = document.getElementById('btnSettings');
 const elSetmenu  = document.getElementById('setmenu');
+const elLangbar  = document.getElementById('langbar');
 const elTimer= document.getElementById('timer');
 const elTime = document.getElementById('timerText');
 const elToast= document.getElementById('toast');
@@ -128,9 +129,8 @@ function go(view, fn){
   // وسائط (نتيجة، جولة…)، فإعادة بنائها من اسم الشاشة بيضيّعهن.
   S.render = fn;
   elBack.hidden = (view === 'home');
-  elBack.setAttribute('aria-label', t('back'));   // ‹ Symbol bleibt, Label übersetzt
   elReset.hidden = (view !== 'praxis');            // Zurücksetzen nur in der Übung
-  elReset.setAttribute('aria-label', t('praxisReset'));
+  refreshHeader();                                 // كلمة «رجوع» + أعلام اللغة + تسميات
   window.scrollTo(0, 0);
   fn();
 }
@@ -178,12 +178,8 @@ function setbarHTML(){
   const i = SIZES.indexOf(sz);
   const ic = { light: '☀', dark: '🌙' };
 
+  // ★ اللغة انتقلت لشريط بالهيدر (renderLangbar) — هون بس المظهر والخطّ.
   return `<div class="setbar" role="group" aria-label="${esc(t('settings'))}">
-    <div class="setgrp">
-      ${I18N.LANGS.map(l => `<button class="chip flagchip${l.id === I18N.lang ? ' on' : ''}"
-        data-lang="${esc(l.id)}" title="${esc(l.name)}"
-        aria-label="${esc(l.name)}">${l.flag}</button>`).join('')}
-    </div>
     <div class="setgrp">
       ${THEMES.map(x => `<button class="chip${x === th ? ' on' : ''}"
         data-theme="${esc(x)}" title="${esc(t(x === 'light' ? 'themeLight' : 'themeDark'))
@@ -200,6 +196,7 @@ function setbarHTML(){
 
 applyLook();
 I18N.apply();
+renderLangbar();   // ★ أعلام اللغة بالهيدر من أول تحميل
 
 /* الكتالوج بيعرض الامتحانات المقفولة للتشويق — تحسين، مو شرط.
    فشله (قاعدة قديمة، أو واجهة ما بتعرفه) ما لازم يمنع التطبيق يشتغل. */
@@ -250,13 +247,29 @@ elHome.onclick = () => screenHome();
 
 // ★ Einstellungen (Sprache/Thema/Schrift) über ein Header-Menü — überall
 //   erreichbar, ohne zur Startseite zu müssen.
+/* ★ شريط اللغة بالهيدر جنب ⚙: الأعلام ظاهرة فوراً، بلا ما يفتح قائمة. */
+function renderLangbar(){
+  if (!elLangbar) return;
+  elLangbar.innerHTML = I18N.LANGS.map(l =>
+    `<button class="chip flagchip${l.id === I18N.lang ? ' on' : ''}" data-lang="${esc(l.id)}"`
+    + ` title="${esc(l.name)}" aria-label="${esc(l.name)}">${l.flag}</button>`).join('');
+  elLangbar.querySelectorAll('[data-lang]').forEach(b => b.onclick = () => {
+    I18N.setLang(b.dataset.lang);
+    refreshHeader();
+    S.render && S.render();                         // aktuelle Seite neu zeichnen
+  });
+}
+
+/* عناصر الهيدر يلي بتتغيّر مع اللغة: كلمة «رجوع»، أعلام اللغة، التسميات. */
+function refreshHeader(){
+  elBack.textContent = t('back');                   // كلمة، مو رمز ←
+  elBack.setAttribute('aria-label', t('back'));
+  elReset.setAttribute('aria-label', t('praxisReset'));
+  renderLangbar();
+}
+
 function renderSetmenu(){
   elSetmenu.innerHTML = setbarHTML();
-  elSetmenu.querySelectorAll('[data-lang]').forEach(b => b.onclick = () => {
-    I18N.setLang(b.dataset.lang); renderSetmenu();
-    elBack.setAttribute('aria-label', t('back'));
-    S.render && S.render();                       // aktuelle Seite neu zeichnen
-  });
   elSetmenu.querySelectorAll('[data-theme]').forEach(b => b.onclick = () => {
     save('b1.theme', b.dataset.theme); applyLook(); renderSetmenu();   // CSS-Variable, kein Neuaufbau nötig
   });

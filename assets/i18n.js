@@ -27,7 +27,7 @@ const I18N = (() => {
 
   const DICT = {
     de: {
-      back: '‹ Zurück',
+      back: 'Zurück',
       loading: 'Lädt …',
       moment: 'Einen Moment …',
       preparing: 'Wird vorbereitet …',
@@ -311,7 +311,7 @@ const I18N = (() => {
     },
 
     ar: {
-      back: '‹ رجوع',
+      back: 'رجوع',
       loading: 'جاري التحميل …',
       moment: 'لحظة …',
       preparing: 'جاري التحضير …',
@@ -604,7 +604,7 @@ const I18N = (() => {
     },
 
     uk: {
-      back: '‹ Назад',
+      back: 'Назад',
       loading: 'Завантаження …',
       moment: 'Хвилинку …',
       preparing: 'Підготовка …',
