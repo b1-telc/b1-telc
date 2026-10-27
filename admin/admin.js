@@ -298,49 +298,16 @@ function subPill(s){
 }
 
 let userSearch = '';
+/* ★ قائمة نظيفة: اسم (أو @تلغرام) لكل مستخدم، بلا أعمدة ولا أزرار. الضغط
+   بيفتح بروفيل كامل بصفحة (openUser) — مش popup. */
 async function screenUsers(){
-  const sy = window.scrollY;                 // مكان التمرير — منرجّعه بعد الرسم
   app.innerHTML = '<div class="empty">Lädt …</div>';
   const rows = await rpc('admin_users', { p_search: userSearch || null });
-
-  const line = u => {
-    /* Ein Nutzer kann mehrere Abos haben — ein Code öffnet genau eine
-       Stufe, wer A1 und B1 will, löst zwei Codes ein. Jede Zeile der
-       drei Spalten Abo/Stufen/Aktion gehört zum selben Abo. */
-    const subs = u.subs || [];
-    const cell = (html) => subs.length
-      ? subs.map(html).join('') : '<span style="color:var(--muted)">—</span>';
-
-    return `<tr data-u="${esc(u.id)}">
-      <td>
-        <b>${esc(u.name || 'ohne Namen')}</b>
-        ${u.tg ? `<a href="https://t.me/${esc(u.tg)}" target="_blank" rel="noopener"
-             class="mono" style="color:var(--accent);font-size:12px;text-decoration:none"
-             title="Telegram-Konto öffnen">@${esc(u.tg)}</a>` : ''}
-        ${u.note ? `<div style="color:var(--muted);font-size:13px">${esc(u.note)}</div>` : ''}
-        ${(u.codes || []).map(c =>
-          `<div class="mono" style="color:var(--muted);font-size:12px">${esc(fmtCode(c.code))}</div>`
-        ).join('')}
-      </td>
-      <td>${subs.length ? subs.map(s =>
-        `<div class="subrow" data-subcell="${esc(s.id)}">${subPill(s)}</div>`
-      ).join('') : '<span class="pill">kein Abo</span>'}</td>
-      <td>${cell(s => `<div class="subrow mono">${esc((s.levels || []).join(', '))}</div>`)}</td>
-      <td>${u.devices}</td>
-      <td>${u.attempts}${u.best_pct != null ? ` · best ${u.best_pct}%` : ''}</td>
-      <td>${fmtDate(u.last_seen_at || u.created_at)}</td>
-      <td style="white-space:nowrap">
-        ${subs.map(s => `<div class="subrow">
-          <button class="btn sm grey" data-shift="30"  data-sub="${esc(s.id)}">+30</button>
-          <button class="btn sm grey" data-shift="-30" data-sub="${esc(s.id)}">−30</button>
-        </div>`).join('')}
-        <button class="btn sm grey" data-more="${esc(u.id)}">…</button>
-      </td></tr>`;
-  };
+  const dname = u => esc(u.name || (u.tg ? '@' + u.tg : 'ohne Namen'));
 
   app.innerHTML = `
     <h1>Nutzer</h1>
-    <p class="sub">${rows.length} Einträge. Suche nach Name, Notiz oder Code.</p>
+    <p class="sub">${rows.length} ${rows.length === 1 ? 'Eintrag' : 'Einträge'} · zum Öffnen antippen.</p>
     <div class="card">
       <div class="row">
         <label style="flex:3">Suche
@@ -349,11 +316,15 @@ async function screenUsers(){
         ${userSearch ? '<button class="btn grey" id="clr">Zurücksetzen</button>' : ''}
       </div>
     </div>
-    <div class="card"><div class="wrap" data-users><table>
-      <tr><th>Nutzer</th><th>Abo</th><th>Stufen</th><th>Geräte</th>
-          <th>Prüfungen</th><th>zuletzt</th><th></th></tr>
-      ${rows.map(line).join('') || '<tr><td colspan="7" class="empty">Keine Nutzer</td></tr>'}
-    </table></div></div>`;
+    <div class="card" style="padding:6px" data-users>
+      ${rows.length ? rows.map(u => `
+        <button class="userrow" data-u="${esc(u.id)}">
+          <span class="uname">${dname(u)}</span>
+          ${u.name && u.tg ? `<span class="utg">@${esc(u.tg)}</span>` : ''}
+          <span class="uarrow">›</span>
+        </button>`).join('')
+        : '<p class="empty" style="padding:20px">Keine Nutzer</p>'}
+    </div>`;
 
   const q = document.getElementById('q');
   const find = () => { userSearch = q.value.trim(); screenUsers(); };
@@ -362,35 +333,21 @@ async function screenUsers(){
   const clr = document.getElementById('clr');
   if (clr) clr.onclick = () => { userSearch = ''; screenUsers(); };
 
-  // ★ تفويض حدث على حاوية الجدول (عنصر جديد كل رسم → بلا تراكم مستمعين).
-  //   +30/−30 بيحدّث خانة الاشتراك المعنيّة فقط — بلا إعادة جلب كل القائمة،
-  //   فما بيضيع مكان التمرير ولا الفوكس.
-  const wrap = app.querySelector('[data-users]');
-  UI.delegate(wrap, 'click', '[data-shift]', async b => {
-    const r = await act(b, () => rpc('admin_shift_subscription',
-      { p_sub_id: b.dataset.sub, p_days: Number(b.dataset.shift) }), 'Abo angepasst');
-    if (r && r.current_period_end){
-      const cell = wrap.querySelector(`[data-subcell="${CSS.escape(b.dataset.sub)}"]`);
-      if (cell) cell.innerHTML = subPill({
-        current_period_end: r.current_period_end, status: 'active' });
-    }
-  });
-  UI.delegate(wrap, 'click', '[data-more]', b =>
-    userDialog(rows.find(u => u.id === b.dataset.more)));
-
-  if (window.scrollY !== sy) window.scrollTo(0, sy);
+  UI.delegate(app.querySelector('[data-users]'), 'click', '[data-u]',
+    b => openUser(b.dataset.u));
 }
 
-/* تفاصيل مستخدم: كل الإجراءات الباقية — بنافذة UI.modal الموحّدة
-   (Escape، نقرة الخلفية، حبس الفوكس، إرجاعه). الإجراءات بتقفل النافذة،
-   و onClose بيعيد رسم القائمة تا تبيّن التغيير. */
-/* ★ Nutzer-zentriert: ein vollständiges Profil pro Person. Zugänge
-   (Anbieter·Stufe), Codes und alle Aktionen (Zeit, Aktivierungen, löschen)
-   an einem Ort — statt über Tabs verstreut. */
-function userDialog(u){
-  if (!u) return;
+/* ★ Nutzer-zentriert: ein vollständiges Profil pro Person — als eigene
+   Seite (kein Popup). Zugänge (Anbieter·Stufe), Codes und alle Aktionen
+   (Zeit, Aktivierungen, löschen) an einem Ort. Aktionen rendern die Seite
+   mit frischen Daten neu statt zu schließen. */
+async function openUser(id){
+  app.innerHTML = '<div class="empty">Lädt …</div>';
+  const u = (await rpc('admin_users', {})).find(x => x.id === id);
+  if (!u) return screenUsers();
   const subs = u.subs || [];
   const codes = u.codes || [];
+  const refresh = () => openUser(id);
   const pill = (cls, txt) => `<span class="pill ${cls}">${txt}</span>`;
 
   /* Ein Zugang (Abo). Knöpfe tragen die Abo-ID, damit +30 auf B1 nicht
@@ -451,12 +408,16 @@ function userDialog(u){
 
   const tgLine = u.tg
     ? `<a href="https://t.me/${esc(u.tg)}" target="_blank" rel="noopener"
-         class="mono" style="color:var(--accent);text-decoration:none">@${esc(u.tg)}</a>
+         class="mono" style="color:var(--blue);text-decoration:none">@${esc(u.tg)}</a>
        — <a href="https://t.me/${esc(u.tg)}" target="_blank" rel="noopener"
-         style="color:var(--accent)">Telegram schreiben ↗</a>`
+         style="color:var(--blue)">Telegram schreiben ↗</a>`
     : '<span style="color:var(--muted)">kein Telegram-Konto verknüpft</span>';
 
-  const html = `
+  const title = u.name || (u.tg ? '@' + u.tg : 'Nutzer ohne Namen');
+
+  app.innerHTML = `
+    <button class="btn grey sm" id="u_back">← Nutzer</button>
+    <h1 style="margin:12px 0 4px">${esc(title)}</h1>
     <p style="margin:0 0 6px">${tgLine}</p>
     <p class="sub" style="margin-bottom:14px">
       ${u.attempts} Prüfungen · ${u.devices} Geräte · angelegt ${fmtDate(u.created_at)}
@@ -472,12 +433,14 @@ function userDialog(u){
                    : '<p class="sub">Noch keinen Code eingelöst.</p>'}
 
     <h2 style="margin-top:16px">Notiz & Name</h2>
-    <label style="font-size:13px;color:var(--muted)">Name
-      <input id="d_name" value="${esc(u.name || '')}" style="margin-top:4px"></label>
-    <label style="font-size:13px;color:var(--muted);display:block;margin-top:8px">Notiz
-      <input id="d_note" value="${esc(u.note || '')}"
-             placeholder="z. B. WhatsApp-Nummer, bezahlt am …" style="margin-top:4px"></label>
-    <button class="btn sm" id="d_save" style="margin-top:10px">Speichern</button>
+    <div class="card" style="padding:12px">
+      <label style="font-size:13px;color:var(--muted)">Name
+        <input id="d_name" value="${esc(u.name || '')}" style="margin-top:4px"></label>
+      <label style="font-size:13px;color:var(--muted);display:block;margin-top:8px">Notiz
+        <input id="d_note" value="${esc(u.note || '')}"
+               placeholder="z. B. WhatsApp-Nummer, bezahlt am …" style="margin-top:4px"></label>
+      <button class="btn sm" id="d_save" style="margin-top:10px">Speichern</button>
+    </div>
 
     <h2 style="margin-top:16px">Geräte</h2>
     <p class="sub" style="margin-bottom:8px">${u.devices} registriert.
@@ -489,55 +452,51 @@ function userDialog(u){
       Geräten, Daten <b>und seinen Codes</b> — endgültig.</p>
     <button class="btn sm danger" id="d_del">Nutzer + Codes löschen</button>`;
 
-  const title = (u.name || (u.tg ? '@' + u.tg : 'Nutzer ohne Namen'));
-  const dlg   = UI.modal({ title, html, onClose: screenUsers });
-  const panel = dlg.panel;
-  const $ = id => panel.querySelector('#' + id);
+  const $ = x => document.getElementById(x);
+  $('u_back').onclick = () => screenUsers();
 
   $('d_save').onclick = e => act(e.target, () => rpc('admin_set_profile', {
     p_user_id: u.id, p_name: $('d_name').value.trim() || null,
-    p_note: $('d_note').value.trim() || null }), 'Gespeichert');
+    p_note: $('d_note').value.trim() || null }), 'Gespeichert').then(refresh);
 
   $('d_dev').onclick = e => act(e.target,
     () => rpc('admin_reset_devices', { p_user_id: u.id }), 'Geräte zurückgesetzt')
-    .then(() => dlg.close());
+    .then(refresh);
 
-  panel.querySelectorAll('[data-d]').forEach(b => b.onclick = () =>
+  app.querySelectorAll('[data-d]').forEach(b => b.onclick = () =>
     act(b, () => rpc('admin_shift_subscription',
       { p_sub_id: b.dataset.sub, p_days: Number(b.dataset.d) }), 'Zugang angepasst')
-      .then(() => dlg.close()));
+      .then(refresh));
 
-  panel.querySelectorAll('[data-end]').forEach(b => b.onclick = () =>
+  app.querySelectorAll('[data-end]').forEach(b => b.onclick = () =>
     act(b, () => rpc('admin_set_period_end', {
       p_sub_id: b.dataset.end,
       p_end: new Date($('d_end' + b.dataset.i).value + 'T12:00:00Z').toISOString() }),
-      'Enddatum gesetzt').then(() => dlg.close()));
+      'Enddatum gesetzt').then(refresh));
 
-  panel.querySelectorAll('[data-st]').forEach(b => b.onclick = () =>
+  app.querySelectorAll('[data-st]').forEach(b => b.onclick = () =>
     act(b, () => rpc('admin_set_subscription_status',
       { p_sub_id: b.dataset.sub, p_status: b.dataset.st }),
-      b.dataset.st === 'revoked' ? 'Zugang gesperrt' : 'Zugang entsperrt').then(() => dlg.close()));
+      b.dataset.st === 'revoked' ? 'Zugang gesperrt' : 'Zugang entsperrt').then(refresh));
 
   // +1 Aktivierung für einen Code (z. B. Gerätewechsel) — direkt vom Profil.
-  panel.querySelectorAll('[data-more1]').forEach(b => b.onclick = () =>
+  app.querySelectorAll('[data-more1]').forEach(b => b.onclick = () =>
     act(b, () => rpc('admin_add_code_use', { p_code_id: b.dataset.more1, p_extra: 1 }),
-      'Eine Aktivierung freigegeben').then(() => dlg.close()));
+      'Eine Aktivierung freigegeben').then(refresh));
 
   // Einen Code löschen — nach Rückfrage.
-  panel.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
+  app.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
     if (!confirm(`„${b.dataset.code}" endgültig löschen? Ein daraus entstandenes aktives Abo wird dabei beendet.`)) return;
     const r = await act(b, () => rpc('admin_delete_code', { p_code_id: b.dataset.del }), 'Code gelöscht');
-    if (r) dlg.close();
+    if (r) refresh();
   });
 
-  // Konto + Codes endgültig löschen — nach Rückfrage. onClose rendert neu.
+  // Konto + Codes endgültig löschen — nach Rückfrage → zurück zur Liste.
   $('d_del').onclick = async e => {
-    const who = u.name || (u.tg ? '@' + u.tg : 'ohne Namen');
-    if (!confirm(`Nutzer „${who}" mit allen Zugängen, Daten und seinen Codes endgültig löschen?`)) return;
+    if (!confirm(`Nutzer „${title}" mit allen Zugängen, Daten und seinen Codes endgültig löschen?`)) return;
     const r = await act(e.target,
-      () => rpc('admin_delete_user', { p_user_id: u.id }),
-      'Nutzer gelöscht');
-    if (r) dlg.close();
+      () => rpc('admin_delete_user', { p_user_id: u.id }), 'Nutzer gelöscht');
+    if (r) screenUsers();
   };
 }
 

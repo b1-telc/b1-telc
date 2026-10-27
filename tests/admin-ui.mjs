@@ -138,51 +138,51 @@ try {
     (await page.textContent('#app'))?.includes('Testnutzer'));
   check('شاشة Nutzer بترسم المستخدم', seen);
 
-  // اسم مستخدم تلغرام (@username) بيطلع جنب الاسم كرابط t.me
-  const tgHandle = await page.$('[data-u] a[href="https://t.me/houzaifa"]');
-  check('Nutzer: @username تلغرام ظاهر كرابط', !!tgHandle);
+  // الضغط على صفّ المستخدم → صفحة بروفيل كاملة (مش popup)
+  await page.click('.userrow[data-u]');
+  await until(() => page.$('#u_back'));
+  check('بروفيل: فتح كصفحة كاملة (زر رجوع)', !!(await page.$('#u_back')));
+  check('بروفيل: مو popup', !(await page.$('.uimodal-back')));
+  const profTxt = (await page.textContent('#app')) || '';
+  check('بروفيل: Zugänge فيها «Goethe · A1»', /Goethe · A1/.test(profTxt));
+  check('بروفيل: رابط «Telegram schreiben»',
+    !!(await page.$('a[href="https://t.me/houzaifa"]')));
+  check('بروفيل: الكود B1TEST ظاهر', /B1TEST/.test(profTxt));
 
-  const usersBefore = calls.admin_users || 0;
-  const cellBefore = (await page.textContent('[data-subcell]'))?.trim();
-  check('خانة الاشتراك فيها «40 Tage»', /40\s*Tage/.test(cellBefore || ''));
+  // +30 Tage من البروفيل → admin_shift_subscription، وبعدها الصفحة بتتجدّد
+  const shiftBefore = calls.admin_shift_subscription || 0;
+  await page.click('[data-d="30"]');
+  check('بروفيل: +30 → admin_shift_subscription',
+    await until(() => (calls.admin_shift_subscription || 0) === shiftBefore + 1));
 
-  // +30: تحديث جزئي — بلا إعادة جلب القائمة
-  await page.click('[data-shift="30"]');
-  const shifted = await until(() => (calls.admin_shift_subscription || 0) === 1);
-  check('admin_shift_subscription انندهت مرة', shifted);
-  check('admin_users ما انعاد جلبها (تحديث جزئي)', (calls.admin_users || 0) === usersBefore);
-  const cellAfter = await until(async () =>
-    /70\s*Tage/.test((await page.textContent('[data-subcell]')) || ''));
-  check('الخانة تحدّثت لـ«70 Tage» بلا إعادة رسم كامل', cellAfter);
+  // +1 Aktivierung من البروفيل
+  await until(() => page.$('[data-more1]'));
+  const add1 = calls.admin_add_code_use || 0;
+  await page.click('[data-more1]');
+  check('بروفيل: +1 Aktivierung → admin_add_code_use',
+    await until(() => (calls.admin_add_code_use || 0) === add1 + 1));
 
-  // النافذة الموحّدة: فتح، فوكس داخلها، Escape بيسكّر ويرجّع الفوكس
-  await page.click('[data-more]');
-  const modalOpen = await until(() => page.$('.uimodal-back'));
-  check('نافذة التفاصيل فتحت (UI.modal)', !!modalOpen);
-  const focusInside = await page.evaluate(() =>
-    !!document.querySelector('.uimodal')?.contains(document.activeElement));
-  check('الفوكس انحبس داخل النافذة', focusInside);
+  // حذف كود من البروفيل (confirm بينقبل)
+  await until(() => page.$('[data-del]'));
+  const cdel = calls.admin_delete_code || 0;
+  await page.click('[data-del]');
+  check('بروفيل: Code löschen → admin_delete_code',
+    await until(() => (calls.admin_delete_code || 0) === cdel + 1));
 
-  const usersBeforeClose = calls.admin_users || 0;
-  await page.keyboard.press('Escape');
-  const closed = await until(async () => !(await page.$('.uimodal-back')));
-  check('Escape بيسكّر النافذة', closed);
-  const refetched = await until(() => (calls.admin_users || 0) === usersBeforeClose + 1);
-  check('بعد الإغلاق انعادت القائمة مرة وحدة (onClose)', refetched);
-  const focusBack = await page.evaluate(() =>
-    document.activeElement?.getAttribute('data-more') != null ||
-    document.activeElement === document.body);
-  check('الفوكس رجع برّا النافذة', focusBack);
+  // «← Nutzer» بيرجّع للقائمة
+  await until(() => page.$('#u_back'));
+  await page.click('#u_back');
+  check('بروفيل: «← Nutzer» رجّع للقائمة',
+    await until(async () => !!(await page.$('.userrow')) && !(await page.$('#u_back'))));
 
-  // حذف المستخدم: فتح النافذة → «Nutzer löschen» → تأكيد → admin_delete_user
-  await page.click('[data-more]');
+  // حذف المستخدم: من البروفيل → «Nutzer + Codes löschen» → تأكيد → القائمة
+  await page.click('.userrow[data-u]');
   await until(() => page.$('#d_del'));
-  const delBefore = calls.admin_delete_user || 0;
+  const udel = calls.admin_delete_user || 0;
   await page.click('#d_del');                         // confirm() بينقبل تلقائياً
-  const udelCalled = await until(() => (calls.admin_delete_user || 0) === delBefore + 1);
-  check('Nutzer löschen: admin_delete_user انندهت مرة', udelCalled);
-  const dlgClosed = await until(async () => !(await page.$('.uimodal-back')));
-  check('Nutzer löschen: النافذة انسكّرت بعد الحذف', dlgClosed);
+  check('بروفيل: Nutzer löschen → admin_delete_user',
+    await until(() => (calls.admin_delete_user || 0) === udel + 1));
+  check('حذف المستخدم: رجع للقائمة', await until(() => page.$('.userrow')));
 
   // ── Codes: sperren / +1 تحديث جزئي بلا إعادة جلب القائمة ──
   await page.click('[data-tab="codes"]');
@@ -203,8 +203,9 @@ try {
   check('+1: admin_codes ما انعاد جلبها', (calls.admin_codes || 0) === codesCalls);
 
   // löschen: حذف نهائي بعد تأكيد → الصفّ انشال، بلا إعادة جلب القائمة
+  const cdelTab = calls.admin_delete_code || 0;
   await page.click('[data-coderow="c1"] [data-del]');
-  const delCalled = await until(() => (calls.admin_delete_code || 0) === 1);
+  const delCalled = await until(() => (calls.admin_delete_code || 0) === cdelTab + 1);
   check('löschen: admin_delete_code انندهت مرة', delCalled);
   const rowGone = await until(async () => !(await page.$('[data-coderow="c1"]')));
   check('löschen: صفّ الكود انشال', rowGone);
