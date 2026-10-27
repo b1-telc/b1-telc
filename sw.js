@@ -1,5 +1,5 @@
 /* خدمة عامل: بتخزّن التطبيق تا يشتغل بدون إنترنت */
-const CACHE = 'telc-b1-v65';
+const CACHE = 'telc-b1-v66';
 const CORE = [
   './', './index.html', './manifest.webmanifest',
   './assets/style.css', './assets/app.js',

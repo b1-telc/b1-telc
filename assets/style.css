@@ -814,6 +814,16 @@ body.paused main{filter:blur(7px); pointer-events:none; user-select:none}
 .markbtn.on{color:var(--warn); border-color:var(--warn)}
 .markbtn.on svg{fill:currentColor}
 .markbtn.listmark{margin-inline-start:6px}
+/* ★ زرّ الإبلاغ لكل تمرين — نفس حجم النجمة، جنبها عاليمين. */
+.praxisset .sethead .markbtn{margin-inline-start:auto}
+.repbtn{flex:0 0 auto; width:38px; height:38px; padding:0;
+  display:inline-flex; align-items:center; justify-content:center;
+  background:transparent; border:1px solid var(--line); border-radius:10px;
+  color:var(--muted); cursor:pointer; font-family:inherit;
+  transition:background .12s, color .12s, border-color .12s, transform .1s}
+.repbtn svg{width:20px; height:20px; display:block}
+.repbtn:hover{background:var(--brand-soft); color:var(--brand-dark);
+  border-color:var(--brand); transform:translateY(-1px)}
 /* Sammel-Karten (Fehler / Lesezeichen) auf der Stufen-Seite. */
 .tile.collmist .n{background:var(--bad-soft); color:var(--bad)}
 .tile.collmark .n{background:var(--warn-soft); color:var(--warn)}

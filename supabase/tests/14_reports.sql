@@ -224,5 +224,31 @@ begin
                   s like '%Wegwerf-Modell%');
 end $$;
 
+-- ★ مكان التمرين (spot): بينحفظ، بينظّف لسطر واحد بلا حروف تحكّم، وبيوصل
+reset role;
+insert into auth.users (id) values ('cccc0000-0000-0000-0000-000000000009')
+  on conflict do nothing;
+insert into profiles (id, is_admin, display_name)
+  values ('cccc0000-0000-0000-0000-000000000009', false, 'RP-Spot')
+  on conflict (id) do nothing;
+
+do $$
+declare tst uuid; r jsonb; sp text;
+begin
+  select id into tst from tests where published order by slug limit 1;
+  set local role authenticated;
+  perform set_config('request.jwt.claim.sub',
+                     'cccc0000-0000-0000-0000-000000000009', true);
+  -- حروف تحكّم + سطر جديد + مسافات زيادة — لازم كلها تتنظّف لسطر واحد
+  r := report_problem(tst, 'جواب التمرين غلط بالتصحيح، تأكّدوا منه', 'ar',
+                      E'Lesen \x07·\t Teil 1\n·  Übung 2');
+  perform t_check('تبليغ مع مكان التمرين (spot)', (r->>'ok')::boolean);
+  reset role;
+  sp := (t_rep('جواب التمرين%'))->>'spot';
+  perform t_check(format('★ الـspot انحفظ ووصل منظّف: %s', sp),
+                  sp = 'Lesen · Teil 1 · Übung 2');
+  perform t_check('★ وبلا حروف تحكّم (سطر واحد)', sp !~ '[\x00-\x1F\x7F]');
+end $$;
+
 -- الجدول انفضى تا ما يأثّر على اختبارات تانية
 delete from reports;

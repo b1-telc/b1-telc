@@ -1115,6 +1115,8 @@ function praxisSetHTML(sec){
       ${sec.title ? `<h2 class="setnum">${esc(sec.title)}</h2>` : '<span class="setnum"></span>'}
       <button class="markbtn${isMarked(sec.id) ? ' on' : ''}" type="button" data-mark="${esc(sec.id)}"
         aria-label="${esc(t('bookmark'))}" title="${esc(t('bookmark'))}">${ICON_STAR}</button>
+      <button class="repbtn" type="button" data-repsec="${esc(sec.id)}"
+        aria-label="${esc(t('reportBtn'))}" title="${esc(t('reportBtn'))}">${ICON_INFO}</button>
     </div>
     ${instrBlock(sec.instruction)}
     ${renderPartBody(sec)}
@@ -1299,6 +1301,14 @@ function renderPraxis(b, secs){
     const on = toggleMark(mb.dataset.mark);
     mb.classList.toggle('on', on);
     toast(on ? t('bookmarkAdded') : t('bookmarkRemoved'));
+  };
+  // ★ «بلّغ عن مشكلة» لهالتمرين بالذات: بنمرّر «القسم · التمرين» للوحة
+  //   تا الأدمن يعرف وين الغلط بالضبط، مو بس أي امتحان.
+  const rb = app.querySelector('[data-repsec]');
+  if (rb) rb.onclick = () => {
+    const idx = secs.indexOf(cur);
+    const where = [b.title, cur.title || ('#' + (idx + 1))].filter(Boolean).join(' · ');
+    openReport(S.modell && S.modell.uuid, where, where);
   };
   document.querySelectorAll('[data-set]').forEach(btn => btn.onclick = () => {
     if (btn.dataset.set === S.praxisSet) return;
@@ -1565,7 +1575,9 @@ async function reportLevel(l){
 
 // uuid = Test-ID (bindet die Meldung im Panel an die richtige Prüfung/Stufe),
 // label = was dem/der Nutzer·in im Dialog angezeigt wird (z. B. „DTZ · B1").
-function openReport(uuid, label){
+// spot = genaue Stelle (Teil · Übung), die gemeldet wird — erscheint im Panel,
+//        damit man die Übung sofort findet. Optional (ganze Prüfung → leer).
+function openReport(uuid, label, spot){
   const MIN = 10, MAX = 2000;
   const back = document.createElement('div');
   back.className = 'modalback';
@@ -1603,7 +1615,7 @@ function openReport(uuid, label){
     const was = send.textContent;
     send.textContent = t('reportSending');
     let r;
-    try { r = await API.reportProblem(uuid, ta.value.trim(), I18N.lang); }
+    try { r = await API.reportProblem(uuid, ta.value.trim(), I18N.lang, spot || null); }
     catch { r = { ok: false, error: 'network' }; }
     if (r && r.ok){ close(); return toast(t('reportThanks'), 3600); }
     send.textContent = was; send.disabled = false;

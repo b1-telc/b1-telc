@@ -702,6 +702,7 @@ async function screenReports(){
   const row = r => `<tr>
     <td style="white-space:nowrap">${fmtDT(r.created_at)}</td>
     <td>${esc(r.test || '—')}
+      ${r.spot ? `<div style="font-weight:600;font-size:13px;margin-top:2px">📍 ${esc(r.spot)}</div>` : ''}
       ${r.provider || r.stufe
         ? `<div class="mono" style="color:var(--muted);font-size:12px">${
             esc([r.provider, r.stufe, r.slug].filter(Boolean).join(' · '))}</div>` : ''}</td>
@@ -1244,7 +1245,7 @@ const STALE_MSG = '⚠ Die Datenbank ist noch nicht aktualisiert — bitte '
    بتفشل بصمت بطريقتها، وولا وحدة بتقول السبب. الرقم بيخلّي اللوحة تقوله.
 
    لما يتضاف ترحيل: يزيد الرقم هون وبـ0019_version.sql. */
-const SCHEMA_MIN = 34;
+const SCHEMA_MIN = 35;
 let schemaHave = null;      // null = لسا ما انفحص
 
 async function checkSchema(){

@@ -309,8 +309,9 @@ const API = (() => {
      ما منركّب منه لا SQL ولا HTML بأي مكان — والقاعدة بتقصّه وبتنظّفه
      وبتحدّ معدّله. السياق (أي امتحان، أي مستوى) بتقراه القاعدة من
      جدول الامتحانات، مو من هون: العميل بيقول الرقم بس. */
-  const reportProblem = (testUuid, text, lang) =>
-    rpc('report_problem', { p_test_id: testUuid, p_text: text, p_lang: lang || null });
+  const reportProblem = (testUuid, text, lang, spot) =>
+    rpc('report_problem', { p_test_id: testUuid, p_text: text,
+                            p_lang: lang || null, p_spot: spot || null });
 
   /* ---------- التصحيح ---------- */
   const submitAttempt = (testUuid, blockId, answers) =>
