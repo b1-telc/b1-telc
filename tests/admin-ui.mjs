@@ -29,9 +29,12 @@ const RPC = {
     id:'uuuuuuuu-0000-0000-0000-000000000001', name:'Testnutzer', tg:'houzaifa', note:'', devices:1,
     attempts:3, best_pct:80, mistakes:0,
     last_seen_at:iso(Date.now()), created_at:iso(Date.now() - 10*DAY),
-    codes:[{ code:'B1TEST', levels:['goethe-a1'], at:iso(Date.now() - 5*DAY) }],
+    codes:[{ id:'cccccccc-0000-0000-0000-000000000001', code:'B1TEST', levels:['goethe-a1'],
+             label:'Goethe · A1', uses:1, max_uses:1, revoked:false, kind:'full',
+             at:iso(Date.now() - 5*DAY) }],
     subs:[{ id:'ssssssss-0000-0000-0000-000000000001', levels:['goethe-a1'],
-            status:'active', current_period_end:iso(subEnd), days_left:40, code:'B1TEST' }]
+            label:'Goethe · A1', status:'active', current_period_end:iso(subEnd),
+            days_left:40, code:'B1TEST' }]
   }]),
   admin_shift_subscription: (a) => { subEnd += Number(a.p_days) * DAY;
     return { ok:true, current_period_end: iso(subEnd) }; },

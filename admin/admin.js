@@ -384,41 +384,94 @@ async function screenUsers(){
 /* تفاصيل مستخدم: كل الإجراءات الباقية — بنافذة UI.modal الموحّدة
    (Escape، نقرة الخلفية، حبس الفوكس، إرجاعه). الإجراءات بتقفل النافذة،
    و onClose بيعيد رسم القائمة تا تبيّن التغيير. */
+/* ★ Nutzer-zentriert: ein vollständiges Profil pro Person. Zugänge
+   (Anbieter·Stufe), Codes und alle Aktionen (Zeit, Aktivierungen, löschen)
+   an einem Ort — statt über Tabs verstreut. */
 function userDialog(u){
   if (!u) return;
   const subs = u.subs || [];
+  const codes = u.codes || [];
+  const pill = (cls, txt) => `<span class="pill ${cls}">${txt}</span>`;
 
-  /* Ein Block pro Abo. Die Knöpfe tragen die Abo-ID, damit +30 auf B1
-     nicht versehentlich das A1-Abo verlängert. */
-  const aboBlock = (s, i) => `
-    <h2>Abo ${esc((s.levels || []).join(', ') || '—')}</h2>
-    <p class="sub" style="margin-bottom:8px">
-      ${esc(s.status)} · läuft bis ${fmtDate(s.current_period_end)}
-      ${s.code ? ` · Code <span class="mono">${esc(fmtCode(s.code))}</span>` : ''}</p>
-    <div class="row">
-      <label>Enddatum
-        <input id="d_end${i}" type="date"
-               value="${new Date(s.current_period_end).toISOString().slice(0,10)}"></label>
-      <button class="btn sm" data-end="${esc(s.id)}" data-i="${i}">Setzen</button>
-    </div>
-    <div class="row" style="margin-top:10px">
-      ${[7, 30, 90, -7, -30].map(d =>
-        `<button class="btn sm grey" data-d="${d}" data-sub="${esc(s.id)}"
-          >${d > 0 ? '+' : '−'}${Math.abs(d)}</button>`).join('')}
-    </div>
-    <div class="row" style="margin-top:10px">
-      ${s.status === 'active'
-        ? `<button class="btn sm danger" data-st="revoked" data-sub="${esc(s.id)}"
-            >Abo sperren</button>`
-        : `<button class="btn sm" data-st="active" data-sub="${esc(s.id)}"
-            >Abo entsperren</button>`}
+  /* Ein Zugang (Abo). Knöpfe tragen die Abo-ID, damit +30 auf B1 nicht
+     das A1-Abo verlängert. „label" = lesbarer Name (Goethe · A1). */
+  const zugang = (s, i) => {
+    const active = s.status === 'active' &&
+      new Date(s.current_period_end).getTime() > Date.now();
+    const st = s.status !== 'active' ? pill('bad', 'gesperrt')
+             : active ? pill('ok', `aktiv · noch ${s.days_left} Tage`)
+                      : pill('warn', 'abgelaufen');
+    return `
+    <div class="card" style="margin:10px 0;padding:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+        <b>${esc(s.label || (s.levels || []).join(', ') || '—')}</b>${st}
+      </div>
+      <p class="sub" style="margin:6px 0 8px">läuft bis ${fmtDate(s.current_period_end)}${
+        s.code ? ` · Code <span class="mono">${esc(fmtCode(s.code))}</span>` : ''}</p>
+      <div class="row">
+        <label>Enddatum
+          <input id="d_end${i}" type="date"
+                 value="${new Date(s.current_period_end).toISOString().slice(0,10)}"></label>
+        <button class="btn sm" data-end="${esc(s.id)}" data-i="${i}">Setzen</button>
+      </div>
+      <div class="row" style="margin-top:10px">
+        ${[7, 30, 90, -7, -30].map(d =>
+          `<button class="btn sm grey" data-d="${d}" data-sub="${esc(s.id)}"
+            >${d > 0 ? '+' : '−'}${Math.abs(d)} Tage</button>`).join('')}
+        ${s.status === 'active'
+          ? `<button class="btn sm danger" data-st="revoked" data-sub="${esc(s.id)}"
+              >sperren</button>`
+          : `<button class="btn sm" data-st="active" data-sub="${esc(s.id)}"
+              >entsperren</button>`}
+      </div>
     </div>`;
+  };
+
+  /* Ein Code mit Aktivierungen: +1 (z. B. Gerätewechsel) und löschen —
+     ohne den Codes-Tab zu öffnen. */
+  const codeBlock = c => {
+    const spent = (c.uses || 0) >= (c.max_uses || 0);
+    const stat = c.revoked ? pill('bad', 'gesperrt')
+               : spent ? pill('', `${c.uses}/${c.max_uses} — voll`)
+                       : pill('ok', `${c.uses}/${c.max_uses} benutzt`);
+    return `
+    <div class="card" style="margin:10px 0;padding:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+        <span class="mono"><b>${esc(fmtCode(c.code))}</b></span>${stat}
+      </div>
+      <p class="sub" style="margin:6px 0 8px">${esc(c.label || (c.levels || []).join(', '))} ·
+        ${c.kind === 'demo' ? 'Demo' : 'Vollzugang'} · eingelöst ${fmtDate(c.at)}</p>
+      <div class="row">
+        <button class="btn sm grey" data-more1="${esc(c.id)}">+1 Aktivierung</button>
+        <button class="btn sm danger" data-del="${esc(c.id)}"
+          data-code="${esc(fmtCode(c.code))}">Code löschen</button>
+      </div>
+    </div>`;
+  };
+
+  const tgLine = u.tg
+    ? `<a href="https://t.me/${esc(u.tg)}" target="_blank" rel="noopener"
+         class="mono" style="color:var(--accent);text-decoration:none">@${esc(u.tg)}</a>
+       — <a href="https://t.me/${esc(u.tg)}" target="_blank" rel="noopener"
+         style="color:var(--accent)">Telegram schreiben ↗</a>`
+    : '<span style="color:var(--muted)">kein Telegram-Konto verknüpft</span>';
 
   const html = `
-    <p class="sub" style="margin-bottom:12px">
-      ${u.attempts} Prüfungen · ${u.mistakes} offene Fehler · ${u.devices} Geräte<br>
-      angelegt ${fmtDate(u.created_at)}
+    <p style="margin:0 0 6px">${tgLine}</p>
+    <p class="sub" style="margin-bottom:14px">
+      ${u.attempts} Prüfungen · ${u.devices} Geräte · angelegt ${fmtDate(u.created_at)}
+      ${u.last_seen_at ? ` · zuletzt ${fmtDate(u.last_seen_at)}` : ''}
     </p>
+
+    <h2>Zugänge</h2>
+    ${subs.length ? subs.map(zugang).join('')
+                  : '<p class="sub">Kein Zugang — noch keinen Code eingelöst.</p>'}
+
+    <h2 style="margin-top:16px">Codes</h2>
+    ${codes.length ? codes.map(codeBlock).join('')
+                   : '<p class="sub">Noch keinen Code eingelöst.</p>'}
+
+    <h2 style="margin-top:16px">Notiz & Name</h2>
     <label style="font-size:13px;color:var(--muted)">Name
       <input id="d_name" value="${esc(u.name || '')}" style="margin-top:4px"></label>
     <label style="font-size:13px;color:var(--muted);display:block;margin-top:8px">Notiz
@@ -426,29 +479,18 @@ function userDialog(u){
              placeholder="z. B. WhatsApp-Nummer, bezahlt am …" style="margin-top:4px"></label>
     <button class="btn sm" id="d_save" style="margin-top:10px">Speichern</button>
 
-    <h2>Eingelöste Codes</h2>
-    ${(u.codes || []).length ? `<div class="wrap"><table>
-      <tr><th>Code</th><th>Stufe</th><th>eingelöst</th></tr>
-      ${u.codes.map(c => `<tr>
-        <td class="mono">${esc(fmtCode(c.code))}</td>
-        <td class="mono">${esc((c.levels || []).join(', '))}</td>
-        <td>${fmtDate(c.at)}</td></tr>`).join('')}
-    </table></div>` : '<p class="sub">Noch keinen Code eingelöst.</p>'}
-
-    ${subs.length ? subs.map(aboBlock).join('')
-                  : '<h2>Abo</h2><p class="sub">Kein Abo vorhanden.</p>'}
-
-    <h2>Geräte</h2>
+    <h2 style="margin-top:16px">Geräte</h2>
     <p class="sub" style="margin-bottom:8px">${u.devices} registriert.
       Zurücksetzen, wenn der Nutzer sein Gerät gewechselt hat.</p>
     <button class="btn sm grey" id="d_dev">Geräte zurücksetzen</button>
 
     <h2 style="margin-top:18px">Konto löschen</h2>
-    <p class="sub" style="margin-bottom:8px">Entfernt diesen Nutzer mit allen Abos,
-      Geräten und Daten — endgültig. Für Doppelkonten derselben Person.</p>
-    <button class="btn sm danger" id="d_del">Nutzer löschen</button>`;
+    <p class="sub" style="margin-bottom:8px">Entfernt diesen Nutzer mit allen Zugängen,
+      Geräten, Daten <b>und seinen Codes</b> — endgültig.</p>
+    <button class="btn sm danger" id="d_del">Nutzer + Codes löschen</button>`;
 
-  const dlg   = UI.modal({ title: u.name || 'Nutzer ohne Namen', html, onClose: screenUsers });
+  const title = (u.name || (u.tg ? '@' + u.tg : 'Nutzer ohne Namen'));
+  const dlg   = UI.modal({ title, html, onClose: screenUsers });
   const panel = dlg.panel;
   const $ = id => panel.querySelector('#' + id);
 
@@ -462,7 +504,7 @@ function userDialog(u){
 
   panel.querySelectorAll('[data-d]').forEach(b => b.onclick = () =>
     act(b, () => rpc('admin_shift_subscription',
-      { p_sub_id: b.dataset.sub, p_days: Number(b.dataset.d) }), 'Abo angepasst')
+      { p_sub_id: b.dataset.sub, p_days: Number(b.dataset.d) }), 'Zugang angepasst')
       .then(() => dlg.close()));
 
   panel.querySelectorAll('[data-end]').forEach(b => b.onclick = () =>
@@ -474,14 +516,27 @@ function userDialog(u){
   panel.querySelectorAll('[data-st]').forEach(b => b.onclick = () =>
     act(b, () => rpc('admin_set_subscription_status',
       { p_sub_id: b.dataset.sub, p_status: b.dataset.st }),
-      b.dataset.st === 'revoked' ? 'Abo gesperrt' : 'Abo entsperrt').then(() => dlg.close()));
+      b.dataset.st === 'revoked' ? 'Zugang gesperrt' : 'Zugang entsperrt').then(() => dlg.close()));
 
-  // Konto endgültig löschen — nach Rückfrage. onClose rendert die Liste neu.
+  // +1 Aktivierung für einen Code (z. B. Gerätewechsel) — direkt vom Profil.
+  panel.querySelectorAll('[data-more1]').forEach(b => b.onclick = () =>
+    act(b, () => rpc('admin_add_code_use', { p_code_id: b.dataset.more1, p_extra: 1 }),
+      'Eine Aktivierung freigegeben').then(() => dlg.close()));
+
+  // Einen Code löschen — nach Rückfrage.
+  panel.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
+    if (!confirm(`„${b.dataset.code}" endgültig löschen? Ein daraus entstandenes aktives Abo wird dabei beendet.`)) return;
+    const r = await act(b, () => rpc('admin_delete_code', { p_code_id: b.dataset.del }), 'Code gelöscht');
+    if (r) dlg.close();
+  });
+
+  // Konto + Codes endgültig löschen — nach Rückfrage. onClose rendert neu.
   $('d_del').onclick = async e => {
     const who = u.name || (u.tg ? '@' + u.tg : 'ohne Namen');
-    if (!confirm(`Nutzer „${who}" mit allen Abos und Daten endgültig löschen?`)) return;
+    if (!confirm(`Nutzer „${who}" mit allen Zugängen, Daten und seinen Codes endgültig löschen?`)) return;
     const r = await act(e.target,
-      () => rpc('admin_delete_user', { p_user_id: u.id }), 'Nutzer gelöscht');
+      () => rpc('admin_delete_user', { p_user_id: u.id }),
+      'Nutzer gelöscht');
     if (r) dlg.close();
   };
 }
@@ -1279,7 +1334,7 @@ const STALE_MSG = '⚠ Die Datenbank ist noch nicht aktualisiert — bitte '
    بتفشل بصمت بطريقتها، وولا وحدة بتقول السبب. الرقم بيخلّي اللوحة تقوله.
 
    لما يتضاف ترحيل: يزيد الرقم هون وبـ0019_version.sql. */
-const SCHEMA_MIN = 39;
+const SCHEMA_MIN = 40;
 let schemaHave = null;      // null = لسا ما انفحص
 
 async function checkSchema(){
