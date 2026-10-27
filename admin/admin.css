@@ -151,3 +151,13 @@ textarea.paste{min-height:280px;font-family:ui-monospace,SFMono-Regular,Menlo,mo
 details.help{margin-top:10px}
 details.help pre{background:var(--bg);border:1px solid var(--line);border-radius:9px;
   padding:10px;overflow-x:auto;font-size:12px;line-height:1.5}
+
+/* قائمة المستخدمين: صفوف نظيفة قابلة للضغط → بروفيل كامل بصفحة */
+.userrow{display:flex;align-items:center;gap:10px;width:100%;text-align:start;
+  background:none;border:0;border-bottom:1px solid var(--line);
+  padding:14px 12px;cursor:pointer;color:var(--ink);font:inherit;font-size:15px}
+.userrow:last-child{border-bottom:0}
+.userrow:hover{background:var(--bg)}
+.userrow .uname{font-weight:600}
+.userrow .utg{color:var(--blue);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
+.userrow .uarrow{margin-inline-start:auto;color:var(--muted);font-size:20px;line-height:1}
