@@ -693,10 +693,12 @@ async function screenCodes(){
   // ★ endgültig löschen: entfernt den Code für immer (kein „sperren"). Nach
   //   Rückfrage weg aus Tabelle und Liste — unwiderruflich.
   UI.delegate(codesWrap, 'click', '[data-del]', async b => {
-    if (!confirm(`„${b.dataset.code}" endgültig löschen? Das lässt sich nicht rückgängig machen.`)) return;
+    if (!confirm(`„${b.dataset.code}" endgültig löschen? Ein daraus entstandenes aktives Abo wird dabei beendet (Zugang gesperrt). Das lässt sich nicht rückgängig machen.`)) return;
     const r = await act(b, () => rpc('admin_delete_code',
-      { p_code_id: b.dataset.del }), 'Code gelöscht');
+      { p_code_id: b.dataset.del }),
+      'Code gelöscht');
     if (!r) return;
+    if (r.revoked_subs) toast(`Zugang gesperrt · ${r.revoked_subs} Abo beendet`);
     const tr = codesWrap.querySelector(`[data-coderow="${CSS.escape(b.dataset.del)}"]`);
     if (tr) tr.remove();
     const i = codes.findIndex(x => x.id === b.dataset.del);
@@ -1263,7 +1265,7 @@ const STALE_MSG = '⚠ Die Datenbank ist noch nicht aktualisiert — bitte '
    بتفشل بصمت بطريقتها، وولا وحدة بتقول السبب. الرقم بيخلّي اللوحة تقوله.
 
    لما يتضاف ترحيل: يزيد الرقم هون وبـ0019_version.sql. */
-const SCHEMA_MIN = 36;
+const SCHEMA_MIN = 37;
 let schemaHave = null;      // null = لسا ما انفحص
 
 async function checkSchema(){
