@@ -441,7 +441,12 @@ function userDialog(u){
     <h2>Geräte</h2>
     <p class="sub" style="margin-bottom:8px">${u.devices} registriert.
       Zurücksetzen, wenn der Nutzer sein Gerät gewechselt hat.</p>
-    <button class="btn sm grey" id="d_dev">Geräte zurücksetzen</button>`;
+    <button class="btn sm grey" id="d_dev">Geräte zurücksetzen</button>
+
+    <h2 style="margin-top:18px">Konto löschen</h2>
+    <p class="sub" style="margin-bottom:8px">Entfernt diesen Nutzer mit allen Abos,
+      Geräten und Daten — endgültig. Für Doppelkonten derselben Person.</p>
+    <button class="btn sm danger" id="d_del">Nutzer löschen</button>`;
 
   const dlg   = UI.modal({ title: u.name || 'Nutzer ohne Namen', html, onClose: screenUsers });
   const panel = dlg.panel;
@@ -470,6 +475,15 @@ function userDialog(u){
     act(b, () => rpc('admin_set_subscription_status',
       { p_sub_id: b.dataset.sub, p_status: b.dataset.st }),
       b.dataset.st === 'revoked' ? 'Abo gesperrt' : 'Abo entsperrt').then(() => dlg.close()));
+
+  // Konto endgültig löschen — nach Rückfrage. onClose rendert die Liste neu.
+  $('d_del').onclick = async e => {
+    const who = u.name || (u.tg ? '@' + u.tg : 'ohne Namen');
+    if (!confirm(`Nutzer „${who}" mit allen Abos und Daten endgültig löschen?`)) return;
+    const r = await act(e.target,
+      () => rpc('admin_delete_user', { p_user_id: u.id }), 'Nutzer gelöscht');
+    if (r) dlg.close();
+  };
 }
 
 let codeLevel = '';
@@ -1265,7 +1279,7 @@ const STALE_MSG = '⚠ Die Datenbank ist noch nicht aktualisiert — bitte '
    بتفشل بصمت بطريقتها، وولا وحدة بتقول السبب. الرقم بيخلّي اللوحة تقوله.
 
    لما يتضاف ترحيل: يزيد الرقم هون وبـ0019_version.sql. */
-const SCHEMA_MIN = 38;
+const SCHEMA_MIN = 39;
 let schemaHave = null;      // null = لسا ما انفحص
 
 async function checkSchema(){

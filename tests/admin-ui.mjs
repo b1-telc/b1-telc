@@ -35,6 +35,7 @@ const RPC = {
   }]),
   admin_shift_subscription: (a) => { subEnd += Number(a.p_days) * DAY;
     return { ok:true, current_period_end: iso(subEnd) }; },
+  admin_delete_user: () => ({ ok:true }),
   admin_content: () => ({
     levels:[
       { id:'goethe-a1', provider:'Goethe', stufe:'A1', title:'Goethe · A1',
@@ -169,6 +170,16 @@ try {
     document.activeElement?.getAttribute('data-more') != null ||
     document.activeElement === document.body);
   check('الفوكس رجع برّا النافذة', focusBack);
+
+  // حذف المستخدم: فتح النافذة → «Nutzer löschen» → تأكيد → admin_delete_user
+  await page.click('[data-more]');
+  await until(() => page.$('#d_del'));
+  const delBefore = calls.admin_delete_user || 0;
+  await page.click('#d_del');                         // confirm() بينقبل تلقائياً
+  const udelCalled = await until(() => (calls.admin_delete_user || 0) === delBefore + 1);
+  check('Nutzer löschen: admin_delete_user انندهت مرة', udelCalled);
+  const dlgClosed = await until(async () => !(await page.$('.uimodal-back')));
+  check('Nutzer löschen: النافذة انسكّرت بعد الحذف', dlgClosed);
 
   // ── Codes: sperren / +1 تحديث جزئي بلا إعادة جلب القائمة ──
   await page.click('[data-tab="codes"]');
