@@ -314,6 +314,9 @@ async function screenUsers(){
     return `<tr data-u="${esc(u.id)}">
       <td>
         <b>${esc(u.name || 'ohne Namen')}</b>
+        ${u.tg ? `<a href="https://t.me/${esc(u.tg)}" target="_blank" rel="noopener"
+             class="mono" style="color:var(--accent);font-size:12px;text-decoration:none"
+             title="Telegram-Konto öffnen">@${esc(u.tg)}</a>` : ''}
         ${u.note ? `<div style="color:var(--muted);font-size:13px">${esc(u.note)}</div>` : ''}
         ${(u.codes || []).map(c =>
           `<div class="mono" style="color:var(--muted);font-size:12px">${esc(fmtCode(c.code))}</div>`
@@ -516,6 +519,9 @@ async function screenCodes(){
              title="Eine weitere Aktivierung freigeben">+1</button>` : ''}
       ${!c.revoked_at && c.uses === 0
         ? `<button class="btn sm danger" data-rev="${esc(c.id)}">sperren</button>` : ''}
+      <button class="btn sm danger" data-del="${esc(c.id)}"
+        data-code="${esc(fmtCode(c.code))}"
+        title="Code endgültig löschen">löschen</button>
     </td>`; };
   app.innerHTML = `
     <h1>Zugangscodes</h1>
@@ -683,6 +689,18 @@ async function screenCodes(){
     if (!r) return;
     const c = codes.find(x => x.id === b.dataset.more1);
     if (c){ if (r.max_uses != null) c.max_uses = r.max_uses; patchCode(c); }
+  });
+  // ★ endgültig löschen: entfernt den Code für immer (kein „sperren"). Nach
+  //   Rückfrage weg aus Tabelle und Liste — unwiderruflich.
+  UI.delegate(codesWrap, 'click', '[data-del]', async b => {
+    if (!confirm(`„${b.dataset.code}" endgültig löschen? Das lässt sich nicht rückgängig machen.`)) return;
+    const r = await act(b, () => rpc('admin_delete_code',
+      { p_code_id: b.dataset.del }), 'Code gelöscht');
+    if (!r) return;
+    const tr = codesWrap.querySelector(`[data-coderow="${CSS.escape(b.dataset.del)}"]`);
+    if (tr) tr.remove();
+    const i = codes.findIndex(x => x.id === b.dataset.del);
+    if (i >= 0) codes.splice(i, 1);
   });
 }
 
@@ -1245,7 +1263,7 @@ const STALE_MSG = '⚠ Die Datenbank ist noch nicht aktualisiert — bitte '
    بتفشل بصمت بطريقتها، وولا وحدة بتقول السبب. الرقم بيخلّي اللوحة تقوله.
 
    لما يتضاف ترحيل: يزيد الرقم هون وبـ0019_version.sql. */
-const SCHEMA_MIN = 35;
+const SCHEMA_MIN = 36;
 let schemaHave = null;      // null = لسا ما انفحص
 
 async function checkSchema(){

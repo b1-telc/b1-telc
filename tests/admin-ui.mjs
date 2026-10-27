@@ -26,7 +26,7 @@ const RPC = {
   admin_limits: () => ({ active:1, max_active:0, today:0, max_new_per_day:0, waiting:0 }),
   admin_waitlist: () => [],
   admin_users: () => ([{
-    id:'uuuuuuuu-0000-0000-0000-000000000001', name:'Testnutzer', note:'', devices:1,
+    id:'uuuuuuuu-0000-0000-0000-000000000001', name:'Testnutzer', tg:'houzaifa', note:'', devices:1,
     attempts:3, best_pct:80, mistakes:0,
     last_seen_at:iso(Date.now()), created_at:iso(Date.now() - 10*DAY),
     codes:[{ code:'B1TEST', levels:['goethe-a1'], at:iso(Date.now() - 5*DAY) }],
@@ -67,6 +67,7 @@ const RPC = {
   ]),
   admin_revoke_code:  () => ({ ok:true }),
   admin_add_code_use: () => ({ ok:true, max_uses:3 }),
+  admin_delete_code:  () => ({ ok:true }),
 };
 
 let PORT = 0;
@@ -121,6 +122,9 @@ await page.addInitScript(() => {
 });
 
 try {
+  // confirm() تبع «löschen»: منقبل أي نافذة تأكيد (الحذف الوحيد يلي بيفتح وحدة)
+  page.on('dialog', d => d.accept().catch(() => {}));
+
   await page.goto(`http://127.0.0.1:${PORT}/admin/index.html`, { waitUntil:'load' });
 
   // دخل مباشرة (جلسة مزروعة) وطلع التبويب
@@ -129,6 +133,10 @@ try {
   const seen = await until(async () =>
     (await page.textContent('#app'))?.includes('Testnutzer'));
   check('شاشة Nutzer بترسم المستخدم', seen);
+
+  // اسم مستخدم تلغرام (@username) بيطلع جنب الاسم كرابط t.me
+  const tgHandle = await page.$('[data-u] a[href="https://t.me/houzaifa"]');
+  check('Nutzer: @username تلغرام ظاهر كرابط', !!tgHandle);
 
   const usersBefore = calls.admin_users || 0;
   const cellBefore = (await page.textContent('[data-subcell]'))?.trim();
@@ -179,6 +187,14 @@ try {
   check('+1: خانة التفعيلات صارت «2 / 3»', bumped);
   check('+1: زرّ +1 اختفى', !(await page.$('[data-coderow="c2"] [data-more1]')));
   check('+1: admin_codes ما انعاد جلبها', (calls.admin_codes || 0) === codesCalls);
+
+  // löschen: حذف نهائي بعد تأكيد → الصفّ انشال، بلا إعادة جلب القائمة
+  await page.click('[data-coderow="c1"] [data-del]');
+  const delCalled = await until(() => (calls.admin_delete_code || 0) === 1);
+  check('löschen: admin_delete_code انندهت مرة', delCalled);
+  const rowGone = await until(async () => !(await page.$('[data-coderow="c1"]')));
+  check('löschen: صفّ الكود انشال', rowGone);
+  check('löschen: admin_codes ما انعاد جلبها', (calls.admin_codes || 0) === codesCalls);
 
   // ── Inhalte: تبديل نشر + حذف جزئي بلا إعادة جلب الكتالوج ──
   await page.click('[data-tab="content"]');
