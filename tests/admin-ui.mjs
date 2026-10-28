@@ -39,6 +39,7 @@ const RPC = {
   admin_shift_subscription: (a) => { subEnd += Number(a.p_days) * DAY;
     return { ok:true, current_period_end: iso(subEnd) }; },
   admin_delete_user: () => ({ ok:true }),
+  admin_delete_subscription: () => ({ ok:true }),
   admin_content: () => ({
     levels:[
       { id:'goethe-a1', provider:'Goethe', stufe:'A1', title:'Goethe · A1',
@@ -161,6 +162,13 @@ try {
   await page.click('[data-more1]');
   check('بروفيل: +1 Aktivierung → admin_add_code_use',
     await until(() => (calls.admin_add_code_use || 0) === add1 + 1));
+
+  // حذف Zugang (اشتراك) من البروفيل
+  await until(() => page.$('[data-subdel]'));
+  const sdel = calls.admin_delete_subscription || 0;
+  await page.click('[data-subdel]');
+  check('بروفيل: Zugang löschen → admin_delete_subscription',
+    await until(() => (calls.admin_delete_subscription || 0) === sdel + 1));
 
   // حذف كود من البروفيل (confirm بينقبل)
   await until(() => page.$('[data-del]'));

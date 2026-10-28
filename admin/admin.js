@@ -380,6 +380,8 @@ async function openUser(id){
               >sperren</button>`
           : `<button class="btn sm" data-st="active" data-sub="${esc(s.id)}"
               >entsperren</button>`}
+        <button class="btn sm danger" data-subdel="${esc(s.id)}"
+          data-lbl="${esc(s.label || (s.levels || []).join(', ') || '—')}">löschen</button>
       </div>
     </div>`;
   };
@@ -479,14 +481,21 @@ async function openUser(id){
       { p_sub_id: b.dataset.sub, p_status: b.dataset.st }),
       b.dataset.st === 'revoked' ? 'Zugang gesperrt' : 'Zugang entsperrt').then(refresh));
 
+  // Einen Zugang (Abo) ganz entfernen — z. B. Reste gelöschter Codes.
+  app.querySelectorAll('[data-subdel]').forEach(b => b.onclick = async () => {
+    if (!confirm(`Zugang „${b.dataset.lbl}" endgültig löschen? Der Zugang verschwindet komplett.`)) return;
+    const r = await act(b, () => rpc('admin_delete_subscription', { p_sub_id: b.dataset.subdel }), 'Zugang gelöscht');
+    if (r) refresh();
+  });
+
   // +1 Aktivierung für einen Code (z. B. Gerätewechsel) — direkt vom Profil.
   app.querySelectorAll('[data-more1]').forEach(b => b.onclick = () =>
     act(b, () => rpc('admin_add_code_use', { p_code_id: b.dataset.more1, p_extra: 1 }),
       'Eine Aktivierung freigegeben').then(refresh));
 
-  // Einen Code löschen — nach Rückfrage.
+  // Einen Code löschen — entfernt Code UND seinen Zugang. Nach Rückfrage.
   app.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
-    if (!confirm(`„${b.dataset.code}" endgültig löschen? Ein daraus entstandenes aktives Abo wird dabei beendet.`)) return;
+    if (!confirm(`„${b.dataset.code}" endgültig löschen? Code und zugehöriger Zugang werden entfernt.`)) return;
     const r = await act(b, () => rpc('admin_delete_code', { p_code_id: b.dataset.del }), 'Code gelöscht');
     if (r) refresh();
   });
@@ -721,7 +730,7 @@ async function screenCodes(){
   // ★ endgültig löschen: entfernt den Code für immer (kein „sperren"). Nach
   //   Rückfrage weg aus Tabelle und Liste — unwiderruflich.
   UI.delegate(codesWrap, 'click', '[data-del]', async b => {
-    if (!confirm(`„${b.dataset.code}" endgültig löschen? Ein daraus entstandenes aktives Abo wird dabei beendet (Zugang gesperrt). Das lässt sich nicht rückgängig machen.`)) return;
+    if (!confirm(`„${b.dataset.code}" endgültig löschen? Code und zugehöriger Zugang werden entfernt. Das lässt sich nicht rückgängig machen.`)) return;
     const r = await act(b, () => rpc('admin_delete_code',
       { p_code_id: b.dataset.del }),
       'Code gelöscht');
@@ -1293,7 +1302,7 @@ const STALE_MSG = '⚠ Die Datenbank ist noch nicht aktualisiert — bitte '
    بتفشل بصمت بطريقتها، وولا وحدة بتقول السبب. الرقم بيخلّي اللوحة تقوله.
 
    لما يتضاف ترحيل: يزيد الرقم هون وبـ0019_version.sql. */
-const SCHEMA_MIN = 42;
+const SCHEMA_MIN = 43;
 let schemaHave = null;      // null = لسا ما انفحص
 
 async function checkSchema(){
