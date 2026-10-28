@@ -53,6 +53,7 @@ const I18N = (() => {
       codeErrDevices: 'Die Höchstzahl an Geräten ist erreicht.',
       codeErrNetwork: 'Keine Verbindung. Bitte später versuchen.',
       codeErrOther: 'Der Code konnte nicht eingelöst werden.',
+      codeAlreadyFull: 'Sie haben für diese Stufe bereits vollen Zugang — dieser Code ist nicht nötig.',
 
       waitTitle: 'Sie stehen auf der Warteliste',
       waitPos: 'Platz {n}',
@@ -336,6 +337,7 @@ const I18N = (() => {
       codeErrDevices: 'وصلت لأقصى عدد أجهزة.',
       codeErrNetwork: 'ما في اتصال. جرّب بعد شوي.',
       codeErrOther: 'ما قدرنا نفعّل الرمز.',
+      codeAlreadyFull: 'عندك وصول كامل أصلاً لهالمستوى — ما بتحتاج هالرمز.',
 
       waitTitle: 'إنت بقائمة الانتظار',
       waitPos: 'دورك رقم {n}',
@@ -630,6 +632,7 @@ const I18N = (() => {
       codeErrDevices: 'Досягнуто максимальну кількість пристроїв.',
       codeErrNetwork: 'Немає зв’язку. Спробуйте пізніше.',
       codeErrOther: 'Код не вдалося активувати.',
+      codeAlreadyFull: 'У вас уже є повний доступ до цього рівня — цей код не потрібен.',
 
       waitTitle: 'Ви у списку очікування',
       waitPos: 'Місце {n}',

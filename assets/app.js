@@ -418,6 +418,7 @@ function screenCode(msg){
       screenCode(t({
         invalid_code:   'codeErrUnknown',
         already_used:   'codeErrUsed',
+        already_full:   'codeAlreadyFull',
         revoked:        'codeErrRevoked',
         code_exhausted: 'codeErrExhausted',
         device_limit:   'codeErrDevices',
