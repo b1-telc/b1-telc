@@ -350,21 +350,36 @@ async function openUser(id){
   const refresh = () => openUser(id);
   const pill = (cls, txt) => `<span class="pill ${cls}">${txt}</span>`;
 
-  /* Ein Zugang (Abo). Knöpfe tragen die Abo-ID, damit +30 auf B1 nicht
-     das A1-Abo verlängert. „label" = lesbarer Name (Goethe · A1). */
-  const zugang = (s, i) => {
+  /* Code und Zugang sind dieselbe Sache — darum eine Karte pro Zugang, die
+     den zugehörigen Code (Nummer, Art, Aktivierungen) gleich mitführt.
+     Verknüpft wird über die Code-Nummer. Knöpfe tragen die Abo- bzw.
+     Code-ID, damit +30 auf B1 nicht das A1-Abo verlängert und „löschen"
+     den richtigen Code trifft. */
+  const codeByStr = new Map();
+  codes.forEach(c => { if (c.code) codeByStr.set(c.code, c); });
+  const usedCodeIds = new Set();
+
+  const accessCard = (s, i) => {
+    const c = s.code ? codeByStr.get(s.code) : null;
+    if (c) usedCodeIds.add(c.id);
     const active = s.status === 'active' &&
       new Date(s.current_period_end).getTime() > Date.now();
     const st = s.status !== 'active' ? pill('bad', 'gesperrt')
              : active ? pill('ok', `aktiv · noch ${s.days_left} Tage`)
                       : pill('warn', 'abgelaufen');
+    const label = s.label || (s.levels || []).join(', ') || '—';
+    // Code-Zeile: Nummer · Art · Aktivierungen (voll/benutzt) — alles im Zugang.
+    const codeLine = c
+      ? ` · Code <span class="mono">${esc(fmtCode(c.code))}</span> · ${
+          c.kind === 'demo' ? 'Demo' : 'Vollzugang'} · ${c.uses}/${c.max_uses}${
+          (c.uses || 0) >= (c.max_uses || 0) ? ' — voll' : ' benutzt'}`
+      : (s.code ? ` · Code <span class="mono">${esc(fmtCode(s.code))}</span>` : '');
     return `
     <div class="card" style="margin:10px 0;padding:12px">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
-        <b>${esc(s.label || (s.levels || []).join(', ') || '—')}</b>${st}
+        <b>${esc(label)}</b>${st}
       </div>
-      <p class="sub" style="margin:6px 0 8px">läuft bis ${fmtDate(s.current_period_end)}${
-        s.code ? ` · Code <span class="mono">${esc(fmtCode(s.code))}</span>` : ''}</p>
+      <p class="sub" style="margin:6px 0 8px">läuft bis ${fmtDate(s.current_period_end)}${codeLine}</p>
       <div class="row">
         <label>Enddatum
           <input id="d_end${i}" type="date"
@@ -380,18 +395,21 @@ async function openUser(id){
               >sperren</button>`
           : `<button class="btn sm" data-st="active" data-sub="${esc(s.id)}"
               >entsperren</button>`}
-        <button class="btn sm danger" data-subdel="${esc(s.id)}"
-          data-lbl="${esc(s.label || (s.levels || []).join(', ') || '—')}">löschen</button>
+        ${c ? `<button class="btn sm grey" data-more1="${esc(c.id)}">+1 Aktivierung</button>` : ''}
+        ${c
+          ? `<button class="btn sm danger" data-del="${esc(c.id)}"
+               data-code="${esc(fmtCode(c.code))}">löschen</button>`
+          : `<button class="btn sm danger" data-subdel="${esc(s.id)}"
+               data-lbl="${esc(label)}">löschen</button>`}
       </div>
     </div>`;
   };
 
-  /* Ein Code mit Aktivierungen: +1 (z. B. Gerätewechsel) und löschen —
-     ohne den Codes-Tab zu öffnen. */
-  const codeBlock = c => {
-    const spent = (c.uses || 0) >= (c.max_uses || 0);
+  /* Code ohne lebenden Zugang (Abo gelöscht, Einlösung bleibt) — damit man
+     ihn trotzdem noch +1en oder löschen kann. */
+  const orphanCard = c => {
     const stat = c.revoked ? pill('bad', 'gesperrt')
-               : spent ? pill('', `${c.uses}/${c.max_uses} — voll`)
+               : (c.uses || 0) >= (c.max_uses || 0) ? pill('', `${c.uses}/${c.max_uses} — voll`)
                        : pill('ok', `${c.uses}/${c.max_uses} benutzt`);
     return `
     <div class="card" style="margin:10px 0;padding:12px">
@@ -399,7 +417,8 @@ async function openUser(id){
         <span class="mono"><b>${esc(fmtCode(c.code))}</b></span>${stat}
       </div>
       <p class="sub" style="margin:6px 0 8px">${esc(c.label || (c.levels || []).join(', '))} ·
-        ${c.kind === 'demo' ? 'Demo' : 'Vollzugang'} · eingelöst ${fmtDate(c.at)}</p>
+        ${c.kind === 'demo' ? 'Demo' : 'Vollzugang'} · eingelöst ${fmtDate(c.at)} ·
+        <span style="color:var(--muted)">kein aktiver Zugang</span></p>
       <div class="row">
         <button class="btn sm grey" data-more1="${esc(c.id)}">+1 Aktivierung</button>
         <button class="btn sm danger" data-del="${esc(c.id)}"
@@ -407,6 +426,10 @@ async function openUser(id){
       </div>
     </div>`;
   };
+
+  // Zuerst die Zugänge rendern (füllt usedCodeIds), dann die Rest-Codes.
+  const accessHTML = subs.map((s, i) => accessCard(s, i)).join('');
+  const orphanHTML = codes.filter(c => !usedCodeIds.has(c.id)).map(orphanCard).join('');
 
   const tgLine = u.tg
     ? `<a href="https://t.me/${esc(u.tg)}" target="_blank" rel="noopener"
@@ -426,13 +449,9 @@ async function openUser(id){
       ${u.last_seen_at ? ` · zuletzt ${fmtDate(u.last_seen_at)}` : ''}
     </p>
 
-    <h2>Zugänge</h2>
-    ${subs.length ? subs.map(zugang).join('')
-                  : '<p class="sub">Kein Zugang — noch keinen Code eingelöst.</p>'}
-
-    <h2 style="margin-top:16px">Codes</h2>
-    ${codes.length ? codes.map(codeBlock).join('')
-                   : '<p class="sub">Noch keinen Code eingelöst.</p>'}
+    <h2>Zugänge &amp; Codes</h2>
+    ${accessHTML + orphanHTML
+      || '<p class="sub">Kein Zugang — noch keinen Code eingelöst.</p>'}
 
     <h2 style="margin-top:16px">Notiz & Name</h2>
     <div class="card" style="padding:12px">
