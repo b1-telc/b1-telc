@@ -34,7 +34,11 @@ const RPC = {
              at:iso(Date.now() - 5*DAY) }],
     subs:[{ id:'ssssssss-0000-0000-0000-000000000001', levels:['goethe-a1'],
             label:'Goethe · A1', status:'active', current_period_end:iso(subEnd),
-            days_left:40, code:'B1TEST' }]
+            days_left:40, code:'B1TEST' },
+          // Zugang ohne Code (manuell) — prüft den „löschen"-Pfad via data-subdel.
+          { id:'ssssssss-0000-0000-0000-000000000002', levels:['goethe-a1'],
+            label:'Goethe · A1 (manuell)', status:'active', current_period_end:iso(subEnd),
+            days_left:10, code:null }]
   }]),
   admin_shift_subscription: (a) => { subEnd += Number(a.p_days) * DAY;
     return { ok:true, current_period_end: iso(subEnd) }; },
