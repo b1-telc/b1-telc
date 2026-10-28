@@ -444,11 +444,6 @@ async function openUser(id){
       <button class="btn sm" id="d_save" style="margin-top:10px">Speichern</button>
     </div>
 
-    <h2 style="margin-top:16px">Geräte</h2>
-    <p class="sub" style="margin-bottom:8px">${u.devices} registriert.
-      Zurücksetzen, wenn der Nutzer sein Gerät gewechselt hat.</p>
-    <button class="btn sm grey" id="d_dev">Geräte zurücksetzen</button>
-
     <h2 style="margin-top:18px">Konto löschen</h2>
     <p class="sub" style="margin-bottom:8px">Entfernt diesen Nutzer mit allen Zugängen,
       Geräten, Daten <b>und seinen Codes</b> — endgültig.</p>
@@ -460,10 +455,6 @@ async function openUser(id){
   $('d_save').onclick = e => act(e.target, () => rpc('admin_set_profile', {
     p_user_id: u.id, p_name: $('d_name').value.trim() || null,
     p_note: $('d_note').value.trim() || null }), 'Gespeichert').then(refresh);
-
-  $('d_dev').onclick = e => act(e.target,
-    () => rpc('admin_reset_devices', { p_user_id: u.id }), 'Geräte zurückgesetzt')
-    .then(refresh);
 
   app.querySelectorAll('[data-d]').forEach(b => b.onclick = () =>
     act(b, () => rpc('admin_shift_subscription',
