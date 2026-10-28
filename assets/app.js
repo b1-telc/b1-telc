@@ -714,6 +714,31 @@ async function resumeLast(){
   }
 }
 
+/* ★ عدّاد حيّ للمدد القصيرة: تجريبي 90 دقيقة لازم يبيّن الوقت بدقّة
+   (H:MM:SS) بدل تقريب «ساعتين». تحت 3 ساعات = عدّاد. */
+const SHORT_MS = 3 * 3600000;
+const fmtCountdown = ms => {
+  const s = Math.max(0, Math.floor(ms / 1000));
+  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+  const p = n => String(n).padStart(2, '0');
+  return '⏳ ' + (h > 0 ? `${h}:${p(m)}:${p(sec)}` : `${m}:${p(sec)}`);
+};
+let _cdTimer = null;
+/* بيحدّث كل عناصر [data-countdown] كل ثانية؛ بيوقف لحاله لما ما يبقى ولا عدّاد. */
+function startCountdowns(){
+  if (_cdTimer){ clearInterval(_cdTimer); _cdTimer = null; }
+  const tick = () => {
+    const els = document.querySelectorAll('[data-countdown]');
+    if (!els.length){ if (_cdTimer){ clearInterval(_cdTimer); _cdTimer = null; } return; }
+    els.forEach(el => {
+      const left = Number(el.dataset.countdown) - Date.now();
+      el.textContent = left <= 0 ? t('expired') : fmtCountdown(left);
+    });
+  };
+  tick();
+  _cdTimer = setInterval(tick, 1000);
+}
+
 /* ★ Startseite: Begrüßung + eine Karte je Stufe (Goethe · A1, telc · B1 …)
    plus eine „+"-Karte zum Code-Einlösen. Antippen einer Karte öffnet den
    Inhalt der Stufe (screenLevel); „zurück" führt wieder hierher. */
@@ -734,14 +759,14 @@ function screenHome(){
       const d = S.sub && S.sub.until && S.sub.until[id];
       return d ? new Date(d) - Date.now() : null;
     };
-    // الوقت الباقي: بالساعات لما يكون أقل من يومين (كود ٢٤ ساعة ما يطلع «يوم»).
+    // الوقت الباقي: أيام (≥ يومين)، عدّاد حيّ (< 3 ساعات، متل التجريبي)،
+    // وإلا ساعات مقرّبة.
     const remaining = ms => {
       if (ms == null) return '';
       if (ms <= 0) return t('expired');
       if (ms >= 48 * 3600000) return plural(Math.ceil(ms / 86400000), 'daysLeft');
-      const h = Math.ceil(ms / 3600000);
-      if (h >= 1) return plural(h, 'hoursLeft');
-      return t('lessThanHour');
+      if (ms < SHORT_MS) return fmtCountdown(ms);
+      return plural(Math.ceil(ms / 3600000), 'hoursLeft');
     };
     const endsFmt = id => {
       const d = S.sub && S.sub.until && S.sub.until[id];
@@ -776,7 +801,8 @@ function screenHome(){
           ${bar}
         </span>
         <span class="when">
-          <b>${esc(remaining(ms))}</b>
+          <b${ms != null && ms > 0 && ms < SHORT_MS
+              ? ` data-countdown="${Date.now() + ms}"` : ''}>${esc(remaining(ms))}</b>
           <span class="bis">${esc(t('until', { date: endsFmt(l.id) }))}</span>
         </span>
         <button class="lvlrep" data-rep="${esc(l.id)}" aria-label="${esc(t('reportBtn'))}"
@@ -844,6 +870,7 @@ function screenHome(){
     });
     const addc = document.getElementById('addcode');
     if (addc) addc.onclick = () => screenCode();
+    startCountdowns();   // عدّاد حيّ للبطاقات القصيرة (تجريبي)
   });
 }
 
