@@ -48,7 +48,7 @@ const I18N = (() => {
       codeErrUnknown: 'Dieser Code ist unbekannt. Bitte die Ziffern noch einmal prüfen.',
       codeErrUsed: 'Dieser Code wurde bereits verwendet.',
       codeErrRevoked: 'Dieser Code wurde gesperrt.',
-      codeErrExhausted: 'Dieser Code wurde bereits auf allen erlaubten Geräten benutzt. '
+      codeErrExhausted: 'Dieser Code ist vollständig aufgebraucht – alle Aktivierungen wurden verwendet. '
                       + 'Bitte wenden Sie sich an Ihren Kurs.',
       codeErrDevices: 'Die Höchstzahl an Geräten ist erreicht.',
       codeErrNetwork: 'Keine Verbindung. Bitte später versuchen.',
@@ -332,7 +332,7 @@ const I18N = (() => {
       codeErrUnknown: 'هالرمز مو معروف. راجع الأرقام مرة تانية.',
       codeErrUsed: 'هالرمز مستعمل من قبل.',
       codeErrRevoked: 'هالرمز متوقّف.',
-      codeErrExhausted: 'هالرمز انستعمل على كل الأجهزة المسموحة. '
+      codeErrExhausted: 'هالرمز استُهلك بالكامل — كل التفعيلات انستعملت. '
                       + 'احكي مع الدورة تبعك.',
       codeErrDevices: 'وصلت لأقصى عدد أجهزة.',
       codeErrNetwork: 'ما في اتصال. جرّب بعد شوي.',
@@ -627,7 +627,7 @@ const I18N = (() => {
       codeErrUnknown: 'Такий код невідомий. Перевірте цифри ще раз.',
       codeErrUsed: 'Цей код уже використано.',
       codeErrRevoked: 'Цей код заблоковано.',
-      codeErrExhausted: 'Цей код уже використано на всіх дозволених пристроях. '
+      codeErrExhausted: 'Цей код повністю використано — усі активації вичерпано. '
                       + 'Зверніться до свого курсу.',
       codeErrDevices: 'Досягнуто максимальну кількість пристроїв.',
       codeErrNetwork: 'Немає зв’язку. Спробуйте пізніше.',
